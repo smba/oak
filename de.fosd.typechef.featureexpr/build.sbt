@@ -8,7 +8,4 @@ libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.3.0-SNAP2"
 
 libraryDependencies += "junit" % "junit" % "4.12"
 
-packageArchetype.java_application
-
-exportJars := true
 
