@@ -1,25 +1,33 @@
 package edu.cmu.cs.oak.core
 
+import com.caucho.quercus.env.Value
+import com.caucho.quercus.expr.AbstractBinaryExpr
 import com.caucho.quercus.expr.AbstractVarExpr
+import com.caucho.quercus.expr.BinaryAddExpr
+import com.caucho.quercus.expr.BinaryAndExpr
 import com.caucho.quercus.expr.BinaryAssignExpr
+import com.caucho.quercus.expr.BinaryDivExpr
+import com.caucho.quercus.expr.BinaryMulExpr
+import com.caucho.quercus.expr.BinaryOrExpr
+import com.caucho.quercus.expr.BinarySubExpr
 import com.caucho.quercus.expr.Expr
 import com.caucho.quercus.expr.LiteralExpr
+import com.caucho.quercus.expr.LiteralUnicodeExpr
+import com.caucho.quercus.expr.UnaryNotExpr
+import com.caucho.quercus.expr.VarExpr
 import com.caucho.quercus.statement.BlockStatement
 import com.caucho.quercus.statement.EchoStatement
 import com.caucho.quercus.statement.ExprStatement
 import com.caucho.quercus.statement.Statement
+
+import edu.cmu.cs.oak.env.BooleanValue
+import edu.cmu.cs.oak.env.DoubleValue
 import edu.cmu.cs.oak.env.Environment
-import com.caucho.quercus.env.Value
+import edu.cmu.cs.oak.env.IntValue
+import edu.cmu.cs.oak.env.NumericValue
 import edu.cmu.cs.oak.env.OakValue
 import edu.cmu.cs.oak.env.StringValue
-import com.caucho.quercus.expr.VarExpr
-import edu.cmu.cs.oak.env.BooleanValue
-import edu.cmu.cs.oak.env.IntValue
-import edu.cmu.cs.oak.env.DoubleValue
-import com.caucho.quercus.expr.LiteralUnicodeExpr
-import com.caucho.quercus.expr.BinaryAndExpr
-import com.caucho.quercus.expr.BinaryOrExpr
-import com.caucho.quercus.expr.UnaryNotExpr
+import com.caucho.quercus.expr.BinaryModExpr
 
 object Interpreter {
 
@@ -65,7 +73,7 @@ object Interpreter {
         case _ => throw new RuntimeException("unimplemented")
       }
     }
-    
+
     case _ => throw new RuntimeException("execute() not implemented for AST class " + stmt.getClass + ".")
   }
 
@@ -81,7 +89,7 @@ object Interpreter {
     /* Literals: String, Double, ...*/
     case e: LiteralExpr => {
       val value = Interpreter.accessField(e, "_value").asInstanceOf[Value]
-      
+
       /*
        * Boolean Value
        */
@@ -93,12 +101,9 @@ object Interpreter {
         } else {
           throw new RuntimeException()
         }
-      } 
-      
-      /*
+      } /*
        * Numeric Value
-       */
-      else if (e.isNumber) {
+       */ else if (e.isNumber) {
         return try {
           if (e.isLong) {
             return IntValue(e.toString.toInt)
@@ -110,7 +115,7 @@ object Interpreter {
         } catch {
           case e: NumberFormatException => throw new RuntimeException(e)
         }
-        
+
       } else if (e.isArray) {
         return null
       } else if (e.isAssign()) {
@@ -119,16 +124,17 @@ object Interpreter {
         return null
       }
     }
-    
+
     // String literal 
     case e: LiteralUnicodeExpr => {
       return new StringValue(e.toString.slice(1, e.toString.length - 1))
     }
-    
+
+    //Var ref
     case e: VarExpr => {
       return env.lookup(e.toString)
     }
-    
+
     case e: UnaryNotExpr => {
       return evaluate(e.getExpr, env) match {
         case e: BooleanValue => {
@@ -137,7 +143,59 @@ object Interpreter {
         case _ => throw new RuntimeException()
       }
     }
-    
+
+    // X op Y
+    case ae: AbstractBinaryExpr => {
+      val e1 = ae.getLeft//Interpreter.accessField(e, "_left").asInstanceOf[Expr]
+      val e2 = ae.getRight//tInterpreter.accessField(e, "_right").asInstanceOf[Expr]
+      return try {
+        
+        evaluate(e1, env) match {
+
+          case v1: BooleanValue => {
+            evaluate(e2, env) match {
+              case v2: BooleanValue => {
+                ae match {
+                  case e: BinaryAndExpr => {
+                    v1 && v2
+                  }
+                  case e: BinaryOrExpr => {
+                    v1 || v2
+                  }
+                }
+              }
+            }
+          }
+          
+          case v1: NumericValue => {
+            evaluate(e2, env) match {
+              case v2: NumericValue => {
+                ae match {
+                  case e: BinaryAddExpr => {
+                    v1 + v2
+                  }
+                  case e: BinarySubExpr => {
+                    v1 - v2
+                  }
+                  case e: BinaryMulExpr => {
+                    v1 * v2
+                  }
+                  case e: BinaryDivExpr => {
+                    v1 / v2
+                  }
+                  case e: BinaryModExpr => {
+                    v1 % v2
+                  }
+                }
+              }
+            }
+          }
+        }
+      } catch {
+        case e: Exception => throw new RuntimeException()
+      }
+    }
+    /*
     case e: BinaryAndExpr => {
       val e1 = Interpreter.accessField(e, "_left").asInstanceOf[Expr]
       val e2 = Interpreter.accessField(e, "_right").asInstanceOf[Expr]
@@ -157,7 +215,7 @@ object Interpreter {
         case ex: Exception => throw new RuntimeException(ex)
       }
     }
-    
+
     case e: BinaryOrExpr => {
       val e1 = Interpreter.accessField(e, "_left").asInstanceOf[Expr]
       val e2 = Interpreter.accessField(e, "_right").asInstanceOf[Expr]
@@ -177,7 +235,7 @@ object Interpreter {
         case ex: Exception => throw new RuntimeException(ex)
       }
     }
-
+	*/
     case _ => throw new RuntimeException("evaluate() not implemented for AST class " + e.getClass + ".")
   }
 
