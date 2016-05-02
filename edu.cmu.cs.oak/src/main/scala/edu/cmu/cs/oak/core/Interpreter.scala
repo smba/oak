@@ -17,6 +17,9 @@ import edu.cmu.cs.oak.env.BooleanValue
 import edu.cmu.cs.oak.env.IntValue
 import edu.cmu.cs.oak.env.DoubleValue
 import com.caucho.quercus.expr.LiteralUnicodeExpr
+import com.caucho.quercus.expr.BinaryAndExpr
+import com.caucho.quercus.expr.BinaryOrExpr
+import com.caucho.quercus.expr.UnaryNotExpr
 
 object Interpreter {
 
@@ -32,7 +35,7 @@ object Interpreter {
     case s: BlockStatement => {
       var env_ = env
       s.getStatements.foreach {
-        stmt => env_ = execute(s, env_)
+        stmt => env_ = execute(stmt, env_)
       }
       return env_
     }
@@ -120,6 +123,59 @@ object Interpreter {
     // String literal 
     case e: LiteralUnicodeExpr => {
       return new StringValue(e.toString.slice(1, e.toString.length - 1))
+    }
+    
+    case e: VarExpr => {
+      return env.lookup(e.toString)
+    }
+    
+    case e: UnaryNotExpr => {
+      return evaluate(e.getExpr, env) match {
+        case e: BooleanValue => {
+          e.not
+        }
+        case _ => throw new RuntimeException()
+      }
+    }
+    
+    case e: BinaryAndExpr => {
+      val e1 = Interpreter.accessField(e, "_left").asInstanceOf[Expr]
+      val e2 = Interpreter.accessField(e, "_right").asInstanceOf[Expr]
+      return try {
+        evaluate(e1, env) match {
+          case v1: BooleanValue => {
+            evaluate(e2, env) match {
+              case v2: BooleanValue => {
+                v1 && v2
+              }
+              case _ => throw new RuntimeException()
+            }
+          }
+          case _ => throw new RuntimeException()
+        }
+      } catch {
+        case ex: Exception => throw new RuntimeException(ex)
+      }
+    }
+    
+    case e: BinaryOrExpr => {
+      val e1 = Interpreter.accessField(e, "_left").asInstanceOf[Expr]
+      val e2 = Interpreter.accessField(e, "_right").asInstanceOf[Expr]
+      return try {
+        evaluate(e1, env) match {
+          case v1: BooleanValue => {
+            evaluate(e2, env) match {
+              case v2: BooleanValue => {
+                v1 || v2
+              }
+              case _ => throw new RuntimeException()
+            }
+          }
+          case _ => throw new RuntimeException()
+        }
+      } catch {
+        case ex: Exception => throw new RuntimeException(ex)
+      }
     }
 
     case _ => throw new RuntimeException("evaluate() not implemented for AST class " + e.getClass + ".")
