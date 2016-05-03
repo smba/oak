@@ -7,6 +7,8 @@ scalaVersion := "2.10.3"
 // Add sources to eclipse project
 EclipseKeys.withSource := true
 
+libraryDependencies ++= Seq("org.slf4j" % "slf4j-api" % "1.7.5", "org.slf4j" % "slf4j-simple" % "1.7.5")
+
 libraryDependencies += "javax.cache" % "cache-api" % "1.0.0"
 libraryDependencies += "javax.servlet.jsp" % "jsp-api" % "2.2"
 libraryDependencies += "javax" % "javaee-api" % "7.0"

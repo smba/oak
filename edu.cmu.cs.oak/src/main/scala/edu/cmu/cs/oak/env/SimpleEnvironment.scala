@@ -1,7 +1,6 @@
 package edu.cmu.cs.oak.env
 
 import scala.collection.immutable.Stack
-import edu.cmu.cs.oak.constraints.Constraint
 
 
 
@@ -11,7 +10,7 @@ import edu.cmu.cs.oak.constraints.Constraint
 class SimpleEnvironment(variables: Map[String, OakValue],
                         output:    Stack[OakValue],
                         calls:     Stack[String],
-                        constraint:	 Constraint) extends Environment {
+                        constraint: String) extends Environment {
  
   def getVariables = variables
   def getOutput = output
@@ -28,7 +27,7 @@ class SimpleEnvironment(variables: Map[String, OakValue],
     if (!opt.isEmpty) {
       return opt.get
     } else {
-      throw new RuntimeException("")
+      throw new RuntimeException("Variable " + name + " is undefined.")
     }
   }
   
@@ -37,7 +36,9 @@ class SimpleEnvironment(variables: Map[String, OakValue],
   }
   
   override def join(env:Environment): Environment = {
-    null
+    val vars = joinVariableMaps(this, env)
+    val outp = joinStacks(this, env)
+    return new SimpleEnvironment(vars, outp, this.calls, this.constraint)
   }
   
   /**
@@ -68,9 +69,8 @@ class SimpleEnvironment(variables: Map[String, OakValue],
     } else {
       var stv1 = StringValue(output1.foldLeft("")((a, b) => a + b))
       var stv2 = StringValue(output2.foldLeft("")((a, b) => a + b))
-      
-      //TODO typing!!
-      return prefix.push(Choice( /*env1.getPathCondition()*/null , stv1, stv2)).reverse
+
+      return prefix.push(Choice(env1.getConstraint, stv1, stv2)).reverse
     }
   }
   
@@ -107,7 +107,7 @@ class SimpleEnvironment(variables: Map[String, OakValue],
    * will refer to symbolic values if their definition is ambiguous or
    * they're only defined once.
    */
-  private def joinStateMaps(env1:Environment, env2:Environment): Map[String, OakValue] = {
+  private def joinVariableMaps(env1: Environment, env2: Environment): Map[String, OakValue] = {
     val m1 = env1.getVariables
     val m2 = env2.getVariables
     /**
@@ -138,5 +138,15 @@ class SimpleEnvironment(variables: Map[String, OakValue],
   
   override def isGlobalEnvironment(): Boolean = {
     true
+  }
+
+  // TODO use real constraints
+  def fork(constraintS: String): (Environment, Environment) = {
+    return (new SimpleEnvironment(variables, output, calls, constraint + " && " + constraintS), new SimpleEnvironment(variables, output, calls, constraint + " && NOT(" + constraintS + ")"))
+  }
+
+  // TODO use real constraints
+  def withConstraint(constraintS: String): Environment = {
+    return new SimpleEnvironment(variables, output, calls, constraint + " && " + constraintS)
   }
 }

@@ -1,35 +1,19 @@
 package edu.cmu.cs.oak.core
 
 import com.caucho.quercus.env.Value
-import com.caucho.quercus.expr.AbstractBinaryExpr
-import com.caucho.quercus.expr.AbstractVarExpr
-import com.caucho.quercus.expr.BinaryAddExpr
-import com.caucho.quercus.expr.BinaryAndExpr
-import com.caucho.quercus.expr.BinaryAssignExpr
-import com.caucho.quercus.expr.BinaryDivExpr
-import com.caucho.quercus.expr.BinaryMulExpr
-import com.caucho.quercus.expr.BinaryOrExpr
-import com.caucho.quercus.expr.BinarySubExpr
-import com.caucho.quercus.expr.Expr
-import com.caucho.quercus.expr.LiteralExpr
-import com.caucho.quercus.expr.LiteralUnicodeExpr
-import com.caucho.quercus.expr.UnaryNotExpr
-import com.caucho.quercus.expr.VarExpr
-import com.caucho.quercus.statement.BlockStatement
-import com.caucho.quercus.statement.EchoStatement
-import com.caucho.quercus.statement.ExprStatement
-import com.caucho.quercus.statement.Statement
+import com.caucho.quercus.expr._
+import com.caucho.quercus.statement._
+import edu.cmu.cs.oak.env._
+import org.slf4j.LoggerFactory
 
-import edu.cmu.cs.oak.env.BooleanValue
-import edu.cmu.cs.oak.env.DoubleValue
-import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.env.IntValue
-import edu.cmu.cs.oak.env.NumericValue
-import edu.cmu.cs.oak.env.OakValue
-import edu.cmu.cs.oak.env.StringValue
-import com.caucho.quercus.expr.BinaryModExpr
+class Interpreter {
+
+}
 
 object Interpreter {
+
+  // Logging for the interpreter
+  val logger = LoggerFactory.getLogger(classOf[Interpreter])
 
   /**
    * Execution method. Executes a given statement and returns a
@@ -40,6 +24,10 @@ object Interpreter {
    */
   def execute(stmt: Statement, env: Environment): Environment = stmt match {
 
+    /*
+     * Statement of the form
+     * <Statement>; <Statement>; ...
+     */
     case s: BlockStatement => {
       var env_ = env
       s.getStatements.foreach {
@@ -48,18 +36,27 @@ object Interpreter {
       return env_
     }
 
+    /*
+     * Statement of the form
+     * echo <Expr>;
+     */
     case s: EchoStatement => {
       val expr = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
       return env.addOutput(evaluate(expr, env))
     }
 
     /*
-     * -> Assign statement
+     * Statement of the form
+     * <Var> = <Expr>;
      */
     case s: ExprStatement => {
+
+      // TODO Refactor variable access by reflection!
       val e = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
       e match {
         case b: BinaryAssignExpr => {
+
+          // TODO Refactor variable access by reflection!
           val name = Interpreter.accessField(e, "_var").asInstanceOf[AbstractVarExpr]
           val expr = Interpreter.accessField(e, "_value").asInstanceOf[Expr]
 
@@ -67,11 +64,72 @@ object Interpreter {
             case n: VarExpr => {
               env.update(name.toString(), evaluate(expr, env))
             }
-            case _ => throw new RuntimeException("unimplemented")
+            case _ => throw new RuntimeException()
           }
         }
         case _ => throw new RuntimeException("unimplemented")
       }
+    }
+
+
+    /*
+     * Statements of the form
+     * if (<Expr>) {
+     *    <Statement>
+     * } else {
+     *    <Statement>
+     * }
+      */
+    case s: IfStatement => {
+
+      /* Retrieve the condition and both statements from the IfStatement AST node.
+       * TODO Refactor variable access by reflection! */
+      val test = Interpreter.accessField(s, "_test").asInstanceOf[Expr]
+      val trueBlock = Interpreter.accessField(s, "_trueBlock").asInstanceOf[Statement]
+      val falseBlock = Interpreter.accessField(s, "_falseBlock").asInstanceOf[Statement]
+
+      /*
+      Concrete if possible, symbolic otherwise
+       */
+      return evaluate(test, env) match {
+
+        /* Execute a single branch */
+        case b: BooleanValue => {
+          if (b.value) {
+            return execute(trueBlock, env)
+          } else {
+            return execute(falseBlock, env)
+          }
+        }
+
+        /* Execute both branches (-> symbolically) and merge environments */
+        case b: SymbolicValue => {
+
+          // TODO use real constraints
+          val envs = env.fork(test.toString)
+          return execute(trueBlock, envs._1) join (execute(falseBlock, envs._2))
+        }
+
+        case _ => throw new RuntimeException()
+      }
+    }
+
+
+    /*
+     * Statements of the form
+     * while (<Expr>) {
+     *    <Statement>
+     * }
+     */
+    case s: WhileStatement => {
+
+      /* Retrieve the condition and both statements from the WhileStatement AST node.
+       * TODO Refactor variable access by reflection! */
+      val test = Interpreter.accessField(s, "_test").asInstanceOf[Expr]
+      val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
+
+      // TODO use real constraints
+      return execute(block, env.withConstraint(test.toString)) join (env)
     }
 
     case _ => throw new RuntimeException("execute() not implemented for AST class " + stmt.getClass + ".")
@@ -88,6 +146,8 @@ object Interpreter {
 
     /* Literals: String, Double, ...*/
     case e: LiteralExpr => {
+
+      // TODO Refactor variable access by reflection!
       val value = Interpreter.accessField(e, "_value").asInstanceOf[Value]
 
       /*
@@ -117,43 +177,65 @@ object Interpreter {
         }
 
       } else if (e.isArray) {
-        return null
+        throw new RuntimeException("Array values not implemented yet!")
       } else if (e.isAssign()) {
-        return null
+        throw new RuntimeException("AssignExpr not implemented yet!")
       } else {
-        return null
+        throw new RuntimeException()
       }
     }
 
-    // String literal 
+    /*
+     * Literal expressions, such as string, number or boolean literals.
+     */
     case e: LiteralUnicodeExpr => {
       return new StringValue(e.toString.slice(1, e.toString.length - 1))
     }
 
-    //Var ref
+    /*
+     * Variable expression of the form $<ID>
+     */
     case e: VarExpr => {
       return env.lookup(e.toString)
     }
 
+    /*
+     * Negated (boolean) expression of the form !<Expr>
+     */
     case e: UnaryNotExpr => {
       return evaluate(e.getExpr, env) match {
+
+        // default case: e evaluates to a BooleanValue
         case e: BooleanValue => {
           e.not
         }
+
+        // exceptional case: Found symbolic value -> return symbolic value
+        case v2: SymbolicValue => SymbolValue(e)
+
         case _ => throw new RuntimeException()
       }
     }
 
-    // X op Y
+    /*
+     * Binary expressions of the form v1 <operator> v2
+     */
     case ae: AbstractBinaryExpr => {
-      val e1 = ae.getLeft//Interpreter.accessField(e, "_left").asInstanceOf[Expr]
-      val e2 = ae.getRight//tInterpreter.accessField(e, "_right").asInstanceOf[Expr]
+
+      // Retrieve the operands e1, e2 of the binary expression
+      val e1 = ae.getLeft
+      val e2 = ae.getRight
+
       return try {
-        
+
+        // evaluate e1 and match by type
         evaluate(e1, env) match {
 
+          // expecting a boolean expression, where e1 AND e2 are BooleanValues
           case v1: BooleanValue => {
             evaluate(e2, env) match {
+
+              // default case: e1 AND e2 are BooleanValues
               case v2: BooleanValue => {
                 ae match {
                   case e: BinaryAndExpr => {
@@ -164,11 +246,21 @@ object Interpreter {
                   }
                 }
               }
+
+              // exceptional cases: return symbolic value and track unresolved expression
+              case v2: SymbolicValue => SymbolValue(ae)
+              case v2: NumericValue => SymbolValue(ae)
+              case v2: StringValue => SymbolValue(ae)
+
+              case _ => throw new RuntimeException()
             }
           }
-          
+
+          // expecting a arithmetic expression, where e1 AND e2 are NumericValues
           case v1: NumericValue => {
             evaluate(e2, env) match {
+
+              // default case: e1 AND e2 are NumericValues
               case v2: NumericValue => {
                 ae match {
                   case e: BinaryAddExpr => {
@@ -186,65 +278,49 @@ object Interpreter {
                   case e: BinaryModExpr => {
                     v1 % v2
                   }
+                  case e: BinaryLtExpr => {
+                    v1 < v2
+                  }
+                  case e: BinaryGtExpr => {
+                    v1 > v2
+                  }
+                  case e: BinaryEqExpr => {
+                    BooleanValue(v1 == v2)
+                  }
                 }
               }
-            }
-          }
-        }
-      } catch {
-        case e: Exception => throw new RuntimeException()
-      }
-    }
-    /*
-    case e: BinaryAndExpr => {
-      val e1 = Interpreter.accessField(e, "_left").asInstanceOf[Expr]
-      val e2 = Interpreter.accessField(e, "_right").asInstanceOf[Expr]
-      return try {
-        evaluate(e1, env) match {
-          case v1: BooleanValue => {
-            evaluate(e2, env) match {
-              case v2: BooleanValue => {
-                v1 && v2
-              }
+
+              // exceptional cases: return symbolic value and track unresolved expression
+              case v2: SymbolicValue => SymbolValue(ae)
+              case v2: BooleanValue => SymbolValue(ae)
+              case v2: StringValue => SymbolValue(ae)
+
               case _ => throw new RuntimeException()
             }
           }
-          case _ => throw new RuntimeException()
+
+          // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
+          case v1: SymbolicValue => SymbolValue(ae)
         }
       } catch {
-        case ex: Exception => throw new RuntimeException(ex)
+        case e: Exception => throw new RuntimeException(e)
       }
     }
 
-    case e: BinaryOrExpr => {
-      val e1 = Interpreter.accessField(e, "_left").asInstanceOf[Expr]
-      val e2 = Interpreter.accessField(e, "_right").asInstanceOf[Expr]
-      return try {
-        evaluate(e1, env) match {
-          case v1: BooleanValue => {
-            evaluate(e2, env) match {
-              case v2: BooleanValue => {
-                v1 || v2
-              }
-              case _ => throw new RuntimeException()
-            }
-          }
-          case _ => throw new RuntimeException()
-        }
-      } catch {
-        case ex: Exception => throw new RuntimeException(ex)
-      }
-    }
-	*/
     case _ => throw new RuntimeException("evaluate() not implemented for AST class " + e.getClass + ".")
   }
 
   /**
-   * Utility method. Access private fields via reflection.
-   *
-   * TODO replace by aspects in the future
-   */
-  def accessField(obj: AnyRef, name: String): Object = {
+    * Utility method to access private or protected fields of compiled
+    * sources.
+    *
+    * TODO Replace!
+    *
+    * @param obj  Object to access private of protected field of
+    * @param name Identifier of the field to access
+    * @return Value of the specified field at runtime
+    */
+  @deprecated def accessField(obj: AnyRef, name: String): Object = {
     val field = try {
       obj.getClass.getDeclaredField(name)
     } catch {

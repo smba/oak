@@ -31,5 +31,19 @@ case class IntValue(value: Int) extends NumericValue {
       case d: DoubleValue => DoubleValue(value % d.getValue)
     }
   }
+
+  override def <(v: NumericValue): BooleanValue = {
+    return v match {
+      case i: IntValue => BooleanValue(value < i.getValue)
+      case d: DoubleValue => BooleanValue(value < d.getValue)
+    }
+  }
+
+  override def >(v: NumericValue): BooleanValue = {
+    return v match {
+      case i: IntValue => BooleanValue(value > i.getValue)
+      case d: DoubleValue => BooleanValue(value > d.getValue)
+    }
+  }
   def getValue: Int = value
 }

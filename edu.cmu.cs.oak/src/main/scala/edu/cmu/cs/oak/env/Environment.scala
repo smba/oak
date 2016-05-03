@@ -1,45 +1,56 @@
 package edu.cmu.cs.oak.env
 
 import scala.collection.immutable.Stack
-import edu.cmu.cs.oak.constraints.Constraint
 
 trait Environment {
   
   /**
    * Updates a variable value in the environment.
    */
-  def update(name:String, value:OakValue): Environment = ???
+  def update(name: String, value: OakValue): Environment
   
   /**
    * Looks up a variable value in the environment
    */
-  def lookup(name:String): OakValue = ???
+  def lookup(name: String): OakValue
   
   /**
    * Adds an value (string, symbolic) to the output.
    */
-  def addOutput(value:OakValue): Environment = ???
+  def addOutput(value: OakValue): Environment
   
   /**
    * Merges two environments, e.g.:
    * val env_ = env1 join env2
    */
-  def join(env:Environment): Environment 
-  
+  def join(env: Environment): Environment
+
   /**
-   * Creates a plain environment only. Function symbols are
-   * available. Parent environment is linked to this instance 
-   * and vice versa.
-   */
-  def createSubEnv(): Environment = ???
+    * Returns a tuple of two copies of this, where the constrained is
+    * joined with either the argument constraint or NOT(constraint)
+    *
+    * @param constraint Constraint to add to the path condition
+    * @return Tuple of two alternate branch environments
+    */
+  def fork(constraint: String): (Environment, Environment)
+
+  /**
+    * Returns a new copy of this, where argument constraint is
+    * added to the path condition.
+    *
+    * @param constraint Constraint to add to the path condition
+    * @return Environment with respective path condition
+    */
+  def withConstraint(constraint: String): Environment
   
   /**
    * 
    */
-  def isGlobalEnvironment(): Boolean = ???
+  def isGlobalEnvironment(): Boolean
   
   def getVariables: Map[String, OakValue]
   def getOutput: Stack[OakValue]
   def getCalls: Stack[String]
-  def getConstraint: Constraint
+
+  def getConstraint: String
 }

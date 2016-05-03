@@ -1,37 +1,27 @@
-import scala.collection.immutable.Stack
-
-import org.scalatest.Finders
+import edu.cmu.cs.oak.core.{Interpreter, OakEngine}
+import edu.cmu.cs.oak.env._
 import org.scalatest.FlatSpec
 
-import edu.cmu.cs.oak.core.Interpreter
-import edu.cmu.cs.oak.core.OakEngine
-import edu.cmu.cs.oak.env.BooleanValue
-import edu.cmu.cs.oak.env.DoubleValue
-import edu.cmu.cs.oak.env.IntValue
-import edu.cmu.cs.oak.env.OakValue
-import edu.cmu.cs.oak.env.SimpleEnvironment
-import edu.cmu.cs.oak.env.StringValue
-import edu.cmu.cs.oak.env.IntValue
-import edu.cmu.cs.oak.env.StringValue
-import edu.cmu.cs.oak.env.BooleanValue
+import scala.collection.immutable.Stack
 
 object OakTest {
   def engine = new OakEngine()
-  def env = new SimpleEnvironment(Map[String, OakValue](), new Stack[OakValue](), new Stack[String](), null)
-  
+
+  def env = new SimpleEnvironment(Map[String, OakValue](), new Stack[OakValue](), new Stack[String](), "true")
 }
 
 class OakTest extends FlatSpec {
-  
-  /*
-  "Simple EchoStatement with String" should "be assigned correctly" in {
-    val p = OakTest.engine.loadFromScript("<?php echo 'Hallo World!'; ?>")
-    assert("\"Hallo World!\"" == Interpreter.execute(p.getStatement, OakTest.env))
+
+  /**
+    *
+    */
+  def loadAndExecute(script: String): Environment = {
+    val program = OakTest.engine.loadFromScript("<?php " + script + " ?>")
+    return Interpreter.execute(program.getStatement, OakTest.env)
   }
-  */
+
   "Simple ExprStatement with VarExpr (double)" should "be assigned correctly" in {
-    val p = OakTest.engine.loadFromScript("<?php $i = 13.37; ?>")
-    assert(Interpreter.execute(p.getStatement, OakTest.env).lookup("$i") == DoubleValue(13.37))
+    assert(loadAndExecute("$i = 13.37;").lookup("$i") == DoubleValue(13.37))
   }
   
   "Simple ExprStatement with VarExpr (int)" should "be assigned correctly" in {
@@ -126,6 +116,12 @@ class OakTest extends FlatSpec {
     assert(Interpreter.execute(p.getStatement, OakTest.env).lookup("$i") == IntValue(1))
   }
 
-  
+  "Simple ExprStatement with String (double)" should "be assigned correctly" in {
+    assert(loadAndExecute("$i = 'Bener';").lookup("$i") == StringValue("Bener"))
+  }
+
+  "IF Statement" should "be exeuted correctly" in {
+    assert(loadAndExecute("$i = 1; while ($i < 10) {$i = $i + 1;}").lookup("$i") == IntValue(1))
+  }
   
 }
