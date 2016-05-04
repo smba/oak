@@ -10,11 +10,11 @@ object OakTest {
   def env = new SimpleEnvironment(Map[String, OakValue](), new Stack[OakValue](), new Stack[String](), "true")
 }
 
+/**
+  * TODO simplify
+  */
 class OakTest extends FlatSpec {
 
-  /**
-    *
-    */
   def loadAndExecute(script: String): Environment = {
     val program = OakTest.engine.loadFromScript("<?php " + script + " ?>")
     return Interpreter.execute(program.getStatement, OakTest.env)
@@ -117,11 +117,21 @@ class OakTest extends FlatSpec {
   }
 
   "Simple ExprStatement with String (double)" should "be assigned correctly" in {
-    assert(loadAndExecute("$i = 'Bener';").lookup("$i") == StringValue("Bener"))
+    assert(loadAndExecute("$i = 'HelloWorld';").lookup("$i") == StringValue("HelloWorld"))
   }
 
-  "IF Statement" should "be exeuted correctly" in {
-    assert(loadAndExecute("$i = 1; while ($i < 10) {$i = $i + 1;}").lookup("$i") == IntValue(1))
+  "IF statements " should " be executed correctly" in {
+    // concrete execution
+    assert(loadAndExecute("$i = 0; if ($i < 1) {$j = 1;} else {$j = 0}").lookup("$j") == IntValue(1))
+    assert(loadAndExecute("$i = 1; if ($i < 1) {$j = 1;} else {$j = 0}").lookup("$j") == IntValue(0))
+
+    // symbolic execution with Choice
+    assert(loadAndExecute("$i = 0; if ($i < 'i') {$j = 1;} else {$j = 0}").lookup("$j") == Choice("true && ($i < \"i\")", IntValue(1), IntValue(0)))
+  }
+
+  "WHILE statements " should " be symbolically executed correctly" in {
+    // symbolic execution with Choice
+    assert(loadAndExecute("$i = 0; $j = 2; while ($i < 10) {$j = $j*$j; $i = $i+1;}").lookup("$j") == Choice("true && ($i < 10)", IntValue(4), IntValue(2)))
   }
   
 }
