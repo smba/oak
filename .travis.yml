@@ -2,4 +2,3 @@ language: scala
 
 script:
    - sbt "project oak" test
-   - sbt "project difftest" test
