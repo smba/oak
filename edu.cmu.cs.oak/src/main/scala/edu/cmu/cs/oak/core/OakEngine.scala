@@ -1,13 +1,14 @@
 package edu.cmu.cs.oak.core
 
 import java.io.StringReader
-import scala.io.Source
+
 import com.caucho.quercus.QuercusContext
 import com.caucho.quercus.parser.QuercusParser
 import com.caucho.quercus.program.QuercusProgram
 import com.caucho.quercus.script.EncoderStream
-import com.caucho.vfs.ReadStream
-import com.caucho.vfs.VfsStream
+import com.caucho.vfs.{ReadStream, VfsStream}
+
+import scala.io.Source
 
 /**
  * Loads scripts, handles the Quercus parser and manages the interpreter.
@@ -15,7 +16,7 @@ import com.caucho.vfs.VfsStream
 class OakEngine {
   
   /**
-   * @param Absolute path to the PHP source file to parse
+    * @param path to the PHP source file to parse
    * @return QuercusProgram parsed AST
    */
   def loadFromFile(path: String): QuercusProgram = {
@@ -28,7 +29,7 @@ class OakEngine {
   }
 
   /**
-   * @param PHP source code to parse, e.g. "<?php echo 'Hi!'; ?>"
+    * @param script source code to parse, e.g. "<?php echo 'Hi!'; ?>"
    * @return QuercusProgram parsed AST
    */
   def loadFromScript(script: String): QuercusProgram = {
@@ -66,5 +67,4 @@ object OakEngine {
     quercus.start
     return quercus
   }
-
 }

@@ -1,25 +1,31 @@
 package edu.cmu.cs.oak.env
 
-import scala.collection.immutable.Stack
-
-
+import scala.collection.immutable.{Map, Stack}
 
 /**
  * Implementation of a program state.
  */
-class SimpleEnvironment(variables: Map[String, OakValue],
+class SimpleEnvironment(parent: Environment,
+                        variables: Map[String, OakValue],
                         output:    Stack[OakValue],
                         calls:     Stack[String],
-                        constraint: String) extends Environment {
- 
-  def getVariables = variables
-  def getOutput = output
-  def getCalls = calls
-  def getConstraint = constraint
-  
+                        constraint: String,
+                        functions: Map[String, FunctionDef]) extends Environment {
+
+  override def getParent = parent
+
+  override def getVariables = variables
+
+  override def getOutput = output
+
+  override def getCalls = calls
+
+  override def getConstraint = constraint
+
+  override def getFunctions = functions
   
   override def update(name:String, value:OakValue): Environment = {
-    return new SimpleEnvironment(variables + (name -> value), output, calls, constraint)
+    return new SimpleEnvironment(parent, variables + (name -> value), output, calls, constraint, functions)
   }
   
   override def lookup(name:String): OakValue = {
@@ -27,18 +33,19 @@ class SimpleEnvironment(variables: Map[String, OakValue],
     if (!opt.isEmpty) {
       return opt.get
     } else {
+      println(getVariables)
       throw new RuntimeException("Variable " + name + " is undefined.")
     }
   }
   
   override def addOutput(value:OakValue): Environment = {
-    return new SimpleEnvironment(variables, output.push(value), calls, constraint)
+    return new SimpleEnvironment(parent, variables, output.push(value), calls, constraint, functions)
   }
   
   override def join(env:Environment): Environment = {
     val vars = joinVariableMaps(this, env)
     val outp = joinStacks(this, env)
-    return new SimpleEnvironment(vars, outp, this.calls, this.constraint)
+    return new SimpleEnvironment(parent, vars, outp, calls, constraint, functions)
   }
   
   /**
@@ -135,18 +142,19 @@ class SimpleEnvironment(variables: Map[String, OakValue],
     }
     return smap
   }
-  
-  override def isGlobalEnvironment(): Boolean = {
-    true
+
+  // TODO use real constraints
+  override def fork(constraintS: String): (Environment, Environment) = {
+    return (new BranchEnvironment(parent, variables, output, calls, constraint + " && " + constraintS, functions), new BranchEnvironment(parent, variables, output, calls, constraint + " && NOT(" + constraintS + ")", functions))
   }
 
   // TODO use real constraints
-  def fork(constraintS: String): (Environment, Environment) = {
-    return (new SimpleEnvironment(variables, output, calls, constraint + " && " + constraintS), new SimpleEnvironment(variables, output, calls, constraint + " && NOT(" + constraintS + ")"))
+  override def withConstraint(constraintS: String): Environment = {
+    return new SimpleEnvironment(parent, variables, output, calls, constraint + " && " + constraintS, functions)
   }
 
-  // TODO use real constraints
-  def withConstraint(constraintS: String): Environment = {
-    return new SimpleEnvironment(variables, output, calls, constraint + " && " + constraintS)
+  override def getFunctionEnv(functionDef: FunctionDef): Environment = {
+    return new FunctionEnv(this, Map[String, OakValue](), new Stack[OakValue], getCalls.push(functionDef.getName), getConstraint(), getFunctions())
   }
+
 }

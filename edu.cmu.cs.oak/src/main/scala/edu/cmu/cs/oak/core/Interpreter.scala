@@ -2,9 +2,13 @@ package edu.cmu.cs.oak.core
 
 import com.caucho.quercus.env.Value
 import com.caucho.quercus.expr._
+import com.caucho.quercus.program.{Arg, QuercusProgram}
 import com.caucho.quercus.statement._
 import edu.cmu.cs.oak.env._
 import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
 
 class Interpreter {
 
@@ -14,6 +18,32 @@ object Interpreter {
 
   // Logging for the interpreter
   val logger = LoggerFactory.getLogger(classOf[Interpreter])
+
+
+  def execute(p: QuercusProgram): Environment = {
+
+    val context = new GlobalEnv
+    p.getFunctionList.foreach {
+      f => {
+
+        // TODO Refactor variable access by reflection!
+        val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
+        val args = ListBuffer[String]()
+        Interpreter.accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
+          a => args.append(a.getName.toString())
+        }
+        val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
+
+        // Add function to the global context
+        context.addFunction(new FunctionDef(f.getName, args.toArray, statement, hasReturn))
+      }
+    }
+
+    /**
+      * TODO Objects & methods
+      */
+    return execute(p.getStatement, context.createSimpleEnvironment())
+  }
 
   /**
    * Execution method. Executes a given statement and returns a
@@ -41,8 +71,22 @@ object Interpreter {
      * echo <Expr>;
      */
     case s: EchoStatement => {
+
       val expr = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
-      return env.addOutput(evaluate(expr, env))
+      val v = evaluate(expr, env)
+
+      // TODO doku
+      if (env.getParent.isInstanceOf[BranchEnvironment] || env.getCalls.isEmpty) {
+        var tempEnv = env.writeBufferToOutput()
+        tempEnv = tempEnv.addOutput(v)
+        tempEnv.resetBuffer()
+        return tempEnv
+      } else {
+        env.sendBufferToParent()
+        env.resetBuffer()
+        env.getParent.receive(v)
+        return env
+      }
     }
 
     /*
@@ -114,7 +158,6 @@ object Interpreter {
       }
     }
 
-
     /*
      * Statements of the form
      * while (<Expr>) {
@@ -130,6 +173,20 @@ object Interpreter {
 
       // TODO use real constraints
       return execute(block, env.withConstraint(test.toString)) join (env)
+    }
+
+    /**
+      * Statement of the form
+      * return <-Expr>;
+      */
+    case s: ReturnStatement => {
+
+      // TODO Refactor variable access by reflection!
+      // TODO Call-by-reference
+      val expr = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
+      val v = evaluate(expr, env)
+
+      return env.update("return", evaluate(expr, env))
     }
 
     case _ => throw new RuntimeException("execute() not implemented for AST class " + stmt.getClass + ".")
@@ -305,6 +362,42 @@ object Interpreter {
       } catch {
         case e: Exception => throw new RuntimeException(e)
       }
+    }
+
+    // TODO recursion detection
+    case e: CallExpr => {
+
+      // TODO Refactor variable access by reflection!
+      val name = Interpreter.accessField(e, "_name").toString
+      var args = ListBuffer[Expr]()
+      Interpreter.accessField(e, "_args").asInstanceOf[Array[Expr]].foreach {
+        o => args.+=(o.asInstanceOf[Expr])
+      }
+
+      // get the function declaration
+      val function = if (env.getFunctions.get(name).nonEmpty) {
+        env.getFunctions.get(name).get
+      } else {
+        throw new RuntimeException("Function " + name + " is undefined!")
+      }
+
+      // Assert that the number of arguments in the function call and declaration match
+      assert(function.getArgs.length == args.length)
+
+      /* CALL-BY-VALUE only */
+
+      /**
+        * Create a new (function) environment with pre-assigned arguments
+        * TODO call-by-reference
+        */
+      var argsAssigned = Map[String, OakValue]()
+      (function.getArgs zip args).foreach {
+        t => argsAssigned = argsAssigned.+("$" + t._1 -> evaluate(t._2, env))
+      }
+      val functionEnv = new FunctionEnv(env, argsAssigned, env.getOutput(), env.getCalls.push(name), env.getConstraint(), env.getFunctions())
+      val returnEnv = execute(function.getStatement, functionEnv)
+
+      return returnEnv.lookup("return")
     }
 
     case _ => throw new RuntimeException("evaluate() not implemented for AST class " + e.getClass + ".")
