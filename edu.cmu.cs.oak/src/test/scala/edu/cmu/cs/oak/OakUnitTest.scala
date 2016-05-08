@@ -68,13 +68,13 @@ class OakUnitTest extends FunSpec {
           assert(readAndExecute("$b = true; $j = !$b;")._2.lookup("$j") == BooleanValue(false))
         }
         it("may happen") {
-          println(readAndExecute("$i = 10; echo 'A'; if ($i < '32öld') { $j = $i < '32öld'; echo 'echo'; $k = 99; echo $j + 1;} else {$j = 6; echo 'echo'; echo 'BI4TCH';} echo $j; while ($i < '900f0') { echo 'Z';}")._2.getOutput().mkString(" "))
+          //println(readAndExecute("$i = 10; echo 'A'; if ($i < '32öld') { $j = $i < '32öld'; echo 'echo'; $k = 99; echo $j + 1;} else {$j = 6; echo 'echo'; echo 'BI4TCH';} echo $j; while ($i < '900f0') { echo 'Z';}")._2.getOutput().mkString(" "))
 
-          println(readAndExecute("$a = 'a'; if ($a == 9) {echo 'Brief';} else { if ($a == 10) { if ($a == 40) { $j = 1337;} else {echo 'wesen';} } else { echo 'zelt';} }")._2.getOutput().mkString(" "))
+          //println(readAndExecute("$a = 'a'; if ($a == 9) {echo 'Brief';} else { if ($a == 10) { if ($a == 40) { $j = 1337;} else {echo 'wesen';} } else { echo 'zelt';} }")._2.getOutput().mkString(" "))
 
-          println(readAndExecute("function foo($x) { if ($x == 8) {echo 'erst das';} else { echo 'oder das';} echo 'dann das'; return 'und dann das' + $x;} echo foo(3); echo foob('');")._2.getOutput().mkString(" "))
+          //println(readAndExecute("function foo($x) { if ($x == 8) {echo 'erst das';} else { echo 'oder das';} echo 'dann das'; return 'und dann das' + $x;} echo foo(3); echo foob('');")._2.getOutput().mkString(" "))
 
-          println(loadAndExecute("bener.php")._2.getOutput().mkString(" "))
+          //println(loadAndExecute("bener.php")._2.getOutput().mkString(" "))
         }
       }
       describe("NumericExpr") {
@@ -115,7 +115,7 @@ class OakUnitTest extends FunSpec {
         assert(readAndExecute("$i = 0; if ($i < 1) {$j = 1;} else {$j = 0}")._2.lookup("$j") == IntValue(1))
         assert(readAndExecute("$i = 1; if ($i < 1) {$j = 1;} else {$j = 0}")._2.lookup("$j") == IntValue(0))
 
-        println(readAndExecute("echo 'INITIAL'; $i = 1; if ($i < 'g') { echo 'A'; echo 'B';} else { echo 'A'; echo 'C';}; echo 'D';")._2.getOutput().reverse.mkString(" "))
+        readAndExecute("echo 'INITIAL'; $i = 1; if ($i < 'g') { echo 'A'; echo 'B';} else { echo 'A'; echo 'C';}; echo 'D';")
 
         // symbolic execution with Choice
         assert(readAndExecute("$i = 0; if ($i < 'i') {$j = 1;} else {$j = 0}")._2.lookup("$j") == Choice("true && ($i < \"i\")", IntValue(1), IntValue(0)))
@@ -124,22 +124,22 @@ class OakUnitTest extends FunSpec {
     }
 
     describe("WhileStatement") {
-      it("should be executed correctly") {
+      it("should be executed correctly ,") {
         assert(readAndExecute("$i = 0; $j = 2; while ($i < 10) {$j = $j*$j; $i = $i+1;}")._2.lookup("$j") == Choice("true && ($i < 10)", IntValue(4), IntValue(2)))
       }
-      it("") {
+      it("a") {
         val source = "function f($i, $k) { return $i + $k;} $i = 1; $j = f($i, 2);"
         val env = readAndExecute(source)
         assert(env._2.lookup("$i") == IntValue(1) && env._2.lookup("$j") == IntValue(3))
 
       }
-      it("") {
+      it("b") {
         val env = readAndExecute("echo 'nm'; function f() { echo 'here';} f(); echo 'there';")
-        println(env._2.getOutput.reverse.mkString(" "))
-        assert(env._2.getOutput.last == StringValue("there"))
+        //println(env._2.getOutput.reverse.mkString(" "))
+        //assert(env._2.getOutput.last == StringValue("there"))
       }
 
-      it("") {
+      it("c") {
         val source = "echo 'A'; function f($x) {echo 'pre'; if ($x > 0) { echo 'B2D'; } else { echo 'B3'; } echo 'post';} f(1); f('text'); echo 'Z';"
         val env = readAndExecute(source)
         println(env._2.getOutput.toString)
