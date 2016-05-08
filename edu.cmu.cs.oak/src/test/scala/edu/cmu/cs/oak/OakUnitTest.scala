@@ -55,7 +55,7 @@ class OakUnitTest extends FunSpec {
           assert(readAndExecute("$i = 42;")._2.lookup("$i") == IntValue(42))
           assert(readAndExecute("$i = false;")._2.lookup("$i") == BooleanValue(false))
           assert(readAndExecute("$i = true;")._2.lookup("$i") == BooleanValue(true))
-          assert(readAndExecute("$i = 'bener';")._2.lookup("$i") == StringValue("bener"))
+          assert(readAndExecute("$i = 'tisch';")._2.lookup("$i") == StringValue("tisch"))
           assert(readAndExecute("$i = 3; $j = $i;")._2.lookup("$j") == IntValue(3))
         }
       }
@@ -127,19 +127,19 @@ class OakUnitTest extends FunSpec {
       it("should be executed correctly") {
         assert(readAndExecute("$i = 0; $j = 2; while ($i < 10) {$j = $j*$j; $i = $i+1;}")._2.lookup("$j") == Choice("true && ($i < 10)", IntValue(4), IntValue(2)))
       }
-      it("sucks") {
+      it("") {
         val source = "function f($i, $k) { return $i + $k;} $i = 1; $j = f($i, 2);"
         val env = readAndExecute(source)
         assert(env._2.lookup("$i") == IntValue(1) && env._2.lookup("$j") == IntValue(3))
 
       }
-      it("strikes again") {
+      it("") {
         val env = readAndExecute("echo 'nm'; function f() { echo 'here';} f(); echo 'there';")
         println(env._2.getOutput.reverse.mkString(" "))
         assert(env._2.getOutput.last == StringValue("there"))
       }
 
-      it("kicks in") {
+      it("") {
         val source = "echo 'A'; function f($x) {echo 'pre'; if ($x > 0) { echo 'B2D'; } else { echo 'B3'; } echo 'post';} f(1); f('text'); echo 'Z';"
         val env = readAndExecute(source)
         println(env._2.getOutput.toString)
