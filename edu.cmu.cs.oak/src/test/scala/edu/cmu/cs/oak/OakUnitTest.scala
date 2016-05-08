@@ -68,13 +68,13 @@ class OakUnitTest extends FunSpec {
           assert(readAndExecute("$b = true; $j = !$b;")._2.lookup("$j") == BooleanValue(false))
         }
         it("may happen") {
-          //println(readAndExecute("$i = 10; echo 'A'; if ($i < '32öld') { $j = $i < '32öld'; echo 'echo'; $k = 99; echo $j + 1;} else {$j = 6; echo 'echo'; echo 'BI4TCH';} echo $j; while ($i < '900f0') { echo 'Z';}")._2.getOutput().mkString(" "))
+          println(readAndExecute("$i = 10; echo 'A'; if ($i < '32öld') { $j = $i < '32öld'; echo 'echo'; $k = 99; echo $j + 1;} else {$j = 6; echo 'echo'; echo 'BI4TCH';} echo $j; while ($i < '900f0') { echo 'Z';}")._2.getOutput().mkString(" "))
 
-          //println(readAndExecute("$a = 'a'; if ($a == 9) {echo 'Brief';} else { if ($a == 10) { if ($a == 40) { $j = 1337;} else {echo 'wesen';} } else { echo 'zelt';} }")._2.getOutput().mkString(" "))
+          println(readAndExecute("$a = 'a'; if ($a == 9) {echo 'Brief';} else { if ($a == 10) { if ($a == 40) { $j = 1337;} else {echo 'wesen';} } else { echo 'zelt';} }")._2.getOutput().mkString(" "))
 
-          //println(readAndExecute("function foo($x) { if ($x == 8) {echo 'erst das';} else { echo 'oder das';} echo 'dann das'; return 'und dann das' + $x;} echo foo(3); echo foob('');")._2.getOutput().mkString(" "))
+          println(readAndExecute("function foo($x) { if ($x == 8) {echo 'erst das';} else { echo 'oder das';} echo 'dann das'; return 'und dann das' + $x;} echo foo(3); echo foob('');")._2.getOutput().mkString(" "))
 
-          //println(loadAndExecute("bener.php")._2.getOutput().mkString(" "))
+          println(loadAndExecute("bener.php")._2.getOutput().mkString(" "))
         }
       }
       describe("NumericExpr") {
@@ -135,8 +135,8 @@ class OakUnitTest extends FunSpec {
       }
       it("b") {
         val env = readAndExecute("echo 'nm'; function f() { echo 'here';} f(); echo 'there';")
-        //println(env._2.getOutput.reverse.mkString(" "))
-        //assert(env._2.getOutput.last == StringValue("there"))
+        println(env._2.getOutput.reverse.mkString(" "))
+        assert(env._2.getOutput.last == StringValue("there"))
       }
 
       it("c") {
