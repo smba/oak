@@ -24,15 +24,15 @@ trait Environment extends EnvListener {
 
   def getOutput(): List[OakValue]
   //def clearOutput()
-
+  def receiveOutput(value: Seq[OakValue])
   def createFunctionEnvironment(f: String): Environment
 
   def getConstraint(): String
 
   def fork(constraint: String): (BranchEnv, BranchEnv)
   def prependOutput(pre: List[OakValue])
-  def ifdefy(node: OakValue): List[String]
-  def ifdefy(): List[String]
+  //def ifdefy(node: OakValue): List[String]
+  //def ifdefy(): List[String]
 }
 
 object Environment {

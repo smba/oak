@@ -245,17 +245,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   override def execute(stmt: Statement, env: Environment): (String, Environment) = stmt match {
 
     case s: BlockStatement => execute(s, env)
-
     case s: EchoStatement => execute(s, env)
-
     case s: ExprStatement => execute(s, env)
-
     case s: IfStatement => execute(s, env)
-
     case s: WhileStatement => execute(s, env)
-
     case s: ReturnStatement => execute(s, env)
-
     case _ => throw new UnimplementedException(stmt, " is not implemented for statement " + stmt.getClass + ".")
   }
 
@@ -520,9 +514,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case e: UnaryNotExpr => evaluate(e, env)
     case ae: AbstractBinaryExpr => evaluate(ae, env)
     case e: CallExpr => evaluate(e, env)
-    case arrayExpr: FunArrayExpr => evaluate(e, env)
-    case arrayGet: ArrayGetExpr => evaluate(e, env)
-    case b: BinaryAppendExpr => evaluate(e, env)
+    case arrayExpr: FunArrayExpr => evaluate(arrayExpr, env)
+    case arrayGet: ArrayGetExpr => evaluate(arrayGet, env)
+    case b: BinaryAppendExpr => evaluate(b, env)
     case _ => throw new UnimplementedException(e, "is unimplemented.")
   }
 
