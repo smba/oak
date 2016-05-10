@@ -7,6 +7,13 @@ import edu.cmu.cs.oak.value.OakValue
 
 trait Interpreter {
 
+  def evaluate(e: Expr, env: Environment): (OakValue, Environment)
+
+  def execute(e: Statement, env: Environment): (String, Environment)
+
+}
+
+object Interpreter {
   /**
    * Utility method to access private or protected fields of compiled
    * sources.
@@ -32,8 +39,12 @@ trait Interpreter {
     value
   }
 
-  def evaluate(e: Expr, env: Environment): (OakValue, Environment)
-
-  def execute(e: Statement, env: Environment): (String, Environment)
-
+  @deprecated def accessArrayFields[T](obj: scala.Array[T]): List[T] = {
+    val size = obj.length
+    var out = List[T]()
+    for (i <- 0 to size - 1) {
+      out = out ++ List(java.lang.reflect.Array.get(obj, i).asInstanceOf[T])
+    }
+    out
+  }
 }

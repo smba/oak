@@ -6,6 +6,6 @@ import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class OakTest extends Suites(
-  new OakUnitTest,
-  new OakIntegrationTest
+  //new OakUnitTest,
+  //new OakIntegrationTest
 )
