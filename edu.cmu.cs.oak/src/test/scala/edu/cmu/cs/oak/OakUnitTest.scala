@@ -13,6 +13,8 @@ import edu.cmu.cs.oak.value.StringValue
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.nodes.DNode
 
 
 /**
@@ -45,6 +47,7 @@ class OakUnitTest extends FunSpec {
    * @return (ControlCode, Environment)
    */
   def loadAndExecute(fileName: String): (String, Environment) = {
+    System.err.println(getClass.getResource("/" + fileName))
     val program = engine.loadFromFile(getClass.getResource("/" + fileName))
     return interpreter.execute(program)
   }
@@ -128,15 +131,15 @@ class OakUnitTest extends FunSpec {
     describe("in combination") {
       it("should be executed correctly") {
         var script = "$i = 10; echo 'A'; if ($i < 'Text') { $j = $i < 'Text'; echo 'echo'; $k = 99; echo $j + 1;} else {$j = 6; echo 'B'; echo 'C';} echo $j; while ($i < 'Texttext') { echo 'Z';}"
-        System.err.println(readAndExecute(script)._2.getOutput())
+        //System.err.println(readAndExecute(script)._2.getOutput())
 
         script = "$a = 'a'; if ($a == 9) {echo 'Brief';} else { if ($a == 10) { if ($a == 40) { $j = 1337;} else {echo 'wesen';} } else { echo 'zelt';} }"
-        System.err.println(readAndExecute(script)._2.getOutput())
+        //System.err.println(readAndExecute(script)._2.getOutput())
 
         script = "function foo($x) { if ($x == 8) {echo 'erst das';} else { echo 'oder das';} echo 'dann das'; return 'und dann das' + $x;} echo foo(3); echo foob('');"
-        System.err.println(readAndExecute(script)._2.getOutput())
+        //System.err.println(readAndExecute(script)._2.getOutput())
 
-        System.err.println(loadAndExecute("bener.php"))
+        //System.err.println(loadAndExecute("bener.php"))
       }
 
       it("a") {
@@ -147,14 +150,12 @@ class OakUnitTest extends FunSpec {
       }
       it("b") {
         val env = readAndExecute("echo 'nm'; function f() { echo 'here';} f(); echo 'there';")
-        System.err.println(env._2.getOutput.reverse.mkString(" "))
         assert(env._2.getOutput.last == StringValue("there"))
       }
 
       it("c") {
         val source = "echo 'A'; function f($x) {echo 'pre'; if ($x > 0) { echo 'B2D'; } else { echo 'B3'; } echo 'post';} f(1); f('text'); echo 'Z';"
         val env = readAndExecute(source)
-        System.err.println(env._2.getOutput.toString)
       }
     }
 
@@ -166,16 +167,26 @@ class OakUnitTest extends FunSpec {
       }
       
       it("e") {
-        var script = "function foo($x) { return $x;} $ints['bener'] = 3; $t = array(12,14); echo count($t);"
+        var script = "function foo($x) { return $x;} $ints['bener'] = 3; $x = $ints['bener']; $t = array(12,14); echo count($t);"
         val env = readAndExecute(script)._2
-        //println(Map(1->2,2->4,3->6))
-        //println(env.getVariables())
-        System.err.println(env.getVariables())
-        System.err.println(env.getOutput())
-        //println(e.asInstanceOf[ArrayValue])
-        //assert(env.ifdefy().mkString(" ").equals("A #if true && ($i < \"Text\") echo Σ[7] #else B C #endif #if true && ($i < \"Text\") Σ[4] #else 6 #endif #if true && ($i < \"Texttext\") Z #else #endif"))
+        //System.err.println(env.getVariables())
+        //System.err.println(env.getOutput())
+        //println(env.ifdefy().mkString(" ").equals("A #if true && ($i < \"Text\") echo Σ[7] #else B C #endif #if true && ($i < \"Text\") Σ[4] #else 6 #endif #if true && ($i < \"Texttext\") Z #else #endif"))
       }
 
+  }
+  describe("Array values") {
+    it("should be assigned and referred to correctly") {
+      val res = loadAndExecute("arrayValue01.php")._2
+      //println("BEnerr " + DNode.createDNode(res.getOutput()))
+    }
+  }
+  describe("DModel") {
+    it("rocks") {
+      val source = "echo 'INITIAL'; $i = 1; if ($i < 'g') { echo 'A'; if ($i < 'word') { echo 'no hablo'; echo 'espanol';} else { echo 'sure, yo hablo espanol'; } } else { echo 'A'; echo 'C';}; echo 'D';"
+      val env = readAndExecute(source)._2
+      //System.err.println(DNode.createDNode(env.getOutput()))
+    }
   }
 
 }
