@@ -1,6 +1,6 @@
 <?php
 $j = 9;
-echo "Hallo Christian!";
+echo "Hallo Welt!";
 $i = 1;
 function foo($x) {
 	echo "foo";
