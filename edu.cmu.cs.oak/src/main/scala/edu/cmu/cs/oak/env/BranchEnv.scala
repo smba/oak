@@ -9,9 +9,23 @@ import edu.cmu.cs.oak.value.OakValueSequence
 
 class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends AbstractEnv(parent: EnvListener, calls: Stack[String], constraint: String) {
 
+  /**
+   * Join this branch environment with another branch environment.
+   * 
+   * @param that BranchEnv instance to join with
+   * 
+   * @return merged Environment instance
+   */
   def join(that: BranchEnv): Environment = {
-
-    val symbolicOutput = joinOutput(this, that)
+    
+    /* Assert that both this and that environment link to the 
+     * same parent environment. */
+    assert(getParent eq that.getParent)
+    
+    /* Create a new result environment of the same tyoe
+     * as the parent environment. 
+     * 
+     * */
     val env = parent.asInstanceOf[Environment] match {
       case simpleEnv: SimpleEnv => {
         new SimpleEnv(simpleEnv.getParent(), simpleEnv.getCalls(), simpleEnv.getConstraint())
@@ -24,14 +38,27 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
       }
     }
     
+    /* Compute symbolic output of merged branches and add
+     * it to the output of the result environment. */
+    val symbolicOutput = joinOutput(this, that)
     symbolicOutput.foreach {
       o => env.addOutput(o)
     }
 
+    /* Compute the merged map of variables and add
+     *  he map to the result environment. 
+     *  
+     *  TODO Tag 'dirty' variables and only compare neccessary variables
+     *  */
     val joinedVar = joinVariableMaps(this, that)
     joinedVar.keySet.foreach {
-
-      key => assert(!joinedVar.get(key).get.isInstanceOf[OakVariable]); env.update(key, joinedVar.get(key).get)
+      key => 
+         {
+           /* Assert that the variables are defined. */
+           assert(joinedVar.get(key).nonEmpty)
+           
+           env.update(key, joinedVar.get(key).get)
+         }
     }
 
     return env
@@ -76,7 +103,7 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
    */
   private def commonPrefix(s: List[OakValue], t: List[OakValue], out: List[OakValue] = List[OakValue]()): List[OakValue] = {
     if (s.isEmpty || t.isEmpty || !s(0).equals(t(0))) {
-      return out
+      return out 
     } else {
       commonPrefix(s.slice(1, s.size), t.slice(1, t.size), out.::(s(0)))
     }
@@ -91,14 +118,14 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
     val s2 = env2.getOutput
     
     val prefix = commonPrefix(s1.reverse, s2.reverse)
-    val output1 = s1/*.reverse*/.slice(prefix.size, s1.size)
-    val output2 = s2/*.reverse*/.slice(prefix.size, s2.size)
+    val output1 = s1.slice(prefix.size, s1.size)
+    val output2 = s2.slice(prefix.size, s2.size)
 
     if (compareStacks(output1, output2)) {
       return prefix ++ output1
     } else {
-      var stv1 = if (output1.size > 1) OakValueSequence(output1.toList)/*StringValue(output1.foldLeft("")((a, b) => a + b))*/ else if (output1.size == 1) output1.head else null
-      var stv2 = if (output2.size > 1) OakValueSequence(output2.toList)/*StringValue(output2.foldLeft("")((a, b) => a + b))*/ else if (output2.size == 1) output2.head else null
+      var stv1 = if (output1.size > 1) OakValueSequence(output1.toList) else if (output1.size == 1) output1.head else null
+      var stv2 = if (output2.size > 1) OakValueSequence(output2.toList) else if (output2.size == 1) output2.head else null
 
       return prefix.::(Choice(env1.getConstraint, stv1, stv2))
     }
@@ -122,7 +149,7 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
     a = a.tail
     val element_b = b.head
     b = b.tail
-    try {
+    try { 
       if (((element_a == null) && (element_b != null)) || (!element_a.equals(element_b)))
         return false
       return compareStacks(a, b)
