@@ -1,8 +1,10 @@
-<?php
+<?php 
 
 	/* Assignments */
 	$i = array(1,2,4,8);
 	$i[5] = 16;
+	
+	$x = 8;
 	
 	/* Access array variables */
 	$j["key"] = $i[1] * 2;
@@ -11,6 +13,6 @@
 	/* Print */
 	echo $j;
 
-	$k = "a" . "b" . ($i < 9);
-	echo "a" . "b" . ($i < 9);
+	$k = "a" . "b" . ($x < 9);
+	echo "a" . "b" . ($x < 9);
 ?>

@@ -146,7 +146,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             logger.info("Updated " + arrayValueName)
             return ("OK", env)
           }
-          case _ => throw new UnexpectedTypeException(name, " type is unexpected.")
+          case _ => throw new UnexpectedTypeException(name, expr.toString())
         }
       }
 
@@ -381,25 +381,26 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
                 }
               }, env)
             }
-
+            
             // exceptional cases: return symbolic value and track unresolved expression
             case v2: SymbolicValue => (SymbolValue(ae, OakHeap.getIndex), env)
             case v2: BooleanValue => (SymbolValue(ae, OakHeap.getIndex), env)
             case v2: StringValue => (SymbolValue(ae, OakHeap.getIndex), env)
-
-            case _ => throw new UnexpectedTypeException(e2, " type is not expected.")
+              
+            case v2: ArrayValue => throw new UnexpectedTypeException(e2, "Can't compare array with " + v1.getClass + ".")
+            case _ => throw new UnexpectedTypeException(e2, evaluate(e2, env)._1+"")
           }
         }
 
         case v1: StringValue => {
-          //TODO CONCAT
+          //TODO CONCAT?
           return (new SymbolValue(ae, OakHeap.getIndex), env)
         }
-
+        
         // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
         case v1: SymbolicValue => (SymbolValue(ae, OakHeap.getIndex), env)
 
-        case _ => throw new UnexpectedTypeException(e1, " type is not expected.")
+        case _ => throw new UnexpectedTypeException(e1, " any type1 ")
       }
     } catch {
       case e: Exception => throw new RuntimeException(e)
