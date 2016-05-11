@@ -23,7 +23,7 @@ import edu.cmu.cs.oak.nodes.DNode
  * for basic code coverage.
  */
 
-//@RunWith(classOf[JUnitRunner]) //optional
+@RunWith(classOf[JUnitRunner]) //optional
 class OakUnitTest extends FunSpec {
 
   // engine and interpreter instance for testing
@@ -186,6 +186,22 @@ class OakUnitTest extends FunSpec {
       val source = "echo 'INITIAL'; $i = 1; if ($i < 'g') { echo 'A'; if ($i < 'word') { echo 'no hablo'; echo 'espanol';} else { echo 'sure, yo hablo espanol'; } } else { echo 'A'; echo 'C';}; echo 'D';"
       val env = readAndExecute(source)._2
       //System.err.println(DNode.createDNode(env.getOutput()))
+    }
+  }
+  
+  describe("Reference values") {
+    describe("simple assignment/access") {
+      //val env = loadAndExecute("referenceValue01.php")._2
+      //assert(env.lookup("$a") == IntValue(2) && env.lookup("$b") == IntValue(2))
+    }
+    describe("array assignment/access") {
+     // val env = loadAndExecute("referenceValue02.php")._2
+      //assert(env.lookup("$b") == IntValue(9) && env.lookup("$a").asInstanceOf[ArrayValue].get(IntValue(0)) == IntValue(9))
+    }
+    
+    describe("function arguments passed by reference") {
+      val env = loadAndExecute("referenceValue03.php")._2
+      assert(env.lookup("$a") == IntValue(4))
     }
   }
 

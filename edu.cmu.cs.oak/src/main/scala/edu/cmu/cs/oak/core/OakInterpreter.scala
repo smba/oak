@@ -1,5 +1,7 @@
 package edu.cmu.cs.oak.core
 
+import scala.annotation.elidable
+import scala.annotation.elidable.ASSERTION
 import scala.collection.immutable.Stack
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
@@ -7,23 +9,59 @@ import scala.collection.mutable.ListBuffer
 import org.slf4j.LoggerFactory
 
 import com.caucho.quercus.env.Value
-import com.caucho.quercus.expr._
+import com.caucho.quercus.expr.AbstractBinaryExpr
+import com.caucho.quercus.expr.AbstractVarExpr
+import com.caucho.quercus.expr.ArrayGetExpr
+import com.caucho.quercus.expr.BinaryAddExpr
+import com.caucho.quercus.expr.BinaryAndExpr
+import com.caucho.quercus.expr.BinaryAppendExpr
+import com.caucho.quercus.expr.BinaryAssignExpr
+import com.caucho.quercus.expr.BinaryAssignRefExpr
+import com.caucho.quercus.expr.BinaryDivExpr
+import com.caucho.quercus.expr.BinaryEqExpr
+import com.caucho.quercus.expr.BinaryGtExpr
+import com.caucho.quercus.expr.BinaryLtExpr
+import com.caucho.quercus.expr.BinaryModExpr
+import com.caucho.quercus.expr.BinaryMulExpr
+import com.caucho.quercus.expr.BinaryOrExpr
+import com.caucho.quercus.expr.BinarySubExpr
+import com.caucho.quercus.expr.CallExpr
+import com.caucho.quercus.expr.Expr
+import com.caucho.quercus.expr.FunArrayExpr
+import com.caucho.quercus.expr.LiteralExpr
+import com.caucho.quercus.expr.LiteralUnicodeExpr
+import com.caucho.quercus.expr.UnaryNotExpr
+import com.caucho.quercus.expr.VarExpr
 import com.caucho.quercus.program.Arg
 import com.caucho.quercus.program.QuercusProgram
-import com.caucho.quercus.statement._
+import com.caucho.quercus.statement.BlockStatement
+import com.caucho.quercus.statement.EchoStatement
+import com.caucho.quercus.statement.ExprStatement
+import com.caucho.quercus.statement.IfStatement
+import com.caucho.quercus.statement.ReturnStatement
+import com.caucho.quercus.statement.Statement
+import com.caucho.quercus.statement.WhileStatement
 
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.env.SimpleEnv
-import edu.cmu.cs.oak.lib.InterpreterPlugin
-import edu.cmu.cs.oak.lib.array.Count
-import edu.cmu.cs.oak.value._
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.exceptions.UnexpectedTypeException
 import edu.cmu.cs.oak.exceptions.UnimplementedException
+import edu.cmu.cs.oak.lib.InterpreterPlugin
+import edu.cmu.cs.oak.lib.array.Count
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.value.BooleanValue
+import edu.cmu.cs.oak.value.DoubleValue
+import edu.cmu.cs.oak.value.FunctionDef
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.NumericValue
+import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.value.StringValue
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.SymbolicValue
+import edu.cmu.cs.oak.value.OakVariable
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -50,7 +88,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
       val args = ListBuffer[String]()
       Interpreter.accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
-        a => args.append(a.getName.toString())
+        a => args.append((if (a.isReference()) "&" else "") + a.getName.toString())
       }
       val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
       // Add function to the global environment
@@ -140,10 +178,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             } catch {
               case ex: Exception => new ArrayValue()
             }
-
+            
             arrayValue.set(index, evaluate(expr, env)._1)
+            
             env.update(arrayValueName, arrayValue)
-            logger.info("Updated " + arrayValueName)
             return ("OK", env)
           }
           case _ => throw new UnexpectedTypeException(name, expr.toString())
@@ -157,7 +195,45 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         evaluate(c, env)
         return ("OK", env)
       }
-      case _ => throw new UnimplementedException(e, " is not implemented for ExprStatement.")
+      
+      /* Assignment of a reference, i.e., something like $var = &$value; */
+      case e: BinaryAssignRefExpr => {
+       
+        /* Retrieve the var and value value */
+        val name = Interpreter.accessField(e, "_var").asInstanceOf[VarExpr] // AbstractVarExpr?
+        val value = Interpreter.accessField(e, "_value").asInstanceOf[Expr]
+        
+        /* Update the environment so that 
+         * + $var is mapped to the same reference as evaluate($value)
+         * */
+        val oakVariable = value match {
+          case varexpr: VarExpr => {
+            
+            /* Look up the name of the referenced variable in the String -> OakVariable map*/
+            env.getVariables.get(varexpr.toString).get
+          }
+          case aget: ArrayGetExpr => {
+            
+            // Get the reference of the stuff
+            val exx = Interpreter.accessField(aget, "_expr").asInstanceOf[Expr]
+            val expr = evaluate(exx, env)._1
+            val index = evaluate(Interpreter.accessField(aget, "_index").asInstanceOf[Expr], env)._1
+            
+            assert(expr.isInstanceOf[ArrayValue] && index.isInstanceOf[OakValue])
+            val ref = expr.asInstanceOf[ArrayValue].getRef(index)
+            ref
+          }
+          case _ => throw new UnimplementedException(value, "")
+        }
+        
+        /* Update */
+        env.update(name.toString, oakVariable)
+         
+        return ("OK", env)
+        
+      }
+      
+      case _ => throw new UnimplementedException(e, e.getClass + " is not implemented for ExprStatement.")
     }
   }
 
@@ -293,7 +369,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: VarExpr, env: Environment): (OakValue, Environment) = {
-    return (env.lookup(e.toString), env)
+    val value = env.lookup(e.toString)
+    return  value match {
+      case ref: OakVariable => (OakHeap.extract(ref), env)
+      case _ => (value, env)
+    }
   }
 
   def evaluate(e: UnaryNotExpr, env: Environment): (OakValue, Environment) = {
@@ -408,6 +488,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: CallExpr, env: Environment): (OakValue, Environment) = {
+    
+    
+    
     // TODO Refactor variable Interpreter.access by reflection!
     val name = Interpreter.accessField(e, "_name").toString
 
@@ -456,7 +539,19 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
      */
     val functionEnv = env.createFunctionEnvironment(name)
     (function.getArgs zip args).foreach {
-      t => functionEnv.update("$" + t._1, evaluate(t._2, env)._1)
+      t => {
+        val functionVal = if (t._1.startsWith("&")) {
+           // is reference arg
+          try {
+            env.getVariables.get(t._2.toString).get
+          } catch {
+            case nsee: NoSuchElementException => throw new RuntimeException("Only variables can be passed by reference.")
+          }
+        } else {
+          evaluate(t._2, env)._1
+        }
+        functionEnv.update("$" + t._1.replace("&", ""), functionVal)
+      }
     }
 
     val result = execute(function.getStatement, functionEnv)
@@ -518,7 +613,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case arrayExpr: FunArrayExpr => evaluate(arrayExpr, env)
     case arrayGet: ArrayGetExpr => evaluate(arrayGet, env)
     case b: BinaryAppendExpr => evaluate(b, env)
-    case _ => throw new UnimplementedException(e, "is unimplemented.")
+    case _ => System.err.println(e.getClass.toString); throw new UnimplementedException(e, "is unimplemented.")
+  
   }
 
   /*
