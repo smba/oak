@@ -15,6 +15,8 @@ import org.scalatest.junit.JUnitRunner
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.nodes.DNode
+import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.value.OakVariable
 
 
 /**
@@ -23,7 +25,7 @@ import edu.cmu.cs.oak.nodes.DNode
  * for basic code coverage.
  */
 
-@RunWith(classOf[JUnitRunner]) //optional
+//@RunWith(classOf[JUnitRunner]) //optional
 class OakUnitTest extends FunSpec {
 
   // engine and interpreter instance for testing
@@ -47,7 +49,6 @@ class OakUnitTest extends FunSpec {
    * @return (ControlCode, Environment)
    */
   def loadAndExecute(fileName: String): (String, Environment) = {
-    System.err.println(getClass.getResource("/" + fileName))
     val program = engine.loadFromFile(getClass.getResource("/" + fileName))
     return interpreter.execute(program)
   }
@@ -191,17 +192,26 @@ class OakUnitTest extends FunSpec {
   
   describe("Reference values") {
     describe("simple assignment/access") {
-      //val env = loadAndExecute("referenceValue01.php")._2
-      //assert(env.lookup("$a") == IntValue(2) && env.lookup("$b") == IntValue(2))
+      val env = loadAndExecute("referenceValue01.php")._2
+      assert(env.lookup("$a") == IntValue(2) && env.lookup("$b") == IntValue(2))
     }
     describe("array assignment/access") {
-     // val env = loadAndExecute("referenceValue02.php")._2
-      //assert(env.lookup("$b") == IntValue(9) && env.lookup("$a").asInstanceOf[ArrayValue].get(IntValue(0)) == IntValue(9))
+      val env = loadAndExecute("referenceValue02.php")._2
+      assert(env.lookup("$b") == IntValue(9) && env.lookup("$a").asInstanceOf[ArrayValue].get(IntValue(0)) == IntValue(9))
     }
     
     describe("function arguments passed by reference") {
       val env = loadAndExecute("referenceValue03.php")._2
+      System.err.println("Bener " + env.getOutput())
       assert(env.lookup("$a") == IntValue(4))
+    }
+  }
+  
+  describe("Object orientation") {
+    it("Class decaration") {
+      val env = loadAndExecute("objectOrientation01.php")._2
+      System.err.println(env.lookup("$obj").asInstanceOf[ObjectValue].getFields() + " || " + env.getRef("$myValue"))
+      System.err.println("Output: " + env.getOutput)
     }
   }
 

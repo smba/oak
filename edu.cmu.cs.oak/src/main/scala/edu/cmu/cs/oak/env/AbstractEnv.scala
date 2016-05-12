@@ -6,11 +6,14 @@ import scala.collection.mutable.ListBuffer
 import org.slf4j.LoggerFactory
 
 import edu.cmu.cs.oak.value.Choice
+import edu.cmu.cs.oak.value.ClassDef
 import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.env.ObjectEnv
 
 /**
  * Programs state and program state operations.
@@ -31,6 +34,11 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
    */
   var output = new ListBuffer[OakValue]()
 
+  /**
+   * Class definitions
+   */
+  var classDefs = Map[String, ClassDef]()
+
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
   /**
@@ -41,17 +49,18 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
    * @param value OakValue to assign to the variable
    */
   override def update(name: String, value: OakValue): Unit = value match {
-    case ref: OakVariable => {
-      variables += (name -> ref)
+    case a: OakVariable => {
+      //throw new RuntimeException("misuse")
+      variables += (name -> a)
     }
     case _ => {
-      if (variables.contains(name)) {
-        OakHeap.insert(variables.get(name).get, value)
-      } else {
-        val variable = new OakVariable(name + OakHeap.getIndex())
-        OakHeap.insert(variable, value)
-        variables += (name -> variable)
-      }
+    if (variables.contains(name)) {
+      OakHeap.insert(variables.get(name).get, value)
+    } else {
+      val variable = new OakVariable(name + OakHeap.getIndex())
+      OakHeap.insert(variable, value)
+      variables += (name -> variable)
+    }
     }
   }
 
@@ -83,7 +92,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     output = pre.to[ListBuffer] ++ getOutput
   }
 
-  final override def defineFunction(value: FunctionDef): Unit = {
+  final override def addFunction(value: FunctionDef): Unit = {
     OakHeap.defineFunction(value)
   }
 
@@ -146,6 +155,17 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     return (b1, b2)
   }
 
+  override def addClass(value: ClassDef): Unit = {
+    classDefs += (value.getName -> value)
+  }
+  override def getClass(name: String): ClassDef = {
+    try {
+      classDefs.get(name).get
+    } catch {
+      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
+    }
+  }
+
   def ifdefy(node: OakValue): List[String] = {
     var res = List[String]()
     node match {
@@ -166,9 +186,21 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     res
   }
 
+  override def setRef(name: String, ref: OakVariable): Unit = {
+    variables += (name -> ref)
+  }
+  
+  override def getRef(name: String): OakVariable = {
+    variables.get(name).get
+  }
+
   def ifdefy(): List[String] = {
     var res = List[String]()
     output.foreach { n => res = res ++ ifdefy(n) }
     return res
+  }
+
+  def createObjectEnvironment(obj: ObjectValue): Environment = {
+    return ObjectEnv(this, calls, constraint, obj)
   }
 }

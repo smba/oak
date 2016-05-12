@@ -4,6 +4,9 @@ import com.caucho.quercus.expr._
 import com.caucho.quercus.statement.Statement
 import edu.cmu.cs.oak.env._
 import edu.cmu.cs.oak.value.OakValue
+import java.lang.reflect.Field
+import scala.collection.mutable.ListBuffer
+import java.util.Arrays
 
 trait Interpreter {
 
@@ -26,7 +29,11 @@ object Interpreter {
    */
   @deprecated def accessField(obj: AnyRef, name: String): Object = {
     val field = try {
-      obj.getClass.getDeclaredField(name)
+           
+      val allFields = getAllDeclaredFields(Map[String, Field](), obj.getClass)
+      allFields.get(name).get
+      
+      //obj.getClass.getDeclaredField(name)
     } catch {
       case e: NoSuchFieldException => throw new RuntimeException(e)
     }
@@ -47,4 +54,15 @@ object Interpreter {
     }
     out
   }
+  
+  
+  @deprecated private def getAllDeclaredFields(fields: Map[String, Field], typ: Class[_]): Map[String, Field] = {
+    var fs = fields
+    fs ++= typ.getDeclaredFields.toList.map { x => (x.getName -> x) }
+    if (typ.getSuperclass() != null) {
+        fs ++= getAllDeclaredFields(fields, typ.getSuperclass())
+    }
+    return fs
+  }
+  
 }

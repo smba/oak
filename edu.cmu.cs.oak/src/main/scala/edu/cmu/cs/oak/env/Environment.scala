@@ -4,6 +4,8 @@ import edu.cmu.cs.oak.value.{FunctionDef, OakValue, OakVariable}
 
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
+import edu.cmu.cs.oak.value.ClassDef
+import edu.cmu.cs.oak.value.ObjectValue
 
 trait Environment extends EnvListener {
 
@@ -14,9 +16,14 @@ trait Environment extends EnvListener {
 
   def addOutput(value: OakValue)
   
-  def defineFunction(value: FunctionDef)
+  def setRef(name: String, ref: OakVariable)
+  def getRef(name: String): OakVariable
+  
+  def addFunction(value: FunctionDef)
   def getFunction(name: String): FunctionDef
 
+  def addClass(value: ClassDef)
+  def getClass(name: String): ClassDef
   
   def getCalls(): Stack[String]
 
@@ -26,7 +33,9 @@ trait Environment extends EnvListener {
   //def clearOutput()
   def receiveOutput(value: Seq[OakValue])
   def createFunctionEnvironment(f: String): Environment
-
+  
+  def createObjectEnvironment(obj: ObjectValue): Environment
+  
   def getConstraint(): String
 
   def fork(constraint: String): (BranchEnv, BranchEnv)

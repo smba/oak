@@ -8,9 +8,13 @@ class ArrayValue extends OakValue {
   val array = HashMap[OakValue, OakVariable]()
 
   def set(index: OakValue, value: OakValue) {
-    val ovariable = new OakVariable("arrayVal" + OakHeap.getIndex)
-    OakHeap.insert(ovariable, value)
-    array.put(index, ovariable)
+    val ref = if (array.keySet.contains(index)) {
+      this.getRef(index)
+    } else {
+      new OakVariable("arrayVal" + OakHeap.getIndex)
+    }
+    OakHeap.insert(ref, value)
+    array.put(index, ref)
   }
 
   def getSize(): Int = array.size
@@ -30,6 +34,8 @@ class ArrayValue extends OakValue {
   def getRef(index: OakValue): OakVariable = {
     array.get(index).get
   }
+  
+  def getKeys(): List[OakValue] = array.keySet.toList
 
   override def toString(): String = "[" + array.mkString(", ") + "]"
 
