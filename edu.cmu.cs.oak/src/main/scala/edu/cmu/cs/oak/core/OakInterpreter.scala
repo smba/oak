@@ -82,10 +82,6 @@ import com.caucho.quercus.expr.ObjectFieldExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
-  var libraryFunctions = List[String]()
-
-  this.loadPlugin(new Count)
-
   /** Logger for the interpreter */
   val logger = LoggerFactory.getLogger(classOf[Interpreter])
 
@@ -722,11 +718,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def evaluate(b: BinaryAppendExpr, env: Environment): (OakValue, Environment) = {
     /* Get all values that are being concatenated*/
     val expressions = ListBuffer[Expr]()
-    var c = b
-    while (c.getNext != null) {
-      expressions.append(c.getValue)
-      c = c.getNext
-    }
+    var expr = b
+    
+    expressions.append(expr.getValue)
+    do {
+      expr = expr.getNext
+      expressions.append(expr.getValue)
+    } while (expr.getNext != null)
+    
     val value = OakValueSequence(expressions.toList.map { e => evaluate(e, env)._1 })
 
     return (value, env)
