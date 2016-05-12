@@ -13,9 +13,9 @@ import edu.cmu.cs.oak.value.IntValue
 
 class Count extends InterpreterPlugin {
   
-  def getName(): String = "count"
+  override def getName(): String = "count"
   
-  def visit(provider: InterpreterPluginProvider, args: List[Expr], env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[Expr], env: Environment): OakValue = {
     
     
     
