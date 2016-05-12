@@ -82,7 +82,6 @@ import com.caucho.quercus.expr.ObjectFieldExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
-  val plugins = HashMap[String, InterpreterPlugin]()
   var libraryFunctions = List[String]()
 
   this.loadPlugin(new Count)
@@ -141,8 +140,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def execute(s: ExprStatement, env: Environment): (String, Environment) = {
     // TODO Refactor variable Interpreter.access by reflection!
     val e = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
-    
-    
+
     e match {
       case b: BinaryAssignExpr => {
 
@@ -210,16 +208,16 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
             ("OK", env)
           }
-          
+
           case of: ObjectFieldExpr => {
-            
+
             val objName = Interpreter.accessField(of, "_objExpr").asInstanceOf[Expr].toString()
             val obj = env.lookup(objName).asInstanceOf[ObjectValue]
             val fieldName = Interpreter.accessField(of, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
             val ref = obj.fields.getRef(StringValue(fieldName))
-            
+
             OakHeap.insert(ref, evaluate(expr, env)._1)
-            
+
             ("OK", env)
           }
           case _ => throw new RuntimeException(name.getClass + " unexpected " + expr.toString())
@@ -261,19 +259,19 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             val ref = expr.asInstanceOf[ArrayValue].getRef(index)
             ref
           }
-          
+
           /*
            * Since we are inside a BinaryAssignRefExpr, we assume that the returned value 
            * actually is a OakVariable/reference
            */
           case ome: ObjectMethodExpr => {
-            
+
             val envi = evaluate(ome, env) // return value
-            
+
             val ref = envi._1.asInstanceOf[OakVariable]
-            ref      
+            ref
           }
-          
+
           case _ => throw new RuntimeException(value + " (" + value.getClass + ") is unimplemented.")
         }
 
@@ -283,7 +281,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         return ("OK", env)
 
       }
-      
+
       case o: ObjectMethodExpr => {
         val env_ = evaluate(o, env)._2
         ("OK", env_)
@@ -387,7 +385,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     /* Define all methods as functions */
     val classMethodNames = List(methods.keySet().toArray: _*)
-    
+
     val classMethodDefs = ListBuffer[FunctionDef]()
     classMethodNames.foreach { name => classMethodDefs.append(defineFunction(methods.get(name))) }
 
@@ -417,14 +415,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     env.addClass(classDef)
     return ("OK", env)
   }
-  
+
   def execute(s: ReturnRefStatement, env: Environment): (String, Environment) = {
     // TODO Refactor variable Interpreter.access by reflection!
-    
+
     val u = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
-    
+
     val returnRef = u match {
-      
+
       case t: ThisFieldExpr => {
         val fieldName = Interpreter.accessField(t, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
@@ -439,7 +437,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         array.getRef(index)
       }
     }
-    
+
     env.setRef("$return", returnRef)
     return ("OK", env)
   }
@@ -604,7 +602,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           //TODO CONCAT?
           return (new SymbolValue(ae, OakHeap.getIndex), env)
         }
-        
+
         case v1: VarExpr => {
           return (evaluate(v1, env)._1, env) // TODO more cases
         }
@@ -734,32 +732,30 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     return (value, env)
   }
 
-  
- /*
+  /*
   * $objExpr->methodName(args...)
   * 
   */
   def evaluate(e: ObjectMethodExpr, env: Environment): (OakValue, Environment) = {
     val objExpr = Interpreter.accessField(e, "_objExpr").asInstanceOf[Expr]
     val methodName = Interpreter.accessField(e, "_methodName").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
-    val args = Interpreter.accessField(e, "_args").asInstanceOf[Array[Expr]]   
+    val args = Interpreter.accessField(e, "_args").asInstanceOf[Array[Expr]]
     /*
      * Create new Environment
      */
     val objEnv = env.createObjectEnvironment(env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
-    
+
     val method = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue].getClassdef().getMethods(methodName)
-    
-    
+
     assert(method.args.size == args.size)
     (method.args, args).zipped.foreach {
       (name, expr) => objEnv.update("$" + name, evaluate(expr, env)._1)
     }
-    
+
     val objectValBefore = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]
-    
+
     val envRes = execute(method.statement, objEnv)._2
-       
+
     val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
     val returnVal = try {
       if (method.returnsRef()) {
@@ -770,14 +766,13 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     } catch {
       case e: Exception => IntValue(404)
     }
-    
-    
+
     arrayVal.getKeys.foreach { key => objectValBefore.set(key.toString, arrayVal.get(key)) }
     env.update(objExpr.toString(), objectValBefore)
     (returnVal, env)
-    
+
   }
-  
+
   def evaluate(b: ObjectNewExpr, env: Environment): (OakValue, Environment) = {
 
     // class name
@@ -804,10 +799,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val thisArray = envConstructed.lookup("$this").asInstanceOf[ArrayValue]
     thisArray.getKeys.foreach { key => obj.set(key.toString, thisArray.get(key)) }
-    
+
     (obj, env)
   }
-  
+
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = Interpreter.accessField(t, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
     val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName))
@@ -827,7 +822,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case o: ObjectNewExpr => evaluate(o, env)
     case o: ObjectMethodExpr => evaluate(o, env)
     case t: ThisFieldExpr => evaluate(t, env)
-    case _ => throw new RuntimeException(e +" (" + e.getClass + ") unimplemented.")
+    case _ => throw new RuntimeException(e + " (" + e.getClass + ") unimplemented.")
 
   }
 
@@ -836,7 +831,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val f = fu.asInstanceOf[Function]
     // TODO Refactor variable Interpreter.access by reflection!
     val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
-    
+
     val returnsRef = Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()
     Interpreter.accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
@@ -846,15 +841,5 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, statement, hasReturn, returnsRef)
   }
-
-  /*
-   * Library mechanism
-   */
-  override def getPlugin(name: String) = plugins.get(name).get
-  override def getPlugins(): List[String] = plugins.keySet.toList
-  override def loadPlugin(plugin: InterpreterPlugin) {
-    plugins.put(plugin.getName, plugin)
-  }
-  override def accept(plugin: InterpreterPlugin, args: List[Expr], env: Environment): OakValue = plugin.visit(this, args, env)
 
 }
