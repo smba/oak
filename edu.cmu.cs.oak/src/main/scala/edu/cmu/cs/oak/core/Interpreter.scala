@@ -1,13 +1,17 @@
 package edu.cmu.cs.oak.core
 
-import com.caucho.quercus.expr._
-import com.caucho.quercus.statement.Statement
-import edu.cmu.cs.oak.env._
-import edu.cmu.cs.oak.value.OakValue
 import java.lang.reflect.Field
-import scala.collection.mutable.ListBuffer
-import java.util.Arrays
 
+import scala.collection.mutable.ListBuffer
+
+import com.caucho.quercus.expr.Expr
+import com.caucho.quercus.program.Arg
+import com.caucho.quercus.program.Function
+import com.caucho.quercus.statement.Statement
+
+import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.value.FunctionDef
+import edu.cmu.cs.oak.value.OakValue
 trait Interpreter {
 
   def evaluate(e: Expr, env: Environment): (OakValue, Environment)
@@ -65,4 +69,20 @@ object Interpreter {
     return fs
   }
   
+  
+  def defineFunction(fu: Function): FunctionDef = {
+
+    val f = fu.asInstanceOf[Function]
+    // TODO Refactor variable Interpreter.access by reflection!
+    val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
+
+    val returnsRef = Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
+    val args = ListBuffer[String]()
+    accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
+      a => args.append((if (a.isReference()) "&" else "") + a.getName.toString())
+    }
+    val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
+    // Add function to the global environment
+    return new FunctionDef(f.getName, args.toArray, statement, hasReturn, returnsRef)
+  }
 }

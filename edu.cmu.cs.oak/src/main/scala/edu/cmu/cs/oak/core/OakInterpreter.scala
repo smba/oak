@@ -99,7 +99,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val funcIterator = program.getFunctionList.iterator
     while (funcIterator.hasNext) {
 
-      val func = defineFunction(funcIterator.next())
+      val func = Interpreter.defineFunction(funcIterator.next())
 
       // Add function to the global environment
       env.addFunction(func)
@@ -387,7 +387,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val classMethodNames = List(methods.keySet().toArray: _*)
 
     val classMethodDefs = ListBuffer[FunctionDef]()
-    classMethodNames.foreach { name => classMethodDefs.append(defineFunction(methods.get(name))) }
+    classMethodNames.foreach { name => classMethodDefs.append(Interpreter.defineFunction(methods.get(name))) }
 
     /* Add all methods ex*/
     var classMethodDefMap = Map[String, FunctionDef]()
@@ -825,21 +825,4 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case _ => throw new RuntimeException(e + " (" + e.getClass + ") unimplemented.")
 
   }
-
-  def defineFunction(fu: Function): FunctionDef = {
-
-    val f = fu.asInstanceOf[Function]
-    // TODO Refactor variable Interpreter.access by reflection!
-    val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
-
-    val returnsRef = Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
-    val args = ListBuffer[String]()
-    Interpreter.accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
-      a => args.append((if (a.isReference()) "&" else "") + a.getName.toString())
-    }
-    val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
-    // Add function to the global environment
-    return new FunctionDef(f.getName, args.toArray, statement, hasReturn, returnsRef)
-  }
-
 }
