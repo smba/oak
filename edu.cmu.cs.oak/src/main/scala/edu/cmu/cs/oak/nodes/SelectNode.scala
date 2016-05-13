@@ -3,7 +3,7 @@ package edu.cmu.cs.oak.nodes
 case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
   
   def getChildren(): Seq[DNode] = List(v1, v2)
-  
+  /*
   override def toString(): String = {
     val sb = new StringBuilder
     sb append "#ifdef " + condition + "\n"
@@ -13,5 +13,5 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     sb append "#end "
     sb toString
   }
-  
+  */
 }

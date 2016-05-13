@@ -24,7 +24,7 @@ class OakEngine {
    */
   def loadFromFile(url: URL): QuercusProgram = {
     val content = try {
-      Source.fromURL(url, "UTF-8").getLines.mkString
+      Source.fromURL(url, "UTF-8").getLines.mkString("\n")
     } catch {
       case e: Exception => throw new RuntimeException(e)
     }

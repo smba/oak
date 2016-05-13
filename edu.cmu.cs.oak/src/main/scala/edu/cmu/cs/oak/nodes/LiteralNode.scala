@@ -5,5 +5,5 @@ import edu.cmu.cs.oak.value.OakValue
 case class LiteralNode(lv: OakValue) extends DNode {
   def getChildren(): Seq[DNode] =  null
   
-  override def toString(): String = lv.toString
+  //override def toString(): String = lv.toString
 }
