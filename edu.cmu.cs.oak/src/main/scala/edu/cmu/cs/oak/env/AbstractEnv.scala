@@ -13,16 +13,19 @@ import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.nodes.DNode
 
 /**
  * Programs state and program state operations.
+ * 
+ * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
 abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends Environment {
 
   /**
    * Map of variable identifiers and variable references.
-   *  In various contexts, variables can refer to the same value.
-   * 	For variable reference handling {@see {@link #edu.cmu.cs.oak.env.OakHeap}}.
+   * In various contexts, variables can refer to the same value.
+   * For variable reference handling {@see {@link #edu.cmu.cs.oak.env.OakHeap}}.
    */
   var variables = Map[String, OakVariable]()
 
@@ -34,10 +37,14 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   var output = new ListBuffer[OakValue]()
 
   /**
-   * Class definitions
+   * Map of class definitions. All classes defined during the program execution
+   * are stored here.
    */
   var classDefs = Map[String, ClassDef]()
 
+  /**
+   * Logger instance for environments.
+   */
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
   /**
@@ -49,17 +56,16 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
    */
   override def update(name: String, value: OakValue): Unit = value match {
     case a: OakVariable => {
-      //throw new RuntimeException("misuse")
       variables += (name -> a)
     }
     case _ => {
-    if (variables.contains(name)) {
-      OakHeap.insert(variables.get(name).get, value)
-    } else {
-      val variable = new OakVariable(name + OakHeap.getIndex())
-      OakHeap.insert(variable, value)
-      variables += (name -> variable)
-    }
+      if (variables.contains(name)) {
+        OakHeap.insert(variables.get(name).get, value)
+      } else {
+        val variable = new OakVariable(name + OakHeap.getIndex())
+        OakHeap.insert(variable, value)
+        variables += (name -> variable)
+      }
     }
   }
 
@@ -86,72 +92,21 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     }
     ret
   }
-
-  override def prependOutput(pre: List[OakValue]) {
-    output = pre.to[ListBuffer] ++ getOutput
-  }
-
-  final override def addFunction(value: FunctionDef): Unit = {
-    OakHeap.defineFunction(value)
-  }
-
-  final override def getFunction(name: String): FunctionDef = {
-    OakHeap.getFunction(name)
-  }
-
-  final override def getCalls(): Stack[String] = calls
-
-  final override def addOutput(value: OakValue): Unit = {
-    output += value
-  }
-
-  override def createFunctionEnvironment(f: String): Environment = {
-    return new FunctionEnv(this, calls push f, constraint)
-  }
-
-  final override def getParent(): EnvListener = this.parent
-  /*
-  final override def clearOutput(): Unit = {
-    output = new ListBuffer[OakValue]()
-  }
-  * override def receiveOutput(value: OakValue) = {
-    output += value
-  }
-  */
-  final override def getOutput(): List[OakValue] = this.output.toList
-
+  
+  /**
+   * Creates a D Model tree of the (symbolic) output that
+   * can easily be traversed. 
+   * 
+   * @return Root node of the D Model tree 
+   */
+  final override def getOutputModel(): DNode = DNode.createDNode(output.toList)
+  
+  
+  
   override def receiveOutput(value: Seq[OakValue]) = {
     value.foreach {
       v => output += v
     }
-  }
-
-  override def getVariables(): Map[String, OakVariable] = variables
-
-  override final def getConstraint(): String = constraint
-
-  /**
-   * Splits an environment into two branch environments that
-   * can be joined afterwards.
-   *
-   * @param newConstraint Path constrained to add to the branches
-   *
-   * @param Tuple of two branch environments
-   */
-  override def fork(newConstraint: String): (BranchEnv, BranchEnv) = {
-    val b1 = new BranchEnv(this, calls, constraint + " && " + newConstraint)
-    val b2 = new BranchEnv(this, calls, constraint + " && NOT(" + newConstraint + ")")
-
-    /* Add variables of parent environment to the branch environments. */
-    this.getVariables.keySet.foreach {
-      k =>
-        {
-          b1.update(k, this.lookup(k))
-          b2.update(k, this.lookup(k))
-        }
-    }
-
-    return (b1, b2)
   }
 
   override def addClass(value: ClassDef): Unit = {
@@ -188,18 +143,26 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   override def setRef(name: String, ref: OakVariable): Unit = {
     variables += (name -> ref)
   }
-  
+
   override def getRef(name: String): OakVariable = {
     variables.get(name).get
   }
+  
+  final override def prependOutput(pre: List[OakValue]) { output = pre.to[ListBuffer] ++ getOutput }
+  final override def addFunction(value: FunctionDef) { OakHeap.defineFunction(value) }
+  final override def getFunction(name: String): FunctionDef = { OakHeap.getFunction(name) }
+  final override def addOutput(value: OakValue) { output += value }
 
   def ifdefy(): List[String] = {
     var res = List[String]()
     output.foreach { n => res = res ++ ifdefy(n) }
     return res
   }
-
-  def createObjectEnvironment(obj: ObjectValue): Environment = {
-    return ObjectEnv(this, calls, constraint, obj)
-  }
+  
+  /* ----- Getter methods ----- */
+  final override def getCalls(): Stack[String] = calls
+  final override def getParent(): EnvListener = parent
+  final override def getOutput(): List[OakValue] = output.toList
+  final override def getVariables(): Map[String, OakVariable] = variables
+  final override def getConstraint(): String = constraint
 }

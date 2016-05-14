@@ -11,6 +11,7 @@ import com.caucho.vfs.{ ReadStream, VfsStream }
 import scala.io.Source
 import java.net.URL
 import java.io.File
+import java.io.FileReader
 
 /**
  * Loads scripts, handles the Quercus parser
@@ -22,13 +23,10 @@ class OakEngine {
    * @param path to the PHP source file to parse
    * @return QuercusProgram parsed AST
    */
-  def loadFromFile(url: URL): QuercusProgram = {
-    val content = try {
-      Source.fromURL(url, "UTF-8").getLines.mkString("\n")
-    } catch {
-      case e: Exception => throw new RuntimeException(e)
-    }
-    return loadFromScript(content)
+  def loadFromFile(path: String): QuercusProgram = {
+    val reader = new FileReader(path)
+    val parser = new QuercusParser(OakEngine.getQuercus("UTF-8", true), null, reader)
+    return parser.parse()
   }
 
   /**
@@ -57,7 +55,7 @@ class OakEngine {
     }
     return program
   }
-
+  
   /**
    * 
    */

@@ -79,6 +79,7 @@ import com.caucho.quercus.expr.ObjectMethodExpr
 import java.util.ArrayList
 import com.caucho.quercus.statement.ReturnRefStatement
 import com.caucho.quercus.expr.ObjectFieldExpr
+import com.caucho.quercus.Location
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -322,7 +323,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case b: SymbolicValue => {
 
         // TODO use da real constraints
-        val branches = env.fork(test.toString)
+        val branches = Environment.fork(env, test.toString)
 
         /* Execute both branches with the corresponding branch environments. */
         val res1 = execute(trueBlock, branches._1)._2
@@ -347,7 +348,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
 
     // TODO use real constraints
-    val envs = env.fork(test.toString)
+    val envs = Environment.fork(env, test.toString)
     val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
     val res = res1 join envs._2
     res.prependOutput(env.getOutput)
@@ -487,7 +488,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: LiteralUnicodeExpr, env: Environment): (OakValue, Environment) = {
-    return (new StringValue(e.toString.slice(1, e.toString.length - 1)), env)
+    val sv = StringValue(e.toString.slice(1, e.toString.length - 1))
+    val location = Interpreter.accessField(e, "_location").asInstanceOf[Location]
+    sv.setLocation(location)
+    return (sv, env)
   }
 
   def evaluate(e: VarExpr, env: Environment): (OakValue, Environment) = {
@@ -661,7 +665,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
      * Create a new (function) environment with pre-assigned arguments
      * TODO call-by-reference
      */
-    val functionEnv = env.createFunctionEnvironment(name)
+    val functionEnv = Environment.createFunctionEnvironment(env, name)
     (function.getArgs zip args).foreach {
       t =>
         {
@@ -742,7 +746,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /*
      * Create new Environment
      */
-    val objEnv = env.createObjectEnvironment(env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
+    val objEnv = Environment.createObjectEnvironment(env, env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
 
     val method = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue].getClassdef().getMethods(methodName)
 
@@ -782,7 +786,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     /** Create a new object Value */
     val obj = ObjectValue("Object Doe", env.getClass(name))
-    val objEnv = env.createObjectEnvironment(obj)
+    val objEnv = Environment.createObjectEnvironment(env, obj)
     val constructor = env.getClass(name).getConstructor(args.size) // match by number of args
 
     /* Execute constructor in the object environment and keep its variable $this:
