@@ -1,6 +1,6 @@
 package edu.cmu.cs.oak.value
 
-case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef]) extends OakValue {
+case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef]) {
   
   /**
    * Constructors
@@ -23,5 +23,7 @@ case class ClassDef(name: String, fields: List[String], methods: Map[String, Fun
   def getName(): String = name
   def getMethods(fname: String): FunctionDef = methods.get(fname).get
   def getFields(): List[String] = fields
+  
+  
   
 }

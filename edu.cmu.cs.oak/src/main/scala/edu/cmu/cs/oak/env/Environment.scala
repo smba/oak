@@ -36,8 +36,7 @@ trait Environment extends EnvListener {
   def getConstraint(): String
 
   def prependOutput(pre: List[OakValue])
-  //def ifdefy(node: OakValue): List[String]
-  //def ifdefy(): List[String]
+  def toXml: scala.xml.Elem
 }
 
 /**

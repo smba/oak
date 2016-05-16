@@ -23,4 +23,10 @@ case class ObjectValue(name: String, stereotype: ClassDef) extends OakValue {
     fields.set(StringValue(fieldKey), value)
   }
   
+  override def toXml = {
+    <object name={name}>
+			{fields.toXml}
+    </object>
+  }
+  
 }

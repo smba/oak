@@ -39,4 +39,17 @@ class ArrayValue extends OakValue {
 
   override def toString(): String = "[" + array.mkString(", ") + "]"
 
+  override def toXml = {
+    <array>
+			{for (key <- array.keySet) yield 
+			  <arrayElement>
+			    <key>
+						{key.toXml}
+					</key>
+					<value>
+						{OakHeap.extract(array.get(key).get).toXml}
+					</value>
+				</arrayElement>}
+		</array>
+  }
 }

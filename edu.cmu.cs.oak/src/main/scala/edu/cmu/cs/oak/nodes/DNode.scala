@@ -24,6 +24,8 @@ trait DNode {
    * @return Sequence of child nodes
    */
   def getChildren(): Seq[DNode]
+  
+  def toXml(): scala.xml.Elem 
 
 }
 

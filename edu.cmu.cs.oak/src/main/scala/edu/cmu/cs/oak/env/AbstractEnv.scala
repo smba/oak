@@ -159,6 +159,16 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     return res
   }
   
+  def toXml = {
+    <state>
+			{for (key <- variables.keySet) yield 
+			  <variable>
+			    <key>{key}</key>
+					<value>{OakHeap.extract(variables.get(key).get).toXml}</value>
+				</variable>}
+		</state>
+  }
+  
   /* ----- Getter methods ----- */
   final override def getCalls(): Stack[String] = calls
   final override def getParent(): EnvListener = parent
