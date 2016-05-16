@@ -1,10 +1,11 @@
 package edu.cmu.cs.oak.core
 
+import java.net.URL
 import java.util.LinkedHashMap
 
+import scala.annotation.elidable
 import scala.annotation.elidable.ASSERTION
 import scala.collection.immutable.Stack
-import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
 import org.slf4j.LoggerFactory
@@ -31,10 +32,12 @@ import com.caucho.quercus.expr.Expr
 import com.caucho.quercus.expr.FunArrayExpr
 import com.caucho.quercus.expr.LiteralExpr
 import com.caucho.quercus.expr.LiteralUnicodeExpr
+import com.caucho.quercus.expr.ObjectFieldExpr
+import com.caucho.quercus.expr.ObjectMethodExpr
 import com.caucho.quercus.expr.ObjectNewExpr
+import com.caucho.quercus.expr.ThisFieldExpr
 import com.caucho.quercus.expr.UnaryNotExpr
 import com.caucho.quercus.expr.VarExpr
-import com.caucho.quercus.program.Arg
 import com.caucho.quercus.program.ClassField
 import com.caucho.quercus.program.Function
 import com.caucho.quercus.program.InterpretedClassDef
@@ -44,6 +47,7 @@ import com.caucho.quercus.statement.ClassDefStatement
 import com.caucho.quercus.statement.EchoStatement
 import com.caucho.quercus.statement.ExprStatement
 import com.caucho.quercus.statement.IfStatement
+import com.caucho.quercus.statement.ReturnRefStatement
 import com.caucho.quercus.statement.ReturnStatement
 import com.caucho.quercus.statement.Statement
 import com.caucho.quercus.statement.WhileStatement
@@ -53,9 +57,6 @@ import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.env.SimpleEnv
 import edu.cmu.cs.oak.exceptions.UnexpectedTypeException
-import edu.cmu.cs.oak.exceptions.UnimplementedException
-import edu.cmu.cs.oak.lib.InterpreterPlugin
-import edu.cmu.cs.oak.lib.array.Count
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.ClassDef
@@ -66,25 +67,27 @@ import edu.cmu.cs.oak.value.NumericValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.ClassDef
-import edu.cmu.cs.oak.value.ObjectValue
-import com.caucho.quercus.expr.ThisFieldExpr
-import com.caucho.quercus.expr.ObjectMethodExpr
-import java.util.ArrayList
-import com.caucho.quercus.statement.ReturnRefStatement
-import com.caucho.quercus.expr.ObjectFieldExpr
-import com.caucho.quercus.Location
+import edu.cmu.cs.oak.analysis.ASTVisitor
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   /** Logger for the interpreter */
   val logger = LoggerFactory.getLogger(classOf[Interpreter])
+
+  var url: URL = null
+
+  def execute(url: URL): (String, Environment) = {
+
+    this.url = url
+
+    val engine = new OakEngine()
+    val program = engine.loadFromFile(url)
+    return execute(program)
+  }
 
   def execute(program: QuercusProgram): (String, Environment) = {
 
@@ -125,18 +128,31 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
      */
   def execute(stmt: EchoStatement, env: Environment): (String, Environment) = {
     val expr = Interpreter.accessField(stmt, "_expr").asInstanceOf[Expr]
-    val v = evaluate(expr, env)
-    env.addOutput(v._1)
+    val lineNr = ASTVisitor.getStatementLineNr(stmt)
+
+    val value = evaluate(expr, env)._1
+    val valueX = value match {
+      case sv: StringValue =>
+        sv.setLocation((url, lineNr)); sv
+      case _ => value
+    }
+
+    env.addOutput(valueX)
     return ("OK", env)
   }
 
   /*
+   * TODO Assign location (URL; line) to the string values
+   * 
    * Statement of the form
    * <Var> = <Expr>;
    */
   def execute(s: ExprStatement, env: Environment): (String, Environment) = {
+
     // TODO Refactor variable Interpreter.access by reflection!
     val e = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
+
+    val lineNr = ASTVisitor.getStatementLineNr(s)
 
     e match {
       case b: BinaryAssignExpr => {
@@ -149,17 +165,21 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           /* name is a variable */
           case n: VarExpr => {
-            env.update(name.toString(), evaluate(expr, env)._1)
+            val value = evaluate(expr, env)._1
+            val valueX = value match {
+              case sv: StringValue =>
+                sv.setLocation((url, lineNr)); sv
+              case _ => value
+            }
+            env.update(name.toString(), valueX)
             ("OK", env)
           }
 
-          /* name is something like $var[i] */
-          /*
-             * expr: Expr to assign to array field
-             * name: name of the var to assign, e.g., $h[4]
-             * 
-             * name <- expr
-             */
+          /**
+           * Assignment to array field:
+           *
+           * $<arrayName>..[<Expr>] = <Expr>
+           */
           case a: ArrayGetExpr => {
 
             val index = evaluate(Interpreter.accessField(a, "_index").asInstanceOf[Expr], env)._1
@@ -187,33 +207,61 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
               case ex: Exception => new ArrayValue()
             }
 
-            arrayValue.set(index, evaluate(expr, env)._1)
+            val value = evaluate(expr, env)._1
+            val valueX = value match {
+              case sv: StringValue =>
+                sv.setLocation((url, lineNr)); sv
+              case _ => value
+            }
+
+            arrayValue.set(index, valueX)
 
             env.update(arrayValueName, arrayValue)
             return ("OK", env)
           }
 
-          /* Assignment to object field */
+          /**
+           * Assignment to object field (inside method declararion):
+           *  $this -> <fieldName> = <Expr>
+           */
           case dis: ThisFieldExpr => {
             val fieldName = Interpreter.accessField(dis, "_name").asInstanceOf[com.caucho.quercus.env.StringValue]
 
             /* $this points to an array, hence we perform an assignment to $this[name] */
             val thisValue = env.lookup("$this").asInstanceOf[ArrayValue]
-            thisValue.set(StringValue(fieldName.toString), evaluate(expr, env)._1)
+
+            val value = evaluate(expr, env)._1
+            val valueX = value match {
+              case sv: StringValue =>
+                sv.setLocation((url, lineNr)); sv
+              case _ => value
+            }
+
+            thisValue.set(StringValue(fieldName.toString), valueX)
 
             env.update("$this", thisValue)
 
             ("OK", env)
           }
 
+          /**
+           * Assignment to object field:
+           * $<objName> -> <fieldName> = <Expr>
+           */
           case of: ObjectFieldExpr => {
-
             val objName = Interpreter.accessField(of, "_objExpr").asInstanceOf[Expr].toString()
             val obj = env.lookup(objName).asInstanceOf[ObjectValue]
             val fieldName = Interpreter.accessField(of, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
             val ref = obj.fields.getRef(StringValue(fieldName))
 
-            OakHeap.insert(ref, evaluate(expr, env)._1)
+            val value = evaluate(expr, env)._1
+            val valueX = value match {
+              case sv: StringValue =>
+                sv.setLocation((url, lineNr)); sv
+              case _ => value
+            }
+
+            OakHeap.insert(ref, valueX)
 
             ("OK", env)
           }
@@ -488,9 +536,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: LiteralUnicodeExpr, env: Environment): (OakValue, Environment) = {
+
     val sv = StringValue(e.toString.slice(1, e.toString.length - 1))
-    val location = Interpreter.accessField(e, "_location").asInstanceOf[Location]
-    sv.setLocation(location)
     return (sv, env)
   }
 
@@ -723,13 +770,13 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /* Get all values that are being concatenated*/
     val expressions = ListBuffer[Expr]()
     var expr = b
-    
+
     expressions.append(expr.getValue)
     do {
       expr = expr.getNext
       expressions.append(expr.getValue)
     } while (expr.getNext != null)
-    
+
     val value = OakValueSequence(expressions.toList.map { e => evaluate(e, env)._1 })
 
     return (value, env)

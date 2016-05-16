@@ -77,7 +77,7 @@ object DNode {
    * @param node DModel tree root node
    * @return List of StringValues, which are literals in the DModel
    */
-  def extractStringLiterals(node: DNode): List[StringValue] = {
+  def extractStringLiterals(node: DNode): Set[StringValue] = {
 
     // utility method for DModel tree traversal
     def extractStringLiterals(node: DNode, literals: List[StringValue]): List[StringValue] = node match {
@@ -99,7 +99,7 @@ object DNode {
     }
     
     // apply utility method
-    return extractStringLiterals(node, List[StringValue]())
+    return extractStringLiterals(node, List[StringValue]()).toSet
   }
 
 }

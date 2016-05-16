@@ -23,8 +23,8 @@ class OakEngine {
    * @param path to the PHP source file to parse
    * @return QuercusProgram parsed AST
    */
-  def loadFromFile(path: String): QuercusProgram = {
-    val reader = new FileReader(path)
+  def loadFromFile(path: URL): QuercusProgram = {
+    val reader = new FileReader(path.getPath)
     val parser = new QuercusParser(OakEngine.getQuercus("UTF-8", true), null, reader)
     return parser.parse()
   }

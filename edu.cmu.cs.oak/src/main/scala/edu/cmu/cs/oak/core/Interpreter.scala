@@ -37,11 +37,14 @@ object Interpreter {
       val allFields = getAllDeclaredFields(Map[String, Field](), obj.getClass)
       allFields.get(name).get
       
-      //obj.getClass.getDeclaredField(name)
     } catch {
       case e: NoSuchFieldException => throw new RuntimeException(e)
     }
-    field.setAccessible(true)
+    
+    if (! field.isAccessible()) {
+      field.setAccessible(true)
+    }
+    
     val value = try {
       field.get(obj)
     } catch {

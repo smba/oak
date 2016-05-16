@@ -1,22 +1,17 @@
 package edu.cmu.cs.oak
 
-import org.scalatest.FunSpec
+import java.net.URL
 
+import org.scalatest.FunSpec
+import org.scalatest.junit.JUnitRunner
+
+import edu.cmu.cs.oak.analysis.ASTVisitor
 import edu.cmu.cs.oak.core.OakEngine
 import edu.cmu.cs.oak.core.OakInterpreter
 import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.StringValue
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.value.OakValueSequence
 
 
 /**
@@ -26,7 +21,7 @@ import edu.cmu.cs.oak.value.OakVariable
  */
 
 //@RunWith(classOf[JUnitRunner]) //optional
-class OakUnitTest extends FunSpec {
+object OakUnitTest extends /*FunSpec*/App {
 
   // engine and interpreter instance for testing
   val engine = new OakEngine()
@@ -48,11 +43,12 @@ class OakUnitTest extends FunSpec {
    * @param script PHP source code file
    * @return (ControlCode, Environment)
    */
-  def loadAndExecute(fileName: String): (String, Environment) = {
-    val program = engine.loadFromFile(getClass.getResource("/" + fileName))
+  def loadAndExecute(url: URL): (String, Environment) = {
+    val program = engine.loadFromFile(url)
     return interpreter.execute(program)
   }
-
+  
+  /*
   describe("Expression") {
     describe("ExprStatement with") {
       describe("VarExpr") {
@@ -214,5 +210,19 @@ class OakUnitTest extends FunSpec {
       System.err.println("Output: " + env.getOutput)
     }
   }
+  */
+  
+  val url = new URL("file:/home/stefan/git/oak/edu.cmu.cs.oak/src/test/resources/myTest.php")
+  val env = interpreter.execute(url)._2//loadAndExecute("myTest.php")._2
+  val output = env.getOutput
+  val dModel = DNode.createDNode(OakValueSequence(output))
+  val visitor = new ASTVisitor(url)
+  val available = visitor.retrieveStringLiterals()
+  val found = DNode. extractStringLiterals(dModel)
 
+  val precision = (math floor (found.intersect(available).size / (available.size*1.0)) * 100)
+  println(">> Output covered " + found.size + " of " + available.size + " (" + precision + " %) of possible string literals.")
+  
+  //val p = engine.parseNew(new URL("file:/home/stefan/git/oak/edu.cmu.cs.oak/src/test/resources/myTest.php"))
+  //println(p.getStatement.asInstanceOf[BlockStatement].getStatements.size)
 }
