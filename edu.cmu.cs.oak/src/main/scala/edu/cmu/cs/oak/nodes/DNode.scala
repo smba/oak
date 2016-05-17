@@ -10,6 +10,8 @@ import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.ArrayValue
 import java.util.Collection
 import scala.collection.mutable.ListBuffer
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.DoubleValue
 
 /**
  * Model for (symbolic) output of a symbolically executed PHP script.
@@ -24,8 +26,35 @@ trait DNode {
    * @return Sequence of child nodes
    */
   def getChildren(): Seq[DNode]
-  
-  def toXml(): scala.xml.Elem 
+
+  /**
+   * Recursively serializes a DNode-based tree to XML.
+   *
+   * @return scala.xml.Elem XML node
+   */
+  def toXml(): scala.xml.Elem
+
+  /**
+   * Returns a sequence of output strings mixed with #ifdef annotations
+   * @return List of output strings
+   */
+  def ifdefy(): List[String]
+
+  /**
+   * Compare method for DNodes.
+   * 
+   * @param that DNode tree to comapre
+   * @return this.equals(that)?
+   */
+  def compare(that: DNode): Boolean = {
+    lazy val ifd1 = this.ifdefy()
+    lazy val ifd2 = that.ifdefy()
+    if (ifd1.size == ifd2.size) {
+      (ifd1 zip ifd2).map { case (x, y) => x.equals(y) }.foldLeft(true)(_ && _)
+    } else {
+      false
+    }
+  }
 
 }
 
@@ -69,7 +98,7 @@ object DNode {
    */
   @deprecated def createDNode(vs: Seq[OakValue]): DNode = {
     val nodes = vs.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
-    ConcatNode(nodes)
+    DRoot(ConcatNode(nodes))
   }
 
   /**
@@ -99,7 +128,7 @@ object DNode {
       }
       case _ => List[StringValue]()
     }
-    
+
     // apply utility method
     return extractStringLiterals(node, List[StringValue]()).toSet
   }

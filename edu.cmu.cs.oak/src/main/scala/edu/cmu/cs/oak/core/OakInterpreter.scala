@@ -558,7 +558,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
 
       // exceptional case: Found symbolic value -> return symbolic value
-      case v2: SymbolicValue => (SymbolValue(e, OakHeap.getIndex), env)
+      case v2: SymbolicValue => (SymbolValue(e.toString, OakHeap.getIndex), env)
 
       case _ => throw new RuntimeException()
     }
@@ -593,9 +593,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             }
 
             // exceptional cases: return symbolic value and track unresolved expression
-            case v2: SymbolicValue => (SymbolValue(ae, OakHeap.getIndex), env)
-            case v2: NumericValue => (SymbolValue(ae, OakHeap.getIndex), env)
-            case v2: StringValue => (SymbolValue(ae, OakHeap.getIndex), env)
+            case v2: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+            case v2: NumericValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+            case v2: StringValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
 
             case _ => throw new RuntimeException()
           }
@@ -636,9 +636,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             }
 
             // exceptional cases: return symbolic value and track unresolved expression
-            case v2: SymbolicValue => (SymbolValue(ae, OakHeap.getIndex), env)
-            case v2: BooleanValue => (SymbolValue(ae, OakHeap.getIndex), env)
-            case v2: StringValue => (SymbolValue(ae, OakHeap.getIndex), env)
+            case v2: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+            case v2: BooleanValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+            case v2: StringValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
 
             case v2: ArrayValue => throw new UnexpectedTypeException(e2, "Can't compare array with " + v1.getClass + ".")
             case _ => throw new UnexpectedTypeException(e2, evaluate(e2, env)._1 + "")
@@ -647,7 +647,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
         case v1: StringValue => {
           //TODO CONCAT?
-          return (new SymbolValue(ae, OakHeap.getIndex), env)
+          return (new SymbolValue(ae.toString, OakHeap.getIndex), env)
         }
 
         case v1: VarExpr => {
@@ -655,7 +655,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         }
 
         // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
-        case v1: SymbolicValue => (SymbolValue(ae, OakHeap.getIndex), env)
+        case v1: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
 
         case _ => throw new UnexpectedTypeException(e1, " any type1 ")
       }
@@ -679,7 +679,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
        * is contained in the call stack, we just return a symbol value
        * in order to avoid recursive function calls. */
     if (env.getCalls.contains(name)) {
-      return (new SymbolValue(e, OakHeap.getIndex), env)
+      return (new SymbolValue(e.toString, OakHeap.getIndex), env)
     }
 
     /* If the function called refers to one implemented library function, such as
@@ -700,7 +700,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val function = try {
       env.getFunction(name)
     } catch {
-      case ex: Exception => return (SymbolValue(e, OakHeap.getIndex()), env)
+      case ex: Exception => return (SymbolValue(e.toString, OakHeap.getIndex()), env)
     }
 
     // Assert that the number of arguments in the function call and declaration match

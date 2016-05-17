@@ -28,7 +28,7 @@ class Count extends InterpreterPlugin {
       case a: ArrayValue => {
         return IntValue(a.getSize)
       }
-      case _ =>  return SymbolValue(args(0), OakHeap.getIndex())
+      case _ =>  return SymbolValue(args(0).toString, OakHeap.getIndex())
     }
     
   }

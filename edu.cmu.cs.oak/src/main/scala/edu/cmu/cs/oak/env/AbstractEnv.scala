@@ -5,6 +5,7 @@ import scala.collection.mutable.ListBuffer
 
 import org.slf4j.LoggerFactory
 
+import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.ClassDef
 import edu.cmu.cs.oak.value.FunctionDef
@@ -12,8 +13,6 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.nodes.DNode
 
 /**
  * Programs state and program state operations.
@@ -47,14 +46,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
    */
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
-  /**
-   * Updates a variable in the environment, i.e. it stores a variable
-   * assignment, such as '$i = 8'.
-   *
-   * @paran name Name of the variable
-   * @param value OakValue to assign to the variable
-   */
-  override def update(name: String, value: OakValue): Unit = value match {
+  override final def update(name: String, value: OakValue): Unit = value match {
     case a: OakVariable => {
       variables += (name -> a)
     }
@@ -69,14 +61,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     }
   }
 
-  /**
-   * Looks up an variable and returns its context-dependant value.
-   *
-   * @param name Name of the variable
-   *
-   * @return value Value of the variable
-   */
-  override def lookup(name: String): OakValue = {
+  override final def lookup(name: String): OakValue = {
     val variable = {
       val opt = variables.get(name)
       if (!opt.isEmpty) {

@@ -6,7 +6,7 @@ import com.caucho.quercus.Location
 /**
   *
   */
-case class SymbolValue(e: Expr, id: Long) extends SymbolicValue {
+case class SymbolValue(e: String, id: Long) extends SymbolicValue {
   
   System.err.println("> Introducing symbol σ[" + id + "] for expression " + e + ".")
   

@@ -2,7 +2,6 @@ package edu.cmu.cs.oak.env
 
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakVariable
-import java.util.Collection
 
 trait VarHeap {
   

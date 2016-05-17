@@ -4,14 +4,16 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.StringValue
 
 case class LiteralNode(lv: OakValue) extends DNode {
-  
-  def getChildren(): Seq[DNode] =  null
-  
+
+  def getChildren(): Seq[DNode] = null
+
   def toXml: scala.xml.Elem = {
     <literal>
-			{lv.toXml}
+      { lv.toXml }
     </literal>
   }
   
+  override def ifdefy(): List[String] = List(lv.toString)
+
   override def toString(): String = lv.toString
 }

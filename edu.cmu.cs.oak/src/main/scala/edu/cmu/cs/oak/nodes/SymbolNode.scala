@@ -10,5 +10,7 @@ case class SymbolNode(sv: SymbolValue) extends DNode {
       {sv.toString}
     </symbol>
   }
+  
+  override def ifdefy(): List[String] = List("Σ")
 
 }
