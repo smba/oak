@@ -3,6 +3,7 @@ package edu.cmu.cs.oak.analysis
 import java.net.URL
 
 import scala.collection.mutable.HashSet
+import scala.collection.JavaConversions._
 
 import org.slf4j.LoggerFactory
 
@@ -15,6 +16,9 @@ import edu.cmu.cs.oak.value.StringValue
 import com.caucho.quercus.Location
 import scala.collection.mutable.HashMap
 import com.caucho.quercus.program.QuercusProgram
+import com.caucho.quercus.program.InterpretedClassDef
+import java.util.LinkedHashMap
+import com.caucho.quercus.function.AbstractFunction
 
 /**
  * Traverses the PHP AST provided by Quercus and retrieves all
@@ -72,7 +76,15 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ClassDefStatement.
      */
-    case s: ClassDefStatement => ???
+    case s: ClassDefStatement => {
+      val ic = Interpreter.accessField(s, "_cl").asInstanceOf[InterpretedClassDef]
+      val functionMap = Interpreter.accessField(ic, "_functionMap").asInstanceOf[LinkedHashMap[com.caucho.quercus.env.StringValue, AbstractFunction]]
+    
+      val functions = functionMap.map { case (k, v) => (k.toString(), v)}
+      functions.values.foreach {
+        f => visit(Interpreter.accessField(f.asInstanceOf[com.caucho.quercus.program.Function], "_statement").asInstanceOf[Statement]) 
+      }
+    }
 
     /**
      * Case for AST node class ClassStaticStatement.
@@ -150,7 +162,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ReturnRefStatement.
      */
-    case s: ReturnRefStatement => ???
+    case s: ReturnRefStatement => { /* Nothing to implement here */}
 
     /**
      * Case for AST node class ReturnStatement.
@@ -231,7 +243,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class AbstractMethodExpr.
      */
-    case e: AbstractMethodExpr => ???
+    case e: AbstractMethodExpr => { }
 
     /**
      * Case for AST node class AbstractUnaryExpr.
@@ -300,7 +312,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class BinaryAssignRefExpr.
      */
-    case e: BinaryAssignRefExpr => ???
+    case e: BinaryAssignRefExpr => { }
 
     /**
      * Case for AST node class BinaryBitAndExpr.
@@ -573,7 +585,10 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class FunArrayExpr.
      */
-    case e: FunArrayExpr => ???
+    case e: FunArrayExpr => {
+      val values = Interpreter.accessField(e, "_values").asInstanceOf[Array[Expr]]
+      values.foreach { v => visit(v, loc) }
+    }
 
     /**
      * Case for AST node class FunCloneExpr.
@@ -704,7 +719,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ObjectNewExpr.
      */
-    case e: ObjectNewExpr => ???
+    case e: ObjectNewExpr => { }
 
     /**
      * Case for AST node class ObjectNewStaticExpr.

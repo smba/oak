@@ -12,15 +12,33 @@ import com.caucho.quercus.statement.Statement
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.OakValue
+
 trait Interpreter {
 
+  /**
+   * Evaluates an expression in the context of a given environment.
+   * 
+   * @param e Expression to evaluate
+   * @param env Environment/Context to evaluate the expression in
+   * 
+   * @return Tuple containing (a) the resulting OakValue, (b) the resulting environment with regard to possible side effects
+   */
   def evaluate(e: Expr, env: Environment): (OakValue, Environment)
-
-  def execute(e: Statement, env: Environment): (String, Environment)
+  
+  /**
+   * Executes a statement in the context of a given environment.
+   * 
+   * @param s Statement to execute
+   * @param env Environment/Context to execute the statement in
+   * 
+   * @return Tuple containing (a) a control code, (b) the resulting environment
+   */
+  def execute(s: Statement, env: Environment): (String, Environment)
 
 }
 
 object Interpreter {
+  
   /**
    * Utility method to access private or protected fields of compiled
    * sources.
@@ -62,7 +80,12 @@ object Interpreter {
     out
   }
   
-  
+  /**
+   * Returns all declared fields of a given object including its supertypes.
+   * 
+   * @param fields Map: String -> Field
+   * @param type Class type 
+   */
   @deprecated private def getAllDeclaredFields(fields: Map[String, Field], typ: Class[_]): Map[String, Field] = {
     var fs = fields
     fs ++= typ.getDeclaredFields.toList.map { x => (x.getName -> x) }
@@ -72,10 +95,18 @@ object Interpreter {
     return fs
   }
   
-  
+  /**
+   * Defines a function. The defined function will be accessible during the 
+   * program execution.
+   * 
+   * @param fu Function instance retrieved from the QuercusProgram to execute
+   * 
+   * @return FunctionDef instance to be stored by the Intepreter
+   */
   def defineFunction(fu: Function): FunctionDef = {
 
     val f = fu.asInstanceOf[Function]
+    
     // TODO Refactor variable Interpreter.access by reflection!
     val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
 
@@ -85,6 +116,7 @@ object Interpreter {
       a => args.append((if (a.isReference()) "&" else "") + a.getName.toString())
     }
     val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
+    
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, statement, hasReturn, returnsRef)
   }

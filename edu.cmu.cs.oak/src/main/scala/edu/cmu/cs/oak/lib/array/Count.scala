@@ -7,7 +7,7 @@ import com.caucho.quercus.expr.Expr
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.core.Interpreter
 import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.IntValue
 

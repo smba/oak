@@ -13,6 +13,7 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.env.heap.OakHeap
 
 /**
  * Programs state and program state operations.

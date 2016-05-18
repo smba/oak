@@ -1,7 +1,7 @@
 package edu.cmu.cs.oak.value
 
 import scala.collection.mutable.HashMap
-import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.env.heap.OakHeap
 
 class ArrayValue extends OakValue {
 

@@ -54,7 +54,7 @@ import com.caucho.quercus.statement.WhileStatement
 
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.env.SimpleEnv
 import edu.cmu.cs.oak.exceptions.UnexpectedTypeException
 import edu.cmu.cs.oak.value.ArrayValue
@@ -72,6 +72,7 @@ import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
 import edu.cmu.cs.oak.analysis.ASTVisitor
+import com.caucho.quercus.statement.TextStatement
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -80,10 +81,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   var url: URL = null
 
-  def execute(url: URL): (String, Environment) = {
-
-    this.url = url
-
+  def execute(urlI: URL): (String, Environment) = {
+    
+    this.url = urlI
     val engine = new OakEngine()
     val program = engine.loadFromFile(url)
     return execute(program)
@@ -132,8 +132,13 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val value = evaluate(expr, env)._1
     val valueX = value match {
-      case sv: StringValue =>
-        sv.setLocation((url, lineNr)); sv
+      case sv: StringValue => {
+        sv.setLocation((url, lineNr))
+        sv
+      }
+      case a: ArrayValue => {
+        throw new RuntimeException("Can't echo an entire array.")
+      }
       case _ => value
     }
 
@@ -182,8 +187,16 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
            */
           case a: ArrayGetExpr => {
 
-            val index = evaluate(Interpreter.accessField(a, "_index").asInstanceOf[Expr], env)._1
-
+            val indexRaw = evaluate(Interpreter.accessField(a, "_index").asInstanceOf[Expr], env)._1
+            val index = indexRaw match {
+              case s: StringValue => {
+                s.setLocation((url, lineNr))
+                s
+              }
+              case _ => indexRaw
+            }
+            
+            
             /* Utility, transfer names with $xxx[i] to $xxx */
             val pattern = "\\](\\s|\\d|[^(\\[|\\])])*\\[".r
             val arrayValueName = (pattern replaceFirstIn (name.toString.reverse, "")).reverse
@@ -332,7 +345,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         ("OK", env_)
       }
 
-      case _ => throw new RuntimeException(e.getClass + " is not implemented for ExprStatement.")
+      case _ => throw new RuntimeException(e.getClass + " is not implemented for ExprStatement, expr is " + e.toString())
     }
   }
 
@@ -460,6 +473,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     env.addClass(classDef)
     return ("OK", env)
   }
+  
 
   def execute(s: ReturnRefStatement, env: Environment): (String, Environment) = {
     // TODO Refactor variable Interpreter.access by reflection!
@@ -814,10 +828,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         envRes.lookup("$return")
       }
     } catch {
-      case e: Exception => IntValue(404)
+      case e: Exception => throw new RuntimeException()
     }
 
-    arrayVal.getKeys.foreach { key => objectValBefore.set(key.toString, arrayVal.get(key)) }
+    arrayVal.getKeys.foreach { key => objectValBefore.set(key.asInstanceOf[StringValue].value.toString, arrayVal.get(key)) }
     env.update(objExpr.toString(), objectValBefore)
     (returnVal, env)
 
@@ -848,7 +862,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val envConstructed = execute(constructor.statement, objEnv)._2
 
     val thisArray = envConstructed.lookup("$this").asInstanceOf[ArrayValue]
-    thisArray.getKeys.foreach { key => obj.set(key.toString, thisArray.get(key)) }
+    thisArray.getKeys.foreach { key => obj.set(key.asInstanceOf[StringValue].value.toString, thisArray.get(key)) }
 
     (obj, env)
   }

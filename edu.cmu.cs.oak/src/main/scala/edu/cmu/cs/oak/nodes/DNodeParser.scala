@@ -6,6 +6,8 @@ import edu.cmu.cs.oak.value.DoubleValue
 import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
+import java.net.URL
+import edu.cmu.cs.oak.value.BooleanValue
 
 /**
  * Parser XML -> DNode
@@ -27,9 +29,10 @@ object DNodeParser {
   def createLiteralNodeFromXml(node: scala.xml.Node): LiteralNode = {
     val c = (node.child).filter { n => n.label != "#PCDATA" }(0)
     c.label match {
-      case "int" => LiteralNode(IntValue((node \ "int").text.toInt))
+      case "int" => LiteralNode(IntValue((node \ "int").text.trim.toInt))
       case "double" => LiteralNode(DoubleValue((node \ "double").text.toDouble))
-      case "string" => LiteralNode(StringValue((node \ "string").text))
+      case "string" => LiteralNode(parseStringNode(c))//
+      case "boolean" => LiteralNode( BooleanValue((node \ "boolean").text.trim.toBoolean))//
       case _ => throw new RuntimeException("Could not match label " + node.child(0).label + ".")
     }
   }
@@ -41,6 +44,16 @@ object DNodeParser {
     return SelectNode(condition, trueNode, falseNode)
   }
 
+  
+  def parseStringNode(node: scala.xml.Node): StringValue = {
+    val url = new URL((node \ "url").text)
+    val line = (node \ "line").text.trim.toInt
+    val content = (node \ "content").text
+    val v = StringValue(content)
+    v.setLocation((url, line))
+    v
+  }
+  
   def createConcatNodeFromXml(node: scala.xml.Node): ConcatNode = {
     val nodeBuffer = new ListBuffer[DNode]
     (node \ "concatItem").foreach {

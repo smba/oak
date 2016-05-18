@@ -8,9 +8,8 @@ import com.caucho.quercus.Location
   */
 case class SymbolValue(e: String, id: Long) extends SymbolicValue {
   
-  System.err.println("> Introducing symbol σ[" + id + "] for expression " + e + ".")
   
-  override def toString = "σ"+id
+  override def toString = "σ"
   
   override def toXml = {
     <symbol>

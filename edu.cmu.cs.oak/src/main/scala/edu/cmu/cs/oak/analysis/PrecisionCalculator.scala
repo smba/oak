@@ -22,16 +22,15 @@ object PrecisionCalculator {
 
     // |retrieved| <= |available|
     assert(retrieved.size <= available.size)
-    
     ((retrieved intersect available).size, available.size)
   }
-  
+
   def notCoveredLiterals(retrieved: Set[StringValue], available: Set[StringValue]): Set[StringValue] = {
-    
+
     // |retrieved| <= |available|
     retrieved &~ available
   }
-  
+
   def availableLiterals(url: URL): Set[StringValue] = {
     val visitor = new ASTVisitor(url)
     return visitor.retrieveStringLiterals()

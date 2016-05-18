@@ -4,7 +4,9 @@ import edu.cmu.cs.oak.value.{FunctionDef, OakValue, OakVariable}
 import org.slf4j.LoggerFactory
 
 class OakHeap {}
-
+/**
+ * 
+ */
 object OakHeap extends VarHeap {
 
   val logger = LoggerFactory.getLogger(classOf[OakHeap])

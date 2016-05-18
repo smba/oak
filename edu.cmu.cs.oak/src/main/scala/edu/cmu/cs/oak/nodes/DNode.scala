@@ -98,7 +98,7 @@ object DNode {
    */
   @deprecated def createDNode(vs: Seq[OakValue]): DNode = {
     val nodes = vs.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
-    DRoot(ConcatNode(nodes))
+    ConcatNode(nodes)
   }
 
   /**
