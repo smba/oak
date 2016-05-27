@@ -39,6 +39,10 @@ object OakHeap extends VarHeap {
     funcs += (f.getName -> f)
   }
   
+  def unsetVariable(ref: OakVariable) {
+    varval -= ref
+  }
+  
   def getFunction(name: String): FunctionDef = {
     val opt = funcs.get(name)
     if (! opt.isEmpty) {

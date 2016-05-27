@@ -10,12 +10,14 @@ import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.IntValue
+import java.net.URL
+import java.nio.file.Path
 
 class Count extends InterpreterPlugin {
   
   override def getName(): String = "count"
   
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[Expr],loc: (Path, Int), env: Environment): OakValue = {
     
     
     

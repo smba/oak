@@ -8,11 +8,19 @@ import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import java.net.URL
 import edu.cmu.cs.oak.value.BooleanValue
+import java.nio.file.Paths
+import edu.cmu.cs.oak.value.NullValue
 
 /**
  * Parser XML -> DNode
  */
 object DNodeParser {
+  
+  var rootPath: String = null
+  
+  def init(rootPath: String) {
+    this.rootPath = rootPath
+  }
 
   // utility method
   private def parseNode(node: scala.xml.Node): DNode = {
@@ -33,6 +41,7 @@ object DNodeParser {
       case "double" => LiteralNode(DoubleValue((node \ "double").text.toDouble))
       case "string" => LiteralNode(parseStringNode(c))//
       case "boolean" => LiteralNode( BooleanValue((node \ "boolean").text.trim.toBoolean))//
+      case "undef" => LiteralNode( NullValue("") )//
       case _ => throw new RuntimeException("Could not match label " + node.child(0).label + ".")
     }
   }
@@ -46,7 +55,7 @@ object DNodeParser {
 
   
   def parseStringNode(node: scala.xml.Node): StringValue = {
-    val url = new URL((node \ "url").text)
+    val url = rootPath.concat( (node \ "url").text )
     val line = (node \ "line").text.trim.toInt
     val content = (node \ "content").text
     val v = StringValue(content)

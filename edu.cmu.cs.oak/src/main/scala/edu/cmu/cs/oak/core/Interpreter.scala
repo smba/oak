@@ -12,8 +12,19 @@ import com.caucho.quercus.statement.Statement
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.OakValue
+import java.nio.file.Path
+import java.nio.file.Paths
 
 trait Interpreter {
+  
+  /** Path to the currently executed script */
+  var path: Path = null
+  
+  /** Line of the currently executed script */
+  var currentLineNr: Int = 0
+  
+  /** Root path; where to find the program entry point. */
+  var rootPath: Path = null
 
   /**
    * Evaluates an expression in the context of a given environment.
@@ -120,4 +131,6 @@ object Interpreter {
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, statement, hasReturn, returnsRef)
   }
+  
+  
 }

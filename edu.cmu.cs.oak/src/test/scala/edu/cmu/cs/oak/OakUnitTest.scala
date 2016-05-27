@@ -23,6 +23,16 @@ import edu.cmu.cs.oak.value.DoubleValue
 import org.junit.runner.RunWith
 import scala.xml.PrettyPrinter
 import org.scalatest.FunSuite
+import edu.cmu.cs.oak.env.SimpleEnv
+import scala.collection.immutable.Stack
+import java.nio.file.Path
+import java.nio.file.Paths
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.StringValue
+import edu.cmu.cs.oak.value.BooleanValue
+import edu.cmu.cs.oak.value.Choice
+import edu.cmu.cs.oak.value.DoubleValue
+import edu.cmu.cs.oak.env.heap.OakHeap
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -37,7 +47,7 @@ object OakUnitTest extends FunSuite {
   val engine = new OakEngine()
   val interpreter = new OakInterpreter()
 
-  val pp = new PrettyPrinter(200, 0)
+  //val pp = new PrettyPrinter(200, 0)
 
   /**
    * Reads a PHP source code string, parses & executes it.
@@ -46,7 +56,7 @@ object OakUnitTest extends FunSuite {
    * @return (ControlCode, Environment)
    */
   def readAndExecute(script: String): (String, Environment) = {
-    return interpreter.execute(engine.loadFromScript("<?php " + script + " ?>"))
+    return interpreter.execute(engine.loadFromScript("<?php " + script + " ?>"), new SimpleEnv(null, Stack[String](), "true"))
   }
 
   /**
@@ -55,26 +65,16 @@ object OakUnitTest extends FunSuite {
    * @param script PHP source code file
    * @return (ControlCode, Environment)
    */
-  def loadAndExecute(url: URL): (String, Environment) = {
-    val program = engine.loadFromFile(url)
-    return interpreter.execute(program)
+  def loadAndExecute(path: Path): (String, Environment) = {
+    return interpreter.execute(path)
   }
 
   /* utility method */
-  def url(fileName: String): URL = {
-    getClass.getResource("/" + fileName)
+  def url(fileName: String): Path = {
+    Paths.get(getClass.getResource("/" + fileName).getPath)
   }
-
-  test("VarExpr") {
-    assert(readAndExecute("$i = 5;")._2.lookup("$i") == IntValue(5))
-    assert(readAndExecute("$i = 13.37;")._2.lookup("$i") == DoubleValue(13.37))
-    assert(readAndExecute("$i = 42;")._2.lookup("$i") == IntValue(42))
-    assert(readAndExecute("$i = false;")._2.lookup("$i") == BooleanValue(false))
-    assert(readAndExecute("$i = true;")._2.lookup("$i") == BooleanValue(true))
-    assert(readAndExecute("$i = 'tisch';")._2.lookup("$i") == StringValue("tisch"))
-    assert(readAndExecute("$i = 3; $j = $i;")._2.lookup("$j") == IntValue(3))
-  }
-
+  
+  
   test("BinaryExpression + BooleanExpr") {
     assert(readAndExecute("$b = true; $j = $b && false;")._2.lookup("$j") == BooleanValue(false))
     assert(readAndExecute("$b = true; $j = $b || false;")._2.lookup("$j") == BooleanValue(true))
@@ -103,10 +103,10 @@ object OakUnitTest extends FunSuite {
   }
 
   test("IfStatement") {
-    assert(readAndExecute("$i = 0; if ($i < 1) {$j = 1;} else {$j = 0}")._2.lookup("$j") == IntValue(1))
-    assert(readAndExecute("$i = 1; if ($i < 1) {$j = 1;} else {$j = 0}")._2.lookup("$j") == IntValue(0))
     assert(RegressionTest.test(url("testScripts/ifStatement01.php"))._1)
-    assert(readAndExecute("$i = 0; if ($i < 'i') {$j = 1;} else {$j = 0}")._2.lookup("$j") == Choice("true && ($i < \"i\")", IntValue(1), IntValue(0)))
+    assert(loadAndExecute(url("testScripts/ifStatement02.php"))._2.lookup("$j") == IntValue(1))
+    assert(loadAndExecute(url("testScripts/ifStatement03.php"))._2.lookup("$j") == IntValue(0))
+    assert(loadAndExecute(url("testScripts/ifStatement04.php"))._2.lookup("$j") == Choice("true && ($i < \"i\")", IntValue(1), IntValue(0)))
   }
 
   test("WhileStatement") {
@@ -114,10 +114,10 @@ object OakUnitTest extends FunSuite {
   }
 
   test("Function calls, branching") {
-    var env = readAndExecute("function f($i, $k) { return $i + $k;} $i = 1; $j = f($i, 2);")
+    var env = loadAndExecute(url("testScripts/functions02.php"))
     assert(env._2.lookup("$i") == IntValue(1) && env._2.lookup("$j") == IntValue(3))
 
-    env = readAndExecute("echo 'nm'; function f() { echo 'here';} f(); echo 'there';")
+    env = loadAndExecute(url("testScripts/functions03.php"))
     assert(env._2.getOutput.last == StringValue("there"))
 
     assert(RegressionTest.test(url("testScripts/functions01.php"))._1)
@@ -132,18 +132,22 @@ object OakUnitTest extends FunSuite {
   }
   
   test("Reference values") {
-    var env = loadAndExecute(url("referenceValue01.php"))._2
+    var env = readAndExecute("$a = 1; $b = &$a;	$b += 1;echo $a;")._2
     assert(env.lookup("$a") == IntValue(2) && env.lookup("$b") == IntValue(2))
 
-    env = loadAndExecute(url("referenceValue02.php"))._2
+    env = readAndExecute("$a = array(3,2,1); $b = &$a[0]; $b *= $b; echo $a[0];")._2
     assert(env.lookup("$b") == IntValue(9) && env.lookup("$a").asInstanceOf[ArrayValue].get(IntValue(0)) == IntValue(9))
 
-    env = loadAndExecute(url("referenceValue03.php"))._2
+    env = readAndExecute("function foo(&$x) { $x *= 2; } $a = 2; foo($a); echo $a;")._2
     assert(env.lookup("$a") == IntValue(4))
   }
 
   test("Objects") {
     assert(RegressionTest.test(url("testScripts/objects01.php"))._1)
+  }
+  
+  test("Schoolmate") {
+    assert(RegressionTest.test(url("schoolmate/index.php"))._1)
   }
 
 }

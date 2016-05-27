@@ -12,6 +12,8 @@ import java.util.Collection
 import scala.collection.mutable.ListBuffer
 import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.DoubleValue
+import edu.cmu.cs.oak.nodes.SymbolNode
+import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
 
 /**
  * Model for (symbolic) output of a symbolically executed PHP script.
@@ -33,6 +35,8 @@ trait DNode {
    * @return scala.xml.Elem XML node
    */
   def toXml(): scala.xml.Elem
+  
+  def traverse(listener: OutputGraphListener) 
 
   /**
    * Returns a sequence of output strings mixed with #ifdef annotations
@@ -43,14 +47,19 @@ trait DNode {
   /**
    * Compare method for DNodes.
    * 
-   * @param that DNode tree to comapre
+   * @param that DNode tree to compare
    * @return this.equals(that)?
    */
   def compare(that: DNode): Boolean = {
     lazy val ifd1 = this.ifdefy()
     lazy val ifd2 = that.ifdefy()
+    
+    def chop(s: String): String = s.split('\n').map(_.trim.filter(_ >= ' ')).mkString.replace(" ", "")
+    
     if (ifd1.size == ifd2.size) {
-      (ifd1 zip ifd2).map { case (x, y) => x.equals(y) }.foldLeft(true)(_ && _)
+      (ifd1 zip ifd2).map { 
+        case (x, y) => chop(x) equals chop(y) 
+      }.foldLeft(true)(_ && _)
     } else {
       false
     }
@@ -82,6 +91,10 @@ object DNode {
     case o: OakValueSequence => {
       val nodes = o.getSequence.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
       ConcatNode(nodes)
+    }
+    case s: StringValue => {
+      assert(s.loc._1 != null) //FIXME
+      LiteralNode(s)
     }
     case _ => {
       LiteralNode(v)
@@ -122,6 +135,8 @@ object DNode {
       }
       case l: LiteralNode => l.lv match {
         case s: StringValue => {
+         
+          assert(s.loc._1 != null) //FIXME
           literals ++ List(s)
         }
         case _ => List[StringValue]()
@@ -131,6 +146,12 @@ object DNode {
 
     // apply utility method
     return extractStringLiterals(node, List[StringValue]()).toSet
+  }
+  
+  def createOutputGraph(node: DNode): scala.xml.Elem = {
+    val listener = new OutputGraphListener("Output Graph")
+    node.traverse(listener)
+    listener.toXml
   }
 
 }

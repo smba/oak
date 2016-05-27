@@ -2,6 +2,7 @@ package edu.cmu.cs.oak.analysis
 
 import edu.cmu.cs.oak.value.StringValue
 import java.net.URL
+import java.nio.file.Path
 
 object PrecisionCalculator {
 
@@ -31,8 +32,9 @@ object PrecisionCalculator {
     retrieved &~ available
   }
 
-  def availableLiterals(url: URL): Set[StringValue] = {
-    val visitor = new ASTVisitor(url)
+  def availableLiterals(path: Path): Set[StringValue] = {
+    val visitor = new ASTVisitor(path)
+    visitor.init
     return visitor.retrieveStringLiterals()
   }
 

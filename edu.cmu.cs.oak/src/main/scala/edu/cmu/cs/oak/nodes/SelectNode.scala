@@ -1,6 +1,15 @@
 package edu.cmu.cs.oak.nodes
 
+import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
+
 case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
+  
+  override def traverse(listener: OutputGraphListener) {
+     listener.addEdge(this.hashCode.toString, v1.hashCode.toString)
+     v1.traverse(listener)
+     listener.addEdge(this.hashCode.toString, v2.hashCode.toString)
+     v2.traverse(listener)
+  }
   
   def getChildren(): Seq[DNode] = List(v1, v2)
   

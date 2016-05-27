@@ -12,6 +12,7 @@ import scala.io.Source
 import java.net.URL
 import java.io.File
 import java.io.FileReader
+import java.nio.file.Path
 
 /**
  * Loads scripts, handles the Quercus parser
@@ -23,8 +24,8 @@ class OakEngine {
    * @param path to the PHP source file to parse
    * @return QuercusProgram parsed AST
    */
-  def loadFromFile(path: URL): QuercusProgram = {
-    val reader = new FileReader(path.getPath)
+  def loadFromFile(path: Path): QuercusProgram = {
+    val reader = new FileReader(path.toString)
     val parser = new QuercusParser(OakEngine.getQuercus("UTF-8", true), null, reader)
     return parser.parse()
   }

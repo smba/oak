@@ -6,6 +6,8 @@ import com.caucho.quercus.expr.Expr
 import edu.cmu.cs.oak.env.Environment
 import scala.collection.mutable.HashMap
 import edu.cmu.cs.oak.lib.array.Count
+import java.net.URL
+import java.nio.file.Path
 
 /**
  * Via this plugin loader the interpreter can 
@@ -46,8 +48,8 @@ trait InterpreterPluginProvider {
     plugins.put(plugin.getName, plugin)
   }
 
-  def accept(plugin: InterpreterPlugin, args: List[Expr], env: Environment): OakValue = {
-    plugin.visit(this, args, env)
+  def accept(plugin: InterpreterPlugin, args: List[Expr], loc: (Path, Int), env: Environment): OakValue = {
+    plugin.visit(this, args, loc, env)
   }
   
   def getPlugins(): List[String] = {

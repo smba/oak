@@ -19,6 +19,8 @@ import com.caucho.quercus.program.QuercusProgram
 import com.caucho.quercus.program.InterpretedClassDef
 import java.util.LinkedHashMap
 import com.caucho.quercus.function.AbstractFunction
+import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * Traverses the PHP AST provided by Quercus and retrieves all
@@ -28,7 +30,7 @@ import com.caucho.quercus.function.AbstractFunction
  *
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
-class ASTVisitor(url: URL) {
+class ASTVisitor(path: Path) {
 
   /** Set of found string literals including contextual information. */
   lazy val stringLiterals = new HashSet[StringValue]
@@ -40,13 +42,20 @@ class ASTVisitor(url: URL) {
   lazy val logger = LoggerFactory.getLogger(classOf[ASTVisitor])
 
   /**
+   * Set the global parent path for the ASTVisitor
+   */
+  def init() {
+    ASTVisitor.rootPath = path.getParent()
+  }
+  
+  /**
    * Loads a program from file and retrieves string literals.
    *
    * @param path URL to the PHP source file to parse
    */
   def retrieveStringLiterals(): Set[StringValue] = {
-    val program = engine.loadFromFile(url)
-    
+    val program = engine.loadFromFile(path)
+
     // Traverse function string literals
     List(program.getFunctionList.toArray: _*).foreach {
       f => visit(Interpreter.accessField(f, "_statement").asInstanceOf[Statement])
@@ -61,7 +70,7 @@ class ASTVisitor(url: URL) {
      * Case for AST node class BlockStatement.
      */
     case s: BlockStatement => {
-      
+
       Interpreter.accessField(s, "_statements").asInstanceOf[Array[Statement]].foreach {
         st => visit(st)
       }
@@ -71,7 +80,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class BreakStatement.
      */
-    case s: BreakStatement => ???
+    case s: BreakStatement => {}
 
     /**
      * Case for AST node class ClassDefStatement.
@@ -79,10 +88,10 @@ class ASTVisitor(url: URL) {
     case s: ClassDefStatement => {
       val ic = Interpreter.accessField(s, "_cl").asInstanceOf[InterpretedClassDef]
       val functionMap = Interpreter.accessField(ic, "_functionMap").asInstanceOf[LinkedHashMap[com.caucho.quercus.env.StringValue, AbstractFunction]]
-    
-      val functions = functionMap.map { case (k, v) => (k.toString(), v)}
+
+      val functions = functionMap.map { case (k, v) => (k.toString(), v) }
       functions.values.foreach {
-        f => visit(Interpreter.accessField(f.asInstanceOf[com.caucho.quercus.program.Function], "_statement").asInstanceOf[Statement]) 
+        f => visit(Interpreter.accessField(f.asInstanceOf[com.caucho.quercus.program.Function], "_statement").asInstanceOf[Statement])
       }
     }
 
@@ -99,7 +108,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ContinueStatement.
      */
-    case s: ContinueStatement => ???
+    case s: ContinueStatement => {}
 
     /**
      * Case for AST node class DoStatement.
@@ -110,7 +119,7 @@ class ASTVisitor(url: URL) {
      * Case for AST node class EchoStatement.
      */
     case s: EchoStatement => {
-      
+
       val expr = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
       visit(expr, ASTVisitor.getStatementLineNr(s))
     }
@@ -120,7 +129,15 @@ class ASTVisitor(url: URL) {
      */
     case s: ExprStatement => {
       val expr = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
-      visit(expr, ASTVisitor.getStatementLineNr(s))
+      
+      if (expr.isInstanceOf[FunIncludeExpr] || expr.isInstanceOf[FunIncludeOnceExpr]) {
+        val path = Paths.get(this.path.getParent.toString + "/" + expr.toString.replace("\"", ""))
+        val includeVisitor = new ASTVisitor(path)
+        stringLiterals ++= includeVisitor.retrieveStringLiterals()
+      } else {
+        visit(expr, ASTVisitor.getStatementLineNr(s))
+      }
+      
     }
 
     /**
@@ -131,7 +148,10 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ForStatement.
      */
-    case s: ForStatement => ???
+    case s: ForStatement => {
+      val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
+      visit(block)
+    }
 
     /**
      * Case for AST node class FunctionDefStatement.
@@ -149,9 +169,13 @@ class ASTVisitor(url: URL) {
     case s: IfStatement => {
       //val expr = Interpreter.accessField(s, "_test").asInstanceOf[Expr]
       //visit(expr, ASTVisitor.getStatementLineNr(s))
-      
+
       visit(Interpreter.accessField(s, "_trueBlock").asInstanceOf[Statement])
-      visit(Interpreter.accessField(s, "_falseBlock").asInstanceOf[Statement])
+      try {
+        visit(Interpreter.accessField(s, "_falseBlock").asInstanceOf[Statement])
+      } catch {
+        case e: Exception => {}
+      }
     }
 
     /**
@@ -162,14 +186,14 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ReturnRefStatement.
      */
-    case s: ReturnRefStatement => { /* Nothing to implement here */}
+    case s: ReturnRefStatement => { /* Nothing to implement here */ }
 
     /**
      * Case for AST node class ReturnStatement.
      */
     case s: ReturnStatement => {
       val expr = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
-      visit(expr, ASTVisitor.getStatementLineNr(s))      
+      visit(expr, ASTVisitor.getStatementLineNr(s))
     }
 
     /**
@@ -180,18 +204,25 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class SwitchStatement.
      */
-    case s: SwitchStatement => ???
+    case s: SwitchStatement => {
+      val blocks = Interpreter.accessField(s, "_blocks").asInstanceOf[Array[BlockStatement]]
+      val default = Interpreter.accessField(s, "_defaultBlock").asInstanceOf[Statement]
+      blocks.foreach { b => visit(b) }
+      if (default != null) {
+        visit(default)
+      }
+    }
 
     /**
      * Case for AST node class TextStatement.
      */
     case s: TextStatement => {
-      
+
       /* -----------------------------------------------------*/
       val loc = Interpreter.accessField(s, "_location").asInstanceOf[Location]
       println("line:" + Interpreter.accessField(loc, "_lineNumber"))
-      /* -----------------------------------------------------*/ 
-      
+      /* -----------------------------------------------------*/
+
       val value = Interpreter.accessField(s, "_value").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
       println("-- " + value)
     }
@@ -217,13 +248,13 @@ class ASTVisitor(url: URL) {
     case s: WhileStatement => {
       val expr = Interpreter.accessField(s, "_test").asInstanceOf[Expr]
       visit(expr, ASTVisitor.getStatementLineNr(s))
-      
+
       visit(Interpreter.accessField(s, "_block").asInstanceOf[Statement])
     }
   }
 
   /**
-   * 
+   *
    */
   def visit(expr: Expr, loc: Int): Unit = expr match {
 
@@ -243,12 +274,12 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class AbstractMethodExpr.
      */
-    case e: AbstractMethodExpr => { }
+    case e: AbstractMethodExpr => {}
 
     /**
      * Case for AST node class AbstractUnaryExpr.
      */
-    case e: AbstractUnaryExpr => ???
+    case e: AbstractUnaryExpr => {}
 
     /**
      * Case for AST node class AbstractVarExpr.
@@ -307,12 +338,15 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class BinaryAssignListExpr.
      */
-    case e: BinaryAssignListExpr => ???
+    case e: BinaryAssignListExpr => {
+      val value = Interpreter.accessField(e, "_value").asInstanceOf[Expr]
+      visit(value, loc)
+    }
 
     /**
      * Case for AST node class BinaryAssignRefExpr.
      */
-    case e: BinaryAssignRefExpr => { }
+    case e: BinaryAssignRefExpr => {}
 
     /**
      * Case for AST node class BinaryBitAndExpr.
@@ -569,7 +603,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ConstExpr.
      */
-    case e: ConstExpr => ???
+    case e: ConstExpr => { }
 
     /**
      * Case for AST node class ConstFileExpr.
@@ -581,7 +615,6 @@ class ASTVisitor(url: URL) {
      */
     case e: DieExpr => ???
 
-    
     /**
      * Case for AST node class FunArrayExpr.
      */
@@ -599,7 +632,7 @@ class ASTVisitor(url: URL) {
      * Case for AST node class FunDieExpr.
      */
     case e: FunDieExpr => {
-      visit(Interpreter.accessField(e, "_value").asInstanceOf[Expr], loc)
+      //visit(Interpreter.accessField(e, "_value").asInstanceOf[Expr], loc)
     }
 
     /**
@@ -630,12 +663,16 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class FunIncludeExpr.
      */
-    case e: FunIncludeExpr => ???
+    case e: FunIncludeExpr => {
+      println(e)
+    }
 
     /**
      * Case for AST node class FunIncludeOnceExpr.
      */
-    case e: FunIncludeOnceExpr => ???
+    case e: FunIncludeOnceExpr => {
+      println(e)    
+    }
 
     /**
      * Case for AST node class FunIssetExpr.
@@ -681,9 +718,9 @@ class ASTVisitor(url: URL) {
      * Case for AST node class LiteralStringExpr.
      */
     case e: LiteralStringExpr => {
-      
+
       val string = StringValue(Interpreter.accessField(e, "_value").asInstanceOf[com.caucho.quercus.env.StringValue].toString)
-      string.setLocation((url, loc))
+      string.setLocation((path.toString diff ASTVisitor.rootPath.toString, loc))
       stringLiterals += string
     }
 
@@ -692,7 +729,7 @@ class ASTVisitor(url: URL) {
      */
     case e: LiteralUnicodeExpr => {
       val string = StringValue(Interpreter.accessField(e, "_value").asInstanceOf[com.caucho.quercus.env.StringValue].toString)
-      string.setLocation((url, loc))
+      string.setLocation((path.toString diff ASTVisitor.rootPath.toString, loc))
       stringLiterals += string
     }
 
@@ -719,7 +756,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class ObjectNewExpr.
      */
-    case e: ObjectNewExpr => { }
+    case e: ObjectNewExpr => {}
 
     /**
      * Case for AST node class ObjectNewStaticExpr.
@@ -884,7 +921,7 @@ class ASTVisitor(url: URL) {
     /**
      * Case for AST node class VarUnsetExpr.
      */
-    case e: VarUnsetExpr => ???
+    case e: VarUnsetExpr => {}
 
     /**
      * Case for AST node class VarVarExpr.
@@ -896,13 +933,15 @@ class ASTVisitor(url: URL) {
 }
 
 object ASTVisitor {
- 
+  
+  var rootPath: Path = null
+
   /**
-   * Auxiliary method to retrieve the line nr of a given 
+   * Auxiliary method to retrieve the line nr of a given
    * statement AST node.
-   * 
+   *
    * @param Statement statement AST node to inspect
-   * 
+   *
    * @return line nr
    */
   @deprecated def getStatementLineNr(stmt: Statement): Int = {

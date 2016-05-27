@@ -10,59 +10,62 @@ import edu.cmu.cs.oak.core.OakInterpreter
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.nodes.DNodeParser
+import java.nio.file.Path
+import java.io.PrintWriter
+import java.io.File
 
 /**
  * First, an URL is loaded. For this URL, we retrieve all available string
- * literals by traversing the AST (PrecisionCalculator, ASTVisitor). 
- * Second, we load and symbolically execute the program specified by 
- * the URL and store the resulting environment. 
- * Third, we load the test oracle corresponding to the loaded URL 
- * (named by convention) and parse the XML-based Dmodel and compare 
- * it with the Dmodel retrieved from the result environment. 
- * If these two Dmodels match, their output is equal; if they do not 
+ * literals by traversing the AST (PrecisionCalculator, ASTVisitor).
+ * Second, we load and symbolically execute the program specified by
+ * the URL and store the resulting environment.
+ * Third, we load the test oracle corresponding to the loaded URL
+ * (named by convention) and parse the XML-based Dmodel and compare
+ * it with the Dmodel retrieved from the result environment.
+ * If these two Dmodels match, their output is equal; if they do not
  * match, either an error occured or the test oracle is outdated.
  */
 object RegressionTest {
-  
+
   lazy val engine = new OakEngine
   lazy val interpreter = new OakInterpreter
-  
+
   /**
    * @param URL to test
    * @return (passed?, (found, available))
    */
-  def test(url: URL): (Boolean, (Int, Int)) = {
-    
+  def test(url: Path): (Boolean, (Int, Int)) = {
+
     // get available literals
     val available = PrecisionCalculator.availableLiterals(url)
-    
+
     // symbolically execute the program
     val env = interpreter.execute(url)
-    
+
     // get found literals 
     val found = DNode.extractStringLiterals(env._2.getOutputModel)
 
-    val path = url.getFile + "t"
-    
+    val path = url.toString + "t"
+
+    DNodeParser.init(url.getParent.toString)
+
     val oracle = DNodeParser.createConcatNodeFromXml(scala.xml.XML.loadString(Source.fromFile(path).getLines.mkString("")))
+
+    val writer1 = new PrintWriter(new File("/home/stefan/Desktop/outputModel.xml"))
+    val writer2 = new PrintWriter(new File("/home/stefan/Desktop/outputOracle.xml"))
+    
+    writer1.write(env._2.getOutputModel.toString)
+    writer1.close()
+    
+    writer2.write(oracle.toString)
+    writer2.close()
+
     val outputModel = env._2.getOutputModel()
-      
+
     val matches = oracle compare outputModel
     val precision = PrecisionCalculator.computePrecision(found, available)
-    
-    System.out.println(matches, precision)
-    
+
     return (matches, precision)
   }
-  
-  /**
-   * Read a PHP source code from file, parses & executes it.
-   *
-   * @param script PHP source code file
-   * @return (ControlCode, Environment)
-   */
-  def loadAndExecute(url: URL): (String, Environment) = {
-    return interpreter.execute(url)
-  }
-  
+
 }

@@ -7,6 +7,12 @@ import scala.collection.mutable.ListBuffer
 import edu.cmu.cs.oak.value.ClassDef
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.nodes.DNode
+import edu.cmu.cs.oak.env.heap.OakHeap
+import com.caucho.quercus.expr.Expr
+import scala.collection.mutable.HashSet
+import edu.cmu.cs.oak.value.Choice
+import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.value.NullValue
 
 trait Environment extends EnvListener {
 
@@ -123,13 +129,18 @@ trait Environment extends EnvListener {
   def getVariables(): Map[String, OakVariable]
 
   /**
-   * Serializes the entire state, i.e., serializes variable names 
+   * Serializes the entire state, i.e., serializes variable names
    * and values to XML.
    * TODO implement parser for serialized environment
-   * 
+   *
    * @return XML representation of the environment
    */
   def toXml: scala.xml.Elem
+
+  def unset(name: String)
+  
+  def join(that: Environment): Environment
+
 }
 
 /**
@@ -185,5 +196,112 @@ object Environment {
         }
     }
     return (b1, b2)
+  }
+  
+
+  /**
+   *
+   */
+  def splitN(parent: Environment, expr: Expr, cases: List[Expr]): List[BranchEnv] = {
+
+    var envs = List[BranchEnv]()
+    cases.foreach {
+      c => envs ++= List(new BranchEnv(parent, parent.getCalls, parent.getConstraint + " && (" + expr + " == " + c + ")"))
+    }
+    envs.toList.foreach {
+      e =>
+        parent.getVariables.keySet.foreach {
+          k =>
+            {
+              e.update(k, parent.lookup(k))
+            }
+        }
+    }
+    return envs
+  }
+
+  def joinN(parent: Environment, envs: List[BranchEnv], default: BranchEnv): Environment = {
+
+    def choice(varmap: Map[String, OakValue], defaultValue: OakValue): Choice = {
+      val keyIterator = varmap.keySet.toIterator
+      var currentkey = keyIterator.next
+      var choice = Choice(currentkey.toString, varmap.get(currentkey).get, defaultValue)
+      while (keyIterator.hasNext) {
+        currentkey = keyIterator.next
+        choice = Choice(currentkey.toString, varmap.get(currentkey).get, choice)
+      }
+      choice
+    }
+
+    /* Identify all variable names */
+    val variableNames = {
+      var buffer = new HashSet[String]
+      envs.foreach {
+        case env => buffer = buffer union env.getVariables.keySet
+      }
+      buffer.toSet
+    }
+
+    /* find out, which variables changed by merging all update sets */
+    val changed = envs.map {
+      env => env.getUpdates
+    }.foldLeft(Set[String]())(_ union _)
+
+    /* Generate a choice for any changed variable */
+    var choices = Map[String, Choice]()
+    changed.foreach {
+      c =>
+        {
+          var cMap = Map[String, OakValue]() // Constraint -> Value
+          envs.foreach {
+            env =>
+              {
+                val value = try {
+                  env.lookup(c)
+                } catch {
+                  case _ => NullValue("")
+                }
+                cMap += (env.getConstraint -> value)
+              }
+          }
+          val defaultValue = if (default != null) {
+            try {
+              default.lookup(c)
+            } catch {
+              case _ => NullValue("")
+            }
+          } else {
+            NullValue("")
+          }
+          choices += (c -> choice(cMap, defaultValue))
+        }
+    }
+
+    /* Merge output */
+    val outputChoice = {
+      var outputMap = Map[String, OakValueSequence]()
+      envs.foreach {
+        env => outputMap += (env.getConstraint -> OakValueSequence(env.getOutput))
+      }
+      val defaultOutput = if (default != null) {
+        try {
+          OakValueSequence(default.getOutput)
+        } catch {
+          case _ => NullValue("")
+        }
+      } else {
+        NullValue("")
+      }
+      choice(outputMap, defaultOutput)
+    }
+    
+    parent.addOutput(outputChoice)
+    choices.foreach {
+      case (name, choice) => {
+        parent.update(name, choice)
+      }
+    }
+    
+    parent
   }
 }
