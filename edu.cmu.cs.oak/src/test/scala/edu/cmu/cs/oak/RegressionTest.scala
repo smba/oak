@@ -51,15 +51,6 @@ object RegressionTest {
 
     val oracle = DNodeParser.createConcatNodeFromXml(scala.xml.XML.loadString(Source.fromFile(path).getLines.mkString("")))
 
-    val writer1 = new PrintWriter(new File("/home/stefan/Desktop/outputModel.xml"))
-    val writer2 = new PrintWriter(new File("/home/stefan/Desktop/outputOracle.xml"))
-    
-    writer1.write(env._2.getOutputModel.toString)
-    writer1.close()
-    
-    writer2.write(oracle.toString)
-    writer2.close()
-
     val outputModel = env._2.getOutputModel()
 
     val matches = oracle compare outputModel
