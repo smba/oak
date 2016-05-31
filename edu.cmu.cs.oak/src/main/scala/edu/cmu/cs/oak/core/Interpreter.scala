@@ -25,6 +25,9 @@ trait Interpreter {
   
   /** Root path; where to find the program entry point. */
   var rootPath: Path = null
+  
+  /** Constants */
+  var constants = Map[String, OakValue]()
 
   /**
    * Evaluates an expression in the context of a given environment.

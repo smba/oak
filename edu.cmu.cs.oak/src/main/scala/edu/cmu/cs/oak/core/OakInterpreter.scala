@@ -106,6 +106,9 @@ import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.ClassDef
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.lib.builtin.Defined
+import edu.cmu.cs.oak.lib.builtin.Define
+import edu.cmu.cs.oak.lib.builtin.DirName
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -116,6 +119,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   this.loadPlugin(new Count)
   this.loadPlugin(new Print)
+  this.loadPlugin(new DirName)
+  this.loadPlugin(new Define)
+  this.loadPlugin(new Defined)
 
   def execute(path: Path): (String, Environment) = {
 
