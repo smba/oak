@@ -111,6 +111,7 @@ import edu.cmu.cs.oak.lib.builtin.Define
 import edu.cmu.cs.oak.lib.builtin.DirName
 import com.caucho.quercus.expr.FunIssetExpr
 import com.caucho.quercus.expr.ConstExpr
+import com.caucho.quercus.statement.GlobalStatement
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -121,9 +122,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   this.loadPlugin(new Count)
   this.loadPlugin(new Print)
-  //this.loadPlugin(new DirName)
-  //this.loadPlugin(new Define)
-  //this.loadPlugin(new Defined)
+  this.loadPlugin(new DirName)
+  this.loadPlugin(new Define)
+  this.loadPlugin(new Defined)
 
   def execute(path: Path): (String, Environment) = {
 
@@ -668,6 +669,12 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     println(value) //FIXME
     ("OK", env)
   }
+  
+  def execute(s: GlobalStatement, env: Environment): (String, Environment) = {
+    val value = Interpreter.accessField(s, "_var").asInstanceOf[VarExpr]
+    println(value)
+    ("OK", env)
+  }
 
   override def execute(stmt: Statement, env: Environment): (String, Environment) = stmt match {
 
@@ -684,6 +691,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case s: ForStatement => execute(s, env)
     case s: ContinueStatement => execute(s, env)
     case s: TextStatement => execute(s, env)
+    case s: GlobalStatement => execute(s, env)
     case _ => throw new RuntimeException(stmt + " unimplemented.")
   }
 
