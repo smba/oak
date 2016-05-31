@@ -9746,125 +9746,62 @@
                     <select>
                      <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 28) &amp;&amp; $student=mysql_fetch_row() </condition>
                      <trueNode>
-                      <select>
-                       <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 28) &amp;&amp; $student=mysql_fetch_row() &amp;&amp; ($student[0] == $_POST[&quot;student&quot;]) </condition>
-                       <trueNode>
-                        <concat>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content>&lt;option value='</content>
-                            <url>/GradeReport.php</url>
-                            <line>46</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <symbol> σ </symbol>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content>'&gt;</content>
-                            <url>/GradeReport.php</url>
-                            <line>46</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <symbol> σ </symbol>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content> </content>
-                            <url>/GradeReport.php</url>
-                            <line>46</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <symbol> σ </symbol>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content>&lt;/option&gt; </content>
-                            <url>/GradeReport.php</url>
-                            <line>46</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content></content>
-                            <url>/GradeReport.php</url>
-                            <line>34</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                        </concat>
-                       </trueNode>
-                       <falseNode>
-                        <concat>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content></content>
-                            <url>/GradeReport.php</url>
-                            <line>34</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content>&lt;option value='</content>
-                            <url>/GradeReport.php</url>
-                            <line>50</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <symbol> σ </symbol>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content>'&gt;</content>
-                            <url>/GradeReport.php</url>
-                            <line>50</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <symbol> σ </symbol>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content> </content>
-                            <url>/GradeReport.php</url>
-                            <line>50</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                         <concatItem>
-                          <symbol> σ </symbol>
-                         </concatItem>
-                         <concatItem>
-                          <literal>
-                           <string>
-                            <content>&lt;/option&gt; </content>
-                            <url>/GradeReport.php</url>
-                            <line>50</line>
-                           </string>
-                          </literal>
-                         </concatItem>
-                        </concat>
-                       </falseNode>
-                      </select>
+                      <concat>
+                       <concatItem>
+                        <literal>
+                         <string>
+                          <content>&lt;option value='</content>
+                          <url>/GradeReport.php</url>
+                          <line>46</line>
+                         </string>
+                        </literal>
+                       </concatItem>
+                       <concatItem>
+                        <symbol> σ </symbol>
+                       </concatItem>
+                       <concatItem>
+                        <literal>
+                         <string>
+                          <content>'&gt;</content>
+                          <url>/GradeReport.php</url>
+                          <line>46</line>
+                         </string>
+                        </literal>
+                       </concatItem>
+                       <concatItem>
+                        <symbol> σ </symbol>
+                       </concatItem>
+                       <concatItem>
+                        <literal>
+                         <string>
+                          <content> </content>
+                          <url>/GradeReport.php</url>
+                          <line>46</line>
+                         </string>
+                        </literal>
+                       </concatItem>
+                       <concatItem>
+                        <symbol> σ </symbol>
+                       </concatItem>
+                       <concatItem>
+                        <literal>
+                         <string>
+                          <content>&lt;/option&gt; </content>
+                          <url>/GradeReport.php</url>
+                          <line>46</line>
+                         </string>
+                        </literal>
+                       </concatItem>
+                       <concatItem>
+                        <literal>
+                         <string>
+                          <content></content>
+                          <url>/GradeReport.php</url>
+                          <line>34</line>
+                         </string>
+                        </literal>
+                       </concatItem>
+                      </concat>
                      </trueNode>
                      <falseNode>
                       <literal>
@@ -11955,101 +11892,50 @@
                                 <select>
                                  <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 21) &amp;&amp; $user=mysql_fetch_row() </condition>
                                  <trueNode>
-                                  <select>
-                                   <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 21) &amp;&amp; $user=mysql_fetch_row() &amp;&amp; ($student[0] == $user[0]) </condition>
-                                   <trueNode>
-                                    <concat>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content>&lt;option value='</content>
-                                        <url>/EditStudent.php</url>
-                                        <line>41</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                     <concatItem>
-                                      <symbol> σ </symbol>
-                                     </concatItem>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content>'&gt;</content>
-                                        <url>/EditStudent.php</url>
-                                        <line>41</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                     <concatItem>
-                                      <symbol> σ </symbol>
-                                     </concatItem>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content>&lt;/option&gt; </content>
-                                        <url>/EditStudent.php</url>
-                                        <line>41</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content></content>
-                                        <url>/EditStudent.php</url>
-                                        <line>36</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                    </concat>
-                                   </trueNode>
-                                   <falseNode>
-                                    <concat>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content></content>
-                                        <url>/EditStudent.php</url>
-                                        <line>36</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content>&lt;option value='</content>
-                                        <url>/EditStudent.php</url>
-                                        <line>45</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                     <concatItem>
-                                      <symbol> σ </symbol>
-                                     </concatItem>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content>'&gt;</content>
-                                        <url>/EditStudent.php</url>
-                                        <line>45</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                     <concatItem>
-                                      <symbol> σ </symbol>
-                                     </concatItem>
-                                     <concatItem>
-                                      <literal>
-                                       <string>
-                                        <content>&lt;/option&gt; </content>
-                                        <url>/EditStudent.php</url>
-                                        <line>45</line>
-                                       </string>
-                                      </literal>
-                                     </concatItem>
-                                    </concat>
-                                   </falseNode>
-                                  </select>
+                                  <concat>
+                                   <concatItem>
+                                    <literal>
+                                     <string>
+                                      <content>&lt;option value='</content>
+                                      <url>/EditStudent.php</url>
+                                      <line>41</line>
+                                     </string>
+                                    </literal>
+                                   </concatItem>
+                                   <concatItem>
+                                    <symbol> σ </symbol>
+                                   </concatItem>
+                                   <concatItem>
+                                    <literal>
+                                     <string>
+                                      <content>'&gt;</content>
+                                      <url>/EditStudent.php</url>
+                                      <line>41</line>
+                                     </string>
+                                    </literal>
+                                   </concatItem>
+                                   <concatItem>
+                                    <symbol> σ </symbol>
+                                   </concatItem>
+                                   <concatItem>
+                                    <literal>
+                                     <string>
+                                      <content>&lt;/option&gt; </content>
+                                      <url>/EditStudent.php</url>
+                                      <line>41</line>
+                                     </string>
+                                    </literal>
+                                   </concatItem>
+                                   <concatItem>
+                                    <literal>
+                                     <string>
+                                      <content></content>
+                                      <url>/EditStudent.php</url>
+                                      <line>36</line>
+                                     </string>
+                                    </literal>
+                                   </concatItem>
+                                  </concat>
                                  </trueNode>
                                  <falseNode>
                                   <literal>
@@ -15754,125 +15640,62 @@
                                           <select>
                                            <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 15) &amp;&amp; ($i &lt; sizeof()) </condition>
                                            <trueNode>
-                                            <select>
-                                             <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 15) &amp;&amp; ($i &lt; sizeof()) &amp;&amp; ($types[$i] == $user[1]) </condition>
-                                             <trueNode>
-                                              <concat>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>&lt;option value='</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>58</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>Admin</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>51</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>'&gt;</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>58</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>Admin</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>51</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>&lt;/option&gt; </content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>58</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content></content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>53</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                              </concat>
-                                             </trueNode>
-                                             <falseNode>
-                                              <concat>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content></content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>53</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>&lt;option value='</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>62</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>Admin</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>51</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>'&gt;</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>62</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>Admin</content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>51</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                               <concatItem>
-                                                <literal>
-                                                 <string>
-                                                  <content>&lt;/option&gt; </content>
-                                                  <url>/EditUser.php</url>
-                                                  <line>62</line>
-                                                 </string>
-                                                </literal>
-                                               </concatItem>
-                                              </concat>
-                                             </falseNode>
-                                            </select>
+                                            <concat>
+                                             <concatItem>
+                                              <literal>
+                                               <string>
+                                                <content>&lt;option value='</content>
+                                                <url>/EditUser.php</url>
+                                                <line>58</line>
+                                               </string>
+                                              </literal>
+                                             </concatItem>
+                                             <concatItem>
+                                              <literal>
+                                               <string>
+                                                <content>Admin</content>
+                                                <url>/EditUser.php</url>
+                                                <line>51</line>
+                                               </string>
+                                              </literal>
+                                             </concatItem>
+                                             <concatItem>
+                                              <literal>
+                                               <string>
+                                                <content>'&gt;</content>
+                                                <url>/EditUser.php</url>
+                                                <line>58</line>
+                                               </string>
+                                              </literal>
+                                             </concatItem>
+                                             <concatItem>
+                                              <literal>
+                                               <string>
+                                                <content>Admin</content>
+                                                <url>/EditUser.php</url>
+                                                <line>51</line>
+                                               </string>
+                                              </literal>
+                                             </concatItem>
+                                             <concatItem>
+                                              <literal>
+                                               <string>
+                                                <content>&lt;/option&gt; </content>
+                                                <url>/EditUser.php</url>
+                                                <line>58</line>
+                                               </string>
+                                              </literal>
+                                             </concatItem>
+                                             <concatItem>
+                                              <literal>
+                                               <string>
+                                                <content></content>
+                                                <url>/EditUser.php</url>
+                                                <line>53</line>
+                                               </string>
+                                              </literal>
+                                             </concatItem>
+                                            </concat>
                                            </trueNode>
                                            <falseNode>
                                             <literal>
@@ -21049,101 +20872,50 @@
                                                           <select>
                                                            <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 17) &amp;&amp; $user=mysql_fetch_row() </condition>
                                                            <trueNode>
-                                                            <select>
-                                                             <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 17) &amp;&amp; $user=mysql_fetch_row() &amp;&amp; ($teacher[0] == $user[0]) </condition>
-                                                             <trueNode>
-                                                              <concat>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content>&lt;option value='</content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>39</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <symbol> σ </symbol>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content>'&gt;</content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>39</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <symbol> σ </symbol>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content>&lt;/option&gt; </content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>39</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content></content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>34</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                              </concat>
-                                                             </trueNode>
-                                                             <falseNode>
-                                                              <concat>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content></content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>34</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content>&lt;option value='</content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>43</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <symbol> σ </symbol>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content>'&gt;</content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>43</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <symbol> σ </symbol>
-                                                               </concatItem>
-                                                               <concatItem>
-                                                                <literal>
-                                                                 <string>
-                                                                  <content>&lt;/option&gt; </content>
-                                                                  <url>/EditTeacher.php</url>
-                                                                  <line>43</line>
-                                                                 </string>
-                                                                </literal>
-                                                               </concatItem>
-                                                              </concat>
-                                                             </falseNode>
-                                                            </select>
+                                                            <concat>
+                                                             <concatItem>
+                                                              <literal>
+                                                               <string>
+                                                                <content>&lt;option value='</content>
+                                                                <url>/EditTeacher.php</url>
+                                                                <line>39</line>
+                                                               </string>
+                                                              </literal>
+                                                             </concatItem>
+                                                             <concatItem>
+                                                              <symbol> σ </symbol>
+                                                             </concatItem>
+                                                             <concatItem>
+                                                              <literal>
+                                                               <string>
+                                                                <content>'&gt;</content>
+                                                                <url>/EditTeacher.php</url>
+                                                                <line>39</line>
+                                                               </string>
+                                                              </literal>
+                                                             </concatItem>
+                                                             <concatItem>
+                                                              <symbol> σ </symbol>
+                                                             </concatItem>
+                                                             <concatItem>
+                                                              <literal>
+                                                               <string>
+                                                                <content>&lt;/option&gt; </content>
+                                                                <url>/EditTeacher.php</url>
+                                                                <line>39</line>
+                                                               </string>
+                                                              </literal>
+                                                             </concatItem>
+                                                             <concatItem>
+                                                              <literal>
+                                                               <string>
+                                                                <content></content>
+                                                                <url>/EditTeacher.php</url>
+                                                                <line>34</line>
+                                                               </string>
+                                                              </literal>
+                                                             </concatItem>
+                                                            </concat>
                                                            </trueNode>
                                                            <falseNode>
                                                             <literal>
@@ -24666,125 +24438,62 @@
                                                                             <select>
                                                                              <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 24) &amp;&amp; $students=mysql_fetch_row() </condition>
                                                                              <trueNode>
-                                                                              <select>
-                                                                               <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 24) &amp;&amp; $students=mysql_fetch_row() &amp;&amp; ($students[0] == $_POST[&quot;studentid&quot;]) </condition>
-                                                                               <trueNode>
-                                                                                <concat>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;option value='</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>35</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>'&gt;</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>35</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content> </content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>35</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;/option&gt; </content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>35</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content></content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>30</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                </concat>
-                                                                               </trueNode>
-                                                                               <falseNode>
-                                                                                <concat>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content></content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>30</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;option value='</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>39</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>'&gt;</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>39</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content> </content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>39</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;/option&gt; </content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>39</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                </concat>
-                                                                               </falseNode>
-                                                                              </select>
+                                                                              <concat>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content>&lt;option value='</content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>35</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <symbol> σ </symbol>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content>'&gt;</content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>35</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <symbol> σ </symbol>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content> </content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>35</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <symbol> σ </symbol>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content>&lt;/option&gt; </content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>35</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content></content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>30</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                              </concat>
                                                                              </trueNode>
                                                                              <falseNode>
                                                                               <literal>
@@ -24810,101 +24519,50 @@
                                                                             <select>
                                                                              <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 24) &amp;&amp; $user=mysql_fetch_row() </condition>
                                                                              <trueNode>
-                                                                              <select>
-                                                                               <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 24) &amp;&amp; $user=mysql_fetch_row() &amp;&amp; ($parent[0] == $user[0]) </condition>
-                                                                               <trueNode>
-                                                                                <concat>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;option value='</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>63</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>'&gt;</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>63</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;/option&gt; </content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>63</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content></content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>58</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                </concat>
-                                                                               </trueNode>
-                                                                               <falseNode>
-                                                                                <concat>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content></content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>58</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;option value='</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>67</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>'&gt;</content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>67</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <symbol> σ </symbol>
-                                                                                 </concatItem>
-                                                                                 <concatItem>
-                                                                                  <literal>
-                                                                                   <string>
-                                                                                    <content>&lt;/option&gt; </content>
-                                                                                    <url>/EditParent.php</url>
-                                                                                    <line>67</line>
-                                                                                   </string>
-                                                                                  </literal>
-                                                                                 </concatItem>
-                                                                                </concat>
-                                                                               </falseNode>
-                                                                              </select>
+                                                                              <concat>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content>&lt;option value='</content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>63</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <symbol> σ </symbol>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content>'&gt;</content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>63</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <symbol> σ </symbol>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content>&lt;/option&gt; </content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>63</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                               <concatItem>
+                                                                                <literal>
+                                                                                 <string>
+                                                                                  <content></content>
+                                                                                  <url>/EditParent.php</url>
+                                                                                  <line>58</line>
+                                                                                 </string>
+                                                                                </literal>
+                                                                               </concatItem>
+                                                                              </concat>
                                                                              </trueNode>
                                                                              <falseNode>
                                                                               <literal>
@@ -26666,125 +26324,62 @@
                                                                                   <select>
                                                                                    <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 11) &amp;&amp; $teacher=mysql_fetch_row() </condition>
                                                                                    <trueNode>
-                                                                                    <select>
-                                                                                     <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 11) &amp;&amp; $teacher=mysql_fetch_row() &amp;&amp; ($teacher[0] == $class[1]) </condition>
-                                                                                     <trueNode>
-                                                                                      <concat>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;option value='</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>37</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>'&gt;</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>37</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content> </content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>37</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;/option&gt; </content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>37</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content></content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>32</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                      </concat>
-                                                                                     </trueNode>
-                                                                                     <falseNode>
-                                                                                      <concat>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content></content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>32</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;option value='</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>41</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>'&gt;</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>41</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content> </content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>41</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;/option&gt; </content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>41</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                      </concat>
-                                                                                     </falseNode>
-                                                                                    </select>
+                                                                                    <concat>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content>&lt;option value='</content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>37</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <symbol> σ </symbol>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content>'&gt;</content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>37</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <symbol> σ </symbol>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content> </content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>37</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <symbol> σ </symbol>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content>&lt;/option&gt; </content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>37</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content></content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>32</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                    </concat>
                                                                                    </trueNode>
                                                                                    <falseNode>
                                                                                     <literal>
@@ -26810,101 +26405,50 @@
                                                                                   <select>
                                                                                    <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 11) &amp;&amp; $semester=mysql_fetch_row() </condition>
                                                                                    <trueNode>
-                                                                                    <select>
-                                                                                     <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 11) &amp;&amp; $semester=mysql_fetch_row() &amp;&amp; ($semester[0] == $class[2]) </condition>
-                                                                                     <trueNode>
-                                                                                      <concat>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;option value='</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>60</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>'&gt;</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>60</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;/option&gt; </content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>60</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content></content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>55</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                      </concat>
-                                                                                     </trueNode>
-                                                                                     <falseNode>
-                                                                                      <concat>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content></content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>55</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;option value='</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>64</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>'&gt;</content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>64</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <symbol> σ </symbol>
-                                                                                       </concatItem>
-                                                                                       <concatItem>
-                                                                                        <literal>
-                                                                                         <string>
-                                                                                          <content>&lt;/option&gt; </content>
-                                                                                          <url>/EditClass.php</url>
-                                                                                          <line>64</line>
-                                                                                         </string>
-                                                                                        </literal>
-                                                                                       </concatItem>
-                                                                                      </concat>
-                                                                                     </falseNode>
-                                                                                    </select>
+                                                                                    <concat>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content>&lt;option value='</content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>60</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <symbol> σ </symbol>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content>'&gt;</content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>60</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <symbol> σ </symbol>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content>&lt;/option&gt; </content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>60</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                     <concatItem>
+                                                                                      <literal>
+                                                                                       <string>
+                                                                                        <content></content>
+                                                                                        <url>/EditClass.php</url>
+                                                                                        <line>55</line>
+                                                                                       </string>
+                                                                                      </literal>
+                                                                                     </concatItem>
+                                                                                    </concat>
                                                                                    </trueNode>
                                                                                    <falseNode>
                                                                                     <literal>
@@ -26973,125 +26517,62 @@
                                                                                     <select>
                                                                                      <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 11) &amp;&amp; $teacher=mysql_fetch_row() &amp;&amp; ($type == &quot;Substitute&quot;) </condition>
                                                                                      <trueNode>
-                                                                                      <select>
-                                                                                       <condition> true &amp;&amp; ($page == 1) &amp;&amp; ($page2 == 11) &amp;&amp; $teacher=mysql_fetch_row() &amp;&amp; ($type == &quot;Substitute&quot;) &amp;&amp; ($teacher[0] == $class[7]) </condition>
-                                                                                       <trueNode>
-                                                                                        <concat>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content>&lt;option value='</content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>90</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <symbol> σ </symbol>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content>'&gt;</content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>90</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <symbol> σ </symbol>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content> </content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>90</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <symbol> σ </symbol>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content>&lt;/option&gt; </content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>90</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content></content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>81</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                        </concat>
-                                                                                       </trueNode>
-                                                                                       <falseNode>
-                                                                                        <concat>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content></content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>81</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content>&lt;option value='</content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>94</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <symbol> σ </symbol>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content>'&gt;</content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>94</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <symbol> σ </symbol>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content> </content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>94</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <symbol> σ </symbol>
-                                                                                         </concatItem>
-                                                                                         <concatItem>
-                                                                                          <literal>
-                                                                                           <string>
-                                                                                            <content>&lt;/option&gt; </content>
-                                                                                            <url>/EditClass.php</url>
-                                                                                            <line>94</line>
-                                                                                           </string>
-                                                                                          </literal>
-                                                                                         </concatItem>
-                                                                                        </concat>
-                                                                                       </falseNode>
-                                                                                      </select>
+                                                                                      <concat>
+                                                                                       <concatItem>
+                                                                                        <literal>
+                                                                                         <string>
+                                                                                          <content>&lt;option value='</content>
+                                                                                          <url>/EditClass.php</url>
+                                                                                          <line>90</line>
+                                                                                         </string>
+                                                                                        </literal>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <symbol> σ </symbol>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <literal>
+                                                                                         <string>
+                                                                                          <content>'&gt;</content>
+                                                                                          <url>/EditClass.php</url>
+                                                                                          <line>90</line>
+                                                                                         </string>
+                                                                                        </literal>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <symbol> σ </symbol>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <literal>
+                                                                                         <string>
+                                                                                          <content> </content>
+                                                                                          <url>/EditClass.php</url>
+                                                                                          <line>90</line>
+                                                                                         </string>
+                                                                                        </literal>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <symbol> σ </symbol>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <literal>
+                                                                                         <string>
+                                                                                          <content>&lt;/option&gt; </content>
+                                                                                          <url>/EditClass.php</url>
+                                                                                          <line>90</line>
+                                                                                         </string>
+                                                                                        </literal>
+                                                                                       </concatItem>
+                                                                                       <concatItem>
+                                                                                        <literal>
+                                                                                         <string>
+                                                                                          <content></content>
+                                                                                          <url>/EditClass.php</url>
+                                                                                          <line>81</line>
+                                                                                         </string>
+                                                                                        </literal>
+                                                                                       </concatItem>
+                                                                                      </concat>
                                                                                      </trueNode>
                                                                                      <falseNode>
                                                                                       <literal>

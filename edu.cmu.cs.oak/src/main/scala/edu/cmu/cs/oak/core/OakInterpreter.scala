@@ -109,6 +109,8 @@ import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.lib.builtin.Defined
 import edu.cmu.cs.oak.lib.builtin.Define
 import edu.cmu.cs.oak.lib.builtin.DirName
+import com.caucho.quercus.expr.FunIssetExpr
+import com.caucho.quercus.expr.ConstExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -119,9 +121,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   this.loadPlugin(new Count)
   this.loadPlugin(new Print)
-  this.loadPlugin(new DirName)
-  this.loadPlugin(new Define)
-  this.loadPlugin(new Defined)
+  //this.loadPlugin(new DirName)
+  //this.loadPlugin(new Define)
+  //this.loadPlugin(new Defined)
 
   def execute(path: Path): (String, Environment) = {
 
@@ -302,7 +304,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         //logger.info("Including script " + include.toString)
         val oldURL = this.path
         val expr = Interpreter.accessField(include, "_expr").asInstanceOf[Expr]
-        val includePath = Paths.get(this.rootPath + "/" + expr.toString.replace("\"", ""))
+        val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
         val program = (new OakEngine).loadFromFile(includePath)
 
         graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
@@ -316,7 +318,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         //logger.info("Including script " + includeOnce.toString)
         val oldURL = this.path
         val expr = Interpreter.accessField(includeOnce, "_expr").asInstanceOf[Expr]
-        val includePath = Paths.get(this.rootPath + "/" + expr.toString.replace("\"", ""))
+        val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
         val program = (new OakEngine).loadFromFile(includePath)
 
         graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
@@ -407,8 +409,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case b: BooleanValue => {
         if (b.value) {
           return execute(trueBlock, env)
-        } else {
+        } else if (falseBlock != null) {
           return execute(falseBlock, env)
+        } else {
+          ("OK", env)
         }
       }
 
@@ -1251,7 +1255,26 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case _ => (SymbolValue(e.toString, OakHeap.index), env)
     }
   }
+  
+  def evaluate(e: FunIssetExpr, env: Environment): (OakValue, Environment) = {
+    return try {
+      val x = env.lookup(e.toString)
+      (BooleanValue(true), env)
+    } catch {
+      case e: VariableNotFoundException => (BooleanValue(false), env)
+    }
+  }
 
+  def evaluate(e: ConstExpr, env: Environment): (OakValue, Environment) = {
+    if (constants.keySet contains e.toString) {
+      val opt = constants.get(e.toString)
+      return (opt.get, env)
+    } else {
+      throw new RuntimeException("Constant " + e.toString + " is not defined!")
+    }
+    
+  }
+  
   override def evaluate(e: Expr, env: Environment): (OakValue, Environment) = e match {
     case e: LiteralExpr => evaluate(e, env)
     case e: LiteralUnicodeExpr => evaluate(e, env)
@@ -1271,6 +1294,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case u: UnarySuppressErrorExpr => evaluate(u, env)
     case e: LiteralLongExpr => evaluate(e, env)
     case e: ConditionalExpr => evaluate(e, env)
+    case e: FunIssetExpr => evaluate(e, env)
+    case e: ConstExpr => evaluate(e, env)
     case _ => throw new RuntimeException(e + " (" + e.getClass + ") not implemented.")
 
   }

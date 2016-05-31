@@ -49,6 +49,10 @@ trait Interpreter {
    */
   def execute(s: Statement, env: Environment): (String, Environment)
 
+  def addConstants(name: String, value: OakValue) {
+    constants += (name -> value)
+  }
+  
 }
 
 object Interpreter {
