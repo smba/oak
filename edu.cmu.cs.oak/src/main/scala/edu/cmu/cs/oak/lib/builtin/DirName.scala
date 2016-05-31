@@ -18,11 +18,14 @@ class DirName extends InterpreterPlugin {
 
     val interpreter = provider.asInstanceOf[Interpreter]
 
-    /* Assert that the function has been o*/
+    /* Assert that the function has been o */
     assert(args.size == 1)
 
+    val zu = (interpreter.path.toString diff interpreter.rootPath.toString)
+    val dirname = zu.substring(0, zu.lastIndexOf('/'))
+
     //FIXME argument"
-    return StringValue("")
+    return StringValue(dirname)
   }
 
 }

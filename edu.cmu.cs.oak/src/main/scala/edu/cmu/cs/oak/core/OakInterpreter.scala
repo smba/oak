@@ -112,6 +112,9 @@ import edu.cmu.cs.oak.lib.builtin.DirName
 import com.caucho.quercus.expr.FunIssetExpr
 import com.caucho.quercus.expr.ConstExpr
 import com.caucho.quercus.statement.GlobalStatement
+import com.caucho.quercus.expr.FunEmptyExpr
+import com.caucho.quercus.statement.StaticStatement
+import edu.cmu.cs.oak.env.AbstractEnv
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -302,29 +305,31 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
 
       case include: FunIncludeExpr => {
-        //logger.info("Including script " + include.toString)
         val oldURL = this.path
         val expr = Interpreter.accessField(include, "_expr").asInstanceOf[Expr]
         val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
         val program = (new OakEngine).loadFromFile(includePath)
 
-        graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
+        //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
         this.path = includePath
+        logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
+        logger.info("Resuming " + oldURL)
         this.path = oldURL
         ("OK", res)
       }
 
       case includeOnce: FunIncludeOnceExpr => {
-        //logger.info("Including script " + includeOnce.toString)
         val oldURL = this.path
         val expr = Interpreter.accessField(includeOnce, "_expr").asInstanceOf[Expr]
         val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
         val program = (new OakEngine).loadFromFile(includePath)
 
-        graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
+        //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
         this.path = includePath
+        logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
+        logger.info("Resuming " + oldURL)
         this.path = oldURL
         ("OK", res)
       }
@@ -377,6 +382,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         }
         ("OK", env)
       }
+
+      case e: UnarySuppressErrorExpr => ("OK", evaluate(e, env)._2)
 
       case _ => throw new RuntimeException(e.getClass + " is not implemented for ExprStatement, expr is " + e.toString())
     }
@@ -669,10 +676,27 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     println(value) //FIXME
     ("OK", env)
   }
-  
+
   def execute(s: GlobalStatement, env: Environment): (String, Environment) = {
     val value = Interpreter.accessField(s, "_var").asInstanceOf[VarExpr]
-    println(value)
+    AbstractEnv.addToGlobal(value.toString)
+    ("OK", env)
+  }
+  
+  def execute(s: StaticStatement, env: Environment): (String, Environment) = {
+    /**
+     * protected StringValue _uniqueStaticName;
+
+  protected VarExpr _var;
+  protected Expr _initValue;
+     */
+    val uniqueStaticName = Interpreter.accessField(s, "_uniqueStaticName").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
+    val variable = Interpreter.accessField(s, "_var").asInstanceOf[VarExpr]
+    val initValue = evaluate(Interpreter.accessField(s, "_initValue").asInstanceOf[Expr], env)._1
+    
+    println(uniqueStaticName + " " +variable + " " + initValue )
+    AbstractEnv.addToGlobal(variable.toString) // FIXME global ~ static
+    env.update(variable.toString, initValue)
     ("OK", env)
   }
 
@@ -692,6 +716,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case s: ContinueStatement => execute(s, env)
     case s: TextStatement => execute(s, env)
     case s: GlobalStatement => execute(s, env)
+    case s: StaticStatement => execute(s, env)
     case _ => throw new RuntimeException(stmt + " unimplemented.")
   }
 
@@ -747,7 +772,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: UnaryNotExpr, env: Environment): (OakValue, Environment) = {
-    return evaluate(e.getExpr, env)._1 match {
+    val p = evaluate(e.getExpr, env)._1
+    return p match {
 
       // default case: e evaluates to a BooleanValue
       case e: BooleanValue => {
@@ -757,7 +783,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       // exceptional case: Found symbolic value -> return symbolic value
       case v2: SymbolicValue => (SymbolValue(e.toString, OakHeap.getIndex), env)
 
-      case _ => throw new RuntimeException()
+      case _ => throw new RuntimeException(p.toString)
     }
   }
 
@@ -1092,7 +1118,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           case _ => value
         }
         env.update(name.toString(), valueX)
-        (NullValue(name.toString), env)
+        (null, env)
       }
 
       /**
@@ -1128,7 +1154,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           if (av.isInstanceOf[SymbolicValue]) {
             env.update(arrayValueName, SymbolValue(a.toString, OakHeap.index))
-            return (NullValue(arrayValueName), env)
+            return (null, env)
           }
 
           /* Assert that av is a array value. */
@@ -1154,7 +1180,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         arrayValue.set(index, valueX)
 
         env.update(arrayValueName, arrayValue)
-        return (NullValue(arrayValueName), env)
+        return (null, env)
       }
 
       /**
@@ -1178,7 +1204,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
         env.update("$this", thisValue)
 
-        (NullValue("$this"), env)
+        (null, env)
       }
 
       /**
@@ -1263,7 +1289,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case _ => (SymbolValue(e.toString, OakHeap.index), env)
     }
   }
-  
+
   def evaluate(e: FunIssetExpr, env: Environment): (OakValue, Environment) = {
     return try {
       val x = env.lookup(e.toString)
@@ -1280,9 +1306,23 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     } else {
       throw new RuntimeException("Constant " + e.toString + " is not defined!")
     }
-    
   }
-  
+
+  def evaluate(e: FunEmptyExpr, env: Environment): (OakValue, Environment) = {
+    val value = Interpreter.accessField(e, "_value").asInstanceOf[Expr]
+    val re = try {
+      val empty = env.lookup(e.toString)
+      if (empty == BooleanValue(false)) {
+        (BooleanValue(true), env)
+      } else {
+        (BooleanValue(false), env)
+      }
+    } catch {
+      case v: VariableNotFoundException => (BooleanValue(true), env)
+    }
+    return re
+  }
+
   override def evaluate(e: Expr, env: Environment): (OakValue, Environment) = e match {
     case e: LiteralExpr => evaluate(e, env)
     case e: LiteralUnicodeExpr => evaluate(e, env)
@@ -1304,6 +1344,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case e: ConditionalExpr => evaluate(e, env)
     case e: FunIssetExpr => evaluate(e, env)
     case e: ConstExpr => evaluate(e, env)
+    case e: FunEmptyExpr => evaluate(e, env)
     case _ => throw new RuntimeException(e + " (" + e.getClass + ") not implemented.")
 
   }

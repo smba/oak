@@ -50,6 +50,13 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
   override def update(name: String, value: OakValue) {
+
+    // global?
+    if (AbstractEnv.globals.keySet contains name) {
+      AbstractEnv.globals += (name -> value)
+      return
+    }
+
     value match {
       case a: OakVariable => {
         variables += (name -> a)
@@ -67,6 +74,12 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   }
 
   override final def lookup(name: String): OakValue = {
+
+    // global?
+    if (AbstractEnv.globals.keySet contains name) {
+      return AbstractEnv.globals.get(name).get
+    }
+
     val variable = {
       val opt = variables.get(name)
       if (!opt.isEmpty) {
@@ -85,7 +98,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     }
     ret
   }
-  
+
   override def unset(name: String) {
     OakHeap.unsetVariable(getRef(name))
     variables -= name
@@ -324,4 +337,14 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   final override def getOutput(): List[OakValue] = output.toList
   final override def getVariables(): Map[String, OakVariable] = variables
   final override def getConstraint(): String = constraint
+}
+
+object AbstractEnv {
+
+  var globals = Map[String, OakValue]()
+
+  def addToGlobal(name: String) {
+    globals += (name -> NullValue(""))
+  }
+
 }
