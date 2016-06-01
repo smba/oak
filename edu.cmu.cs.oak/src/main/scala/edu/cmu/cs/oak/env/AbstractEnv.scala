@@ -39,12 +39,6 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   var output = new ListBuffer[OakValue]()
 
   /**
-   * Map of class definitions. All classes defined during the program execution
-   * are stored here.
-   */
-  var classDefs = Map[String, ClassDef]()
-
-  /**
    * Logger instance for environments.
    */
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
@@ -94,6 +88,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
       case e: Exception => throw new RuntimeException(e)
     }
     if (ret == null) {
+      System.err.println(this.variables.keySet contains "$locales")
       throw new RuntimeException(name)
     }
     ret
@@ -118,16 +113,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     }
   }
 
-  override def addClass(value: ClassDef): Unit = {
-    classDefs += (value.getName -> value)
-  }
-  override def getClass(name: String): ClassDef = {
-    try {
-      classDefs.get(name).get
-    } catch {
-      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
-    }
-  }
+  
 
   def ifdefy(node: OakValue): List[String] = {
     var res = List[String]()
@@ -342,9 +328,37 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
 object AbstractEnv {
 
   var globals = Map[String, OakValue]()
+  
+  
+  /**
+   * Map of class definitions. All classes defined during the program execution
+   * are stored here.
+   */
+  var classDefs = Map[String, ClassDef]()
 
   def addToGlobal(name: String) {
     globals += (name -> NullValue(""))
+  }
+  
+  /**
+   * Adds a class definition to the environment.
+   * @param value ClassDef to add
+   */
+  def addClass(value: ClassDef): Unit = {
+    classDefs += (value.getName -> value)
+  }
+  
+  /**
+   * Looks up a class definition in the environment.
+   * @param name Name of the class
+   * @return corresponding class definition
+   */
+  def getClass(name: String): ClassDef = {
+    try {
+      classDefs.get(name).get
+    } catch {
+      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
+    }
   }
 
 }

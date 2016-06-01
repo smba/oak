@@ -83,14 +83,14 @@ trait Environment extends EnvListener {
    * Adds a class definition to the environment.
    * @param value ClassDef to add
    */
-  def addClass(value: ClassDef)
+  //def addClass(value: ClassDef)
 
   /**
    * Looks up a class definition in the environment.
    * @param name Name of the class
    * @return corresponding class definition
    */
-  def getClass(name: String): ClassDef
+  //def getClass(name: String): ClassDef
 
   /**
    * Returns the current call stack at runtime.

@@ -22,7 +22,9 @@ class Defined extends InterpreterPlugin {
     /* Assert that the function has one argument */
     assert(args.size == 1)
 
-    return BooleanValue( (interpreter.constants.keySet contains args(0).toString.replace("\"", "")) )
+    val b = BooleanValue( (interpreter.constants.keySet contains args(0).toString.replace("\"", "")) )
+  
+    return b
   }
   
 }

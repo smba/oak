@@ -115,6 +115,7 @@ import com.caucho.quercus.statement.GlobalStatement
 import com.caucho.quercus.expr.FunEmptyExpr
 import com.caucho.quercus.statement.StaticStatement
 import edu.cmu.cs.oak.env.AbstractEnv
+import com.caucho.quercus.statement.ForeachStatement
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -316,6 +317,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val res = this.execute(program, env)._2
         logger.info("Resuming " + oldURL)
         this.path = oldURL
+        
         ("OK", res)
       }
 
@@ -490,6 +492,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
    */
   def execute(s: ClassDefStatement, env: Environment): (String, Environment) = {
 
+    println(s.toString)
+    
     currentLineNr = ASTVisitor.getStatementLineNr(s)
 
     val interpreted = Interpreter.accessField(s, "_cl").asInstanceOf[InterpretedClassDef]
@@ -529,7 +533,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }.foreach {
       fd => classDef.addConstructor(fd.args.size, fd)
     }
-    env.addClass(classDef)
+    AbstractEnv.addClass(classDef)
     return ("OK", env)
   }
 
@@ -682,22 +686,78 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     AbstractEnv.addToGlobal(value.toString)
     ("OK", env)
   }
-  
+
   def execute(s: StaticStatement, env: Environment): (String, Environment) = {
     /**
      * protected StringValue _uniqueStaticName;
-
-  protected VarExpr _var;
-  protected Expr _initValue;
+     *
+     * protected VarExpr _var;
+     * protected Expr _initValue;
      */
     val uniqueStaticName = Interpreter.accessField(s, "_uniqueStaticName").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
     val variable = Interpreter.accessField(s, "_var").asInstanceOf[VarExpr]
     val initValue = evaluate(Interpreter.accessField(s, "_initValue").asInstanceOf[Expr], env)._1
-    
-    println(uniqueStaticName + " " +variable + " " + initValue )
+
     AbstractEnv.addToGlobal(variable.toString) // FIXME global ~ static
     env.update(variable.toString, initValue)
     ("OK", env)
+  }
+
+  /**
+   * There are two syntaxes for foreach statements,
+   * A)
+   * foreach (<array_expression> as $value)
+   * <statement>
+   *
+   * or B)
+   * foreach (<array_expression> as $key => $value)
+   * <statement>
+   */
+  def execute(s: ForeachStatement, env: Environment): (String, Environment) = {
+    /*
+     * protected final Expr _objExpr;
+
+  protected final AbstractVarExpr _key;
+
+  protected final AbstractVarExpr _value;
+  protected final boolean _isRef;
+
+  protected final Statement _block;
+     */
+    val objExpr = (evaluate(Interpreter.accessField(s, "_objExpr").asInstanceOf[Expr], env)._1).asInstanceOf[ArrayValue]
+
+    val key = Interpreter.accessField(s, "_key").asInstanceOf[AbstractVarExpr]
+    val value = Interpreter.accessField(s, "_value").asInstanceOf[AbstractVarExpr]
+
+    /** Loop body */
+    val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
+
+    // We can only iterate over PHP arrays
+    assert(objExpr.isInstanceOf[ArrayValue])
+
+    val values = new ListBuffer[OakValue]
+    val keys = new ListBuffer[OakValue]
+
+    objExpr.array.keySet.foreach {
+      key =>
+        {
+          keys.append(key)
+          values.append(objExpr.array.get(key).get)
+        }
+    }
+
+    /** Loop environment */
+    var env_ = env
+    (keys zip values).foreach {
+      case (k, v) => {
+        if (key != null) {
+          env.update(key.toString, k)
+        }
+        env.update(value.toString, v)
+        env_ = execute(block, env_)._2
+      }
+    }
+    ("OK", env_)
   }
 
   override def execute(stmt: Statement, env: Environment): (String, Environment) = stmt match {
@@ -717,6 +777,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case s: TextStatement => execute(s, env)
     case s: GlobalStatement => execute(s, env)
     case s: StaticStatement => execute(s, env)
+    case s: ForeachStatement => execute(s, env)
     case _ => throw new RuntimeException(stmt + " unimplemented.")
   }
 
@@ -783,7 +844,16 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       // exceptional case: Found symbolic value -> return symbolic value
       case v2: SymbolicValue => (SymbolValue(e.toString, OakHeap.getIndex), env)
 
-      case _ => throw new RuntimeException(p.toString)
+      case a: ArrayValue => {
+        val b = if (a.array.size == 0) {
+          false
+        } else {
+          true
+        }
+        (BooleanValue(b), env)
+      }
+
+      case _ => throw new RuntimeException("" + this.currentLineNr)
     }
   }
 
@@ -806,6 +876,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
         // expecting a boolean expression, where e1 AND e2 are BooleanValues
         case v1: BooleanValue => {
+
           evaluate(e2, env)._1 match {
 
             // default case: e1 AND e2 are BooleanValues
@@ -818,6 +889,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
                   v1 || v2
                 }
               }, env)
+            }
+            case s2: SymbolicValue => {
+              if (ae.isInstanceOf[BinaryOrExpr] && v1.v) {
+                return (BooleanValue(true), env)
+              }
+              if (ae.isInstanceOf[BinaryAndExpr] && !v1.v) {
+                return (BooleanValue(false), env)
+              }
+              (SymbolValue(ae.toString, OakHeap.index), env)
             }
 
             // exceptional cases: return symbolic value and track unresolved expression
@@ -1066,9 +1146,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val args = Interpreter.accessField(b, "_args").asInstanceOf[Array[Expr]]
 
     /** Create a new object Value */
-    val obj = ObjectValue("Object Doe", env.getClass(name))
+    val obj = ObjectValue("Object Doe", AbstractEnv.getClass(name))
     val objEnv = Environment.createObjectEnvironment(env, obj)
-    val constructor = env.getClass(name).getConstructor(args.size) // match by number of args
+    val constructor = AbstractEnv.getClass(name).getConstructor(args.size) // match by number of args
 
     /* Execute constructor in the object environment and keep its variable $this:
      *  
@@ -1111,13 +1191,31 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
       /* name is a variable */
       case n: VarExpr => {
+
+        if (expr.isInstanceOf[BinaryAssignExpr]) {
+          var names = Set(name.toString)
+          var assignExpr = expr
+          while (assignExpr.isInstanceOf[BinaryAssignExpr]) {
+            val namez = Interpreter.accessField(assignExpr, "_var").asInstanceOf[AbstractVarExpr].toString
+            names += namez
+            assignExpr = Interpreter.accessField(assignExpr, "_value").asInstanceOf[Expr]
+          }
+          val value = evaluate(assignExpr, env)._1
+          names.foreach { n => env.update(n, value) }
+          return (null, env)
+        }
+
         val value = evaluate(expr, env)._1
         val valueX = value match {
-          case sv: StringValue =>
-            sv.setLocation((path.toString diff rootPath.toString, currentLineNr)); sv
-          case _ => value
+          case sv: StringValue => {
+            sv.setLocation((path.toString diff rootPath.toString, currentLineNr))
+            sv
+          }
+          case _ => {
+            value
+          }
         }
-        env.update(name.toString(), valueX)
+        env.update(name.toString, valueX)
         (null, env)
       }
 
@@ -1239,12 +1337,18 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         }
 
         // $name[] = <expr>
-        assert(expr.isInstanceOf[ArrayGetExpr])
-        val value = evaluate(expr, env)._1
-        val index = evaluate(Interpreter.accessField(expr, "_index").asInstanceOf[Expr], env)._1
+        expr match {
+          case a: ArrayGetExpr => {
+            val value = evaluate(expr, env)._1
+            val index = evaluate(Interpreter.accessField(expr, "_index").asInstanceOf[Expr], env)._1
 
-        array.set(index, value)
-        env.update(name, array)
+            array.set(index, value)
+            env.update(name, array)
+          }
+          case _ => {
+            env.update(name, evaluate(expr, env)._1)
+          }
+        }
 
         (null, env)
       }
@@ -1304,7 +1408,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       val opt = constants.get(e.toString)
       return (opt.get, env)
     } else {
-      throw new RuntimeException("Constant " + e.toString + " is not defined!")
+      throw new RuntimeException("Constant " + e.toString + " is not defined! " + currentLineNr)
     }
   }
 
