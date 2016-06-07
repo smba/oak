@@ -16,6 +16,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.ArrayValue
 
 /**
  * Programs state and program state operations.
@@ -44,7 +45,11 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
   override def update(name: String, value: OakValue) {
-
+    
+    if (name equals "$wp_locale") {
+      logger.warn("WP_LOCALE " + value)
+    }
+    
     // global?
     if (AbstractEnv.globals.keySet contains name) {
       AbstractEnv.globals += (name -> value)
@@ -79,6 +84,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
       if (!opt.isEmpty) {
         opt.get
       } else {
+        //println("Unassigned variable " + name + ".")
         throw new VariableNotFoundException("Unassigned variable " + name + ".")
       }
     }
@@ -99,6 +105,16 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     variables -= name
   }
 
+  def unsetArrayElement(name: String, index: OakValue) {
+    val arrayValueO = lookup(name)
+    System.err.println("UNSETARRAY looking up $_SERVER " + lookup("$_SERVER"))
+    assert(arrayValueO.isInstanceOf[ArrayValue])
+    val arrayValue = arrayValueO.asInstanceOf[ArrayValue]
+    
+    OakHeap.unsetVariable(arrayValue.getRef(index))
+    arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"))
+  }
+  
   /**
    * Creates a D Model tree of the (symbolic) output that
    * can easily be traversed.
@@ -260,8 +276,8 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     if (compareStacks(output1, output2)) {
       return prefix ++ output1
     } else {
-      var stv1 = if (output1.size > 1) OakValueSequence(output1.toList) else if (output1.size == 1) output1.head else NullValue("")
-      var stv2 = if (output2.size > 1) OakValueSequence(output2.toList) else if (output2.size == 1) output2.head else NullValue("")
+      var stv1 = if (output1.size > 1) OakValueSequence(output1.toList) else if (output1.size == 1) output1.head else NullValue("AbstractEnv::joinOutput")
+      var stv2 = if (output2.size > 1) OakValueSequence(output2.toList) else if (output2.size == 1) output2.head else NullValue("AbstractEnv::joinOutput")
 
       return prefix.::(Choice(env1.getConstraint, stv1, stv2))
     }
@@ -336,8 +352,8 @@ object AbstractEnv {
    */
   var classDefs = Map[String, ClassDef]()
 
-  def addToGlobal(name: String) {
-    globals += (name -> NullValue(""))
+  def addToGlobal(name: String, value: OakValue = NullValue("AbstractEnv::addToGlobal")) {
+    globals += ( name -> value )
   }
   
   /**

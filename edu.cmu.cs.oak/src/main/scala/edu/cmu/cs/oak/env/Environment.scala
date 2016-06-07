@@ -139,6 +139,8 @@ trait Environment extends EnvListener {
 
   def unset(name: String)
   
+  def unsetArrayElement(name: String, index: OakValue)
+  
   def join(that: Environment): Environment
 
 }
@@ -259,7 +261,7 @@ object Environment {
                 val value = try {
                   env.lookup(c)
                 } catch {
-                  case _ => NullValue("")
+                  case _ => NullValue("Environment::joinN")
                 }
                 cMap += (env.getConstraint -> value)
               }
@@ -268,10 +270,10 @@ object Environment {
             try {
               default.lookup(c)
             } catch {
-              case _ => NullValue("")
+              case _ => NullValue("Environment::joinN")
             }
           } else {
-            NullValue("")
+            NullValue("Environment::joinN")
           }
           choices += (c -> choice(cMap, defaultValue))
         }
@@ -287,10 +289,10 @@ object Environment {
         try {
           OakValueSequence(default.getOutput)
         } catch {
-          case _ => NullValue("")
+          case _ => NullValue("Environment::joinN")
         }
       } else {
-        NullValue("")
+        NullValue("Environment::joinN")
       }
       choice(outputMap, defaultOutput)
     }

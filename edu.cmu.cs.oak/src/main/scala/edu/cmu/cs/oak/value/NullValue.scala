@@ -2,7 +2,7 @@ package edu.cmu.cs.oak.value
 
 case class NullValue(name: String) extends OakValue {
   
-  override def toString = "NullValue(" + name + ")"
+  override def toString = "NullValue()"
   
   def toXml = {
     <undef />

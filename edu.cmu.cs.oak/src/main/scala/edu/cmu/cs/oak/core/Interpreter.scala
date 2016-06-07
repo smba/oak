@@ -14,6 +14,7 @@ import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.OakValue
 import java.nio.file.Path
 import java.nio.file.Paths
+import scala.collection.mutable.Stack
 
 trait Interpreter {
   
@@ -29,6 +30,9 @@ trait Interpreter {
   /** Constants */
   var constants = Map[String, OakValue]()
 
+  /* Keep track of the includes */
+  val includes = Stack[Path]()
+  
   /**
    * Evaluates an expression in the context of a given environment.
    * 

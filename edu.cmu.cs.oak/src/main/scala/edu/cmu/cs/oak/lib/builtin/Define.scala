@@ -1,14 +1,17 @@
 package edu.cmu.cs.oak.lib.builtin
 
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.lib.InterpreterPlugin
-import edu.cmu.cs.oak.core.InterpreterPluginProvider
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.env.Environment
 import java.nio.file.Path
+
+import scala.annotation.elidable
+import scala.annotation.elidable.ASSERTION
+
 import com.caucho.quercus.expr.Expr
+
 import edu.cmu.cs.oak.core.Interpreter
-import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.core.InterpreterPluginProvider
+import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.lib.InterpreterPlugin
+import edu.cmu.cs.oak.value.OakValue
 
 class Define extends InterpreterPlugin {
   
