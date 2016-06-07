@@ -56,6 +56,8 @@ trait DNode {
     
     def chop(s: String): String = s.split('\n').map(_.trim.filter(_ >= ' ')).mkString.replace(" ", "")
     
+    println(ifd1.size + " und " + ifd2.size)
+    
     if (ifd1.size == ifd2.size) {
       (ifd1 zip ifd2).map { 
         case (x, y) => chop(x) equals chop(y) 

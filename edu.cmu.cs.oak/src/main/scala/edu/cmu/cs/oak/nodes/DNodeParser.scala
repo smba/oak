@@ -41,7 +41,7 @@ object DNodeParser {
       case "double" => LiteralNode(DoubleValue((node \ "double").text.toDouble))
       case "string" => LiteralNode(parseStringNode(c))//
       case "boolean" => LiteralNode( BooleanValue((node \ "boolean").text.trim.toBoolean))//
-      case "undef" => LiteralNode( NullValue("") )//
+      case "undef" => LiteralNode( NullValue("DNodeParser::createLiteralNodeFromXml") )//
       case _ => throw new RuntimeException("Could not match label " + node.child(0).label + ".")
     }
   }

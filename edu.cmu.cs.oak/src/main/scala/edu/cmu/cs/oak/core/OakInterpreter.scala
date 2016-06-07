@@ -537,7 +537,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val classMethodNames = List(methods.keySet().toArray: _*)
 
     val classMethodDefs = ListBuffer[FunctionDef]()
-    classMethodNames.foreach { name => classMethodDefs.append(Interpreter.defineFunction(methods.get(name))) }
+    classMethodNames.foreach {
+      name => classMethodDefs.append(Interpreter.defineFunction(methods.get(name))) 
+    }
 
     /* Add all methods ex*/
     var classMethodDefMap = Map[String, FunctionDef]()
@@ -1055,8 +1057,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     // Assert that the number of arguments in the function call and declaration match
     println(name, function.getArgs, args)
-    assert(function.getArgs.length == args.length)
-
+    //assert(function.getArgs.length == args.length)
+   
     /* CALL-BY-VALUE only */
 
     /**
@@ -1064,7 +1066,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
      * TODO call-by-reference
      */
     val functionEnv = Environment.createFunctionEnvironment(env, name)
-    (function.getArgs zip args).foreach {
+    (function.getArgs.slice(0, args.length) zip args).foreach {
       t =>
         {
           val functionVal = if (t._1.startsWith("&")) {
@@ -1072,13 +1074,30 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             try {
               env.getVariables.get(t._2.toString).get
             } catch {
-              case nsee: NoSuchElementException => throw new RuntimeException("Only variables can be passed by reference.")
+              case nsee: NoSuchElementException => {
+                throw new RuntimeException("Only variables can be passed by reference.")
+              }
             }
           } else {
             evaluate(t._2, env)._1
           }
           functionEnv.update("$" + t._1.replace("&", ""), functionVal)
         }
+    }
+    if (function.getArgs.length > args.length) {
+      function.getArgs.slice(args.length, function.getArgs.length).foreach {
+        a => {
+          val default = try {
+            function.defaults.get(a).get
+          } catch {
+            case nsee: NoSuchElementException => {
+              throw new RuntimeException()
+            }
+          }
+          val defaultValue = evaluate(default, env)._1
+          functionEnv.update("$" + a.replace("&", ""), defaultValue)
+        }
+      }
     }
 
     val result = execute(function.getStatement, functionEnv)
