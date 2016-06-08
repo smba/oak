@@ -289,7 +289,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             val expr = evaluate(exx, env)._1
             val index = evaluate(Interpreter.accessField(aget, "_index").asInstanceOf[Expr], env)._1
 
-            println(env.getClass + " " + env.lookup("$arg"))
             assert(expr.isInstanceOf[ArrayValue])
 
             println("-01")
