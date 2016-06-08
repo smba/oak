@@ -20,10 +20,6 @@
 	$dbname     = 'schoolmate';           // name of the database you are using
   ////////////////////////////////////////
 
-	
-	include 'test.php';
-	$bener = "TEST123";
-	
   //include("Connect.php");
 
   // Bring up the report cards and stop processing //
