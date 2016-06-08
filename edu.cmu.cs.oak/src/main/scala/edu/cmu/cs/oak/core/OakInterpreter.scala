@@ -1,10 +1,9 @@
 package edu.cmu.cs.oak.core
 
-import java.net.URL
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.LinkedHashMap
 
-import scala.annotation.elidable
 import scala.annotation.elidable.ASSERTION
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
@@ -14,7 +13,6 @@ import scala.xml.PrettyPrinter
 
 import org.slf4j.LoggerFactory
 
-import com.caucho.quercus.Location
 import com.caucho.quercus.env.Value
 import com.caucho.quercus.expr.AbstractBinaryExpr
 import com.caucho.quercus.expr.AbstractVarExpr
@@ -36,11 +34,15 @@ import com.caucho.quercus.expr.BinaryOrExpr
 import com.caucho.quercus.expr.BinarySubExpr
 import com.caucho.quercus.expr.CallExpr
 import com.caucho.quercus.expr.ConditionalExpr
+import com.caucho.quercus.expr.ConstExpr
 import com.caucho.quercus.expr.Expr
 import com.caucho.quercus.expr.FunArrayExpr
 import com.caucho.quercus.expr.FunDieExpr
+import com.caucho.quercus.expr.FunEmptyExpr
+import com.caucho.quercus.expr.FunExitExpr
 import com.caucho.quercus.expr.FunIncludeExpr
 import com.caucho.quercus.expr.FunIncludeOnceExpr
+import com.caucho.quercus.expr.FunIssetExpr
 import com.caucho.quercus.expr.ListHeadExpr
 import com.caucho.quercus.expr.LiteralExpr
 import com.caucho.quercus.expr.LiteralLongExpr
@@ -50,6 +52,7 @@ import com.caucho.quercus.expr.ObjectFieldExpr
 import com.caucho.quercus.expr.ObjectMethodExpr
 import com.caucho.quercus.expr.ObjectNewExpr
 import com.caucho.quercus.expr.ThisFieldExpr
+import com.caucho.quercus.expr.ToArrayExpr
 import com.caucho.quercus.expr.UnaryMinusExpr
 import com.caucho.quercus.expr.UnaryNotExpr
 import com.caucho.quercus.expr.UnaryPostIncrementExpr
@@ -64,32 +67,44 @@ import com.caucho.quercus.statement.BlockStatement
 import com.caucho.quercus.statement.BreakStatement
 import com.caucho.quercus.statement.ClassDefStatement
 import com.caucho.quercus.statement.ContinueStatement
+import com.caucho.quercus.statement.DoStatement
 import com.caucho.quercus.statement.EchoStatement
 import com.caucho.quercus.statement.ExprStatement
 import com.caucho.quercus.statement.ForStatement
+import com.caucho.quercus.statement.ForeachStatement
+import com.caucho.quercus.statement.GlobalStatement
 import com.caucho.quercus.statement.IfStatement
 import com.caucho.quercus.statement.ReturnRefStatement
 import com.caucho.quercus.statement.ReturnStatement
 import com.caucho.quercus.statement.Statement
+import com.caucho.quercus.statement.StaticStatement
 import com.caucho.quercus.statement.SwitchStatement
+import com.caucho.quercus.statement.TextStatement
 import com.caucho.quercus.statement.WhileStatement
 
 import edu.cmu.cs.oak.analysis.ASTVisitor
-import edu.cmu.cs.oak.analysis.GraphListener
+import edu.cmu.cs.oak.env.AbstractEnv
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.SimpleEnv
 import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.exceptions.UnexpectedTypeException
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.lib.array.Count
+import edu.cmu.cs.oak.lib.builtin.Define
+import edu.cmu.cs.oak.lib.builtin.Defined
+import edu.cmu.cs.oak.lib.builtin.DirName
 import edu.cmu.cs.oak.lib.builtin.Print
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.ClassDef
+import edu.cmu.cs.oak.value.ClassDef
 import edu.cmu.cs.oak.value.DoubleValue
 import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NumericValue
 import edu.cmu.cs.oak.value.OakValue
@@ -98,29 +113,11 @@ import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.SymbolicValue
-import java.nio.file.Path
-import com.caucho.quercus.statement.TextStatement
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.ClassDef
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.lib.builtin.Defined
-import edu.cmu.cs.oak.lib.builtin.Define
-import edu.cmu.cs.oak.lib.builtin.DirName
-import com.caucho.quercus.expr.FunIssetExpr
-import com.caucho.quercus.expr.ConstExpr
-import com.caucho.quercus.statement.GlobalStatement
-import com.caucho.quercus.expr.FunEmptyExpr
-import com.caucho.quercus.statement.StaticStatement
-import edu.cmu.cs.oak.env.AbstractEnv
-import com.caucho.quercus.statement.ForeachStatement
-import com.caucho.quercus.expr.FunExitExpr
+import edu.cmu.cs.oak.value.SymbolicValue
+import edu.cmu.cs.oak.lib.array.IsArray
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
-
-  val graphListener = new GraphListener("OakGraph")
 
   /** Logger for the interpreter */
   val logger = LoggerFactory.getLogger(classOf[Interpreter])
@@ -130,7 +127,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   this.loadPlugin(new DirName)
   this.loadPlugin(new Define)
   this.loadPlugin(new Defined)
-
+  this.loadPlugin(new IsArray)
+  
   def execute(path: Path): (String, Environment) = {
 
     // The current script is located at this.path
@@ -148,7 +146,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     env.update("$_GET", SymbolValue("$_GET", OakHeap.index))
 
     env.update("$_SERVER", SymbolValue("", OakHeap.index))
-    AbstractEnv.addToGlobal("$_SERVER", env.lookup("$_SERVER"))
+    Environment.addToGlobal("$_SERVER", env.lookup("$_SERVER"))
 
     val res = execute(program, env)
 
@@ -161,7 +159,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val funcIterator = program.getFunctionList.iterator
     while (funcIterator.hasNext) {
 
-      val func = Interpreter.defineFunction(funcIterator.next())
+      val func = Environment.defineFunction(funcIterator.next())
 
       // Add function to the global environment
       env.addFunction(func)
@@ -218,6 +216,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }
 
     env.addOutput(valueX)
+    env.addOutputToModel(value)
+
     return ("OK", env)
   }
 
@@ -233,7 +233,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val e = Interpreter.accessField(s, "_expr").asInstanceOf[Expr]
 
     e match {
-      
+
       case exit: FunExitExpr => {
         ("OK", env)
       }
@@ -270,7 +270,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case e: BinaryAssignRefExpr => {
 
         /* Retrieve the var and value value */
-        val name = Interpreter.accessField(e, "_var").asInstanceOf[VarExpr] // AbstractVarExpr?
+        val name = Interpreter.accessField(e, "_var").asInstanceOf[AbstractVarExpr] // AbstractVarExpr?
         val value = Interpreter.accessField(e, "_value").asInstanceOf[Expr]
 
         /* Update the environment so that 
@@ -289,7 +289,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             val expr = evaluate(exx, env)._1
             val index = evaluate(Interpreter.accessField(aget, "_index").asInstanceOf[Expr], env)._1
 
-            assert(expr.isInstanceOf[ArrayValue] && index.isInstanceOf[OakValue])
+            println(env.getClass + " " + env.lookup("$arg"))
+            assert(expr.isInstanceOf[ArrayValue])
+
+            println("-01")
             val ref = expr.asInstanceOf[ArrayValue].getRef(index)
             ref
           }
@@ -333,14 +336,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val program = (new OakEngine).loadFromFile(includePath)
 
         this.includes.push(includePath)
-        
+
         //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
         this.path = includePath
-        logger.info("Including script " + includePath)
+        //logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
-        logger.info("Resuming " + oldURL)
+        //logger.info("Resuming " + oldURL)
         this.path = oldURL
-        
+
         this.includes.pop()
         ("OK", res)
       }
@@ -355,14 +358,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           return ("NOT OK", env)
         }
         this.includes.push(includePath)
-        
+
         //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
         this.path = includePath
-        logger.info("Including script " + includePath)
+        //logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
-        logger.info("Resuming " + oldURL)
+        //logger.info("Resuming " + oldURL)
         this.path = oldURL
-        
+
         this.includes.pop()
         ("OK", res)
       }
@@ -474,7 +477,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         /* Merge the two environments res1 and res2. */
         val res = res1.asInstanceOf[BranchEnv] join res2.asInstanceOf[BranchEnv]
         res.prependOutput(env.getOutput)
-
+        res.prependOutputToModel(env.getOutput())
         return ("OK", res)
       }
 
@@ -498,7 +501,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val envs = Environment.fork(env_, test.toString)
     val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
     val res = res1 join envs._2
+
     res.prependOutput(env.getOutput)
+    res.prependOutputToModel(env.getOutput)
 
     return ("OK", res)
   }
@@ -538,7 +543,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val classMethodDefs = ListBuffer[FunctionDef]()
     classMethodNames.foreach {
-      name => classMethodDefs.append(Interpreter.defineFunction(methods.get(name))) 
+      name => classMethodDefs.append(Environment.defineFunction(methods.get(name)))
     }
 
     /* Add all methods ex*/
@@ -564,7 +569,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }.foreach {
       fd => classDef.addConstructor(fd.args.size, fd)
     }
-    AbstractEnv.addClass(classDef)
+    Environment.addClass(classDef)
     return ("OK", env)
   }
 
@@ -578,6 +583,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
       case t: ThisFieldExpr => {
         val fieldName = Interpreter.accessField(t, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
+
+        println("-02")
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
         thisArray.getRef(StringValue(fieldName))
       }
@@ -585,6 +592,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         env.getVariables().get(v.toString).get
       }
       case a: ArrayGetExpr => {
+        println("-03")
         val array = env.lookup(Interpreter.accessField(a, "_expr").asInstanceOf[Expr].toString()).asInstanceOf[ArrayValue]
         val index = evaluate(Interpreter.accessField(a, "_index").asInstanceOf[Expr], env)._1
         array.getRef(index)
@@ -702,6 +710,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val res1 = execute(block, initEnv)._2.asInstanceOf[BranchEnv]
     val res = res1 join envs._2
     res.prependOutput(env.getOutput)
+    res.prependOutputToModel(env.getOutput())
     return ("OK", res)
 
   }
@@ -713,15 +722,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def execute(s: GlobalStatement, env: Environment): (String, Environment) = {
     val value = Interpreter.accessField(s, "_var").asInstanceOf[VarExpr]
-    logger.info("global "+ value)
     try {
-     AbstractEnv.addToGlobal(value.toString, evaluate(value, env)._1) 
+      Environment.addToGlobal(value.toString, evaluate(value, env)._1)
     } catch {
       case vnfe: VariableNotFoundException => {
-        AbstractEnv.addToGlobal(value.toString) 
+        Environment.addToGlobal(value.toString)
       }
     }
-    
+
     ("OK", env)
   }
 
@@ -737,10 +745,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val initValue = evaluate(Interpreter.accessField(s, "_initValue").asInstanceOf[Expr], env)._1
 
     try {
-      AbstractEnv.addToGlobal(variable.toString, evaluate(variable, env)._1) 
+      Environment.addToGlobal(variable.toString, evaluate(variable, env)._1)
     } catch {
       case vnfe: VariableNotFoundException => {
-        AbstractEnv.addToGlobal(variable.toString)
+        Environment.addToGlobal(variable.toString)
       }
     }
     env.update(variable.toString, initValue)
@@ -758,17 +766,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
    * <statement>
    */
   def execute(s: ForeachStatement, env: Environment): (String, Environment) = {
-    /*
-     * protected final Expr _objExpr;
+    currentLineNr = ASTVisitor.getStatementLineNr(s)
 
-  protected final AbstractVarExpr _key;
-
-  protected final AbstractVarExpr _value;
-  protected final boolean _isRef;
-
-  protected final Statement _block;
-     */
-    val objExpr = (evaluate(Interpreter.accessField(s, "_objExpr").asInstanceOf[Expr], env)._1).asInstanceOf[ArrayValue]
+    println("-04")
+    val objExpr = (evaluate(Interpreter.accessField(s, "_objExpr").asInstanceOf[Expr], env)._1)
 
     val key = Interpreter.accessField(s, "_key").asInstanceOf[AbstractVarExpr]
     val value = Interpreter.accessField(s, "_value").asInstanceOf[AbstractVarExpr]
@@ -776,33 +777,41 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /** Loop body */
     val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
 
-    // We can only iterate over PHP arrays
-    assert(objExpr.isInstanceOf[ArrayValue])
+    // TODO use real constraints
+    val envs = Environment.fork(env, "count(" + objExpr + ") > 0")
+    envs._1.update(value.toString(), SymbolValue("foreach::", OakHeap.index))
+    val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
+    val res = res1 join envs._2
+    res.prependOutput(env.getOutput)
+    res.prependOutputToModel(env.getOutput)
 
-    val values = new ListBuffer[OakValue]
-    val keys = new ListBuffer[OakValue]
-
-    objExpr.array.keySet.foreach {
-      key =>
-        {
-          keys.append(key)
-          values.append(objExpr.array.get(key).get)
-        }
-    }
-
-    /** Loop environment */
-    var env_ = env
-    (keys zip values).foreach {
-      case (k, v) => {
-        if (key != null) {
-          env.update(key.toString, k)
-        }
-        env.update(value.toString, v)
-        env_ = execute(block, env_)._2
-      }
-    }
-    ("OK", env_)
+    ("OK", res)
   }
+  
+  
+  def execute(s: DoStatement, env: Environment): (String, Environment) = {
+
+    currentLineNr = ASTVisitor.getStatementLineNr(s)
+
+    /* Retrieve the condition and both statements from the WhileStatement AST node.
+     * TODO Refactor variable Interpreter.access by reflection! */
+    val test = Interpreter.accessField(s, "_test").asInstanceOf[Expr]
+
+    val env_ = evaluate(test, env)._2
+
+    val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
+
+    // TODO use real constraints
+    val envs = Environment.fork(env_, test.toString)
+    val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
+    val res = res1 join envs._2
+
+    res.prependOutput(env.getOutput)
+    res.prependOutputToModel(env.getOutput)
+
+    return ("OK", res)
+  }
+  
 
   override def execute(stmt: Statement, env: Environment): (String, Environment) = stmt match {
 
@@ -822,6 +831,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case s: GlobalStatement => execute(s, env)
     case s: StaticStatement => execute(s, env)
     case s: ForeachStatement => execute(s, env)
+    case s: DoStatement => execute(s, env)
     case _ => throw new RuntimeException(stmt + " unimplemented.")
   }
 
@@ -1009,6 +1019,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
         case v1: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
 
+        case v1: BinaryAssignExpr => {
+          throw new RuntimeException("FAILURE")
+        }
+        
         case _ => throw new UnexpectedTypeException(e1, " any type1 " + e1.getClass)
       }
     } catch {
@@ -1018,6 +1032,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def evaluate(e: CallExpr, env: Environment): (OakValue, Environment) = {
 
+    
+    
     // TODO Refactor variable Interpreter.access by reflection!
     val name = Interpreter.accessField(e, "_name").toString
 
@@ -1027,6 +1043,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       o => args += o
     }
 
+    logger.info("Call " + e + " " + args)
+    
     /* If the function has already been called, i.e., its name
        * is contained in the call stack, we just return a symbol value
        * in order to avoid recursive function calls. */
@@ -1056,9 +1074,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }
 
     // Assert that the number of arguments in the function call and declaration match
-    println(name, function.getArgs, args)
     //assert(function.getArgs.length == args.length)
-   
+
     /* CALL-BY-VALUE only */
 
     /**
@@ -1070,6 +1087,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       t =>
         {
           val functionVal = if (t._1.startsWith("&")) {
+            println("if")
             // is reference arg
             try {
               env.getVariables.get(t._2.toString).get
@@ -1079,24 +1097,27 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
               }
             }
           } else {
+            println("else " + t._2)
             evaluate(t._2, env)._1
           }
+          println(functionVal)
           functionEnv.update("$" + t._1.replace("&", ""), functionVal)
         }
     }
     if (function.getArgs.length > args.length) {
       function.getArgs.slice(args.length, function.getArgs.length).foreach {
-        a => {
-          val default = try {
-            function.defaults.get(a).get
-          } catch {
-            case nsee: NoSuchElementException => {
-              throw new RuntimeException()
+        a =>
+          {
+            val default = try {
+              function.defaults.get(a).get
+            } catch {
+              case nsee: NoSuchElementException => {
+                throw new RuntimeException()
+              }
             }
+            val defaultValue = evaluate(default, env)._1
+            functionEnv.update("$" + a.replace("&", ""), defaultValue)
           }
-          val defaultValue = evaluate(default, env)._1
-          functionEnv.update("$" + a.replace("&", ""), defaultValue)
-        }
       }
     }
 
@@ -1173,7 +1194,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /*
      * Create new Environment
      */
-    System.err.println( env.lookup(objExpr.toString()), evaluate(objExpr, env)._1  )
+    System.err.println(env.lookup(objExpr.toString()), evaluate(objExpr, env)._1)
     val objEnv = Environment.createObjectEnvironment(env, env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
 
     val method = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue].getClassdef().getMethods(methodName)
@@ -1187,6 +1208,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val envRes = execute(method.statement, objEnv)._2
 
+    println("-05")
     val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
     val returnVal = try {
       if (method.returnsRef()) {
@@ -1198,8 +1220,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case e: Exception => throw new RuntimeException()
     }
 
-    arrayVal.getKeys.foreach { 
-      key => objectValBefore.set(key.asInstanceOf[StringValue].value.toString, arrayVal.get(key)) 
+    arrayVal.getKeys.foreach {
+      key => objectValBefore.set(key.asInstanceOf[StringValue].value.toString, arrayVal.get(key))
     }
     env.update(objExpr.toString(), objectValBefore)
     (returnVal, env)
@@ -1212,10 +1234,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val objectValue = try {
 
-      val constructor = AbstractEnv.getClass(name).getConstructor(args.size) // match by number of args
+      val constructor = Environment.getClass(name).getConstructor(args.size) // match by number of args
 
       /** Create a new object Value */
-      val obj = ObjectValue("Object Doe", AbstractEnv.getClass(name))
+      val obj = ObjectValue("Object Doe", Environment.getClass(name))
       val objEnv = Environment.createObjectEnvironment(env, obj)
 
       /* Execute constructor in the object environment and keep its variable $this:
@@ -1229,6 +1251,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
       val envConstructed = execute(constructor.statement, objEnv)._2
 
+      println("-05")
       val thisArray = envConstructed.lookup("$this").asInstanceOf[ArrayValue]
       thisArray.getKeys.foreach {
         key => obj.set(key.asInstanceOf[StringValue].value.toString, thisArray.get(key))
@@ -1236,7 +1259,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       obj
     } catch {
       case nsee: NoSuchElementException => {
-        AbstractEnv.getClass(name).getDefaultObject()
+        Environment.getClass(name).getDefaultObject()
       }
     }
     (objectValue, env)
@@ -1248,6 +1271,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = Interpreter.accessField(t, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
+
+    println("-06")
     val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName))
     (ref, env)
   }
@@ -1334,6 +1359,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           assert(av.isInstanceOf[ArrayValue])
 
           /* Return array value*/
+
+          println("-07")
           av.asInstanceOf[ArrayValue]
         } catch {
           case ex: VariableNotFoundException => {
@@ -1364,6 +1391,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val fieldName = Interpreter.accessField(dis, "_name").asInstanceOf[com.caucho.quercus.env.StringValue]
 
         /* $this points to an array, hence we perform an assignment to $this[name] */
+        println("-08")
         val thisValue = env.lookup("$this").asInstanceOf[ArrayValue]
 
         val value = evaluate(expr, env)._1
@@ -1406,6 +1434,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val name = Interpreter.accessField(at, "_expr").asInstanceOf[Expr].toString
 
         val array = try {
+          println("-09")
           env.lookup(name).asInstanceOf[ArrayValue]
         } catch {
           case t: Throwable => new ArrayValue()
@@ -1502,6 +1531,12 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }
     return re
   }
+  
+  def evaluate(e: ToArrayExpr, env: Environment): (OakValue, Environment) = {
+    val expr = Interpreter.accessField(e, "_expr").asInstanceOf[Expr]
+    println(expr)
+    (new ArrayValue(), env)
+  }
 
   override def evaluate(e: Expr, env: Environment): (OakValue, Environment) = e match {
     case e: LiteralExpr => evaluate(e, env)
@@ -1525,6 +1560,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case e: FunIssetExpr => evaluate(e, env)
     case e: ConstExpr => evaluate(e, env)
     case e: FunEmptyExpr => evaluate(e, env)
+    case e: ToArrayExpr => evaluate(e, env)
     case _ => throw new RuntimeException(e + " (" + e.getClass + ") not implemented.")
 
   }

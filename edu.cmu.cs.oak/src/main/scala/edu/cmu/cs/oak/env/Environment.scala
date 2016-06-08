@@ -1,18 +1,24 @@
 package edu.cmu.cs.oak.env
 
-import edu.cmu.cs.oak.value.{ FunctionDef, OakValue, OakVariable }
-
 import scala.collection.immutable.Stack
-import scala.collection.mutable.ListBuffer
-import edu.cmu.cs.oak.value.ClassDef
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.env.heap.OakHeap
-import com.caucho.quercus.expr.Expr
 import scala.collection.mutable.HashSet
+import scala.collection.mutable.ListBuffer
+
+import com.caucho.quercus.expr.Expr
+import com.caucho.quercus.program.Arg
+import com.caucho.quercus.program.Function
+import com.caucho.quercus.statement.Statement
+
+import edu.cmu.cs.oak.core.Interpreter
+import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.value.ClassDef
+import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.ObjectValue
 
 trait Environment extends EnvListener {
 
@@ -80,19 +86,6 @@ trait Environment extends EnvListener {
   def getFunction(name: String): FunctionDef
 
   /**
-   * Adds a class definition to the environment.
-   * @param value ClassDef to add
-   */
-  //def addClass(value: ClassDef)
-
-  /**
-   * Looks up a class definition in the environment.
-   * @param name Name of the class
-   * @return corresponding class definition
-   */
-  //def getClass(name: String): ClassDef
-
-  /**
    * Returns the current call stack at runtime.
    * @return Stack of strings where each string denotes a function call
    */
@@ -138,10 +131,20 @@ trait Environment extends EnvListener {
   def toXml: scala.xml.Elem
 
   def unset(name: String)
-  
+
   def unsetArrayElement(name: String, index: OakValue)
-  
+
   def join(that: Environment): Environment
+
+  def getOutputModelNeu(): DNode
+
+  def addOutputToModel(value: OakValue)
+
+  /**
+   * Prepends the passed output to the environments output.
+   * @param pre List of values to add
+   */
+  def prependOutputToModel(pre: List[OakValue])
 
 }
 
@@ -149,6 +152,14 @@ trait Environment extends EnvListener {
  * Includes static methods used by any environment.
  */
 object Environment {
+
+  var globals = Map[String, OakValue]()
+
+  /**
+   * Map of class definitions. All classes defined during the program execution
+   * are stored here.
+   */
+  var classDefs = Map[String, ClassDef]()
 
   /**
    * Creates a new function environment that is used to
@@ -199,7 +210,6 @@ object Environment {
     }
     return (b1, b2)
   }
-  
 
   /**
    *
@@ -296,14 +306,70 @@ object Environment {
       }
       choice(outputMap, defaultOutput)
     }
-    
+
     parent.addOutput(outputChoice)
     choices.foreach {
       case (name, choice) => {
         parent.update(name, choice)
       }
     }
-    
+
     parent
+  }
+
+  def addToGlobal(name: String, value: OakValue = NullValue("AbstractEnv::addToGlobal")) {
+    globals += (name -> value)
+  }
+
+  /**
+   * Adds a class definition to the environment.
+   * @param value ClassDef to add
+   */
+  def addClass(value: ClassDef): Unit = {
+    classDefs += (value.getName -> value)
+  }
+
+  /**
+   * Looks up a class definition in the environment.
+   * @param name Name of the class
+   * @return corresponding class definition
+   */
+  def getClass(name: String): ClassDef = {
+    try {
+      classDefs.get(name).get
+    } catch {
+      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
+    }
+  }
+
+  /**
+   * Defines a function. The defined function will be accessible during the
+   * program execution.
+   *
+   * @param fu Function instance retrieved from the QuercusProgram to execute
+   *
+   * @return FunctionDef instance to be stored by the Intepreter
+   */
+  def defineFunction(fu: Function): FunctionDef = {
+
+    val f = fu.asInstanceOf[Function]
+
+    val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
+
+    val returnsRef = Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
+    val args = ListBuffer[String]()
+    var defaults = Map[String, Expr]()
+    Interpreter.accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
+      a =>
+        {
+          val default = Interpreter.accessField(a, "_default").asInstanceOf[Expr]
+          if (default != null) defaults += (a.getName.toString() -> default)
+          args.append((if (a.isReference()) "&" else "") + a.getName.toString())
+        }
+    }
+    val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
+
+    // Add function to the global environment
+    return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)
   }
 }

@@ -1,22 +1,25 @@
 package edu.cmu.cs.oak.env
 
+import scala.annotation.elidable
+import scala.annotation.elidable.ASSERTION
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
 
 import org.slf4j.LoggerFactory
 
+import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
+import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.DNode
+import edu.cmu.cs.oak.nodes.SelectNode
+import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.ClassDef
 import edu.cmu.cs.oak.value.FunctionDef
+import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.env.heap.OakHeap
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.ArrayValue
 
 /**
  * Programs state and program state operations.
@@ -37,7 +40,12 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
    *  be cached and sent to the parent environment unless this is the global
    *  environment (parent == null).
    */
-  var output = new ListBuffer[OakValue]()
+  @deprecated var output = new ListBuffer[OakValue]()
+
+  /**
+   * TODO Neu
+   */
+  var outputModel = new ConcatNode(List[DNode]())
 
   /**
    * Logger instance for environments.
@@ -45,17 +53,16 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
   override def update(name: String, value: OakValue) {
+   
+    /*if ((name equals "$arg") || (name equals "$domain")) {
+      println(value)
+      throw new RuntimeException()
+    }*/
     
-    if (name equals "$wp_locale") {
-      logger.warn("WP_LOCALE " + value)
-    }
-    
-    // global?
-    if (AbstractEnv.globals.keySet contains name) {
-      AbstractEnv.globals += (name -> value)
+    if (Environment.globals.keySet contains name) {
+      Environment.globals += (name -> value)
       return
     }
-
     value match {
       case a: OakVariable => {
         variables += (name -> a)
@@ -73,12 +80,9 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   }
 
   override final def lookup(name: String): OakValue = {
-
-    // global?
-    if (AbstractEnv.globals.keySet contains name) {
-      return AbstractEnv.globals.get(name).get
+    if (Environment.globals.keySet contains name) {
+      return Environment.globals.get(name).get
     }
-
     val variable = {
       val opt = variables.get(name)
       if (!opt.isEmpty) {
@@ -94,7 +98,6 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
       case e: Exception => throw new RuntimeException(e)
     }
     if (ret == null) {
-      System.err.println(this.variables.keySet contains "$locales")
       throw new RuntimeException(name)
     }
     ret
@@ -107,14 +110,13 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
 
   def unsetArrayElement(name: String, index: OakValue) {
     val arrayValueO = lookup(name)
-    System.err.println("UNSETARRAY looking up $_SERVER " + lookup("$_SERVER"))
     assert(arrayValueO.isInstanceOf[ArrayValue])
     val arrayValue = arrayValueO.asInstanceOf[ArrayValue]
-    
+
     OakHeap.unsetVariable(arrayValue.getRef(index))
     arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"))
   }
-  
+
   /**
    * Creates a D Model tree of the (symbolic) output that
    * can easily be traversed.
@@ -123,13 +125,20 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
    */
   final override def getOutputModel(): DNode = DNode.createDNode(output.toList)
 
-  override def receiveOutput(value: Seq[OakValue]) = {
+  override def getOutputModelNeu(): DNode = outputModel
+
+  @deprecated override def receiveOutput(value: Seq[OakValue]) = {
     value.foreach {
       v => output += v
     }
   }
 
-  
+  //TODO Neu
+  def receiveOutputModel(value: Seq[DNode]) = {
+    value.foreach {
+      outputNode => outputModel.addOutput(outputNode)
+    }
+  }
 
   def ifdefy(node: OakValue): List[String] = {
     var res = List[String]()
@@ -170,7 +179,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
 
     /* Assert that both this and that environment link to the 
      * same parent environment. */
-    //assert(getParent eq that.getParent)
+    assert(getParent eq that.getParent)
 
     /* Create a new result environment of the same tyoe
      * as the parent environment. 
@@ -194,13 +203,15 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
      * it to the output of the result environment. */
     val symbolicOutput = joinOutput(this, that)
     symbolicOutput.foreach {
-      o => env.addOutput(o)
+      o =>
+        {
+          env.addOutput(o)
+          env.addOutputToModel(o)
+        }
     }
 
     /* Compute the merged map of variables and add
-     *  he map to the result environment. 
-     *  
-     *  TODO Tag 'dirty' variables and only compare neccessary variables
+     *  the map to the result environment. 
      *  */
     val joinedVar = joinVariableMaps(this, that)
     joinedVar.keySet.foreach {
@@ -208,11 +219,9 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
         {
           /* Assert that the variables are defined. */
           assert(joinedVar.get(key).nonEmpty)
-
           env.update(key, joinedVar.get(key).get)
         }
     }
-
     return env
   }
 
@@ -264,7 +273,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   /**
    * Merges output stacks of two program states.
    */
-  private def joinOutput(env1: Environment, env2: Environment): List[OakValue] = {
+  @deprecated private def joinOutput(env1: Environment, env2: Environment): List[OakValue] = {
 
     val s1 = env1.getOutput
     val s2 = env2.getOutput
@@ -281,6 +290,13 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
 
       return prefix.::(Choice(env1.getConstraint, stv1, stv2))
     }
+  }
+
+  private def joinOutputModels(constraint: String, env1: Environment, env2: Environment): DNode = {
+    val o1 = env1.getOutputModelNeu
+    val o2 = env2.getOutputModelNeu
+
+    return SelectNode(constraint, o1, o2)
   }
 
   /**
@@ -311,10 +327,25 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     }
   }
 
-  final override def prependOutput(pre: List[OakValue]) { output = pre.to[ListBuffer] ++ getOutput }
-  final override def addFunction(value: FunctionDef) { OakHeap.defineFunction(value) }
-  final override def getFunction(name: String): FunctionDef = { OakHeap.getFunction(name) }
-  final override def addOutput(value: OakValue) { output += value }
+  final override def prependOutput(pre: List[OakValue]) {
+    output = pre.to[ListBuffer] ++ getOutput
+  }
+
+  final override def addFunction(value: FunctionDef) {
+    OakHeap.defineFunction(value)
+  }
+
+  final override def getFunction(name: String): FunctionDef = {
+    OakHeap.getFunction(name)
+  }
+
+  final override def addOutput(value: OakValue) {
+    output += value
+  }
+
+  final override def addOutputToModel(value: OakValue) {
+    outputModel.addOutput(DNode.createDNode(value))
+  }
 
   def ifdefy(): List[String] = {
     var res = List[String]()
@@ -333,48 +364,17 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     </state>
   }
 
+  override def prependOutputToModel(pre: List[OakValue]) {
+    val preNode = ConcatNode(pre.map { v => DNode.createDNode(v) })
+    val save = this.outputModel
+    this.outputModel = preNode
+    this.outputModel.addOutput(save)
+  }
+
   /* ----- Getter methods ----- */
   final override def getCalls(): Stack[String] = calls
   final override def getParent(): EnvListener = parent
   final override def getOutput(): List[OakValue] = output.toList
   final override def getVariables(): Map[String, OakVariable] = variables
   final override def getConstraint(): String = constraint
-}
-
-object AbstractEnv {
-
-  var globals = Map[String, OakValue]()
-  
-  
-  /**
-   * Map of class definitions. All classes defined during the program execution
-   * are stored here.
-   */
-  var classDefs = Map[String, ClassDef]()
-
-  def addToGlobal(name: String, value: OakValue = NullValue("AbstractEnv::addToGlobal")) {
-    globals += ( name -> value )
-  }
-  
-  /**
-   * Adds a class definition to the environment.
-   * @param value ClassDef to add
-   */
-  def addClass(value: ClassDef): Unit = {
-    classDefs += (value.getName -> value)
-  }
-  
-  /**
-   * Looks up a class definition in the environment.
-   * @param name Name of the class
-   * @return corresponding class definition
-   */
-  def getClass(name: String): ClassDef = {
-    try {
-      classDefs.get(name).get
-    } catch {
-      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
-    }
-  }
-
 }

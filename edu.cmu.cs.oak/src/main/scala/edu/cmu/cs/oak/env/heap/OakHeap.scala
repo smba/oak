@@ -3,13 +3,8 @@ package edu.cmu.cs.oak.env.heap
 import edu.cmu.cs.oak.value.{FunctionDef, OakValue, OakVariable}
 import org.slf4j.LoggerFactory
 
-class OakHeap {}
-/**
- * 
- */
 object OakHeap extends VarHeap {
 
-  val logger = LoggerFactory.getLogger(classOf[OakHeap])
   var index: Long = 1
   
   def getIndex(): Long = {
@@ -30,7 +25,6 @@ object OakHeap extends VarHeap {
     if (! opt.isEmpty) {
       return opt.get
     } else {
-      logger.error("Variable " + variable.getName() + " is undefined, heap is " + varval.toString())
       throw new RuntimeException("Variable " + variable.getName() + " is undefined.")
     }
   }

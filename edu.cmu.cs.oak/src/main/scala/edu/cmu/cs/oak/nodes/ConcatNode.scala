@@ -4,7 +4,7 @@ import edu.cmu.cs.oak.value.OakValue
 import scala.collection.mutable.ListBuffer
 import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
 
-case class ConcatNode(values: Seq[DNode]) extends DNode {
+case class ConcatNode(var values: List[DNode]) extends DNode {
 
   override def traverse(listener: OutputGraphListener) {
     values.foreach {
@@ -16,6 +16,10 @@ case class ConcatNode(values: Seq[DNode]) extends DNode {
   }
   
   def getChildren(): Seq[DNode] = values.toSeq
+  
+  def addOutput(outputNode: DNode) {
+    this.values ::= outputNode
+  }
   
   override def toXml = {
     <concat>

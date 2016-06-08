@@ -116,37 +116,4 @@ object Interpreter {
     }
     return fs
   }
-  
-  /**
-   * Defines a function. The defined function will be accessible during the 
-   * program execution.
-   * 
-   * @param fu Function instance retrieved from the QuercusProgram to execute
-   * 
-   * @return FunctionDef instance to be stored by the Intepreter
-   */
-  def defineFunction(fu: Function): FunctionDef = {
-
-    val f = fu.asInstanceOf[Function]
-    
-    // TODO Refactor variable Interpreter.access by reflection!
-    val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
-
-    val returnsRef = Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
-    val args = ListBuffer[String]()
-    var defaults = Map[String, Expr]()
-    accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
-      a => {
-        val default = Interpreter.accessField(a, "_default").asInstanceOf[Expr]
-        if (default != null) defaults += (a.getName.toString() -> default)
-        args.append((if (a.isReference()) "&" else "") + a.getName.toString())
-      }
-    }
-    val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
-    
-    // Add function to the global environment
-    return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)
-  }
-  
-  
 }
