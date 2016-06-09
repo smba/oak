@@ -23,6 +23,7 @@ class ArrayValue extends OakValue {
     if (array.keySet.contains(index)) {
       return OakHeap.extract(array.get(index).get)
     } else {
+      println(array.keySet)
       throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")
     }
   }

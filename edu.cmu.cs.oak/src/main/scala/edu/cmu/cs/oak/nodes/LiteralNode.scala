@@ -1,11 +1,9 @@
 package edu.cmu.cs.oak.nodes
 
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
+import edu.cmu.cs.oak.value.OakValue
 
 case class LiteralNode(lv: OakValue) extends DNode {
-
   override def traverse(listener: OutputGraphListener) {
     
   }
@@ -13,9 +11,7 @@ case class LiteralNode(lv: OakValue) extends DNode {
   def getChildren(): Seq[DNode] = null
 
   def toXml: scala.xml.Elem = {
-    <literal>
-      { lv.toXml }
-    </literal>
+    <Literal Text={lv.toString} />
   }
   
   override def ifdefy(): List[String] = List(lv.toString)

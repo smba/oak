@@ -54,6 +54,8 @@ object RegressionTest {
     val outputModel = env._2.getOutputModel()
 
     val matches = oracle compare outputModel
+    
+    println(oracle.getChildren().size, outputModel.getChildren().size)
     val precision = PrecisionCalculator.computePrecision(found, available)
 
     return (matches, precision)

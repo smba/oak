@@ -116,6 +116,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
 import edu.cmu.cs.oak.lib.array.IsArray
+import edu.cmu.cs.oak.value.OakValueRepeatSequence
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -291,7 +292,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
             assert(expr.isInstanceOf[ArrayValue])
 
-            println("-01")
+            //println("-01")
             val ref = expr.asInstanceOf[ArrayValue].getRef(index)
             ref
           }
@@ -341,7 +342,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         //logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
         //logger.info("Resuming " + oldURL)
-        this.path = oldURL
 
         this.includes.pop()
         ("OK", res)
@@ -445,7 +445,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /* Execute the statement either concrete (-> either one branch)
      * or symbolic by executing both branches and merging them
      * together afterwards. */
-    return evaluate(test, env)._1 match {
+    val testV = evaluate(test, env)._1
+    return testV match {
 
       /* If the branch condition evaluates to a concrete value (of type
        * BoolenanValue, one of the two branches is selected and executed. */
@@ -457,6 +458,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         } else {
           ("OK", env)
         }
+      }
+      
+      case n: NumericValue => {
+        if (n.toString equals "1") {
+          return execute(trueBlock, env)
+        } else {
+          return execute(falseBlock, env)
+        } 
       }
 
       /* Execute both branches (-> symbolically) and merge environments */
@@ -480,7 +489,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         return ("OK", res)
       }
 
-      case _ => throw new RuntimeException("Evaluation of branch condition failed.")
+      case _ => throw new RuntimeException("Evaluation of branch condition " + test + " failed. It was " + testV + ".")
     }
   }
 
@@ -495,15 +504,14 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val env_ = evaluate(test, env)._2
 
     val block = Interpreter.accessField(s, "_block").asInstanceOf[Statement]
-
+    
     // TODO use real constraints
     val envs = Environment.fork(env_, test.toString)
     val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
+    
     val res = res1 join envs._2
-
-    res.prependOutput(env.getOutput)
-    res.prependOutputToModel(env.getOutput)
-
+      
+    res.prependOutput( env.getOutput )
     return ("OK", res)
   }
 
@@ -583,7 +591,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case t: ThisFieldExpr => {
         val fieldName = Interpreter.accessField(t, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
 
-        println("-02")
+        ////println("-02")
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
         thisArray.getRef(StringValue(fieldName))
       }
@@ -591,7 +599,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         env.getVariables().get(v.toString).get
       }
       case a: ArrayGetExpr => {
-        println("-03")
+        ////println("-03")
         val array = env.lookup(Interpreter.accessField(a, "_expr").asInstanceOf[Expr].toString()).asInstanceOf[ArrayValue]
         val index = evaluate(Interpreter.accessField(a, "_index").asInstanceOf[Expr], env)._1
         array.getRef(index)
@@ -708,8 +716,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val initEnv = evaluate(init, envs._1)._2
     val res1 = execute(block, initEnv)._2.asInstanceOf[BranchEnv]
     val res = res1 join envs._2
-    res.prependOutput(env.getOutput)
-    res.prependOutputToModel(env.getOutput())
+    
+    res.prependOutput( env.getOutput )
     return ("OK", res)
 
   }
@@ -767,7 +775,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def execute(s: ForeachStatement, env: Environment): (String, Environment) = {
     currentLineNr = ASTVisitor.getStatementLineNr(s)
 
-    println("-04")
+    //println("-04")
     val objExpr = (evaluate(Interpreter.accessField(s, "_objExpr").asInstanceOf[Expr], env)._1)
 
     val key = Interpreter.accessField(s, "_key").asInstanceOf[AbstractVarExpr]
@@ -780,9 +788,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val envs = Environment.fork(env, "count(" + objExpr + ") > 0")
     envs._1.update(value.toString(), SymbolValue("foreach::", OakHeap.index))
     val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
+    
     val res = res1 join envs._2
     res.prependOutput(env.getOutput)
-    res.prependOutputToModel(env.getOutput)
 
     ("OK", res)
   }
@@ -805,8 +813,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val res1 = execute(block, envs._1)._2.asInstanceOf[BranchEnv]
     val res = res1 join envs._2
 
-    res.prependOutput(env.getOutput)
-    res.prependOutputToModel(env.getOutput)
+    res.prependOutput( env.getOutput)
 
     return ("OK", res)
   }
@@ -1042,8 +1049,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       o => args += o
     }
 
-    logger.info("Call " + e + " " + args)
-    
     /* If the function has already been called, i.e., its name
        * is contained in the call stack, we just return a symbol value
        * in order to avoid recursive function calls. */
@@ -1086,7 +1091,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       t =>
         {
           val functionVal = if (t._1.startsWith("&")) {
-            println("if")
+            //println("if")
             // is reference arg
             try {
               env.getVariables.get(t._2.toString).get
@@ -1096,10 +1101,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
               }
             }
           } else {
-            println("else " + t._2)
+            //println("else " + t._2)
             evaluate(t._2, env)._1
           }
-          println(functionVal)
+          //println(functionVal)
           functionEnv.update("$" + t._1.replace("&", ""), functionVal)
         }
     }
@@ -1177,7 +1182,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       expressions.append(expr.getValue)
     } while (expr.getNext != null)
 
-    val value = OakValueSequence(expressions.toList.map { e => evaluate(e, env)._1 })
+    val value = new OakValueSequence(expressions.toList.map { e => evaluate(e, env)._1 })
 
     return (value, env)
   }
@@ -1207,7 +1212,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val envRes = execute(method.statement, objEnv)._2
 
-    println("-05")
+    //println("-05")
     val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
     val returnVal = try {
       if (method.returnsRef()) {
@@ -1250,7 +1255,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
       val envConstructed = execute(constructor.statement, objEnv)._2
 
-      println("-05")
+      //println("-05")
       val thisArray = envConstructed.lookup("$this").asInstanceOf[ArrayValue]
       thisArray.getKeys.foreach {
         key => obj.set(key.asInstanceOf[StringValue].value.toString, thisArray.get(key))
@@ -1271,7 +1276,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = Interpreter.accessField(t, "_name").asInstanceOf[com.caucho.quercus.env.StringValue].toString()
 
-    println("-06")
+    //println("-06")
     val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName))
     (ref, env)
   }
@@ -1359,7 +1364,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           /* Return array value*/
 
-          println("-07")
+          //println("-07")
           av.asInstanceOf[ArrayValue]
         } catch {
           case ex: VariableNotFoundException => {
@@ -1390,7 +1395,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val fieldName = Interpreter.accessField(dis, "_name").asInstanceOf[com.caucho.quercus.env.StringValue]
 
         /* $this points to an array, hence we perform an assignment to $this[name] */
-        println("-08")
+        //println("-08")
         val thisValue = env.lookup("$this").asInstanceOf[ArrayValue]
 
         val value = evaluate(expr, env)._1
@@ -1433,7 +1438,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val name = Interpreter.accessField(at, "_expr").asInstanceOf[Expr].toString
 
         val array = try {
-          println("-09")
+          //println("-09")
           env.lookup(name).asInstanceOf[ArrayValue]
         } catch {
           case t: Throwable => new ArrayValue()
@@ -1533,7 +1538,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   
   def evaluate(e: ToArrayExpr, env: Environment): (OakValue, Environment) = {
     val expr = Interpreter.accessField(e, "_expr").asInstanceOf[Expr]
-    println(expr)
+    //println(expr)
     (new ArrayValue(), env)
   }
 

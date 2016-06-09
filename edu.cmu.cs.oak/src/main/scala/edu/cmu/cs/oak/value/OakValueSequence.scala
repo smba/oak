@@ -1,6 +1,6 @@
 package edu.cmu.cs.oak.value
 
-case class OakValueSequence(seq: List[OakValue]) extends SymbolicValue {
+class OakValueSequence(seq: List[OakValue]) extends SymbolicValue {
   override def toString() = seq mkString ""
   def getSequence = seq
   

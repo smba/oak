@@ -22,13 +22,11 @@ case class ConcatNode(var values: List[DNode]) extends DNode {
   }
   
   override def toXml = {
-    <concat>
+    <Concat>
       {
-        for (value <- values) yield <concatItem>
-                                      { value.toXml }
-                                    </concatItem>
+        for (value <- values) yield { value.toXml }
       }
-    </concat>
+    </Concat>
   }
 
   override def ifdefy(): List[String] = {

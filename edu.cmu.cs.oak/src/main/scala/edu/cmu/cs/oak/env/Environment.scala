@@ -146,6 +146,8 @@ trait Environment extends EnvListener {
    */
   def prependOutputToModel(pre: List[OakValue])
 
+  def enableLoopOutput()
+  def disableLoopOutput()
 }
 
 /**
@@ -293,11 +295,11 @@ object Environment {
     val outputChoice = {
       var outputMap = Map[String, OakValueSequence]()
       envs.foreach {
-        env => outputMap += (env.getConstraint -> OakValueSequence(env.getOutput))
+        env => outputMap += (env.getConstraint -> new OakValueSequence(env.getOutput))
       }
       val defaultOutput = if (default != null) {
         try {
-          OakValueSequence(default.getOutput)
+          new OakValueSequence(default.getOutput)
         } catch {
           case _ => NullValue("Environment::joinN")
         }

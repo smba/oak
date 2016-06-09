@@ -14,6 +14,7 @@ import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.DoubleValue
 import edu.cmu.cs.oak.nodes.SymbolNode
 import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
+import edu.cmu.cs.oak.value.OakValueRepeatSequence
 
 /**
  * Model for (symbolic) output of a symbolically executed PHP script.
@@ -93,6 +94,11 @@ object DNode {
     case o: OakValueSequence => {
       val nodes = o.getSequence.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
       ConcatNode(nodes)
+    }
+    case o: OakValueRepeatSequence => {
+      println(123)
+      val nodes = o.getSequence.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
+      RepeatNode(ConcatNode(nodes))
     }
     case s: StringValue => {
       assert(s.loc._1 != null) //FIXME

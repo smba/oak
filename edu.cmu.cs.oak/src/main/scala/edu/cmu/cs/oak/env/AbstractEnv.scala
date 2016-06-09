@@ -20,6 +20,7 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.OakValueRepeatSequence
 
 /**
  * Programs state and program state operations.
@@ -43,6 +44,12 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   @deprecated var output = new ListBuffer[OakValue]()
 
   /**
+   *
+   */
+  @deprecated var environmentIsExecutingALoop = false;
+  @deprecated var loopOutput = new ListBuffer[OakValue]()
+
+  /**
    * TODO Neu
    */
   var outputModel = new ConcatNode(List[DNode]())
@@ -53,12 +60,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
 
   override def update(name: String, value: OakValue) {
-   
-    /*if ((name equals "$arg") || (name equals "$domain")) {
-      println(value)
-      throw new RuntimeException()
-    }*/
-    
+
     if (Environment.globals.keySet contains name) {
       Environment.globals += (name -> value)
       return
@@ -179,7 +181,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
 
     /* Assert that both this and that environment link to the 
      * same parent environment. */
-    assert(getParent eq that.getParent)
+    //assert(getParent eq that.getParent)
 
     /* Create a new result environment of the same tyoe
      * as the parent environment. 
@@ -200,7 +202,7 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     }
 
     /* Compute symbolic output of merged branches and add
-     * it to the output of the result environment. */
+     	* it to the output of the result environment. */
     val symbolicOutput = joinOutput(this, that)
     symbolicOutput.foreach {
       o =>
@@ -285,8 +287,8 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     if (compareStacks(output1, output2)) {
       return prefix ++ output1
     } else {
-      var stv1 = if (output1.size > 1) OakValueSequence(output1.toList) else if (output1.size == 1) output1.head else NullValue("AbstractEnv::joinOutput")
-      var stv2 = if (output2.size > 1) OakValueSequence(output2.toList) else if (output2.size == 1) output2.head else NullValue("AbstractEnv::joinOutput")
+      var stv1 = if (output1.size > 1) new OakValueSequence(output1.toList) else if (output1.size == 1) output1.head else NullValue("AbstractEnv::joinOutput")
+      var stv2 = if (output2.size > 1) new OakValueSequence(output2.toList) else if (output2.size == 1) output2.head else NullValue("AbstractEnv::joinOutput")
 
       return prefix.::(Choice(env1.getConstraint, stv1, stv2))
     }
@@ -340,7 +342,11 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
   }
 
   final override def addOutput(value: OakValue) {
-    output += value
+    if (!this.environmentIsExecutingALoop) {
+      output += value
+    } else {
+      loopOutput += value
+    }
   }
 
   final override def addOutputToModel(value: OakValue) {
@@ -369,6 +375,17 @@ abstract class AbstractEnv(parent: EnvListener, calls: Stack[String], constraint
     val save = this.outputModel
     this.outputModel = preNode
     this.outputModel.addOutput(save)
+  }
+
+  override def enableLoopOutput() {
+    this.environmentIsExecutingALoop = true
+  }
+
+  override def disableLoopOutput() {
+    this.environmentIsExecutingALoop = false
+    output += OakValueRepeatSequence(this.loopOutput.toList)
+    this.loopOutput = new ListBuffer[OakValue]()
+
   }
 
   /* ----- Getter methods ----- */
