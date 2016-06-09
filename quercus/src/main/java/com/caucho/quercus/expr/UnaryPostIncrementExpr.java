@@ -37,7 +37,7 @@ import com.caucho.quercus.env.Value;
  * Represents a PHP post increment expression.
  */
 public class UnaryPostIncrementExpr extends AbstractUnaryExpr {
-  protected final int _incr;
+	public final int _incr;
 
   public UnaryPostIncrementExpr(Location location, Expr expr, int incr)
   {

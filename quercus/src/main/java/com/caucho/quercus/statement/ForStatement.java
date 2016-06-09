@@ -40,11 +40,11 @@ import com.caucho.quercus.expr.Expr;
  * Represents a for statement.
  */
 public class ForStatement extends Statement {
-  protected final Expr _init;
-  protected final Expr _test;
-  protected final Expr _incr;
-  protected final Statement _block;
-  protected final String _label;
+	public final Expr _init;
+	public final Expr _test;
+	public final Expr _incr;
+	public final Statement _block;
+	public final String _label;
 
   public ForStatement(Location location, Expr init, Expr test, Expr incr,
                       Statement block, String label)

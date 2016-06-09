@@ -51,7 +51,7 @@ abstract public class Expr {
   public static final int COMPILE_ARG_MAX = 5;
   public static final Expr[] NULL_ARGS = new Expr[0];
 
-  private final Location _location;
+  public final Location _location;
 
   public Expr(Location location)
   {

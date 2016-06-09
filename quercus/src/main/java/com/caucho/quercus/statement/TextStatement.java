@@ -38,7 +38,7 @@ import com.caucho.quercus.env.Value;
  * Represents static text in a PHP program.
  */
 public class TextStatement extends Statement {
-  private StringValue _value;
+	public StringValue _value;
 
   /**
    * Creates the text statement with its string.

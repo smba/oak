@@ -51,48 +51,48 @@ import java.util.Set;
 public class InterpretedClassDef extends ClassDef
   implements InstanceInitializer
 {
-  protected boolean _isAbstract;
-  protected boolean _isInterface;
-  protected boolean _isTrait;
-  protected boolean _isFinal;
+	public boolean _isAbstract;
+	public boolean _isInterface;
+	public boolean _isTrait;
+	public boolean _isFinal;
 
-  protected boolean _hasPublicMethods;
-  protected boolean _hasProtectedMethods;
-  protected boolean _hasPrivateMethods;
+	public boolean _hasPublicMethods;
+	public boolean _hasProtectedMethods;
+	public boolean _hasPrivateMethods;
 
   // true if defined in the top scope of a page
-  private boolean _isTopScope;
+	public boolean _isTopScope;
 
-  protected final LinkedHashMap<StringValue,AbstractFunction> _functionMap
+	public final LinkedHashMap<StringValue,AbstractFunction> _functionMap
     = new LinkedHashMap<StringValue,AbstractFunction>();
 
-  protected final LinkedHashMap<StringValue,ClassField> _fieldMap
+	public final LinkedHashMap<StringValue,ClassField> _fieldMap
     = new LinkedHashMap<StringValue,ClassField>();
 
-  protected final LinkedHashMap<StringValue,StaticFieldEntry> _staticFieldMap
+	public final LinkedHashMap<StringValue,StaticFieldEntry> _staticFieldMap
     = new LinkedHashMap<StringValue,StaticFieldEntry>();
 
-  protected final HashMap<StringValue,Expr> _constMap
+	public final HashMap<StringValue,Expr> _constMap
     = new HashMap<StringValue,Expr>();
 
-  protected AbstractFunction _constructor;
-  protected AbstractFunction _destructor;
-  protected AbstractFunction _getField;
-  protected AbstractFunction _setField;
-  protected AbstractFunction _isset;
-  protected AbstractFunction _unset;
-  protected AbstractFunction _call;
-  protected AbstractFunction _callStatic;
+	public AbstractFunction _constructor;
+	public AbstractFunction _destructor;
+  public AbstractFunction _getField;
+  public AbstractFunction _setField;
+  public AbstractFunction _isset;
+  public AbstractFunction _unset;
+  public AbstractFunction _call;
+  public AbstractFunction _callStatic;
 
-  protected AbstractFunction _serializeFun;
-  protected AbstractFunction _unserializeFun;
+  public AbstractFunction _serializeFun;
+  public AbstractFunction _unserializeFun;
 
-  protected AbstractFunction _invoke;
-  protected AbstractFunction _toString;
+  public AbstractFunction _invoke;
+  public AbstractFunction _toString;
 
-  protected int _parseIndex;
+  public int _parseIndex;
 
-  protected String _comment;
+  public String _comment;
 
   public InterpretedClassDef(Location location,
                              String name,

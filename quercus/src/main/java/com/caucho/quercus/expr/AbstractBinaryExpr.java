@@ -35,8 +35,8 @@ import com.caucho.quercus.Location;
  * Common analysis for a PHP binary expression.
  */
 abstract public class AbstractBinaryExpr extends Expr {
-  protected final Expr _left;
-  protected final Expr _right;
+	public final Expr _left;
+	public final Expr _right;
 
   protected AbstractBinaryExpr(Location location, Expr left, Expr right)
   {

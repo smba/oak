@@ -38,8 +38,8 @@ import com.caucho.quercus.env.Value;
  * Represents a PHP long literal expression.
  */
 public class LiteralLongExpr extends Expr {
-  protected final long _value;
-  protected final LongValue _objValue;
+	public final long _value;
+	public final LongValue _objValue;
 
   public LiteralLongExpr(Location location, long value)
   {

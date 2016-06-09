@@ -39,7 +39,7 @@ import com.caucho.quercus.env.Value;
  * Represents a literal expression.
  */
 public class LiteralExpr extends Expr {
-  private final Value _value;
+	public final Value _value;
 
   public LiteralExpr(Value value)
   {

@@ -40,9 +40,9 @@ import com.caucho.quercus.expr.Expr;
  * Represents a while statement.
  */
 public class WhileStatement extends Statement {
-  protected final Expr _test;
-  protected final Statement _block;
-  protected final String _label;
+	public final Expr _test;
+	public final Statement _block;
+	public final String _label;
 
   public WhileStatement(Location location,
                         Expr test,

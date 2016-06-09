@@ -38,7 +38,7 @@ import com.caucho.quercus.env.Value;
  * Represents the empty() expression.
  */
 public class FunEmptyExpr extends Expr {
-  protected Expr _value;
+	public Expr _value;
 
   public FunEmptyExpr(Location location, Expr value)
   {

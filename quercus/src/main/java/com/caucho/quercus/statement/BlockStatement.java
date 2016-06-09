@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * Represents sequence of statements.
  */
 public class BlockStatement extends Statement {
-  protected Statement []_statements;
+	public Statement []_statements;
 
   public BlockStatement(Location location, Statement []statements)
   {

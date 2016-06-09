@@ -44,10 +44,10 @@ import com.caucho.util.L10N;
  * Represents a PHP field reference.
  */
 public class ObjectFieldExpr extends AbstractVarExpr {
-  private static final L10N L = new L10N(ObjectFieldExpr.class);
+	public static final L10N L = new L10N(ObjectFieldExpr.class);
 
-  protected final Expr _objExpr;
-  protected final StringValue _name;
+	public final Expr _objExpr;
+	public final StringValue _name;
 
   public ObjectFieldExpr(Location location, Expr objExpr, StringValue name)
   {

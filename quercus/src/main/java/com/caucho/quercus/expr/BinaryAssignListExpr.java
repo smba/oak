@@ -36,8 +36,8 @@ import com.caucho.quercus.env.Value;
  * Represents a PHP list assignment expression.
  */
 public class BinaryAssignListExpr extends Expr {
-  protected final ListHeadExpr _listHead;
-  protected final Expr _value;
+	public final ListHeadExpr _listHead;
+	public final Expr _value;
 
   protected BinaryAssignListExpr(ListHeadExpr head, Expr value)
   {

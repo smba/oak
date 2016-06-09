@@ -55,13 +55,13 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class Function extends AbstractFunction {
   protected final FunctionInfo _info;
-  protected final boolean _isReturnsReference;
+  public final boolean _isReturnsReference;
 
-  protected final String _name;
-  protected final Arg []_args;
-  protected final Statement _statement;
+  public final String _name;
+  public final Arg []_args;
+  public final Statement _statement;
 
-  protected boolean _hasReturn;
+  public boolean _hasReturn;
 
   protected String _comment;
 

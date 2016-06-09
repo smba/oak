@@ -37,8 +37,8 @@ import com.caucho.quercus.env.Value;
  * Represents a PHP assignment expression.
  */
 public class BinaryAssignRefExpr extends Expr {
-  protected final AbstractVarExpr _var;
-  protected final Expr _value;
+	public final AbstractVarExpr _var;
+  public final Expr _value;
 
   public BinaryAssignRefExpr(Location location, AbstractVarExpr var, Expr value)
   {

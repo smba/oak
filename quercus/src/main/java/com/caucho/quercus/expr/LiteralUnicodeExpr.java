@@ -37,7 +37,7 @@ import com.caucho.quercus.env.Value;
  * Represents a PHP string literal expression.
  */
 public class LiteralUnicodeExpr extends Expr {
-  protected final UnicodeValue _value;
+	public final UnicodeValue _value;
 
   public LiteralUnicodeExpr(UnicodeValue value)
   {

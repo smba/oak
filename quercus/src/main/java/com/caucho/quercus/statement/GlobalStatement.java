@@ -38,7 +38,7 @@ import com.caucho.quercus.expr.VarExpr;
  * Represents a global statement in a PHP program.
  */
 public class GlobalStatement extends Statement {
-  protected VarExpr _var;
+	public VarExpr _var;
   
   /**
    * Creates the echo statement.

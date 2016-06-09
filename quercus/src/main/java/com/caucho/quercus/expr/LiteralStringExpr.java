@@ -38,7 +38,7 @@ import com.caucho.quercus.parser.QuercusParser;
  * Represents a PHP string literal expression.
  */
 public class LiteralStringExpr extends Expr {
-  protected final StringValue _value;
+	public final StringValue _value;
 
   public LiteralStringExpr(StringValue value)
   {

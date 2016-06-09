@@ -41,8 +41,8 @@ import java.util.ArrayList;
  * Represents the array function
  */
 public class FunArrayExpr extends Expr {
-  protected final Expr []_keys;
-  protected final Expr []_values;
+	public final Expr []_keys;
+	public final Expr []_values;
 
   public FunArrayExpr(Location location,
                       ArrayList<Expr> keyList,

@@ -40,7 +40,7 @@ import com.caucho.quercus.expr.Expr;
  * Represents a return expression statement in a PHP program.
  */
 public class ReturnRefStatement extends Statement {
-  protected Expr _expr;
+	public Expr _expr;
   
   /**
    * Creates the echo statement.

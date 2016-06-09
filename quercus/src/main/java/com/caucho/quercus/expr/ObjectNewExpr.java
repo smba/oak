@@ -41,8 +41,8 @@ import java.util.ArrayList;
  * Represents a PHP function expression of the form "new ClassName()".
  */
 public class ObjectNewExpr extends Expr {
-  protected final String _name;
-  protected final Expr []_args;
+	public final String _name;
+	public final Expr []_args;
 
   public ObjectNewExpr(Location location, String name, ArrayList<Expr> args)
   {

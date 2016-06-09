@@ -44,8 +44,8 @@ import java.util.ArrayList;
 public class ListHeadExpr extends Expr {
   private static final L10N L = new L10N(ListHeadExpr.class);
 
-  protected final Expr []_varList;
-  protected final Value []_keyList;
+  public final Expr []_varList;
+  public final Value []_keyList;
 
   private String _varName;
 

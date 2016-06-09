@@ -40,11 +40,11 @@ import java.util.ArrayList;
  * Represents a PHP function expression.
  */
 public class ObjectMethodExpr extends AbstractMethodExpr {
-  protected final Expr _objExpr;
+	public final Expr _objExpr;
 
-  protected final StringValue _methodName;
+	public final StringValue _methodName;
 
-  protected final Expr []_args;
+	public final Expr []_args;
 
   public ObjectMethodExpr(Location location,
                           Expr objExpr,

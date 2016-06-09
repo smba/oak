@@ -38,9 +38,9 @@ import com.caucho.quercus.expr.Expr;
  * Represents an if statement.
  */
 public class IfStatement extends Statement {
-  private final Expr _test;
-  private final Statement _trueBlock;
-  private final Statement _falseBlock;
+	public final Expr _test;
+	public final Statement _trueBlock;
+	public final Statement _falseBlock;
 
   public IfStatement(Location location,
                      Expr test,

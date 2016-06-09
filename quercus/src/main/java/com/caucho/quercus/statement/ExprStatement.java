@@ -38,7 +38,7 @@ import com.caucho.quercus.expr.Expr;
  * Represents an expression statement in a PHP program.
  */
 public class ExprStatement extends Statement {
-  private Expr _expr;
+	public Expr _expr;
 
   /**
    * Creates the expression statement.

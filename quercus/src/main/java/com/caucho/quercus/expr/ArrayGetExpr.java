@@ -38,8 +38,8 @@ import com.caucho.quercus.env.Var;
  * Represents a PHP array reference expression.
  */
 public class ArrayGetExpr extends AbstractVarExpr {
-  protected final Expr _expr;
-  protected final Expr _index;
+	public final Expr _expr;
+	public final Expr _index;
 
   public ArrayGetExpr(Location location, Expr expr, Expr index)
   {

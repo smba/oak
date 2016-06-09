@@ -42,7 +42,7 @@ import com.caucho.util.L10N;
 public class ClassDefStatement extends Statement {
   private final static L10N L = new L10N(ClassDefStatement.class);
   
-  protected final InterpretedClassDef _cl;
+  public final InterpretedClassDef _cl;
 
   public ClassDefStatement(Location location, InterpretedClassDef cl)
   {

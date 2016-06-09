@@ -39,8 +39,8 @@ import com.caucho.quercus.env.Value;
  */
 public class BinaryAppendExpr extends Expr
 {
-  private final Expr _value;
-  private BinaryAppendExpr _next;
+	public final Expr _value;
+	public BinaryAppendExpr _next;
 
   protected BinaryAppendExpr(Expr value, BinaryAppendExpr next)
   {

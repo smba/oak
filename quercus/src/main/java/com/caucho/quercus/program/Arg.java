@@ -39,10 +39,10 @@ import com.caucho.quercus.expr.ParamRequiredExpr;
  * Represents a formal argument.
  */
 public class Arg {
-  private final StringValue _name;
-  private final Expr _default;
+	public final StringValue _name;
+	public final Expr _default;
 
-  private final boolean _isReference;
+	public final boolean _isReference;
   private final String _expectedClass;
 
   public Arg(StringValue name,

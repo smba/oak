@@ -38,7 +38,7 @@ import com.caucho.quercus.expr.Expr;
  * Represents an echo statement in a PHP program.
  */
 public class EchoStatement extends Statement {
-  protected final Expr _expr;
+	public final Expr _expr;
 
   /**
    * Creates the echo statement.

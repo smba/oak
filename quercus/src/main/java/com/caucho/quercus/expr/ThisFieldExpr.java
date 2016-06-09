@@ -44,11 +44,11 @@ import com.caucho.quercus.program.ClassField;
  * Represents a PHP field reference.
  */
 public class ThisFieldExpr extends AbstractVarExpr {
-  protected final ThisExpr _qThis;
+	public final ThisExpr _qThis;
 
-  protected StringValue _name;
+	public StringValue _name;
 
-  protected boolean _isInit;
+	public boolean _isInit;
 
   public ThisFieldExpr(Location location,
                        ThisExpr qThis,

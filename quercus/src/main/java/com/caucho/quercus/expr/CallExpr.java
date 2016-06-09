@@ -43,15 +43,15 @@ import java.util.ArrayList;
  * A "foo(...)" function call.
  */
 public class CallExpr extends Expr {
-  private static final L10N L = new L10N(CallExpr.class);
+	public static final L10N L = new L10N(CallExpr.class);
 
-  protected final StringValue _name;
-  protected final StringValue _nsName;
-  protected final Expr []_args;
+	public final StringValue _name;
+	public final StringValue _nsName;
+	public final Expr []_args;
 
-  private int _funId;
+	public int _funId;
 
-  protected boolean _isRef;
+	public boolean _isRef;
 
   public CallExpr(Location location, StringValue name, ArrayList<Expr> args)
   {

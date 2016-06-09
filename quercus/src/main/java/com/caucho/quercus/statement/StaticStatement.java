@@ -41,10 +41,10 @@ import com.caucho.quercus.expr.VarExpr;
  * Represents a static statement in a PHP program.
  */
 public class StaticStatement extends Statement {
-  protected StringValue _uniqueStaticName;
+	public StringValue _uniqueStaticName;
 
-  protected VarExpr _var;
-  protected Expr _initValue;
+	public VarExpr _var;
+	public Expr _initValue;
 
   /**
    * Creates the echo statement.

@@ -35,7 +35,7 @@ import com.caucho.quercus.Location;
  * Represents a PHP boolean negation
  */
 abstract public class AbstractUnaryExpr extends Expr {
-  protected final Expr _expr;
+	public final Expr _expr;
 
   protected AbstractUnaryExpr(Location location, Expr expr)
   {

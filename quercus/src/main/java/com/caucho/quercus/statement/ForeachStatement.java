@@ -46,16 +46,16 @@ import java.util.Map;
 public class ForeachStatement
   extends Statement
 {
-  protected final Expr _objExpr;
+	public final Expr _objExpr;
 
-  protected final AbstractVarExpr _key;
+	public final AbstractVarExpr _key;
 
-  protected final AbstractVarExpr _value;
-  protected final boolean _isRef;
+	public final AbstractVarExpr _value;
+	public final boolean _isRef;
 
-  protected final Statement _block;
+	public final Statement _block;
 
-  protected final String _label;
+	public final String _label;
 
   public ForeachStatement(Location location,
                           Expr objExpr,

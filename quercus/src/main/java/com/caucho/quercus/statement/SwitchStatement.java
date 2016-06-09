@@ -42,13 +42,13 @@ import java.util.ArrayList;
  * Represents a switch statement.
  */
 public class SwitchStatement extends Statement {
-  protected final Expr _value;
+	public final Expr _value;
 
-  protected final Expr[][] _cases;
-  protected final BlockStatement[] _blocks;
+	public final Expr[][] _cases;
+	public final BlockStatement[] _blocks;
 
-  protected final Statement _defaultBlock;
-  protected final String _label;
+	public final Statement _defaultBlock;
+	public final String _label;
 
   public SwitchStatement(Location location,
                          Expr value,

@@ -40,8 +40,8 @@ import com.caucho.vfs.Path;
  * Represents a PHP include statement
  */
 public class FunIncludeExpr extends AbstractUnaryExpr {
-  protected Path _dir;
-  protected boolean _isRequire;
+	public Path _dir;
+	public boolean _isRequire;
   
   public FunIncludeExpr(Location location, Path sourceFile, Expr expr)
   {

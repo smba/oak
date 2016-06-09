@@ -38,8 +38,8 @@ import com.caucho.quercus.env.Var;
  * Represents a PHP assignment expression.
  */
 public class BinaryAssignExpr extends Expr {
-  protected final AbstractVarExpr _var;
-  protected final Expr _value;
+	public final AbstractVarExpr _var;
+	public final Expr _value;
 
   public BinaryAssignExpr(Location location, AbstractVarExpr var, Expr value)
   {

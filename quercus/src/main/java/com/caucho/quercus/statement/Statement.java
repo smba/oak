@@ -48,7 +48,7 @@ abstract public class Statement {
   public static final int BREAK_FALL_THROUGH = 0x1;
   public static final int RETURN = 0x2;
 
-  private final Location _location;
+  public final Location _location;
 
   private Statement _parent;
   private String _loopLabel;
