@@ -19,6 +19,7 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
+import com.caucho.quercus.function.AbstractFunction
 
 trait Environment extends EnvListener {
 
@@ -352,24 +353,24 @@ object Environment {
    *
    * @return FunctionDef instance to be stored by the Intepreter
    */
-  def defineFunction(fu: Function): FunctionDef = {
+  def defineFunction(fu: AbstractFunction): FunctionDef = {
 
     val f = fu.asInstanceOf[Function]
 
-    val hasReturn = Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
+    val hasReturn = f._hasReturn//Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
 
-    val returnsRef = Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
+    val returnsRef = f._isReturnsReference//Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()
     var defaults = Map[String, Expr]()
-    Interpreter.accessField(f, "_args").asInstanceOf[Array[Arg]].foreach {
+    f._args.foreach {
       a =>
         {
-          val default = Interpreter.accessField(a, "_default").asInstanceOf[Expr]
+          val default = a._default.asInstanceOf[Expr]
           if (default != null) defaults += (a.getName.toString() -> default)
           args.append((if (a.isReference()) "&" else "") + a.getName.toString())
         }
     }
-    val statement = Interpreter.accessField(f, "_statement").asInstanceOf[Statement]
+    val statement = f._statement.asInstanceOf[Statement]
 
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)

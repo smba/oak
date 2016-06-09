@@ -53,13 +53,15 @@ trait Interpreter {
    */
   def execute(s: Statement, env: Environment): (String, Environment)
 
+  
   def addConstants(name: String, value: OakValue) {
     constants += (name -> value)
   }
   
 }
-
+/*
 object Interpreter {
+  
   
   /**
    * Utility method to access private or protected fields of compiled
@@ -116,4 +118,6 @@ object Interpreter {
     }
     return fs
   }
-}
+  * 
+  
+}*/
