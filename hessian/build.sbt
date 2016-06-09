@@ -1,4 +1,4 @@
-scalaVersion := "2.11.7"
+scalaVersion := "2.10.0"
 
 //libraryDependencies += "javax" % "javaee-api" % "6.0"
 
