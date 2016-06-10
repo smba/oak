@@ -4,7 +4,7 @@ import edu.cmu.cs.oak.value.OakValue
 
 import scala.collection.immutable.Stack
 
-class FunctionEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends AbstractEnv(parent: EnvListener, calls: Stack[String], constraint: String) {
+class FunctionEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], constraint: String) {
 
   def getReturnValue(): OakValue = ???
 

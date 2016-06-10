@@ -33,7 +33,7 @@ import edu.cmu.cs.oak.value.ArrayValue
  */
 abstract class Environment(parent: EnvListener, calls: Stack[String], constraint: String) extends EnvListener {
 
-  val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
+  val logger = LoggerFactory.getLogger(classOf[Environment])
 
   /**
    * Map of variable identifiers and variable references.

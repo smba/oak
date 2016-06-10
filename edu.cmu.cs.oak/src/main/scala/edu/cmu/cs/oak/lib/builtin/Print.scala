@@ -40,7 +40,6 @@ class Print extends InterpreterPlugin {
             case _ => value
           }
           env.addOutput(toAdd)
-          env.addOutputToModel(toAdd)
         }
     }
 

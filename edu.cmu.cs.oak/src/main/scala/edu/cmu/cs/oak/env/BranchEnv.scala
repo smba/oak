@@ -8,7 +8,7 @@ import scala.collection.mutable.ListBuffer
 import edu.cmu.cs.oak.value.OakValueSequence
 import scala.collection.mutable.HashSet
 
-class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends AbstractEnv(parent: EnvListener, calls: Stack[String], constraint: String) {
+class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], constraint: String) {
 
   val updates = new HashSet[String]
   
