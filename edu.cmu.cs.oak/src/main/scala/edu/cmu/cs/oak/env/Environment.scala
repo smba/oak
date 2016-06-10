@@ -20,139 +20,386 @@ import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
 import com.caucho.quercus.function.AbstractFunction
+import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
+import org.slf4j.LoggerFactory
+import edu.cmu.cs.oak.value.ArrayValue
 
-trait Environment extends EnvListener {
+/**
+ * Programs state and program state operations.
+ *
+ * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
+ */
+abstract class Environment(parent: EnvListener, calls: Stack[String], constraint: String) extends EnvListener {
+
+  val logger = LoggerFactory.getLogger(classOf[AbstractEnv])
+
+  /**
+   * Map of variable identifiers and variable references.
+   * In various contexts, variables can refer to the same value.
+   * For variable reference handling {@see {@link #edu.cmu.cs.oak.env.OakHeap}}.
+   */
+  var variables = Map[String, OakVariable]()
+
+  /**
+   * Mutable output trace. All output genereated in this environment will
+   * be cached and sent to the parent environment unless this is the global
+   * environment (parent == null).
+   */
+  private var output = new ListBuffer[OakValue]()
 
   /**
    * Updates a variable in the environment, i.e. it stores a variable
    * assignment, such as '$i = 8'.
-   *
    * @paran name Name of the variable
    * @param value OakValue to assign to the variable
    */
-  def update(name: String, value: OakValue)
+  def update(name: String, value: OakValue) {
+
+    if (Environment.globals.keySet contains name) {
+      Environment.globals += (name -> value)
+      return
+    }
+    value match {
+      case a: OakVariable => {
+        variables += (name -> a)
+      }
+      case _ => {
+        if (variables.contains(name)) {
+          OakHeap.insert(variables.get(name).get, value)
+        } else {
+          val variable = new OakVariable(name + OakHeap.getIndex())
+          OakHeap.insert(variable, value)
+          variables += (name -> variable)
+        }
+      }
+    }
+  }
 
   /**
-   * Looks up an variable and returns its context-dependant value.
-   *
+   * Looks up an variable and returns its context-dependent value.
    * @param name Name of the variable
-   *
    * @return value Value of the variable
    */
-  def lookup(name: String): OakValue
+  def lookup(name: String): OakValue = {
+    if (Environment.globals.keySet contains name) {
+      return Environment.globals.get(name).get
+    }
+    val variable = {
+      val opt = variables.get(name)
+      if (!opt.isEmpty) {
+        opt.get
+      } else {
+        //println("Unassigned variable " + name + ".")
+        throw new VariableNotFoundException("Unassigned variable " + name + ".")
+      }
+    }
+    val ret = try {
+      OakHeap.extract(variable)
+    } catch {
+      case e: Exception => throw new RuntimeException(e)
+    }
+    if (ret == null) {
+      throw new RuntimeException(name)
+    }
+    ret
+  }
 
   /**
-   * Returns a DNode tree of the environment's output.
-   * @return root node of the DNode tree
+   * Creates a D Model tree of the (symbolic) output that
+   * can easily be traversed.
+   * @return Root node of the D Model tree
    */
-  def getOutputModel(): DNode
+  def getOutputModel(): DNode = {
+    DNode.createDNode(output.toList)
+  }
 
   /**
    * Add output to environment.
    * @param value Value to add to output
    */
-  def addOutput(value: OakValue)
+  def addOutput(value: OakValue) {
+    output += value
+
+  }
 
   /**
    * Get the output sequence from the environment.
    * @return output as sequence of values
    */
-  @deprecated def getOutput(): List[OakValue]
+  def getOutput(): List[OakValue] = output.toList
 
   /**
    * Manipulation of references via the environment
    *  @param name of the variabke
    *  @param reference to point to
    */
-  def setRef(name: String, ref: OakVariable)
+  def setRef(name: String, ref: OakVariable): Unit = {
+    variables += (name -> ref)
+  }
 
   /**
    * Get the current reference of a variable at runtime.
    * @param name Name of the variable
    * @return reference that variable 'name points to
    */
-  def getRef(name: String): OakVariable
+  def getRef(name: String): OakVariable = {
+    variables.get(name).get
+  }
 
   /**
    * Adds a function definition to the environment.
    * @param value Function definition to add
    */
-  def addFunction(value: FunctionDef)
+  def addFunction(value: FunctionDef) {
+    OakHeap.defineFunction(value)
+  }
 
   /**
    * Looks up a function definition in the environment.
    * @param name Name of the function
    * @return corresponding function definition
    */
-  def getFunction(name: String): FunctionDef
+  def getFunction(name: String): FunctionDef = {
+    OakHeap.getFunction(name)
+  }
 
   /**
    * Returns the current call stack at runtime.
    * @return Stack of strings where each string denotes a function call
    */
-  def getCalls(): Stack[String]
+  def getCalls(): Stack[String] = calls
 
   /**
    * Returns the environment's parent environment (null if top-level env)
    * @param parent environment
    */
-  def getParent(): EnvListener
+  def getParent(): EnvListener = parent
 
   /**
    * Receive and store output from a child environment
    * @param value Sequence of output values to add
    */
-  def receiveOutput(value: Seq[OakValue])
+  def receiveOutput(value: Seq[OakValue]) = {
+    value.foreach {
+      v => output += v
+    }
+  }
 
   /**
    * Returns the environments path condition
    * @return path condition
    */
-  def getConstraint(): String
+  def getConstraint(): String = constraint
 
   /**
    * Prepends the passed output to the environments output.
    * @param pre List of values to add
    */
-  def prependOutput(pre: List[OakValue])
+  def prependOutput(pre: List[OakValue]) {
+    output = pre.to[ListBuffer] ++ getOutput
+  }
 
   /**
    * Returns the environments map of variable names to references
    * @return map of variable names to references
    */
-  def getVariables(): Map[String, OakVariable]
+  def getVariables(): Map[String, OakVariable] = variables
+
+  def unsetArrayElement(name: String, index: OakValue) {
+    val arrayValueO = lookup(name)
+    assert(arrayValueO.isInstanceOf[ArrayValue])
+    val arrayValue = arrayValueO.asInstanceOf[ArrayValue]
+
+    OakHeap.unsetVariable(arrayValue.getRef(index))
+    arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"))
+  }
+
+  def ifdefy(node: OakValue): List[String] = {
+    var res = List[String]()
+    node match {
+      case seq: OakValueSequence => {
+        seq.getSequence.foreach { v => res = res ++ ifdefy(v) }
+      }
+      case ite: Choice => {
+        res = res ++ List("#if " + ite.getConstraint())
+        res = res ++ ifdefy(ite.getV1()).map { x => x.trim }
+        res = res ++ List("#else")
+        res = res ++ ifdefy(ite.getV2()).map { x => x.trim }
+        res = res ++ List("#endif")
+      }
+      case s: SymbolValue => res = res.::(s.toString())
+      case null => res
+      case _ => res = res.::(node.toString())
+    }
+    res
+  }
 
   /**
-   * Serializes the entire state, i.e., serializes variable names
-   * and values to XML.
-   * TODO implement parser for serialized environment
-   *
-   * @return XML representation of the environment
+   * Join this branch environment with another branch environment.
+   * @param that BranchEnv instance to join with
+   * @return merged Environment instance
    */
-  def toXml: scala.xml.Elem
+  final def join(that: Environment): Environment = {
 
-  def unset(name: String)
+    /* Assert that both this and that environment link to the 
+     * same parent environment. */
+    //assert(getParent eq that.getParent)
 
-  def unsetArrayElement(name: String, index: OakValue)
+    /* Create a new result environment of the same tyoe
+     * as the parent environment. 
+     * 
+     * */
+    val env = parent.asInstanceOf[Environment] match {
+      case simpleEnv: SimpleEnv => {
+        new SimpleEnv(simpleEnv.getParent(), simpleEnv.getCalls(), simpleEnv.getConstraint())
+      }
+      case funcEnv: FunctionEnv => {
+        new FunctionEnv(funcEnv.getParent(), funcEnv.getCalls(), funcEnv.getConstraint())
+      }
+      case branchEnv: BranchEnv => {
+        new BranchEnv(branchEnv.getParent(), branchEnv.getCalls(), branchEnv.getConstraint())
+      }
+      case null => new SimpleEnv(null, new Stack[String], "true")
 
-  def join(that: Environment): Environment
+    }
 
-  def getOutputModelNeu(): DNode
+    /* Compute symbolic output of merged branches and add
+     	* it to the output of the result environment. */
+    val symbolicOutput = joinOutput(this, that)
+    symbolicOutput.foreach {
+      o =>
+        {
+          env.addOutput(o)
+        }
+    }
 
-  def addOutputToModel(value: OakValue)
+    /* Compute the merged map of variables and add
+     *  the map to the result environment. 
+     *  */
+    val joinedVar = joinVariableMaps(this, that)
+    joinedVar.keySet.foreach {
+      key =>
+        {
+          /* Assert that the variables are defined. */
+          assert(joinedVar.get(key).nonEmpty)
+          env.update(key, joinedVar.get(key).get)
+        }
+    }
+    return env
+  }
 
   /**
-   * Prepends the passed output to the environments output.
-   * @param pre List of values to add
+   * Merges two program states variable store. Variables
+   * will refer to symbolic values if their definition is ambiguous or
+   * they're only defined once.
    */
-  def prependOutputToModel(pre: List[OakValue])
+  private def joinVariableMaps(env1: Environment, env2: Environment): Map[String, OakValue] = {
+    val m1 = env1.getVariables
+    val m2 = env2.getVariables
+    /**
+     * Map for joined program states
+     *  - get all keys that are in m1 but not in m2
+     *  - get all keys that are in m2 but not in m1
+     *  - get all keys that are in both m1 and m2
+     */
+    var smap = Map[String, OakValue]()
 
-  def enableLoopOutput()
-  def disableLoopOutput()
+    (m1.keySet -- m2.keySet).foreach {
+      key => smap += key -> Choice(env1.getConstraint, env1.lookup(key), null)
+    }
+
+    (m2.keySet -- m1.keySet).foreach {
+      key => smap += key -> Choice(env2.getConstraint, env2.lookup(key), null)
+    }
+
+    (m1.keySet intersect m2.keySet).foreach { key =>
+      if (!env1.lookup(key).toString.equals(env2.lookup(key).toString)) {
+        smap += key -> Choice(env1.getConstraint, env1.lookup(key), env2.lookup(key))
+      } else {
+        smap += key -> env1.lookup(key)
+      }
+    }
+    return smap
+  }
+
+  /**
+   * Finds the longest common prefix/sequence of
+   * elements on two given stacks.
+   */
+  private def commonPrefix(s: List[OakValue], t: List[OakValue], out: List[OakValue] = List[OakValue]()): List[OakValue] = {
+    if (s.isEmpty || t.isEmpty || !s(0).equals(t(0))) {
+      return out
+    } else {
+      commonPrefix(s.slice(1, s.size), t.slice(1, t.size), out.::(s(0)))
+    }
+  }
+
+  /**
+   * Merges output stacks of two program states.
+   */
+  private def joinOutput(env1: Environment, env2: Environment): List[OakValue] = {
+
+    val s1 = env1.getOutput
+    val s2 = env2.getOutput
+
+    val prefix = commonPrefix(s1.reverse, s2.reverse)
+    val output1 = s1.slice(prefix.size, s1.size)
+    val output2 = s2.slice(prefix.size, s2.size)
+
+    if (compareStacks(output1, output2)) {
+      return prefix ++ output1
+    } else {
+      var stv1 = if (output1.size > 1) new OakValueSequence(output1.toList) else if (output1.size == 1) output1.head else NullValue("AbstractEnv::joinOutput")
+      var stv2 = if (output2.size > 1) new OakValueSequence(output2.toList) else if (output2.size == 1) output2.head else NullValue("AbstractEnv::joinOutput")
+
+      return prefix.::(Choice(env1.getConstraint, stv1, stv2))
+    }
+  }
+
+  /**
+   * Recursively compares two stacks of Value objects. Two stacks are
+   * equal if their size is equal, their top element is equal and the
+   * stack.pop stack are equal (-> recursive definition).
+   */
+  private def compareStacks(s1: List[OakValue], s2: List[OakValue]): Boolean = {
+    var a = s1
+    var b = s2
+    if (a.isEmpty != b.isEmpty) {
+      return false
+    }
+    if (a.isEmpty && b.isEmpty) {
+      return true
+    }
+    val element_a = a.head
+    a = a.tail
+    val element_b = b.head
+    b = b.tail
+    try {
+      if (((element_a == null) && (element_b != null)) || (!element_a.equals(element_b)))
+        return false
+      return compareStacks(a, b)
+    } finally {
+      a = a.::(element_a)
+      b = b.::(element_b)
+    }
+  }
+
+  def unset(name: String) {
+    OakHeap.unsetVariable(getRef(name))
+    variables -= name
+  }
+
+  def ifdefy(): List[String] = {
+    var res = List[String]()
+    output.foreach { n => res = res ++ ifdefy(n) }
+    return res
+  }
 }
 
 /**
- * Includes static methods used by any environment.
+ * Includes ~static~ methods used by any environment.
  */
 object Environment {
 
@@ -171,7 +418,6 @@ object Environment {
    *
    * @param dis Parent environment to bounce output to
    * @param f Name of the function
-   *
    * @return FunctionEnv
    */
   def createFunctionEnvironment(dis: Environment, f: String): FunctionEnv = {
@@ -184,7 +430,6 @@ object Environment {
    *
    * @param dis Parent environment to bounce output to
    * @param f Name of the function
-   *
    * @return ObjectEnv
    */
   def createObjectEnvironment(dis: Environment, obj: ObjectValue): ObjectEnv = {
@@ -196,7 +441,6 @@ object Environment {
    * can be joined afterwards.
    *
    * @param newConstraint Path constrained to add to the branches
-   *
    * @param Tuple of two branch environments
    */
   def fork(parent: Environment, newConstraint: String): (BranchEnv, BranchEnv) = {
@@ -357,9 +601,9 @@ object Environment {
 
     val f = fu.asInstanceOf[Function]
 
-    val hasReturn = f._hasReturn//Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
+    val hasReturn = f._hasReturn //Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
 
-    val returnsRef = f._isReturnsReference//Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
+    val returnsRef = f._isReturnsReference //Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()
     var defaults = Map[String, Expr]()
     f._args.foreach {
@@ -375,4 +619,5 @@ object Environment {
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)
   }
+
 }
