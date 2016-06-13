@@ -91,7 +91,7 @@ abstract class Environment(parent: EnvListener, calls: Stack[String], constraint
       if (!opt.isEmpty) {
         opt.get
       } else {
-        //println("Unassigned variable " + name + ".")
+        println("Unassigned variable " + name + ".")
         throw new VariableNotFoundException("Unassigned variable " + name + ".")
       }
     }
@@ -251,7 +251,8 @@ abstract class Environment(parent: EnvListener, calls: Stack[String], constraint
      * as the parent environment. 
      * 
      * */
-    val env = parent.asInstanceOf[Environment] match {
+    val env = parent.asInstanceOf[Environment] 
+    env match {
       case simpleEnv: SimpleEnv => {
         new SimpleEnv(simpleEnv.getParent(), simpleEnv.getCalls(), simpleEnv.getConstraint())
       }
@@ -260,6 +261,9 @@ abstract class Environment(parent: EnvListener, calls: Stack[String], constraint
       }
       case branchEnv: BranchEnv => {
         new BranchEnv(branchEnv.getParent(), branchEnv.getCalls(), branchEnv.getConstraint())
+      }
+      case obi: ObjectEnv => {
+        new ObjectEnv(obi.getParent(), obi.getCalls(), obi.getConstraint(), obi.obj)
       }
       case null => new SimpleEnv(null, new Stack[String], "true")
 
@@ -395,6 +399,16 @@ abstract class Environment(parent: EnvListener, calls: Stack[String], constraint
     var res = List[String]()
     output.foreach { n => res = res ++ ifdefy(n) }
     return res
+  }
+  
+  def getParents(): List[Environment] = {
+    val parents = new ListBuffer[Environment]
+    var cParent = this.parent
+    while (cParent != null) {
+      parents += cParent.asInstanceOf[Environment]
+      cParent = cParent.asInstanceOf[Environment].getParent()
+    }
+    parents.toList
   }
 }
 
@@ -619,5 +633,7 @@ object Environment {
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)
   }
+  
+  
 
 }

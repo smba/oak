@@ -102,6 +102,10 @@ import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
+import com.caucho.quercus.expr.ClassMethodExpr
+import edu.cmu.cs.oak.env.ObjectEnv
+import com.caucho.quercus.expr.ThisMethodExpr
+import com.caucho.quercus.expr.ToLongExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -275,7 +279,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
             assert(expr.isInstanceOf[ArrayValue])
 
-            //println("-01")
+            println("-01")
             val ref = expr.asInstanceOf[ArrayValue].getRef(index)
             ref
           }
@@ -401,6 +405,25 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         ("OK", env)
       }
 
+      case cme: ClassMethodExpr => {
+
+        // ClassName::ClassName(<args>) called, but not a 
+        if (cme._className equals cme._methodName.toString()) {
+
+          val classDef = Environment.getClass(cme._className)
+          val constructor = classDef.getConstructor(cme._args.size)
+
+          println("here")
+          val env_ = execute(constructor.statement, env)._2
+          println("there")
+          (null, env_)
+        }
+
+        //println(cme._args.size)
+        //System.exit(2)
+        (null, env)
+      }
+
       case e: UnarySuppressErrorExpr => ("OK", evaluate(e, env)._2)
 
       case _ => throw new RuntimeException(e.getClass + " is not implemented for ExprStatement, expr is " + e.toString())
@@ -428,7 +451,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /* Execute the statement either concrete (-> either one branch)
      * or symbolic by executing both branches and merging them
      * together afterwards. */
-    val testV = evaluate(test, env)._1
+    var testV = evaluate(test, env)._1
+    println(testV)
     return testV match {
 
       /* If the branch condition evaluates to a concrete value (of type
@@ -452,8 +476,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
 
       /* Execute both branches (-> symbolically) and merge environments */
-      case b: SymbolicValue => {
+      case _ => {
 
+        println("symbolisch abgebogen (IF)")
         // TODO use real constraints
         val branches = Environment.fork(env, test.toString)
 
@@ -468,10 +493,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         /* Merge the two environments res1 and res2. */
         val res = res1.asInstanceOf[BranchEnv] join res2.asInstanceOf[BranchEnv]
         res.prependOutput(env.getOutput)
+        println("symbolisch joined (IF)")
         return ("OK", res)
       }
 
-      case _ => throw new RuntimeException("Evaluation of branch condition " + test + " failed. It was " + testV + ".")
+      //case _ => throw new RuntimeException("Evaluation of branch condition " + test + " failed. It was " + testV + ".")
     }
   }
 
@@ -547,9 +573,21 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     /* Get all field names */
     val classFieldNamez = List(fields.keySet().toArray: _*)
-    val classFieldNames = classFieldNamez.map { name => name.toString() }
+    var classFieldNames = classFieldNamez.map { name => name.toString() }
 
-    val classDef = ClassDef(name, classFieldNames, classMethodDefMap)
+    /* Retrieve all parent classes */
+    if (interpreted._parentName != null) {
+      val parentClasDef = Environment.getClass(interpreted._parentName)
+
+      classFieldNames ++= parentClasDef.getFields()
+      parentClasDef.methods.foreach {
+        case (name, fdef) => classMethodDefMap += (name -> fdef)
+      }
+    } else {
+    }
+
+    val parent = if (interpreted._parentName != null) interpreted._parentName else ""
+    val classDef = ClassDef(name, classFieldNames, classMethodDefMap, parent)
 
     /* Add construcotrs to the class definition. */
     classMethodDefs.takeWhile {
@@ -572,7 +610,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case t: ThisFieldExpr => {
         val fieldName = t._name.toString()
 
-        ////println("-02")
+        println("-02")
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
         thisArray.getRef(StringValue(fieldName))
       }
@@ -580,7 +618,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         env.getVariables().get(v.toString).get
       }
       case a: ArrayGetExpr => {
-        ////println("-03")
+        println("-03")
         val array = env.lookup(a._expr.toString()).asInstanceOf[ArrayValue]
         val index = evaluate(a._index, env)._1
         array.getRef(index)
@@ -755,8 +793,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def execute(s: ForeachStatement, env: Environment): (String, Environment) = {
     currentLineNr = ASTVisitor.getStatementLineNr(s)
 
-    //println("-04")
-    val objExpr = (evaluate(s._objExpr, env)._1)
+    println("-04")
+    val objExpr = s._objExpr
 
     val key = s._key
     val value = s._value
@@ -894,7 +932,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }
   }
 
-  def evaluate(ae: AbstractBinaryExpr, env: Environment): (OakValue, Environment) = {
+  def evaluate(ae: AbstractBinaryExpr, envi: Environment): (OakValue, Environment) = {
+
+    println("AbstractBinaryExpr abgebogen " + envi.getClass)
+    
+    var env = envi
 
     // Retrieve the operands e1, e2 of the binary expression
     val e1 = ae.getLeft
@@ -907,105 +949,155 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     return try {
 
-      // evaluate e1 and match by type
-      val e1v = evaluate(e1, env)._1
-      e1v match {
+      if (e1.isInstanceOf[BinaryAssignExpr]) {
+        println("IF 01")
+        env = evaluate(e1, env)._2
 
-        // expecting a boolean expression, where e1 AND e2 are BooleanValues
-        case v1: BooleanValue => {
+        if (e2.isInstanceOf[BinaryAssignExpr]) {
+          env = evaluate(e2, env)._2
+        }
+        (null, env)
 
-          evaluate(e2, env)._1 match {
+      } else {
+        println("ELSE 01")
+        val e1v = evaluate(e1, env)._1
+        e1v match {
 
-            // default case: e1 AND e2 are BooleanValues
-            case v2: BooleanValue => {
-              (ae match {
-                case e: BinaryAndExpr => {
-                  v1 && v2
-                }
-                case e: BinaryOrExpr => {
-                  v1 || v2
-                }
-              }, env)
-            }
-            case s2: SymbolicValue => {
-              if (ae.isInstanceOf[BinaryOrExpr] && v1.v) {
-                return (BooleanValue(true), env)
+          // expecting a boolean expression, where e1 AND e2 are BooleanValues
+          case v1: BooleanValue => {
+            println("ELSE 01 CASE 01")
+            evaluate(e2, env)._1 match {
+
+              // default case: e1 AND e2 are BooleanValues
+              case v2: BooleanValue => {
+                (ae match {
+                  case e: BinaryAndExpr => {
+                    v1 && v2
+                  }
+                  case e: BinaryOrExpr => {
+                    v1 || v2
+                  }
+                }, env)
               }
-              if (ae.isInstanceOf[BinaryAndExpr] && !v1.v) {
-                return (BooleanValue(false), env)
+              case s2: SymbolicValue => {
+                if (ae.isInstanceOf[BinaryOrExpr] && v1.v) {
+                  return (BooleanValue(true), env)
+                }
+                if (ae.isInstanceOf[BinaryAndExpr] && !v1.v) {
+                  return (BooleanValue(false), env)
+                }
+                (SymbolValue(ae.toString, OakHeap.index), env)
               }
-              (SymbolValue(ae.toString, OakHeap.index), env)
+
+              // exceptional cases: return symbolic value and track unresolved expression
+              case v2: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+              case v2: NumericValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+              case v2: StringValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+
+              case _ => throw new RuntimeException()
             }
+          }
 
-            // exceptional cases: return symbolic value and track unresolved expression
-            case v2: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
-            case v2: NumericValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
-            case v2: StringValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
+          // expecting a arithmetic expression, where e1 AND e2 are NumericValues
+          case v1: NumericValue => {
+            println("ELSE 01 CASE 02a")
+            println("e2 is " + e2 + " of class " + e2.getClass + " " + env)
+            
+            val bener = evaluate(e2, env)._1
+            println("bener is " + bener + " of class " + bener.getClass)
+            println("ELSE 01 CASE 02b")
+            bener match {
 
-            case _ => throw new RuntimeException()
+              // default case: e1 AND e2 are NumericValues
+              case v2: NumericValue => {
+                println("ELSE 01 CASE 02 CASE 01")
+                return (ae match {
+                  case e: BinaryAddExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 01")
+                    v1 + v2
+                  }
+                  case e: BinarySubExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 02")
+                    v1 - v2
+                  }
+                  case e: BinaryMulExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 03")
+                    v1 * v2
+                  }
+                  case e: BinaryDivExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 04")
+                    v1 / v2
+                  }
+                  case e: BinaryModExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 05")
+                    v1 % v2
+                  }
+                  case e: BinaryLtExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 06")
+                    v1 < v2
+                  }
+                  case e: BinaryGtExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 07")
+                    v1 > v2
+                  }
+                  case e: BinaryEqExpr => {
+                    println("ELSE 01 CASE 02 CASE 01 CASE 08")
+                    BooleanValue(v1 == v2)
+                  }
+                }, env)
+              }
+
+              // exceptional cases: return symbolic value and track unresolved expression
+              case v2: SymbolicValue => {
+                println("ELSE 01 CASE 02 CASE 02")
+                (SymbolValue(ae.toString, OakHeap.getIndex), env)
+              }
+              case v2: BooleanValue => {
+                println("ELSE 01 CASE 02 CASE 03")
+                (SymbolValue(ae.toString, OakHeap.getIndex), env)
+              }
+              case v2: StringValue => {
+                println("ELSE 01 CASE 02 CASE 04")
+                (SymbolValue(ae.toString, OakHeap.getIndex), env)
+              }
+
+              case v2: ArrayValue => {
+                println("ELSE 01 CASE 02 CASE 05")
+                throw new UnexpectedTypeException(e2, "Can't compare array with " + v1.getClass + ".")
+              }
+              case _ => {
+                println("ELSE 01 CASE 02 CASE 06")
+                throw new UnexpectedTypeException(e2, evaluate(e2, env)._1 + "")
+              }
+            }
+          }
+
+          case v1: StringValue => {
+            println("ELSE 01 CASE 03")
+            return (new SymbolValue(ae.toString, OakHeap.getIndex), env)
+          }
+
+          case v1: VarExpr => {
+            println("ELSE 01 CASE 04")  
+            return (evaluate(v1, env)._1, env) // TODO more cases
+          }
+
+          // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
+          case v1: SymbolicValue => {
+            println("ELSE 01 CASE 05")
+            (SymbolValue(ae.toString, OakHeap.getIndex), env)
+          }
+
+          case v1: BinaryAssignExpr => {
+            println("ELSE 01 CASE 06")
+            throw new RuntimeException("FAILURE")
+          }
+
+          case _ => {
+            println("ELSE 01 CASE 07")
+            throw new UnexpectedTypeException(e1, " any type1 " + e1.getClass)
           }
         }
-
-        // expecting a arithmetic expression, where e1 AND e2 are NumericValues
-        case v1: NumericValue => {
-          evaluate(e2, env)._1 match {
-
-            // default case: e1 AND e2 are NumericValues
-            case v2: NumericValue => {
-              (ae match {
-                case e: BinaryAddExpr => {
-                  v1 + v2
-                }
-                case e: BinarySubExpr => {
-                  v1 - v2
-                }
-                case e: BinaryMulExpr => {
-                  v1 * v2
-                }
-                case e: BinaryDivExpr => {
-                  v1 / v2
-                }
-                case e: BinaryModExpr => {
-                  v1 % v2
-                }
-                case e: BinaryLtExpr => {
-                  v1 < v2
-                }
-                case e: BinaryGtExpr => {
-                  v1 > v2
-                }
-                case e: BinaryEqExpr => {
-                  BooleanValue(v1 == v2)
-                }
-              }, env)
-            }
-
-            // exceptional cases: return symbolic value and track unresolved expression
-            case v2: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
-            case v2: BooleanValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
-            case v2: StringValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
-
-            case v2: ArrayValue => throw new UnexpectedTypeException(e2, "Can't compare array with " + v1.getClass + ".")
-            case _ => throw new UnexpectedTypeException(e2, evaluate(e2, env)._1 + "")
-          }
-        }
-
-        case v1: StringValue => {
-          return (new SymbolValue(ae.toString, OakHeap.getIndex), env)
-        }
-
-        case v1: VarExpr => {
-          return (evaluate(v1, env)._1, env) // TODO more cases
-        }
-
-        // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
-        case v1: SymbolicValue => (SymbolValue(ae.toString, OakHeap.getIndex), env)
-
-        case v1: BinaryAssignExpr => {
-          throw new RuntimeException("FAILURE")
-        }
-
-        case _ => throw new UnexpectedTypeException(e1, " any type1 " + e1.getClass)
       }
     } catch {
       case e: Exception => throw new RuntimeException(e)
@@ -1063,7 +1155,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       t =>
         {
           val functionVal = if (t._1.startsWith("&")) {
-            //println("if")
             // is reference arg
             try {
               env.getVariables.get(t._2.toString).get
@@ -1167,41 +1258,92 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val objExpr = e._objExpr
     val methodName = e._methodName.toString()
     val args = e._args
+
     /*
+     * If objExpr is "$this" [and, for sure, the current 
+     * environment is an ObjectEnv], we keep the current
+     * environment instead of creating a new one. 
+     * 
+     * OR
+     * 
+     * Two parent environments are 
+     */
+    val OBJ_IS_THIS = ((objExpr.toString equals "$this") && ( (env.isInstanceOf[ObjectEnv]) || (env.getParents.filter { x => x.isInstanceOf[ObjectEnv] }.size > 0) ) )
+
+    if (OBJ_IS_THIS) {
+      val objEnv = if (env.isInstanceOf[ObjectEnv]) {
+        env.asInstanceOf[ObjectEnv] // copy
+      } else {
+       val p = env.getParents.find(_.isInstanceOf[ObjectEnv]).get.asInstanceOf[ObjectEnv]
+       val o = new ObjectEnv(env.getParent(), env.getCalls(), env.getConstraint(), p.obj)
+       println(env.variables.keySet contains "$headers")
+       env.variables.keySet.foreach {
+         key => o.update(key, env.lookup(key))
+       }
+       o
+      }
+      val method = objEnv.obj.getClassdef.getMethods(methodName)
+      assert(method.args.size == args.size)
+      val objectValBefore = objEnv.obj
+      val envRes = execute(method.statement, objEnv)._2
+
+      println("-05")
+      val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
+      val returnVal = try {
+        if (method.returnsRef()) {
+          envRes.getRef("$return")
+        } else {
+          envRes.lookup("$return")
+        }
+      } catch {
+        case e: Exception => throw new RuntimeException()
+      }
+
+      arrayVal.getKeys.foreach {
+        key => objectValBefore.set(key.asInstanceOf[StringValue].value.toString, arrayVal.get(key))
+      }
+      env.update(objExpr.toString(), objectValBefore.fields)
+      (returnVal, env)
+
+    } else {
+
+      /*
      * Create new Environment
      */
-    System.err.println(env.lookup(objExpr.toString()), evaluate(objExpr, env)._1)
-    val objEnv = Environment.createObjectEnvironment(env, env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
+      println(objExpr, methodName)
 
-    val method = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue].getClassdef().getMethods(methodName)
+      println(env, env.getParents())
+      val objEnv = Environment.createObjectEnvironment(env, env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
 
-    assert(method.args.size == args.size)
-    (method.args zip args).foreach {
-      case (name, expr) => objEnv.update("$" + name, evaluate(expr, env)._1)
-    }
+      val method = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue].getClassdef().getMethods(methodName)
 
-    val objectValBefore = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]
-
-    val envRes = execute(method.statement, objEnv)._2
-
-    //println("-05")
-    val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
-    val returnVal = try {
-      if (method.returnsRef()) {
-        envRes.getRef("$return")
-      } else {
-        envRes.lookup("$return")
+      assert(method.args.size == args.size)
+      (method.args zip args).foreach {
+        case (name, expr) => objEnv.update("$" + name, evaluate(expr, env)._1)
       }
-    } catch {
-      case e: Exception => throw new RuntimeException()
-    }
 
-    arrayVal.getKeys.foreach {
-      key => objectValBefore.set(key.asInstanceOf[StringValue].value.toString, arrayVal.get(key))
-    }
-    env.update(objExpr.toString(), objectValBefore)
-    (returnVal, env)
+      val objectValBefore = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]
 
+      val envRes = execute(method.statement, objEnv)._2
+
+      println("-05 " + method.name)
+      val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
+      val returnVal = try {
+        if (method.returnsRef()) {
+          envRes.getRef("$return")
+        } else {
+          envRes.lookup("$return")
+        }
+      } catch {
+        case e: Exception => null
+      }
+
+      arrayVal.getKeys.foreach {
+        key => objectValBefore.set(key.asInstanceOf[StringValue].value.toString, arrayVal.get(key))
+      }
+      env.update(objExpr.toString(), objectValBefore)
+      (returnVal, env)
+    }
   }
 
   def evaluate(b: ObjectNewExpr, env: Environment): (OakValue, Environment) = {
@@ -1227,7 +1369,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
       val envConstructed = execute(constructor.statement, objEnv)._2
 
-      //println("-05")
+      println("-05")
       val thisArray = envConstructed.lookup("$this").asInstanceOf[ArrayValue]
       thisArray.getKeys.foreach {
         key => obj.set(key.asInstanceOf[StringValue].value.toString, thisArray.get(key))
@@ -1248,9 +1390,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = t._name.toString()
 
-    //println("-06")
+    println("Trying to access field " + fieldName)
+    
     val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName))
-    (ref, env)
+    val value = OakHeap.extract(ref)
+    (value, env)
   }
 
   def evaluate(t: LiteralNullExpr, env: Environment): (OakValue, Environment) = {
@@ -1336,7 +1480,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           /* Return array value*/
 
-          //println("-07")
+          println("-07")
           av.asInstanceOf[ArrayValue]
         } catch {
           case ex: VariableNotFoundException => {
@@ -1367,7 +1511,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val fieldName = dis._name
 
         /* $this points to an array, hence we perform an assignment to $this[name] */
-        //println("-08")
+        println("-08")
         val thisValue = env.lookup("$this").asInstanceOf[ArrayValue]
 
         val value = evaluate(expr, env)._1
@@ -1410,7 +1554,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val name = at._expr.toString
 
         val array = try {
-          //println("-09")
+          println("-09")
           env.lookup(name).asInstanceOf[ArrayValue]
         } catch {
           case t: Throwable => new ArrayValue()
@@ -1513,6 +1657,54 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     (new ArrayValue(), env)
   }
 
+  def evaluate(cme: ClassMethodExpr, env: Environment): (OakValue, Environment) = {
+    // ClassName::ClassName(<args>) called, but not a 
+    if (cme._className equals cme._methodName.toString()) {
+
+      val classDef = Environment.getClass(cme._className)
+      val constructor = classDef.getConstructor(cme._args.size)
+
+      println("here")
+      val env_ = execute(constructor.statement, env)._2
+      println("there")
+      (null, env_)
+    } else {
+      val classDef = Environment.getClass(cme._className)
+      val method = classDef.getMethods(cme._methodName.toString)
+      val cmEnv = Environment.createFunctionEnvironment(env, cme._className + "::" +  cme._methodName.toString())
+      val args = cme._args
+      
+      //default stuff
+      (method.args zip args).foreach {
+        case (name, expr) => {
+          cmEnv.update(name, evaluate(expr, env)._1 )
+        }
+      }
+      
+      val resEnv = execute(method.statement, cmEnv)._2
+      val returnValue = try {
+        resEnv.lookup("$return")
+      } catch {
+        case e: VariableNotFoundException => null
+      }
+      return (returnValue, env)
+    }
+
+    //println(cme._args.size)
+    //System.exit(2)
+    (null, env)
+  }
+
+  def evaluate(e: ThisMethodExpr, env: Environment): (OakValue, Environment) = {
+    logger.info("Hier")
+    (SymbolValue("", OakHeap.index), env)
+  }
+  
+  def evaluate(e: ToLongExpr, env: Environment): (OakValue, Environment) = {
+    val expr = e._expr
+    (SymbolValue(expr.toString, OakHeap.index), env)
+  }
+  
   override def evaluate(e: Expr, env: Environment): (OakValue, Environment) = e match {
     case e: LiteralExpr => evaluate(e, env)
     case e: LiteralUnicodeExpr => evaluate(e, env)
@@ -1536,6 +1728,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case e: ConstExpr => evaluate(e, env)
     case e: FunEmptyExpr => evaluate(e, env)
     case e: ToArrayExpr => evaluate(e, env)
+    case e: ClassMethodExpr => evaluate(e, env)
+    case e: ThisMethodExpr => evaluate(e, env)
+    case e: ToLongExpr => evaluate(e, env)
     case _ => throw new RuntimeException(e + " (" + e.getClass + ") not implemented.")
 
   }

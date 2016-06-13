@@ -10,4 +10,6 @@ case class ObjectEnv(parent: EnvListener, calls: Stack[String], constraint: Stri
   
   this.update("$this", obj.getFields)
   
+  override def toString(): String = "ObjectEnv("  + ")"
+  
 }

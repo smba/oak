@@ -17,6 +17,8 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
     updates += name
   }
   
+  override def toString() = "BranchEnv()"
+  
   def getUpdates = updates.toSet
   
 }
