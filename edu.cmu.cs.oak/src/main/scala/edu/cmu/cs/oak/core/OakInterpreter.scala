@@ -106,6 +106,13 @@ import com.caucho.quercus.expr.ClassMethodExpr
 import edu.cmu.cs.oak.env.ObjectEnv
 import com.caucho.quercus.expr.ThisMethodExpr
 import com.caucho.quercus.expr.ToLongExpr
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.Choice
+import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.DoubleValue
+import edu.cmu.cs.oak.env.FunctionEnv
+import com.caucho.quercus.statement.FunctionDefStatement
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -279,7 +286,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
             assert(expr.isInstanceOf[ArrayValue])
 
-            println("-01")
             val ref = expr.asInstanceOf[ArrayValue].getRef(index)
             ref
           }
@@ -326,9 +332,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
         //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
         this.path = includePath
-        //logger.info("Including script " + includePath)
+        logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
-        //logger.info("Resuming " + oldURL)
+        logger.info("Resuming " + oldURL)
 
         this.includes.pop()
         ("OK", res)
@@ -347,9 +353,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
         //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
         this.path = includePath
-        //logger.info("Including script " + includePath)
+        logger.info("Including script " + includePath)
         val res = this.execute(program, env)._2
-        //logger.info("Resuming " + oldURL)
+        logger.info("Resuming " + oldURL)
         this.path = oldURL
 
         this.includes.pop()
@@ -413,9 +419,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           val classDef = Environment.getClass(cme._className)
           val constructor = classDef.getConstructor(cme._args.size)
 
-          println("here")
           val env_ = execute(constructor.statement, env)._2
-          println("there")
           (null, env_)
         }
 
@@ -452,7 +456,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
      * or symbolic by executing both branches and merging them
      * together afterwards. */
     var testV = evaluate(test, env)._1
-    println(testV)
     return testV match {
 
       /* If the branch condition evaluates to a concrete value (of type
@@ -478,7 +481,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       /* Execute both branches (-> symbolically) and merge environments */
       case _ => {
 
-        println("symbolisch abgebogen (IF)")
         // TODO use real constraints
         val branches = Environment.fork(env, test.toString)
 
@@ -493,7 +495,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         /* Merge the two environments res1 and res2. */
         val res = res1.asInstanceOf[BranchEnv] join res2.asInstanceOf[BranchEnv]
         res.prependOutput(env.getOutput)
-        println("symbolisch joined (IF)")
         return ("OK", res)
       }
 
@@ -577,10 +578,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     /* Retrieve all parent classes */
     if (interpreted._parentName != null) {
-      val parentClasDef = Environment.getClass(interpreted._parentName)
+      val parentClassDef = Environment.getClass(interpreted._parentName)
 
-      classFieldNames ++= parentClasDef.getFields()
-      parentClasDef.methods.foreach {
+      classFieldNames ++= parentClassDef.getFields()
+      parentClassDef.methods.foreach {
         case (name, fdef) => classMethodDefMap += (name -> fdef)
       }
     } else {
@@ -610,7 +611,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case t: ThisFieldExpr => {
         val fieldName = t._name.toString()
 
-        println("-02")
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
         thisArray.getRef(StringValue(fieldName))
       }
@@ -618,7 +618,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         env.getVariables().get(v.toString).get
       }
       case a: ArrayGetExpr => {
-        println("-03")
         val array = env.lookup(a._expr.toString()).asInstanceOf[ArrayValue]
         val index = evaluate(a._index, env)._1
         array.getRef(index)
@@ -793,7 +792,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def execute(s: ForeachStatement, env: Environment): (String, Environment) = {
     currentLineNr = ASTVisitor.getStatementLineNr(s)
 
-    println("-04")
     val objExpr = s._objExpr
 
     val key = s._key
@@ -835,6 +833,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     return ("OK", res)
   }
 
+  def execute(s: FunctionDefStatement, env: Environment): (String, Environment) = {
+    ("OK", env)
+  }
   override def execute(stmt: Statement, env: Environment): (String, Environment) = stmt match {
 
     case s: BlockStatement => execute(s, env)
@@ -854,6 +855,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     case s: StaticStatement => execute(s, env)
     case s: ForeachStatement => execute(s, env)
     case s: DoStatement => execute(s, env)
+    case s: FunctionDefStatement => execute(s, env)
     case _ => throw new RuntimeException(stmt + " unimplemented.")
   }
 
@@ -934,8 +936,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def evaluate(ae: AbstractBinaryExpr, envi: Environment): (OakValue, Environment) = {
 
-    println("AbstractBinaryExpr abgebogen " + envi.getClass)
-    
     var env = envi
 
     // Retrieve the operands e1, e2 of the binary expression
@@ -950,7 +950,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     return try {
 
       if (e1.isInstanceOf[BinaryAssignExpr]) {
-        println("IF 01")
         env = evaluate(e1, env)._2
 
         if (e2.isInstanceOf[BinaryAssignExpr]) {
@@ -959,13 +958,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         (null, env)
 
       } else {
-        println("ELSE 01")
         val e1v = evaluate(e1, env)._1
         e1v match {
 
           // expecting a boolean expression, where e1 AND e2 are BooleanValues
           case v1: BooleanValue => {
-            println("ELSE 01 CASE 01")
             evaluate(e2, env)._1 match {
 
               // default case: e1 AND e2 are BooleanValues
@@ -1000,48 +997,35 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           // expecting a arithmetic expression, where e1 AND e2 are NumericValues
           case v1: NumericValue => {
-            println("ELSE 01 CASE 02a")
-            println("e2 is " + e2 + " of class " + e2.getClass + " " + env)
             
             val bener = evaluate(e2, env)._1
-            println("bener is " + bener + " of class " + bener.getClass)
-            println("ELSE 01 CASE 02b")
             bener match {
 
               // default case: e1 AND e2 are NumericValues
               case v2: NumericValue => {
-                println("ELSE 01 CASE 02 CASE 01")
                 return (ae match {
                   case e: BinaryAddExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 01")
                     v1 + v2
                   }
                   case e: BinarySubExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 02")
                     v1 - v2
                   }
                   case e: BinaryMulExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 03")
                     v1 * v2
                   }
                   case e: BinaryDivExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 04")
                     v1 / v2
                   }
                   case e: BinaryModExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 05")
                     v1 % v2
                   }
                   case e: BinaryLtExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 06")
                     v1 < v2
                   }
                   case e: BinaryGtExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 07")
                     v1 > v2
                   }
                   case e: BinaryEqExpr => {
-                    println("ELSE 01 CASE 02 CASE 01 CASE 08")
                     BooleanValue(v1 == v2)
                   }
                 }, env)
@@ -1049,52 +1033,42 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
               // exceptional cases: return symbolic value and track unresolved expression
               case v2: SymbolicValue => {
-                println("ELSE 01 CASE 02 CASE 02")
                 (SymbolValue(ae.toString, OakHeap.getIndex), env)
               }
               case v2: BooleanValue => {
-                println("ELSE 01 CASE 02 CASE 03")
                 (SymbolValue(ae.toString, OakHeap.getIndex), env)
               }
               case v2: StringValue => {
-                println("ELSE 01 CASE 02 CASE 04")
                 (SymbolValue(ae.toString, OakHeap.getIndex), env)
               }
 
               case v2: ArrayValue => {
-                println("ELSE 01 CASE 02 CASE 05")
                 throw new UnexpectedTypeException(e2, "Can't compare array with " + v1.getClass + ".")
               }
               case _ => {
-                println("ELSE 01 CASE 02 CASE 06")
                 throw new UnexpectedTypeException(e2, evaluate(e2, env)._1 + "")
               }
             }
           }
 
           case v1: StringValue => {
-            println("ELSE 01 CASE 03")
             return (new SymbolValue(ae.toString, OakHeap.getIndex), env)
           }
 
           case v1: VarExpr => {
-            println("ELSE 01 CASE 04")  
             return (evaluate(v1, env)._1, env) // TODO more cases
           }
 
           // exceptional case: Any binary expression, where e1 is symbolic -> return a symbolic value
           case v1: SymbolicValue => {
-            println("ELSE 01 CASE 05")
             (SymbolValue(ae.toString, OakHeap.getIndex), env)
           }
 
           case v1: BinaryAssignExpr => {
-            println("ELSE 01 CASE 06")
             throw new RuntimeException("FAILURE")
           }
 
           case _ => {
-            println("ELSE 01 CASE 07")
             throw new UnexpectedTypeException(e1, " any type1 " + e1.getClass)
           }
         }
@@ -1150,43 +1124,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     /**
      * Create a new (function) environment with pre-assigned arguments
      */
-    val functionEnv = Environment.createFunctionEnvironment(env, name)
-    (function.getArgs.slice(0, args.length) zip args).foreach {
-      t =>
-        {
-          val functionVal = if (t._1.startsWith("&")) {
-            // is reference arg
-            try {
-              env.getVariables.get(t._2.toString).get
-            } catch {
-              case nsee: NoSuchElementException => {
-                throw new RuntimeException("Only variables can be passed by reference.")
-              }
-            }
-          } else {
-            //println("else " + t._2)
-            evaluate(t._2, env)._1
-          }
-          //println(functionVal)
-          functionEnv.update("$" + t._1.replace("&", ""), functionVal)
-        }
-    }
-    if (function.getArgs.length > args.length) {
-      function.getArgs.slice(args.length, function.getArgs.length).foreach {
-        a =>
-          {
-            val default = try {
-              function.defaults.get(a).get
-            } catch {
-              case nsee: NoSuchElementException => {
-                throw new RuntimeException()
-              }
-            }
-            val defaultValue = evaluate(default, env)._1
-            functionEnv.update("$" + a.replace("&", ""), defaultValue)
-          }
-      }
-    }
+    var functionEnv = Environment.createFunctionEnvironment(env, name)
+    functionEnv = prepareFunctionOrMethod(function, env, functionEnv, args.toList).asInstanceOf[FunctionEnv]
+    
 
     val result = execute(function.getStatement, functionEnv)
     val resultEnv = result._2
@@ -1276,7 +1216,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       } else {
        val p = env.getParents.find(_.isInstanceOf[ObjectEnv]).get.asInstanceOf[ObjectEnv]
        val o = new ObjectEnv(env.getParent(), env.getCalls(), env.getConstraint(), p.obj)
-       println(env.variables.keySet contains "$headers")
        env.variables.keySet.foreach {
          key => o.update(key, env.lookup(key))
        }
@@ -1287,7 +1226,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       val objectValBefore = objEnv.obj
       val envRes = execute(method.statement, objEnv)._2
 
-      println("-05")
       val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
       val returnVal = try {
         if (method.returnsRef()) {
@@ -1310,23 +1248,21 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       /*
      * Create new Environment
      */
-      println(objExpr, methodName)
 
-      println(env, env.getParents())
-      val objEnv = Environment.createObjectEnvironment(env, env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
+      var objEnv = Environment.createObjectEnvironment(env, env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]) // assuming this is sth like $obj
 
       val method = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue].getClassdef().getMethods(methodName)
 
-      assert(method.args.size == args.size)
-      (method.args zip args).foreach {
+      objEnv = prepareFunctionOrMethod(method, env, objEnv, args.toList).asInstanceOf[ObjectEnv]
+      //assert(method.args.size == args.size)
+      /*(method.args zip args).foreach {
         case (name, expr) => objEnv.update("$" + name, evaluate(expr, env)._1)
-      }
+      }*/
 
       val objectValBefore = env.lookup(objExpr.toString()).asInstanceOf[ObjectValue]
 
       val envRes = execute(method.statement, objEnv)._2
 
-      println("-05 " + method.name)
       val arrayVal = envRes.lookup("$this").asInstanceOf[ArrayValue]
       val returnVal = try {
         if (method.returnsRef()) {
@@ -1369,7 +1305,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
       val envConstructed = execute(constructor.statement, objEnv)._2
 
-      println("-05")
       val thisArray = envConstructed.lookup("$this").asInstanceOf[ArrayValue]
       thisArray.getKeys.foreach {
         key => obj.set(key.asInstanceOf[StringValue].value.toString, thisArray.get(key))
@@ -1390,8 +1325,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = t._name.toString()
 
-    println("Trying to access field " + fieldName)
-    
     val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName))
     val value = OakHeap.extract(ref)
     (value, env)
@@ -1480,7 +1413,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           /* Return array value*/
 
-          println("-07")
           av.asInstanceOf[ArrayValue]
         } catch {
           case ex: VariableNotFoundException => {
@@ -1511,7 +1443,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val fieldName = dis._name
 
         /* $this points to an array, hence we perform an assignment to $this[name] */
-        println("-08")
         val thisValue = env.lookup("$this").asInstanceOf[ArrayValue]
 
         val value = evaluate(expr, env)._1
@@ -1554,7 +1485,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val name = at._expr.toString
 
         val array = try {
-          println("-09")
           env.lookup(name).asInstanceOf[ArrayValue]
         } catch {
           case t: Throwable => new ArrayValue()
@@ -1664,9 +1594,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       val classDef = Environment.getClass(cme._className)
       val constructor = classDef.getConstructor(cme._args.size)
 
-      println("here")
       val env_ = execute(constructor.statement, env)._2
-      println("there")
       (null, env_)
     } else {
       val classDef = Environment.getClass(cme._className)
@@ -1696,7 +1624,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: ThisMethodExpr, env: Environment): (OakValue, Environment) = {
-    logger.info("Hier")
     (SymbolValue("", OakHeap.index), env)
   }
   

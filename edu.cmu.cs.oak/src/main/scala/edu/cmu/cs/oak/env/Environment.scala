@@ -91,7 +91,7 @@ abstract class Environment(parent: EnvListener, calls: Stack[String], constraint
       if (!opt.isEmpty) {
         opt.get
       } else {
-        println("Unassigned variable " + name + ".")
+        //println("Unassigned variable " + name + ".")
         throw new VariableNotFoundException("Unassigned variable " + name + ".")
       }
     }
@@ -596,6 +596,11 @@ object Environment {
    * @return corresponding class definition
    */
   def getClass(name: String): ClassDef = {
+    
+    if (name equals "Exception") {
+      // TODO implement built-in class(es)?
+    }
+    
     try {
       classDefs.get(name).get
     } catch {

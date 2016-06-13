@@ -15,6 +15,7 @@ import edu.cmu.cs.oak.value.OakValue
 import java.nio.file.Path
 import java.nio.file.Paths
 import scala.collection.mutable.Stack
+import edu.cmu.cs.oak.env.FunctionEnv
 
 trait Interpreter {
   
@@ -58,11 +59,55 @@ trait Interpreter {
     constants += (name -> value)
   }
   
+  /**
+   * TODO 
+   */
+  def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Expr]): Environment = {
+    (function.getArgs.slice(0, args.length) zip args).foreach {
+      t =>
+        {
+          val functionVal = if (t._1.startsWith("&")) {
+            // is reference arg
+            try {
+              env.getVariables.get(t._2.toString).get
+            } catch {
+              case nsee: NoSuchElementException => {
+                throw new RuntimeException("Only variables can be passed by reference.")
+              }
+            }
+          } else {
+            //println("else " + t._2)
+            evaluate(t._2, env)._1
+          }
+          //println(functionVal)
+          functionEnv.update("$" + t._1.replace("&", ""), functionVal)
+        }
+    }
+    if (function.getArgs.length > args.length) {
+      function.getArgs.slice(args.length, function.getArgs.length).foreach {
+        a =>
+          {
+            val default = try {
+              function.defaults.get(a).get
+            } catch {
+              case nsee: NoSuchElementException => {
+                throw new RuntimeException()
+              }
+            }
+            val defaultValue = evaluate(default, env)._1
+            functionEnv.update("$" + a.replace("&", ""), defaultValue)
+          }
+      }
+    }
+    functionEnv
+  }
+  
 }
-/*
+
 object Interpreter {
   
   
+  /*
   /**
    * Utility method to access private or protected fields of compiled
    * sources.
@@ -119,5 +164,5 @@ object Interpreter {
     return fs
   }
   * 
-  
-}*/
+  */
+}
