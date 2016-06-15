@@ -1,6 +1,6 @@
 package edu.cmu.cs.oak.value
 
-case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef]) {
+case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef], parent: String) {
   
   /**
    * Constructors

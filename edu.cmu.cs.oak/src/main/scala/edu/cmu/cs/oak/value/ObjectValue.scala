@@ -1,6 +1,7 @@
 package edu.cmu.cs.oak.value
 
 import scala.annotation.elidable.ASSERTION
+import edu.cmu.cs.oak.env.Environment
 
 
 case class ObjectValue(name: String, stereotype: ClassDef) extends OakValue {
@@ -19,7 +20,8 @@ case class ObjectValue(name: String, stereotype: ClassDef) extends OakValue {
   }
   
   def set(fieldKey: String, value: OakValue): Unit = {
-    assert(stereotype.getFields.contains(fieldKey))
+    
+    //assert(stereotype.getFields.contains(fieldKey), fieldKey)
     fields.set(StringValue(fieldKey), value)
   }
   
