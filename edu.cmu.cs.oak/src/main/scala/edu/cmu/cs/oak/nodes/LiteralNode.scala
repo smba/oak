@@ -4,10 +4,7 @@ import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
 import edu.cmu.cs.oak.value.OakValue
 
 case class LiteralNode(lv: OakValue) extends DNode {
-  override def traverse(listener: OutputGraphListener) {
-    
-  }
-  
+
   def getChildren(): Seq[DNode] = null
 
   def toXml: scala.xml.Elem = {

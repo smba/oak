@@ -17,11 +17,11 @@ import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
 import edu.cmu.cs.oak.value.OakValueRepeatSequence
 
 /**
- * Model for (symbolic) output of a symbolically executed PHP script.
+ * Model for  output of a symbolically executed PHP program.
  *
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
-trait DNode {
+abstract class DNode {
 
   /**
    * Sequence of all child nodes of the current node.
@@ -36,8 +36,6 @@ trait DNode {
    * @return scala.xml.Elem XML node
    */
   def toXml(): scala.xml.Elem
-  
-  def traverse(listener: OutputGraphListener) 
 
   /**
    * Returns a sequence of output strings mixed with #ifdef annotations
@@ -52,12 +50,13 @@ trait DNode {
    * @return this.equals(that)?
    */
   def compare(that: DNode): Boolean = {
-    lazy val ifd1 = this.ifdefy()
-    lazy val ifd2 = that.ifdefy()
     
-    def chop(s: String): String = s.split('\n').map(_.trim.filter(_ >= ' ')).mkString.replace(" ", "")
-    
-    println(ifd1.size + " und " + ifd2.size)
+    def chop(s: String): String = {
+      s.split('\n').map(_.trim.filter(_ >= ' ')).mkString.replace(" ", "")
+    }
+
+    val ifd1 = this.ifdefy()
+    val ifd2 = that.ifdefy()
     
     if (ifd1.size == ifd2.size) {
       (ifd1 zip ifd2).map { 
@@ -74,53 +73,6 @@ trait DNode {
  * Utility methods in order to create a DModel from given output.
  */
 object DNode {
-
-  /**
-   * Creates a DModel tree from output provided by the OakInterpreter.
-   *
-   * TODO The OakInterpreter should generate the output directly.
-   *
-   * @param v OakValue to create a DModel tree of. This is typically
-   * a OakValueSequence.
-   * @return DNode root of the DModel tree
-   */
-  @deprecated def createDNode(v: OakValue): DNode = v match {
-    case c: Choice => {
-      SelectNode(c.getConstraint(), createDNode(c.v1), createDNode(c.v2))
-    }
-    case s: SymbolValue => {
-      SymbolNode(s)
-    }
-    case o: OakValueSequence => {
-      val nodes = o.getSequence.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
-      ConcatNode(nodes)
-    }
-    case o: OakValueRepeatSequence => {
-      println(123)
-      val nodes = o.getSequence.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
-      RepeatNode(ConcatNode(nodes))
-    }
-    case s: StringValue => {
-      assert(s.loc._1 != null) //FIXME
-      LiteralNode(s)
-    }
-    case _ => {
-      LiteralNode(v)
-    }
-  }
-
-  /**
-   * Creates a DModel tree from output provided by the OakInterpreter.
-   *
-   * TODO The OakInterpreter should generate the output directly.
-   *
-   * @param vs OakValues to create a DModel tree of.
-   * @return DNode root of the DModel tree
-   */
-  @deprecated def createDNode(vs: Seq[OakValue]): DNode = {
-    val nodes = vs.map { v => createDNode(v) }.asInstanceOf[List[DNode]]
-    ConcatNode(nodes)
-  }
 
   /**
    * Extracts all string literals as StringValues from
@@ -155,11 +107,4 @@ object DNode {
     // apply utility method
     return extractStringLiterals(node, List[StringValue]()).toSet
   }
-  
-  def createOutputGraph(node: DNode): scala.xml.Elem = {
-    val listener = new OutputGraphListener("Output Graph")
-    node.traverse(listener)
-    listener.toXml
-  }
-
 }
