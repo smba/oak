@@ -6,10 +6,8 @@ import scala.collection.immutable.Stack
 /**
  * This environment is used for method execution.
  */
-case class ObjectEnv(parent: EnvListener, calls: Stack[String], constraint: String, obj: ObjectValue) extends Environment(parent: EnvListener, calls: Stack[String], constraint: String) {
+@deprecated case class ObjectEnv(parent: EnvListener, calls: Stack[String], constraint: String, obj: ObjectValue) extends Environment(parent: EnvListener, calls: Stack[String], constraint: String) {
   
+  // this als ze
   this.update("$this", obj.getFields)
-  
-  override def toString(): String = "ObjectEnv("  + ")"
-  
 }
