@@ -2,7 +2,7 @@ name := "symex"
 
 version := "1.0"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.6"
 
 libraryDependencies += "junit" % "junit" % "4.12"
 libraryDependencies += "org.scalacheck" % "scalacheck_2.10" % "1.13.1"
