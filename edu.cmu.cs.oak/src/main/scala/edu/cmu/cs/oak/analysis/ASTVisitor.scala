@@ -716,8 +716,7 @@ class ASTVisitor(path: Path) {
      */
     case e: LiteralStringExpr => {
 
-      val string = StringValue(e._value.toString)
-      string.setLocation((path.toString diff ASTVisitor.rootPath.toString, loc))
+      val string = StringValue(e._value.toString, e._location)
       stringLiterals += string
     }
 
@@ -725,8 +724,7 @@ class ASTVisitor(path: Path) {
      * Case for AST node class LiteralUnicodeExpr.
      */
     case e: LiteralUnicodeExpr => {
-      val string = StringValue(e._value.toString)
-      string.setLocation((path.toString diff ASTVisitor.rootPath.toString, loc))
+      val string = StringValue(e._value.toString, e._location)
       stringLiterals += string
     }
 

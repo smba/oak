@@ -25,7 +25,7 @@ class DirName extends InterpreterPlugin {
     val dirname = zu.substring(0, zu.lastIndexOf('/'))
 
     //FIXME argument"
-    return StringValue(dirname)
+    return StringValue(dirname, args(0)._location)
   }
 
 }

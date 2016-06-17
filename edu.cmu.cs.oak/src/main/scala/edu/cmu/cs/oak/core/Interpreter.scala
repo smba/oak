@@ -59,7 +59,7 @@ trait Interpreter {
   }
 
   /**
-   * TODO
+   * TODO Einbinden in das generieren eines functionEnv!
    */
   def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Expr]): Environment = {
     (function.getArgs.slice(0, args.length) zip args).foreach {
@@ -98,35 +98,5 @@ trait Interpreter {
     functionEnv
   }
 
-    /**
-   * Creates a new function environment that is used to
-   * execute a 
-   * 
-   *  - function call or 
-   *  - method call
-   *  
-   * The function call is documented via the 
-   * environment's call stack.
-   *
-   * @param dis Parent environment to bounce output to
-   * @param f Name of the function
-   * @return FunctionEnv
-   */
-  def createFunctionEnvironment(dis: Environment, f: String): Environment = {
-    return new Environment(dis, dis.getCalls push f, dis.getConstraint)
-  }
-
-  /**
-   * Creates a new object environment that is used to
-   * execute a function call.
-   *
-   * @param dis Parent environment to bounce output to
-   * @param f Name of the function
-   * @return ObjectEnv
-   */
-  def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
-    val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
-    env.update("$this", obj)
-    env
-  }
+   
 }

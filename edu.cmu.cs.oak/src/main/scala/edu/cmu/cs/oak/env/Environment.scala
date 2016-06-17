@@ -1,7 +1,6 @@
 package edu.cmu.cs.oak.env
 
 import scala.collection.immutable.Stack
-import scala.collection.mutable.HashSet
 import scala.collection.mutable.ListBuffer
 
 import org.slf4j.LoggerFactory
@@ -16,7 +15,6 @@ import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.nodes.SelectNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.ClassDef
@@ -26,7 +24,9 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.nodes.SelectNode
 
 /**
  * Programs state and program state operations.
@@ -35,23 +35,35 @@ import edu.cmu.cs.oak.value.SymbolValue
  */
 class Environment(parent: EnvListener, calls: Stack[String], constraint: String) extends EnvListener {
 
-  /** 
+  /**
+   * HEAP of the environment. This heap manages the mapping from references to 
+   * actual values.
+   */
+  val heap = new OakHeap()
+
+  /**
    * Map of variable identifiers and variable references.
    * In various contexts, variables can refer to the same value.
    * For variable reference handling {@see {@link #edu.cmu.cs.oak.env.OakHeap}}.
    */
   var variables = Map[String, OakVariable]()
-  
+
   /**
    * Map of global variable identifiers and variable references.
    */
   var globalVariables = Set[String]()
 
   /**
+   * Map of fuńction names and function definitions
+   */
+  var funcs = Map[String, FunctionDef]()
+  /**
    * Map of class definitions. All classes defined during the program execution
    * are stored here.
    */
   var classDefs = Map[String, ClassDef]()
+  
+  var loopModeEnabled = false;
 
   /**
    * Output (D Model) of the environment.
@@ -59,7 +71,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
   val output = ConcatNode(List())
 
   val logger = LoggerFactory.getLogger(classOf[Environment])
-  
+
   /**
    * Updates a variable in the environment, i.e. it stores a variable
    * assignment, such as '$i = 8'.
@@ -74,10 +86,10 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       }
       case _ => {
         if (variables.contains(name)) {
-          OakHeap.insert(variables.get(name).get, value)
+          heap.insert(variables.get(name).get, value)
         } else {
-          val variable = new OakVariable(name + OakHeap.getIndex())
-          OakHeap.insert(variable, value)
+          val variable = new OakVariable(name + OakHeap.getIndex(), name)
+          heap.insert(variable, value)
           variables += (name -> variable)
         }
       }
@@ -100,7 +112,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       }
     }
     val ret = try {
-      OakHeap.extract(variable)
+      heap.extract(variable)
     } catch {
       case e: Exception => throw new RuntimeException(e)
     }
@@ -117,7 +129,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
   def addOutput(value: OakValue) {
     output.addOutput(DNode.createDNode(value))
   }
-  
+
   /**
    * Add output to environment.
    * @param DNode Value to add to output
@@ -155,16 +167,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @param value Function definition to add
    */
   def addFunction(value: FunctionDef) {
-    OakHeap.defineFunction(value)
-  }
-
-  /**
-   * Looks up a function definition in the environment.
-   * @param name Name of the function
-   * @return corresponding function definition
-   */
-  def getFunction(name: String): FunctionDef = {
-    OakHeap.getFunction(name)
+    defineFunction(value)
   }
 
   /**
@@ -184,7 +187,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @param value Sequence of output values to add
    */
   def receiveOutput(node: DNode) = {
-     addOutput(node)
+    addOutput(node)
   }
 
   /**
@@ -192,14 +195,6 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @return path condition
    */
   def getConstraint(): String = constraint
-
-  /**
-   * Prepends the passed output to the environments output.
-   * @param pre List of values to add
-   */
-  def prependOutput(pre: DNode) {
-    output.prepend(pre)
-  }
 
   /**
    * Returns the environments map of variable names to references
@@ -212,8 +207,8 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     assert(arrayValueO.isInstanceOf[ArrayValue])
     val arrayValue = arrayValueO.asInstanceOf[ArrayValue]
 
-    OakHeap.unsetVariable(arrayValue.getRef(index))
-    arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"))
+    heap.unsetVariable(arrayValue.getRef(index))
+    arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"), this)
   }
 
   def ifdefy(node: OakValue): List[String] = {
@@ -236,15 +231,13 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     res
   }
 
-  
-
   def unset(name: String) {
-    OakHeap.unsetVariable(getRef(name))
+    heap.unsetVariable(getRef(name))
     variables -= name
   }
 
   def ifdefy(): List[String] = output.ifdefy()
-  
+
   def getParents(): List[Environment] = {
     val parents = new ListBuffer[Environment]
     var cParent = this.parent
@@ -254,8 +247,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     }
     parents.toList
   }
-  
-    
+
   def addToGlobal(name: String, value: OakValue = NullValue("AbstractEnv::addToGlobal")) {
     this.globalVariables += name
   }
@@ -274,17 +266,17 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @return corresponding class definition
    */
   def getClass(name: String): ClassDef = {
-    
+
     if (name equals "Exception") {
       // TODO implement built-in class(es)?
     }
     try {
       classDefs.get(name).get
     } catch {
-      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
+      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined." + this)
     }
   }
-  
+
   /**
    * Defines a function. The defined function will be accessible during the
    * program execution.
@@ -311,10 +303,43 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     // Add function to the global environment
     return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)
   }
+
+  def weaveDelta(joinResult: Delta) {
+
+    // 1) Add the variational output to the environments output
+    if (!joinResult.joinedOutput.isEmpty()) {
+      this.addOutput(joinResult.joinedOutput)
+    }
+
+    // 2) Update the references on the environment's heap
+    joinResult.joinedHeap.foreach {
+      case (reference, value) => {
+        this.heap.insert(reference, value)
+      }
+    }
+    
+    // 3) Update the variables that have changed during the execution of the branches
+    joinResult.joinedVariables.foreach {
+      case (name, value) => this.update(name, value)
+    }
+  }
+
+  def defineFunction(f: FunctionDef): Unit = {
+    funcs += (f.getName -> f)
+  }
+
+  def getFunction(name: String): FunctionDef = {
+    val opt = funcs.get(name)
+    if (!opt.isEmpty) {
+      return opt.get
+    } else {
+      throw new RuntimeException("Function " + name + " is undefined.")
+    }
+  }
 }
 
 /**
- * Static factory methods for environments using different 
+ * Static factory methods for environments using different
  * configurations.
  */
 object Environment {
@@ -326,39 +351,109 @@ object Environment {
    * @param newConstraint Path constrained to add to the branches
    * @param Tuple of two branch environments
    */
-  def fork(parent: Environment, newConstraint: String): (BranchEnv, BranchEnv) = {
+  private def simpleFork(parent: Environment, newConstraint: String): (BranchEnv, BranchEnv) = {
     val b1 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && " + newConstraint)
     val b2 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
 
     /* Add variables of parent environment to the branch environments. */
-    parent.getVariables.keySet.foreach {
-      k =>
+    parent.variables.foreach {
+      case (name, reference) =>
         {
-          b1.update(k, parent.lookup(k))
-          b2.update(k, parent.lookup(k))
+          b1.setRef(name, reference)
+          b2.setRef(name, reference)
+        }
+    }
+    parent.heap.varval.foreach {
+      case (reference, value) => {
+        b1.heap.insert(reference, value)
+        b2.heap.insert(reference, value)
+      }
+    }
+    parent.funcs.foreach {
+      f =>
+        {
+          b1.defineFunction(f._2)
+          b2.defineFunction(f._2)
+        }
+    }
+    parent.classDefs.foreach {
+      cd =>
+        {
+          b1.addClass(cd._2)
+          b2.addClass(cd._2)
         }
     }
     return (b1, b2)
   }
 
+  def fork(environment: Environment, conditions: List[String]): List[BranchEnv] = {
+    val forked = Environment.simpleFork(environment, conditions(0))
+    if (conditions.size == 1) {
+      List(forked._1, forked._2)
+    } else {
+      forked._1 :: fork(forked._2, conditions.tail)
+    }
+  }
+  
   /**
+   * Creates a new function environment that is used to
+   * execute a 
+   * 
+   *  - function call or 
+   *  - method call
+   *  
+   * The function call is documented via the 
+   * environment's call stack.
    *
+   * @param dis Parent environment to bounce output to
+   * @param f Name of the function
+   * @return FunctionEnv
    */
-  def splitN(parent: Environment, expr: Expr, cases: List[Expr]): List[BranchEnv] = {
+  def createFunctionEnvironment(dis: Environment, f: String): Environment = {
+    val env = new Environment(dis, dis.getCalls push f, dis.getConstraint)
+    dis.funcs.foreach {
+      f => env.defineFunction(f._2)
+    }
+    dis.classDefs.foreach {
+      cd => env.addClass(cd._2)
+    }
+    env
+  }
 
-    var envs = List[BranchEnv]()
-    cases.foreach {
-      c => envs ++= List(new BranchEnv(parent, parent.getCalls, parent.getConstraint + " && (" + expr + " == " + c + ")"))
+  /**
+   * Creates a new object environment that is used to
+   * execute a function call.
+   *
+   * @param dis Parent environment to bounce output to
+   * @param f Name of the function
+   * @return ObjectEnv
+   */
+  def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
+    val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
+    env.update("$this", obj)
+    dis.funcs.foreach {
+      f => env.defineFunction(f._2)
     }
-    envs.toList.foreach {
-      e =>
-        parent.getVariables.keySet.foreach {
-          k =>
-            {
-              e.update(k, parent.lookup(k))
-            }
-        }
+    dis.classDefs.foreach {
+      cd => env.addClass(cd._2)
     }
-    return envs
+    env
+  }
+  
+  def createLoopEnvironment(dis: Environment): LoopEnv = {
+    val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
+    dis.funcs.foreach {
+      f => env.defineFunction(f._2)
+    }
+    dis.classDefs.foreach {
+      cd => env.addClass(cd._2)
+    }
+    dis.variables.foreach {
+      case (name, reference) => env.setRef(name, reference)
+    }
+    dis.heap.varval.foreach {
+      case (reference, value) => env.heap.insert(reference, value)
+    }
+    env
   }
 }

@@ -33,9 +33,8 @@ class Print extends InterpreterPlugin {
         {
           val value = interpreter.evaluate(a, env)._1
           val toAdd = value match {
-            case s: StringValue => {
-              s.setLocation((interpreter.path.toString diff interpreter.rootPath.toString, loc._2))
-              s
+            case sv: StringValue => {
+              sv
             }
             case _ => value
           }
