@@ -56,9 +56,7 @@
 		  break;
 
 	default:
-		echo "hier";
 		  die("ValidateLogin.php: Unable to determine the type of user.  Please verify.");
-
 		  break;
   }
  }

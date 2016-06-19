@@ -9,13 +9,11 @@ case class ConcatNode(var values: List[DNode]) extends DNode {
   def getChildren(): Seq[DNode] = values.toSeq
   
   def addOutput(outputNode: DNode) {
-    this.values ::= outputNode
+    if (!outputNode.isEmpty()) {
+      this.values ::= outputNode
+    }
   }
 
-  def prepend(outputNode: DNode) {
-    this.values = outputNode :: values
-  }
-  
   override def toXml = {
     <Concat>
       {
@@ -26,11 +24,13 @@ case class ConcatNode(var values: List[DNode]) extends DNode {
 
   override def ifdefy(): List[String] = {
     var seqence = List[String]()
-    values.foreach {
+    values.reverse.foreach {
       v => seqence ++= v.ifdefy()
     }
     seqence
   }
+  
+  override def toString() = values.reverse.mkString("")
   
   override def isEmpty() = (values.size == 0)
 }
