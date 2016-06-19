@@ -13,6 +13,7 @@ import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.StringValue
 import java.net.URL
 import java.nio.file.Path
+import edu.cmu.cs.oak.nodes.LiteralNode
 
 /**
  * 
@@ -38,7 +39,7 @@ class Print extends InterpreterPlugin {
             }
             case _ => value
           }
-          env.addOutput(toAdd)
+          env.addOutput( LiteralNode(toAdd) )
         }
     }
 

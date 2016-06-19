@@ -88,7 +88,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
         if (variables.contains(name)) {
           heap.insert(variables.get(name).get, value)
         } else {
-          val variable = new OakVariable(name + OakHeap.getIndex(), name)
+          val variable = OakVariable(name + OakHeap.getIndex(), name)
           heap.insert(variable, value)
           variables += (name -> variable)
         }
@@ -120,14 +120,6 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       throw new RuntimeException(name)
     }
     ret
-  }
-
-  /**
-   * Add output to environment.
-   * @param value Value to add to output
-   */
-  def addOutput(value: OakValue) {
-    output.addOutput(DNode.createDNode(value))
   }
 
   /**

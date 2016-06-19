@@ -1,38 +1,11 @@
 package edu.cmu.cs.oak
 
-import java.net.URL
-
-import org.scalatest.FunSpec
-import org.scalatest.junit.JUnitRunner
-
-import edu.cmu.cs.oak.analysis.ASTVisitor
-import edu.cmu.cs.oak.core.OakEngine
-import edu.cmu.cs.oak.core.OakInterpreter
-import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.nodes.ConcatNode
-import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.value.DoubleValue
-import org.junit.runner.RunWith
 import scala.xml.PrettyPrinter
+
+import org.junit.runner.RunWith
+import org.scalatest.FunSpec
 import org.scalatest.FunSuite
-import edu.cmu.cs.oak.env.SimpleEnv
-import scala.collection.immutable.Stack
-import java.nio.file.Path
-import java.nio.file.Paths
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.env.heap.OakHeap
+import org.scalatest.junit.JUnitRunner
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -43,6 +16,7 @@ import edu.cmu.cs.oak.env.heap.OakHeap
 @RunWith(classOf[JUnitRunner]) //optional
 object OakUnitTest extends FunSuite {
 
+  /*
   // engine and interpreter instance for testing
   val engine = new OakEngine()
   val interpreter = new OakInterpreter()
@@ -149,5 +123,5 @@ object OakUnitTest extends FunSuite {
   test("Schoolmate") {
     assert(RegressionTest.test(url("schoolmate/index.php"))._1)
   }
-
+	*/
 }

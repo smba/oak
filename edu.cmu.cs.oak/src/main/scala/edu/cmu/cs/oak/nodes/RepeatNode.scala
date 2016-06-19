@@ -19,4 +19,6 @@ case class RepeatNode(node: DNode) extends DNode {
     l
   }
   
+  override def isEmpty() = node.isEmpty()
+  
 }

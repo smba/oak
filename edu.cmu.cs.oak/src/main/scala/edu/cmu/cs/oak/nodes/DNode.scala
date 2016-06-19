@@ -67,6 +67,7 @@ abstract class DNode {
     }
   }
 
+  def isEmpty(): Boolean
 }
 
 /**

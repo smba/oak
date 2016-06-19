@@ -1,5 +1,7 @@
 package edu.cmu.cs.oak.value
 
+import edu.cmu.cs.oak.env.Environment
+
 case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef], parent: String) {
   
   /**
@@ -19,10 +21,10 @@ case class ClassDef(name: String, fields: List[String], methods: Map[String, Fun
     }
   }
   
-  def getDefaultObject(): ObjectValue = {
+  def getDefaultObject(env: Environment): ObjectValue = {
     val obj = new ObjectValue("default", this)
     fields.foreach {
-      field =>  obj.set(field, NullValue(""))
+      field =>  obj.set(field, NullValue(""), env)
     }
     obj
   }

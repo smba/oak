@@ -51,9 +51,9 @@ object BranchEnv {
    */
   private def joinOutput(envs: List[BranchEnv], constraints: List[String]): DNode = {
     if ((envs.size == 2) && (constraints.size == 1)) {
-      SelectNode(constraints(0), envs(0).output, envs(1).output)
+      SelectNode(constraints.head, envs.head.output, envs(1).output)
     } else {
-      SelectNode(constraints(0), envs(0).output, joinOutput(envs.tail, constraints.tail))
+      SelectNode(constraints.head, envs.head.output, joinOutput(envs.tail, constraints.tail))
     }
   }
 

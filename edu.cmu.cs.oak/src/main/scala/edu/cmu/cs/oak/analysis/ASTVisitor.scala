@@ -1,27 +1,24 @@
 package edu.cmu.cs.oak.analysis
 
-import java.net.URL
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.LinkedHashMap
 
-import scala.collection.mutable.HashSet
 import scala.collection.JavaConversions._
+import scala.collection.mutable.HashSet
 
 import org.slf4j.LoggerFactory
 
+import com.caucho.quercus.Location
 import com.caucho.quercus.expr._
+import com.caucho.quercus.function.AbstractFunction
+import com.caucho.quercus.program.Function
+import com.caucho.quercus.program.InterpretedClassDef
+import com.caucho.quercus.program.QuercusProgram
 import com.caucho.quercus.statement._
 
-import edu.cmu.cs.oak.core.Interpreter
 import edu.cmu.cs.oak.core.OakEngine
 import edu.cmu.cs.oak.value.StringValue
-import com.caucho.quercus.Location
-import scala.collection.mutable.HashMap
-import com.caucho.quercus.program.QuercusProgram
-import com.caucho.quercus.program.InterpretedClassDef
-import java.util.LinkedHashMap
-import com.caucho.quercus.function.AbstractFunction
-import java.nio.file.Path
-import java.nio.file.Paths
-import com.caucho.quercus.program.Function
 
 /**
  * Traverses the PHP AST provided by Quercus and retrieves all
@@ -716,7 +713,7 @@ class ASTVisitor(path: Path) {
      */
     case e: LiteralStringExpr => {
 
-      val string = StringValue(e._value.toString, e._location)
+      val string = StringValue(e._value.toString(), e._location)
       stringLiterals += string
     }
 
@@ -724,7 +721,7 @@ class ASTVisitor(path: Path) {
      * Case for AST node class LiteralUnicodeExpr.
      */
     case e: LiteralUnicodeExpr => {
-      val string = StringValue(e._value.toString, e._location)
+      val string = StringValue(e._value.toString(), e._location)
       stringLiterals += string
     }
 

@@ -47,8 +47,8 @@ import java.util.ArrayList;
  * Represents sequence of statements.
  */
 public class TryStatement extends Statement {
-  protected final Statement _block;
-  protected final ArrayList<Catch> _catchList = new ArrayList<Catch>();
+	public final Statement _block;
+	public final ArrayList<Catch> _catchList = new ArrayList<Catch>();
 
   public TryStatement(Location location, Statement block)
   {

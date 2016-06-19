@@ -115,6 +115,7 @@ import com.caucho.quercus.expr.BinaryGtExpr
 import com.caucho.quercus.expr.BinaryEqExpr
 import com.caucho.quercus.expr.BinaryAndExpr
 import com.caucho.quercus.expr.BinaryMulExpr
+import edu.cmu.cs.oak.nodes.LiteralNode
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -211,7 +212,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case _ => value
     }
 
-    env.addOutput(valueX)
+    env.addOutput( LiteralNode(valueX) )
 
     return ("OK", env)
   }
@@ -516,9 +517,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
    */
   def execute(s: ClassDefStatement, env: Environment): (String, Environment) = {
 
-    currentLineNr = ASTVisitor.getStatementLineNr(s)
+    //currentLineNr = ASTVisitor.getStatementLineNr(s)
 
     val interpreted = s._cl
+    val classDefCasted = interpreted.asInstanceOf[com.caucho.quercus.program.ClassDef]
 
     // TODO class declaration 
     val name = interpreted.getName
@@ -550,8 +552,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     var classFieldNames = classFieldNamez.map { name => name.toString() }
 
     /* Retrieve all parent classes */
-    if ((interpreted._parentName != null) && (!(interpreted._parentName equals "WP_HTTP_Streams"))) {
-      val parentClassDef = env.getClass(interpreted._parentName)
+    if ((classDefCasted._parentName != null) && (!(classDefCasted._parentName equals "WP_HTTP_Streams"))) {
+      val parentClassDef = env.getClass(classDefCasted._parentName)
 
       classFieldNames ++= parentClassDef.getFields()
       parentClassDef.methods.foreach {
@@ -1582,7 +1584,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val obj = evaluate(e._objExpr, env)._1
 
     val value = if (obj.isInstanceOf[ObjectValue]) {
-      obj.asInstanceOf[ObjectValue].get(e._name.toString, env)
+      obj.asInstanceOf[ObjectValue].get(e._name.toString(), env)
     } else {
       SymbolValue(e.toString, OakHeap.index)
     }

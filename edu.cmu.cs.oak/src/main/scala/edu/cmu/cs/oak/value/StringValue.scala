@@ -5,7 +5,7 @@ import edu.cmu.cs.oak.core.Interpreter
 import java.net.URL
 import java.nio.file.Path
 
-case class StringValue(value:String) extends OakValue {
+case class StringValue(value:String, location: Location) extends OakValue {
   
   var loc: (String, Int) = (null, 0)
   

@@ -41,7 +41,7 @@ import com.caucho.util.L10N;
 public class FunctionDefStatement extends Statement {
   private final static L10N L = new L10N(FunctionDefStatement.class);
 
-  protected Function _fun;
+  public Function _fun;
 
   public FunctionDefStatement(Location location, Function fun)
   {

@@ -51,19 +51,19 @@ import java.util.Set;
  * Represents a Quercus class definition
  */
 abstract public class ClassDef implements InstanceInitializer {
-  private final static L10N L = new L10N(ClassDef.class);
+	public final static L10N L = new L10N(ClassDef.class);
 
-  private final Location _location;
-  private final String _name;
-  private final String _parentName;
+  public final Location _location;
+  public final String _name;
+  public final String _parentName;
 
-  private String []_ifaceList;
-  private String []_traitList;
+  public String []_ifaceList;
+  public String []_traitList;
 
-  private TraitInsteadofMap _traitInsteadofMap;
-  private TraitAliasMap _traitAliasMap;
+  public TraitInsteadofMap _traitInsteadofMap;
+  public TraitAliasMap _traitAliasMap;
 
-  protected static final String[] NULL_STRING_ARRAY = new String[0];
+  public static final String[] NULL_STRING_ARRAY = new String[0];
 
   protected ClassDef(Location location,
                      String name,

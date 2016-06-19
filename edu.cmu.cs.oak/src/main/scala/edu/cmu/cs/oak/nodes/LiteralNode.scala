@@ -14,4 +14,6 @@ case class LiteralNode(lv: OakValue) extends DNode {
   override def ifdefy(): List[String] = List(lv.toString)
 
   override def toString(): String = lv+""
+  
+  override def isEmpty() = (lv == null)
 }

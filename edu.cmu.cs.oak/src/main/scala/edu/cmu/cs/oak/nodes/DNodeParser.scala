@@ -16,6 +16,7 @@ import edu.cmu.cs.oak.value.NullValue
  */
 object DNodeParser {
   
+  /*
   var rootPath: String = null
   
   def init(rootPath: String) {
@@ -80,4 +81,6 @@ object DNodeParser {
     val expression = (node \ "expression").text
     return SymbolNode(SymbolValue(expression, id))
   }
+  * */
+  
 }

@@ -31,4 +31,6 @@ case class ConcatNode(var values: List[DNode]) extends DNode {
     }
     seqence
   }
+  
+  override def isEmpty() = (values.size == 0)
 }

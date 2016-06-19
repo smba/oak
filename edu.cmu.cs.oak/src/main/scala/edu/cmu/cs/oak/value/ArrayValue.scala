@@ -2,26 +2,27 @@ package edu.cmu.cs.oak.value
 
 import scala.collection.mutable.HashMap
 import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.Environment
 
 class ArrayValue extends OakValue {
 
   val array = HashMap[OakValue, OakVariable]()
 
-  def set(index: OakValue, value: OakValue) {
+  def set(index: OakValue, value: OakValue, env: Environment) {
     val ref = if (array.keySet.contains(index)) {
       this.getRef(index)
     } else {
-      new OakVariable("arrayVal" + OakHeap.getIndex)
+      OakVariable("arrayVal" + OakHeap.getIndex, "") //FIXME find variable name
     }
-    OakHeap.insert(ref, value)
+    env.heap.insert(ref, value)
     array.put(index, ref)
   }
 
   def getSize(): Int = array.size
 
-  def get(index: OakValue): OakValue = {
+  def get(index: OakValue, env: Environment): OakValue = {
     if (array.keySet.contains(index)) {
-      return OakHeap.extract(array.get(index).get)
+      return env.heap.extract(array.get(index).get)
     } else {
       println(array.keySet)
       throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")
@@ -42,15 +43,7 @@ class ArrayValue extends OakValue {
 
   override def toXml = {
     <array>
-			{for (key <- array.keySet) yield 
-			  <arrayElement>
-			    <key>
-						{key.toXml}
-					</key>
-					<value>
-						{OakHeap.extract(array.get(key).get).toXml}
-					</value>
-				</arrayElement>}
+
 		</array>
   }
 }

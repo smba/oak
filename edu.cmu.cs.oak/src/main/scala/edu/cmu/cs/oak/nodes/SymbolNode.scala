@@ -13,4 +13,5 @@ case class SymbolNode(sv: SymbolValue) extends DNode {
   
   override def ifdefy(): List[String] = List(sv.toString())
 
+  override def isEmpty() = (sv == null)
 }

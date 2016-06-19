@@ -27,6 +27,7 @@ import java.io.File
  */
 object RegressionTest {
 
+  /*
   lazy val engine = new OakEngine
   lazy val interpreter = new OakInterpreter
 
@@ -60,5 +61,5 @@ object RegressionTest {
 
     return (matches, precision)
   }
-
+	*/
 }

@@ -23,4 +23,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     sequence ++= List("#endif")
     sequence
   }
+  
+  override def isEmpty() = (v1.isEmpty() && v2.isEmpty())
+  
 }
