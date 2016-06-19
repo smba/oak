@@ -42,15 +42,15 @@ import com.caucho.util.L10N;
  * A Foo::bar(...) method call expression.
  */
 public class ClassMethodExpr extends AbstractMethodExpr {
-  private static final L10N L = new L10N(ClassMethodExpr.class);
+  public static final L10N L = new L10N(ClassMethodExpr.class);
 
-  protected final String _className;
-  protected final StringValue _methodName;
+  public final String _className;
+  public final StringValue _methodName;
 
-  protected final int _hash;
-  protected final Expr []_args;
+  public final int _hash;
+  public final Expr []_args;
 
-  protected boolean _isMethod;
+  public boolean _isMethod;
 
   public ClassMethodExpr(Location location, String className,
                          StringValue methodName,
