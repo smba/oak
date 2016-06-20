@@ -21,4 +21,5 @@ case class RepeatNode(node: DNode) extends DNode {
   
   override def isEmpty() = node.isEmpty()
   
+  override def toString() = "ρ(" + node + ")"
 }

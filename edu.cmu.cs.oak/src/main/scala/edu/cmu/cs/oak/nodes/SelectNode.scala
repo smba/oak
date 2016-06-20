@@ -24,6 +24,8 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     sequence
   }
   
+  override def toString() = "π(" + condition + "," + v1 + "," + v2 + ")"
+  
   override def isEmpty() = (v1.isEmpty() && v2.isEmpty())
   
 }

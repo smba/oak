@@ -34,6 +34,8 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
     super.update(name, value)
     updates += name
   }
+  
+  override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint +"]"
 
 }
 /**

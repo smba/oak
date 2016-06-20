@@ -249,6 +249,9 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @param value ClassDef to add
    */
   def addClass(value: ClassDef): Unit = {
+    
+    if (value.name equals "POMO_Reader") logger.info(value.name + " is defined, " + this + " " + this.parent)
+    
     this.classDefs += (value.getName -> value)
   }
 
@@ -265,7 +268,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     try {
       classDefs.get(name).get
     } catch {
-      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined." + this)
+      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined at " + this + " " + this.parent)
     }
   }
 

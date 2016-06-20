@@ -180,6 +180,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def execute(stmt: BlockStatement, env: Environment): (String, Environment) = {
 
     var env_ = env
+    
+    //TODO remove imperative hack
+    //stmt.getStatements.takeWhile(!_.isInstanceOf[BreakStatement]).fold(env)(execute(_, _)._2) 
     breakable {
       stmt.getStatements.foreach {
         s =>
@@ -192,6 +195,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           }
       }
     }
+    
     return ("OK", env_)
   }
 
@@ -212,7 +216,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case _ => value
     }
 
-    env.addOutput( LiteralNode(valueX) )
+    env.addOutput( DNode.createDNode(valueX) )
 
     return ("OK", env)
   }
@@ -329,7 +333,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = include._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
-          println("include")
           val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
           val program = (new OakEngine).loadFromFile(includePath)
 
@@ -342,10 +345,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           //logger.info("." * includes.size)
 
           this.includes.pop()
-          println("included")
           ("OK", res)
         } else {
-          println("no include 1 " + (evaluate(expr, env)._1.isInstanceOf[SymbolicValue]))
           ("NOT OK", env)
         }
       }
@@ -354,7 +355,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = includeOnce._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
-          println("include")
           val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
           val program = (new OakEngine).loadFromFile(includePath)
 
@@ -371,10 +371,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           this.path = oldURL
 
           this.includes.pop()
-          println("included")
           ("OK", res)
         } else {
-          println("no include 2")
           ("NOT OK", env)
         }
       }
@@ -582,8 +580,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def execute(s: ReturnRefStatement, env: Environment): (String, Environment) = {
 
-    currentLineNr = ASTVisitor.getStatementLineNr(s)
-
     val u = s._expr
 
     val returnRef = u match {
@@ -592,7 +588,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val fieldName = t._name.toString()
 
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
-        thisArray.getRef(StringValue(fieldName, null))
+        thisArray.getRef(StringValue(fieldName, t._location))
       }
       case v: VarExpr => {
         env.getVariables().get(v.toString).get
@@ -630,8 +626,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val blocks = s._blocks.toList 
     val default = if (s._defaultBlock != null) s._defaultBlock else new BlockStatement(null, Array[Statement]())
     val conditions = cases.map {c => v + " == " + c}
-    
-    println(default)
     
     // FIXME what if no default case has been specified?
     val results = (Environment.fork(env, conditions) zip (default :: blocks.reverse).reverse).map { case (e, s) => execute(s, e)._2 }
@@ -1263,7 +1257,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = t._name.toString()
 
-    val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName, null))
+    val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName, t._location))
     val value = env.heap.extract(ref)
     (value, env)
   }
@@ -1514,7 +1508,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       return (opt.get, env)
     } else {
       logger.warn("Constant " + e.toString + " is not defined! " + currentLineNr)
-      (StringValue("", null), env)
+      (StringValue("", e._location), env)
     }
   }
 
@@ -1596,7 +1590,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def evaluate(e: ThisFieldVarExpr, env: Environment): (OakValue, Environment) = {
     val thisV = env.lookup("$this").asInstanceOf[ArrayValue]
-    val t = thisV.get(StringValue(e._nameExpr.toString, null), env)
+    val t = thisV.get(StringValue(e._nameExpr.toString, e._location), env)
     (t, env)
   }
 

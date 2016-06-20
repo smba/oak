@@ -1,20 +1,18 @@
 package edu.cmu.cs.oak.nodes
 
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.NumericValue
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.ArrayValue
-import java.util.Collection
-import scala.collection.mutable.ListBuffer
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.nodes.SymbolNode
+import com.caucho.quercus.expr.Expr
+
 import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
+import edu.cmu.cs.oak.nodes.SymbolNode
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.value.Choice
+import edu.cmu.cs.oak.value.NumericValue
+import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueRepeatSequence
+import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.value.StringValue
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.SymbolicValue
 
 /**
  * Model for  output of a symbolically executed PHP program.
@@ -75,6 +73,29 @@ abstract class DNode {
  */
 object DNode {
 
+  def createDNode(value: OakValue, expr: Expr = null): DNode = {
+    value match {
+      case s: SymbolValue => {
+        SymbolNode(s)
+      }
+      case c: Choice => {
+        SelectNode(c.p, createDNode(c.v1, expr), createDNode(c.v2, expr))
+      }
+      case se: OakValueSequence => {
+        ConcatNode(se.getSequence.map { v => createDNode(v, expr) } )
+      }
+      case rse: OakValueRepeatSequence => {
+        RepeatNode(ConcatNode(rse.getSequence.map { v => createDNode(v, expr) } ))
+      }
+      case sv: StringValue => {
+        LiteralNode(sv)
+      }
+      case _ => {
+        LiteralNode( StringValue(value.toString(), expr._location) )
+      }
+    }
+  }
+  
   /**
    * Extracts all string literals as StringValues from
    * the DModel tree.

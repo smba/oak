@@ -14,6 +14,7 @@ import edu.cmu.cs.oak.value.StringValue
 import java.net.URL
 import java.nio.file.Path
 import edu.cmu.cs.oak.nodes.LiteralNode
+import edu.cmu.cs.oak.nodes.DNode
 
 /**
  * 
@@ -33,13 +34,7 @@ class Print extends InterpreterPlugin {
       a =>
         {
           val value = interpreter.evaluate(a, env)._1
-          val toAdd = value match {
-            case sv: StringValue => {
-              sv
-            }
-            case _ => value
-          }
-          env.addOutput( LiteralNode(toAdd) )
+          env.addOutput( DNode.createDNode(value, expr = a) )
         }
     }
 
