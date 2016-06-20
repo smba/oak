@@ -52,7 +52,7 @@ trait Interpreter {
    *
    * @return Tuple containing (a) a control code, (b) the resulting environment
    */
-  def execute(s: Statement, env: Environment): (String, Environment)
+  def execute(s: Statement, env: Environment): (String)
 
   def addConstants(name: String, value: OakValue) {
     constants += (name -> value)
