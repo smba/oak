@@ -286,7 +286,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             val expr = evaluate(exx, env)._1
             val index = evaluate(aget._index, env)._1
 
-            println(expr.getClass + "")
             assert(expr.isInstanceOf[ArrayValue])
 
             val ref = expr.asInstanceOf[ArrayValue].getRef(index)
@@ -326,9 +325,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
 
       case include: FunIncludeExpr => {
+        
         val oldURL = this.path
         val expr = include._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
+          println("include")
           val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
           val program = (new OakEngine).loadFromFile(includePath)
 
@@ -341,8 +342,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           //logger.info("." * includes.size)
 
           this.includes.pop()
+          println("included")
           ("OK", res)
         } else {
+          println("no include 1 " + (evaluate(expr, env)._1.isInstanceOf[SymbolicValue]))
           ("NOT OK", env)
         }
       }
@@ -351,6 +354,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = includeOnce._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
+          println("include")
           val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
           val program = (new OakEngine).loadFromFile(includePath)
 
@@ -367,8 +371,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           this.path = oldURL
 
           this.includes.pop()
+          println("included")
           ("OK", res)
         } else {
+          println("no include 2")
           ("NOT OK", env)
         }
       }
@@ -435,7 +441,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         }
 
         //println(cme._args.size)
-        //System.exit(2)
         (null, env)
       }
 
@@ -639,7 +644,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     //bResults.foreach { pp => println(pp.output) }
     
     val delta = BranchEnv.join(bResults, conditions)
-    println(delta.joinedVariables)
     env.weaveDelta(delta)
     return ("OK", env)
   }
@@ -859,7 +863,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(ae: AbstractBinaryExpr, env: Environment): (OakValue, Environment) = {
-    
+    /*
     var envi = env
 
     // Retrieve the operands e1, e2 of the binary expression
@@ -999,8 +1003,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     } catch {
       case e: Exception => throw new RuntimeException(e)
     }
-    
-    //(SymbolValue(ae.toString, OakHeap.index), env)
+    */
+    (SymbolValue(ae.toString, OakHeap.index), env)
   }
 
   def evaluate(e: CallExpr, env: Environment): (OakValue, Environment) = {
@@ -1566,7 +1570,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }
 
     //println(cme._args.size)
-    //System.exit(2)
     (null, env)
   }
 

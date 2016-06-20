@@ -4,6 +4,9 @@ import scala.collection.mutable.HashMap
 import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.env.Environment
 
+/**
+ * 
+ */
 class ArrayValue extends OakValue {
 
   val array = HashMap[OakValue, OakVariable]()
@@ -24,7 +27,6 @@ class ArrayValue extends OakValue {
     if (array.keySet.contains(index)) {
       return env.heap.extract(array.get(index).get)
     } else {
-      println(array.keySet)
       throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")
     }
   }

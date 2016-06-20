@@ -60,7 +60,7 @@ abstract class DNode {
     
     if (ifd1.size == ifd2.size) {
       (ifd1 zip ifd2).map { 
-        case (x, y) => if (!(chop(x) equals chop(y) )) {println(x, y)}; chop(x) equals chop(y) 
+        case (x, y) => if (!(chop(x) equals chop(y) )) {/*println(x, y)*/}; chop(x) equals chop(y) 
       }.foldLeft(true)(_ && _)
     } else {
       false
