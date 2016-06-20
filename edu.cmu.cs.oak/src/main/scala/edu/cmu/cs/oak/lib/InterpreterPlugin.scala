@@ -10,6 +10,6 @@ import java.nio.file.Path
 trait InterpreterPlugin {
   
   def getName(): String
-  def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: (Path, Int), env: Environment): OakValue
+  def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue
   
 }
