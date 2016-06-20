@@ -13,6 +13,7 @@ import java.net.URL
 import java.io.File
 import java.io.FileReader
 import java.nio.file.Path
+import com.caucho.vfs.FilePath
 
 /**
  * Loads scripts, handles the Quercus parser
@@ -26,7 +27,8 @@ class OakEngine {
    */
   def loadFromFile(path: Path): QuercusProgram = {
     val reader = new FileReader(path.toString)
-    val parser = new QuercusParser(OakEngine.getQuercus("UTF-8", true), null, reader)
+    println(new FilePath(path.toString()))
+    val parser = new QuercusParser(OakEngine.getQuercus("UTF-8", true), new FilePath(path.toString()), reader)
     return parser.parse()
   }
 

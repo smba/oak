@@ -14,7 +14,7 @@ class DirName extends InterpreterPlugin {
 
   override def getName(): String = "dirname"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: (Path, Int), env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[Interpreter]
 

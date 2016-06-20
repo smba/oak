@@ -22,9 +22,6 @@ trait Interpreter {
   /** Path to the currently executed script */
   var path: Path = null
 
-  /** Line of the currently executed script */
-  var currentLineNr: Int = 0
-
   /** Root path; where to find the program entry point. */
   var rootPath: Path = null
 
@@ -52,7 +49,7 @@ trait Interpreter {
    *
    * @return Tuple containing (a) a control code, (b) the resulting environment
    */
-  def execute(s: Statement, env: Environment): (String)
+  def execute(s: Statement, env: Environment): ControlCode.Value
 
   def addConstants(name: String, value: OakValue) {
     constants += (name -> value)

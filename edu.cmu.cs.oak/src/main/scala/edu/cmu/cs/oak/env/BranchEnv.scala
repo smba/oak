@@ -11,6 +11,8 @@ import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.env.Delta
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.FunctionDef
+import edu.cmu.cs.oak.value.ClassDef
 
 /**
  * This class encapsulates all merging functionality used for branching
@@ -25,6 +27,11 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
    * when merging different environments.
    */
   var updates = Set[String]()
+  
+  /**
+   * "New" (conditional) class definitions
+   */
+  var updatedClassDefs = Set[String]()
 
   /**
    * In addition to {@see edu.cmu.cs.oak.env.Environment#update}, we
@@ -33,6 +40,15 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
   override def update(name: String, value: OakValue): Unit = {
     super.update(name, value)
     updates += name
+  }
+  
+  /**
+   * Adds a class definition to the environment.
+   * @param value ClassDef to add
+   */
+  override def addClass(value: ClassDef) {
+    super.addClass(value)
+    updatedClassDefs += value.name
   }
   
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint +"]"
@@ -107,6 +123,16 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     envs.map { m => m.heap.varval } reduce (_ ++ _)
   }
 
+  private def joinClassDefs(envs: List[BranchEnv]): Set[ClassDef] = {
+    var classDefs = Set[ClassDef]()
+    envs.foreach {
+      env => env.updatedClassDefs.foreach { 
+        x => classDefs += env.getClass(x)
+      }
+    }
+    classDefs
+  }
+  
   def join(envs: List[BranchEnv], constraints: List[String]): Delta = {
 
     /* 1) JOIN UPDATED VARIABLES
@@ -126,7 +152,18 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
      * 3) JOIN OUTPUT
      */
     val joinedOutput = joinOutput(envs, constraints)
+    
+    /**
+     * 4) JOIN new class definitions
+     */
+    val classDefs = joinClassDefs(envs)
 
-    new Delta(joinedOutput, updatedVariableMap, joinedHeap)
+    /**
+     * 5) Globals
+     */
+    var allGlobals = Set[String]()
+    val gloabls = envs.map { e => e.globalVariables.foreach { g => allGlobals += g } }
+    
+    new Delta(joinedOutput, updatedVariableMap, joinedHeap, classDefs, allGlobals)
   }
 }

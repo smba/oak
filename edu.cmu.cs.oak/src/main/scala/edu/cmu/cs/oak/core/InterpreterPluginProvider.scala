@@ -48,7 +48,7 @@ trait InterpreterPluginProvider {
     plugins.put(plugin.getName, plugin)
   }
 
-  def accept(plugin: InterpreterPlugin, args: List[Expr], loc: (Path, Int), env: Environment): OakValue = {
+  def accept(plugin: InterpreterPlugin, args: List[Expr], loc: Path, env: Environment): OakValue = {
     plugin.visit(this, args, loc, env)
   }
   

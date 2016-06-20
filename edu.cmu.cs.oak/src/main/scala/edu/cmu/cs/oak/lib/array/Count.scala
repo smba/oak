@@ -17,7 +17,7 @@ class Count extends InterpreterPlugin {
   
   override def getName(): String = "count"
   
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr],loc: (Path, Int), env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[Expr],loc: Path, env: Environment): OakValue = {
     
     
     

@@ -27,6 +27,8 @@ import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.nodes.SelectNode
+import edu.cmu.cs.oak.nodes.ConcatNode
+import javax.sql.rowset.JoinRowSet
 
 /**
  * Programs state and program state operations.
@@ -80,6 +82,8 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    */
   def update(name: String, value: OakValue) {
 
+    if (name equals "$wp_local_package") throw new RuntimeException()
+    
     value match {
       case a: OakVariable => {
         variables += (name -> a)
@@ -151,7 +155,12 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @return reference that variable 'name points to
    */
   def getRef(name: String): OakVariable = {
-    variables.get(name).get
+    val opt = variables.get(name)
+    if (!opt.isEmpty) {
+      opt.get
+    } else {
+      null
+    }
   }
 
   /**
@@ -240,7 +249,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     parents.toList
   }
 
-  def addToGlobal(name: String, value: OakValue = NullValue("AbstractEnv::addToGlobal")) {
+  def addToGlobal(name: String) {
     this.globalVariables += name
   }
 
@@ -248,10 +257,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * Adds a class definition to the environment.
    * @param value ClassDef to add
    */
-  def addClass(value: ClassDef): Unit = {
-    
-    if (value.name equals "POMO_Reader") logger.info(value.name + " is defined, " + this + " " + this.parent)
-    
+  def addClass(value: ClassDef) {
     this.classDefs += (value.getName -> value)
   }
 
@@ -316,6 +322,16 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
     // 3) Update the variables that have changed during the execution of the branches
     joinResult.joinedVariables.foreach {
       case (name, value) => this.update(name, value)
+    }
+    
+    // 4) Update new classDefs
+    joinResult.joinedClassDefs.foreach {
+      cd => this.addClass(cd) 
+    }
+    
+    // 5 Globals
+    joinResult.joinedGlobals.foreach {
+      g => this.addToGlobal(g)
     }
   }
 

@@ -24,6 +24,6 @@ class LoopEnv(parent: EnvListener, calls: Stack[String], constraint: String) ext
   }
   
   def getDelta() = {
-    new Delta(this.getOutput(), this.variables, this.heap.varval)
+    new Delta(this.getOutput(), this.variables, this.heap.varval, Set(), Set())
   }
 }

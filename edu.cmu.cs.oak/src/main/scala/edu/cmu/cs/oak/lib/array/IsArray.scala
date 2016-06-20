@@ -16,7 +16,7 @@ import edu.cmu.cs.oak.lib.InterpreterPlugin
 class IsArray extends InterpreterPlugin {
   override def getName(): String = "is_array"
   
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr],loc: (Path, Int), env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
     
     
     
