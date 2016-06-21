@@ -31,9 +31,7 @@ class Print extends InterpreterPlugin {
     assert(args.size == 1)
     
     val value = interpreter.evaluate(args.head, env)._1
-    
-    println(value.getClass+"")
-    
+
     env.addOutput( DNode.createDNode(value, expr = args.head) )
 
     return IntValue(1)

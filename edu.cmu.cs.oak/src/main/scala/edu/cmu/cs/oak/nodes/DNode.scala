@@ -8,7 +8,6 @@ import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NumericValue
 import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.value.OakValueRepeatSequence
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
@@ -83,9 +82,6 @@ object DNode {
       }
       case se: OakValueSequence => {
         ConcatNode(se.getSequence.reverse.map { v => createDNode(v, expr) } )
-      }
-      case rse: OakValueRepeatSequence => {
-        RepeatNode(ConcatNode(rse.getSequence.map { v => createDNode(v, expr) } ))
       }
       case sv: StringValue => {
         LiteralNode(sv)

@@ -120,7 +120,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   this.loadPlugin(new IsArray)
   this.loadPlugin(new IsSet)
 
-  def execute(path: Path): ControlCode.Value = {
+  def execute(path: Path): (ControlCode.Value, Environment) = {
 
     // The current script is located at this.path
     this.path = path
@@ -143,7 +143,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
     execute(program, env)
-    ControlCode.OK
+    
+    (ControlCode.OK, env)
   }
 
   def execute(program: QuercusProgram, env: Environment): ControlCode.Value = {
@@ -206,7 +207,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case _ => value
     }
 
-    env.addOutput(DNode.createDNode(valueX))
+    val x = DNode.createDNode(valueX)
+    env.addOutput(x)
 
     return ControlCode.OK
   }
@@ -329,7 +331,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = include._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
-          val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
+          val includePath = Paths.get(evaluate(expr, env)._1.toString.replace("\"", ""))
           
           val program = try {
             (new OakEngine).loadFromFile(includePath)
@@ -344,14 +346,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
           this.path = includePath
-          //logger.info("Including " + includePath)
+          logger.info("Including " + includePath)
           execute(program, env)
 
           this.includes.pop()
           this.path = oldURL
-          //logger.info("Resuming " + this.path)
+          logger.info("Resuming " + this.path)
           ControlCode.OK
         } else {
+          logger.error("ERROR")
           ControlCode.ERROR
         }
       }
@@ -360,7 +363,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = includeOnce._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
-          val includePath = Paths.get(this.rootPath + "/" + evaluate(expr, env)._1.toString.replace("\"", ""))
+          val includePath = Paths.get(evaluate(expr, env)._1.toString.replace("\"", ""))
           val program = (new OakEngine).loadFromFile(includePath)
 
           if (this.includes contains includePath) {
@@ -370,15 +373,16 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
           this.path = includePath
-          //logger.info("Including " + includePath)
+          logger.info("Including " + includePath)
           execute(program, env)
           
           this.path = oldURL
 
           this.includes.pop()
-          //logger.info("Resuming " + this.path)
+          logger.info("Resuming " + this.path)
           ControlCode.OK
         } else {
+          logger.error("ERROR")
           ControlCode.ERROR
         }
       }

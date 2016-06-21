@@ -27,7 +27,6 @@ class OakEngine {
    */
   def loadFromFile(path: Path): QuercusProgram = {
     val reader = new FileReader(path.toString)
-    println(new FilePath(path.toString()))
     val parser = new QuercusParser(OakEngine.getQuercus("UTF-8", true), new FilePath(path.toString()), reader)
     return parser.parse()
   }

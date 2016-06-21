@@ -6,9 +6,7 @@ import java.net.URL
 import java.nio.file.Path
 
 case class StringValue(value:String, location: Location) extends OakValue {
-  
-  println(location.getFileName)
-  
+
   //assert(location != null)
   
   var loc: (String, Int) = (null, 0)

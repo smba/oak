@@ -9,6 +9,9 @@ import edu.cmu.cs.oak.env.Environment
 import java.nio.file.Path
 import com.caucho.quercus.expr.Expr
 import edu.cmu.cs.oak.core.Interpreter
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.env.heap.OakHeap
 
 class DirName extends InterpreterPlugin {
 
@@ -20,12 +23,30 @@ class DirName extends InterpreterPlugin {
 
     /* Assert that the function has been o */
     assert(args.size == 1)
-
-    val zu = (interpreter.path.toString diff interpreter.rootPath.toString)
-    val dirname = zu.substring(0, zu.lastIndexOf('/'))
-
     //FIXME argument"
-    return StringValue(dirname, args(0)._location)
+    return if (args.head.toString startsWith("$")) {
+      try {
+        return env.lookup(args.head.toString)
+      } catch {
+        case vnfe: VariableNotFoundException => SymbolValue("", OakHeap.index)
+      }
+    } else if (args.head.toString endsWith(")")) {
+      try {
+        val arg = interpreter.evaluate(args.head, env)._1.toString
+        val dirname = arg.substring(0, arg.lastIndexOf("/"))
+        return StringValue(dirname, args.head._location)
+      } catch {
+        case _ : Throwable => SymbolValue("", OakHeap.index)
+      }
+    } else {
+      try {
+        val arg = args.head.toString()
+        val dirname = arg.substring(0, arg.lastIndexOf("/"))
+        return StringValue(dirname, args.head._location)
+      } catch {
+        case _ : Throwable => SymbolValue("", OakHeap.index)
+      }
+    }
   }
 
 }
