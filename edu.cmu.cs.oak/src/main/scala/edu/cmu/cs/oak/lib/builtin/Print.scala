@@ -29,14 +29,12 @@ class Print extends InterpreterPlugin {
 
     /* Assert that the function has been o*/
     assert(args.size == 1)
-
-    args.reverse.foreach {
-      a =>
-        {
-          val value = interpreter.evaluate(a, env)._1
-          env.addOutput( DNode.createDNode(value, expr = a) )
-        }
-    }
+    
+    val value = interpreter.evaluate(args.head, env)._1
+    
+    println(value.getClass+"")
+    
+    env.addOutput( DNode.createDNode(value, expr = args.head) )
 
     return IntValue(1)
   }

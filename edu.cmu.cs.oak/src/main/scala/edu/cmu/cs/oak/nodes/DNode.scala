@@ -82,7 +82,7 @@ object DNode {
         SelectNode(c.p, createDNode(c.v1, expr), createDNode(c.v2, expr))
       }
       case se: OakValueSequence => {
-        ConcatNode(se.getSequence.map { v => createDNode(v, expr) } )
+        ConcatNode(se.getSequence.reverse.map { v => createDNode(v, expr) } )
       }
       case rse: OakValueRepeatSequence => {
         RepeatNode(ConcatNode(rse.getSequence.map { v => createDNode(v, expr) } ))
@@ -91,7 +91,7 @@ object DNode {
         LiteralNode(sv)
       }
       case _ => {
-        LiteralNode( StringValue(value.toString(), expr._location) )
+        LiteralNode( StringValue(value.toString(), if (expr != null) expr._location else null) )
       }
     }
   }

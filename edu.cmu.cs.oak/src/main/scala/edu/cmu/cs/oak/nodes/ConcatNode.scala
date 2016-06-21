@@ -17,7 +17,7 @@ case class ConcatNode(var values: List[DNode]) extends DNode {
   override def toXml = {
     <Concat>
       {
-        for (value <- values) yield { value.toXml }
+        for (value <- values.reverse) yield { value.toXml }
       }
     </Concat>
   }

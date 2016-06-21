@@ -7,7 +7,7 @@ import edu.cmu.cs.oak.value.StringValue
 
 case class LiteralNode(lv: StringValue) extends DNode {
 
-  assert(lv.location != null)
+  //assert(lv.location != null)
   
   def getChildren(): Seq[DNode] = null
 
