@@ -30,7 +30,7 @@ class Print extends InterpreterPlugin {
     /* Assert that the function has been o*/
     assert(args.size == 1)
 
-    args.foreach {
+    args.reverse.foreach {
       a =>
         {
           val value = interpreter.evaluate(a, env)._1
