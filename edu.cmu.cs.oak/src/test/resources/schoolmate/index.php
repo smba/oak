@@ -25,7 +25,6 @@
   // Bring up the report cards and stop processing //
   if($_POST['page2']==1337)
   {
-   require_once('ReportCards.php');
    die();
   }
   

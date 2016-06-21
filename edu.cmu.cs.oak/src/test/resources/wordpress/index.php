@@ -18,3 +18,5 @@ define('WP_USE_THEMES', true);
 
 //echo $x . "A";
 require( dirname( __FILE__ ) . '/wp-blog-header.php' );
+echo dirname( __FILE__ ) . '/wp-blog-header.php';
+?>
