@@ -29,6 +29,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.nodes.SelectNode
 import edu.cmu.cs.oak.nodes.ConcatNode
 import javax.sql.rowset.JoinRowSet
+import scala.xml.PrettyPrinter
 
 /**
  * Programs state and program state operations.
@@ -139,6 +140,24 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    * @return output as sequence of values
    */
   def getOutput(): DNode = output
+
+
+  /**
+   * pretty-printed XML
+   */
+  def getOutputAsPrettyXML(): String = {
+    
+    val wrapXML = {
+      <DataModel>
+			  { this.output.toXml() }
+			</DataModel> 
+    }
+    
+    var out = (new PrettyPrinter(200, 2)).format( wrapXML )  
+    out = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" + out 
+    out
+  }
+  
 
   /**
    * Manipulation of references via the environment

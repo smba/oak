@@ -106,6 +106,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import java.io.FileNotFoundException
+import com.caucho.quercus.expr.AbstractUnaryExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -331,7 +332,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = include._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
-          val includePath = Paths.get(evaluate(expr, env)._1.toString.replace("\"", ""))
+          
+          val includePath = getInlcudePath(expr, env)
           
           val program = try {
             (new OakEngine).loadFromFile(includePath)
@@ -363,7 +365,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val oldURL = this.path
         val expr = includeOnce._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
-          val includePath = Paths.get(evaluate(expr, env)._1.toString.replace("\"", ""))
+          
+          val includePath = getInlcudePath(expr, env)
+          
           val program = (new OakEngine).loadFromFile(includePath)
 
           if (this.includes contains includePath) {
@@ -1673,6 +1677,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   override def evaluate(e: Expr, env: Environment): (OakValue, Environment) = {
+    
+    logger.info(e._location.getFileName)
+    
     e match {
 
       case e: LiteralExpr => evaluate(e, env)
@@ -1710,5 +1717,13 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case _ => return (SymbolValue(e.toString(), 0), env)
 
     }
+  }
+  
+  def getInlcudePath(expr: Expr, env: Environment): Path = {
+    var path = evaluate(expr, env)._1.toString.replace("\"", "")
+    if (!(path startsWith("/"))) {
+      path = this.rootPath + "/" + path
+    }
+    Paths.get(path)
   }
 }

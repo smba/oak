@@ -27,7 +27,7 @@ import java.io.File
  */
 object RegressionTest {
 
-  /*
+  
   lazy val engine = new OakEngine
   lazy val interpreter = new OakInterpreter
 
@@ -35,8 +35,8 @@ object RegressionTest {
    * @param URL to test
    * @return (passed?, (found, available))
    */
-  def test(url: Path): (Boolean, (Int, Int)) = {
-
+  /*def test(url: Path): (Boolean, (Int, Int)) = {
+  
     // get available literals
     val available = PrecisionCalculator.availableLiterals(url)
 
@@ -60,6 +60,6 @@ object RegressionTest {
     val precision = PrecisionCalculator.computePrecision(found, available)
 
     return (matches, precision)
-  }
-	*/
+  }*/
+	
 }

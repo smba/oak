@@ -353,6 +353,8 @@ public class QuercusParser {
     throws IOException
   {
     ReadStream is = path.openRead();
+    
+    
 
     try {
       if (quercus != null && quercus.isUnicodeSemantics()) {
