@@ -114,7 +114,7 @@ object DNode {
       case l: LiteralNode => l.lv match {
         case s: StringValue => {
          
-          assert(s.loc._1 != null) //FIXME
+          //assert(s.loc._1 != null) //FIXME
           literals ++ List(s)
         }
         case _ => List[StringValue]()

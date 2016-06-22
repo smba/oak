@@ -249,8 +249,16 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         ControlCode.OK
       }
 
+      /**
+       * Assignment $a = <Expr>;
+       */
       case b: BinaryAssignExpr => {
-        evaluate(b, env)
+        val value = evaluate(b, env)
+        
+        if (value._1.isInstanceOf[StringValue]) {
+          val svalue = value.asInstanceOf[StringValue]
+          svalue.setLocation(s._location)
+        }
         ControlCode.OK
       }
 
@@ -348,12 +356,12 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
           this.path = includePath
-          logger.info("Including " + includePath)
+          //logger.info("Including " + includePath)
           execute(program, env)
 
           this.includes.pop()
           this.path = oldURL
-          logger.info("Resuming " + this.path)
+          //logger.info("Resuming " + this.path)
           ControlCode.OK
         } else {
           logger.error("ERROR")
@@ -362,6 +370,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
 
       case includeOnce: FunIncludeOnceExpr => {
+        
+        
         val oldURL = this.path
         val expr = includeOnce._expr
         if (!(evaluate(expr, env)._1.isInstanceOf[SymbolicValue])) {
@@ -377,13 +387,13 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
           this.path = includePath
-          logger.info("Including " + includePath)
+          //logger.info("Including " + includePath)
           execute(program, env)
           
           this.path = oldURL
 
           this.includes.pop()
-          logger.info("Resuming " + this.path)
+          //logger.info("Resuming " + this.path)
           ControlCode.OK
         } else {
           logger.error("ERROR")
@@ -855,6 +865,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: VarExpr, env: Environment): (OakValue, Environment) = {
+    
     val value = try {
       env.lookup(e.toString)
     } catch {
@@ -1059,7 +1070,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
        * the library function names to the actual plugin.
        * */
     if (getPlugins.contains(name)) {
-
+      
       /* The library function plugin visits and evaluates the expression. */
       return (this.accept(getPlugin(name), args.toList, path, env), env)
     }
@@ -1119,7 +1130,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val index = evaluate(arrayGet._index, env)._1
     expr match {
       case av: ArrayValue => {
-        val value = av.get(index, env)
+        val value = try {
+          av.get(index, env)
+        } catch {
+          case _: Throwable => SymbolValue("", OakHeap.index)
+        }
         return (value, env)
       }
       case _ => {
@@ -1151,6 +1166,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   * 
   */
   def evaluate(e: ObjectMethodExpr, env: Environment): (OakValue, Environment) = {
+
     val objExpr = e._objExpr
     val methodName = e._methodName.toString()
     val args = e._args
@@ -1678,7 +1694,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   override def evaluate(e: Expr, env: Environment): (OakValue, Environment) = {
     
-    logger.info(e._location.getFileName)
+    if (e._location.getFileName != null) {
+      //logger.info("Location of " + e.getClass + e._location.getFileName + ":" + e._location.getLineNumber)
+    }
     
     e match {
 
@@ -1715,7 +1733,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case e: ThisExpr => evaluate(e, env)
       case e: ToBooleanExpr => evaluate(e, env)
       case _ => return (SymbolValue(e.toString(), 0), env)
-
     }
   }
   
