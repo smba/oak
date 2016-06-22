@@ -1,6 +1,5 @@
 <?php
-class Exception
-{
+class Exception {
     protected $message = 'Unknown exception';   // exception message
     private   $string;                          // __toString cache
     protected $code = 0;                        // user defined exception code
