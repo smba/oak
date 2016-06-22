@@ -1063,6 +1063,10 @@ public class QuercusParser {
     }
     else if (expr instanceof LiteralStringExpr) {
       LiteralStringExpr string = (LiteralStringExpr) expr;
+      
+      
+      // FIXME Manually set the location?
+      expr._location = getLocation();
 
       Statement statement
         = _factory.createText(location, (StringValue) string.evalConstant());
@@ -3952,7 +3956,9 @@ public class QuercusParser {
 
   public Expr createVar(StringValue name)
   {
-    return _factory.createVar(_function.createVar(name));
+    Expr expr = _factory.createVar(_function.createVar(name));
+    expr._location = getLocation();
+    return expr;
   }
 
   /**
@@ -5541,12 +5547,15 @@ public class QuercusParser {
 
   private Expr createStringExpr(StringValue lexeme)
   {
+	  Expr stringExpr;
     if (lexeme.isUnicode()) {
-      return _factory.createUnicode((UnicodeValue) lexeme);
+    	stringExpr = _factory.createUnicode((UnicodeValue) lexeme);
     }
     else {
-      return _factory.createString(lexeme);
+    	stringExpr =  _factory.createString(lexeme);
     }
+    stringExpr._location = getLocation();
+    return stringExpr;
   }
 
   private Expr createBinaryExpr(StringValue lexeme)
