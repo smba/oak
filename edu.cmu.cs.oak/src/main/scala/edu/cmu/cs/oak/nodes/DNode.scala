@@ -2,7 +2,6 @@ package edu.cmu.cs.oak.nodes
 
 import com.caucho.quercus.expr.Expr
 
-import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
 import edu.cmu.cs.oak.nodes.SymbolNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
@@ -84,10 +83,10 @@ object DNode {
         ConcatNode(se.getSequence.reverse.map { v => createDNode(v, expr) } )
       }
       case sv: StringValue => {
-        LiteralNode(sv)
+        LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
       }
       case _ => {
-        LiteralNode( StringValue(value.toString(), if (expr != null) expr._location else null) )
+        LiteralNode(value.toString(), expr._location.getFileName, expr._location.getLineNumber)
       }
     }
   }
@@ -111,13 +110,9 @@ object DNode {
         }
         literals ++ lits
       }
-      case l: LiteralNode => l.lv match {
-        case s: StringValue => {
-         
-          //assert(s.loc._1 != null) //FIXME
-          literals ++ List(s)
-        }
-        case _ => List[StringValue]()
+      case l: LiteralNode => literals ++ List(StringValue(l.sv, l.file, l.lineNr))
+      case r: RepeatNode => {
+        literals ++ extractStringLiterals(r.node, literals)
       }
       case _ => List[StringValue]()
     }

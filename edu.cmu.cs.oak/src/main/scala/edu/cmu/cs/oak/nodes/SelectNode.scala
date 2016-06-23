@@ -1,7 +1,5 @@
 package edu.cmu.cs.oak.nodes
 
-import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
-
 case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     
   def getChildren(): Seq[DNode] = List(v1, v2)

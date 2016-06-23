@@ -34,7 +34,7 @@ class DirName extends InterpreterPlugin {
       try {
         val arg = interpreter.evaluate(args.head, env)._1.toString
         val dirname = arg.substring(0, arg.lastIndexOf("/"))
-        return StringValue(dirname, args.head._location)
+        return StringValue(dirname, args.head._location.getFileName(), args.head._location.getLineNumber())
       } catch {
         case _ : Throwable => SymbolValue("", OakHeap.index)
       }
@@ -42,7 +42,7 @@ class DirName extends InterpreterPlugin {
       try {
         val arg = args.head.toString()
         val dirname = arg.substring(0, arg.lastIndexOf("/"))
-        return StringValue(dirname, args.head._location)
+        return StringValue(dirname, args.head._location.getFileName(), args.head._location.getLineNumber())
       } catch {
         case _ : Throwable => SymbolValue("", OakHeap.index)
       }

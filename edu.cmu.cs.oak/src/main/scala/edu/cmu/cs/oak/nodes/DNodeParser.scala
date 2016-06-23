@@ -1,21 +1,57 @@
 package edu.cmu.cs.oak.nodes
 
-import scala.collection.mutable.ListBuffer
-
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.StringValue
+import scala.xml.XML
 import edu.cmu.cs.oak.value.SymbolValue
-import java.net.URL
-import edu.cmu.cs.oak.value.BooleanValue
-import java.nio.file.Paths
-import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.nodes.LiteralNode
 
 /**
  * Parser XML -> DNode
  */
-object DNodeParser {
+object DNodeParser extends App {
+
+  var i = 0
   
+  def parseNode(node: scala.xml.Node): DNode = {
+    println(i)
+    i += 1
+    node.label match {
+      case "DataModel"  => parseDataModel(node)
+      case "Concat" => parseConcatNode(node)
+      case "Repeat" => parseRepeatNode(node)
+      case "Select" => parseSelectNode(node)
+      case "Symbolic" => parseSymbolicNode(node)
+      case "Literal" => parseLiteralNode(node)
+    }
+  }
+  
+  def parseDataModel(node: scala.xml.Node): DNode = {
+    parseNode( (node \ "Concat")(0) )
+  }
+  
+  def parseConcatNode(node: scala.xml.Node): DNode = {
+    ConcatNode(node.child.filter { n => !("#PCDATA" equals n.label) }.map(c => parseNode(c)).toList)
+  }
+  
+  def parseRepeatNode(node: scala.xml.Node): DNode = {
+    RepeatNode(ConcatNode(node.child.filter { n => !("#PCDATA" equals n.label) }.map(c => parseNode(c)).toList))
+  }
+  
+  def parseSelectNode(node: scala.xml.Node): DNode = {
+    val children = node.child.filter { n => !("#PCDATA" equals n.label) }
+    SelectNode((node \ "Constraint").text.trim, parseNode(children(1)), parseNode(children(2)))
+  }
+  
+  def parseSymbolicNode(node: scala.xml.Node): DNode = {
+    SymbolNode(SymbolValue((node \ "Text").text.trim, OakHeap.index))
+  }
+  
+  def parseLiteralNode(node: scala.xml.Node): DNode = {
+    LiteralNode((node \ "Text").text.trim, (node \ "File").text.trim, try {(node \ "Line").text.toInt} catch {case nfe: NumberFormatException => 0})
+  }
+  
+  val xml = XML.loadFile("/home/stefan/Desktop/output2.xml")
+  println(DNodeParser.parseNode(xml))
   /*
   var rootPath: String = null
   
@@ -82,5 +118,6 @@ object DNodeParser {
     return SymbolNode(SymbolValue(expression, id))
   }
   * */
+  
   
 }
