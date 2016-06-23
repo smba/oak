@@ -96,7 +96,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ClassStaticStatement.
      */
-    case s: ClassStaticStatement => ???
+    case s: ClassStaticStatement => { }
 
     /**
      * Case for AST node class ClosureStaticStatement.
@@ -111,7 +111,10 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class DoStatement.
      */
-    case s: DoStatement => ???
+    case s: DoStatement => {
+      visit(s._test)
+      visit(s._block)
+    }
 
     /**
      * Case for AST node class EchoStatement.
@@ -119,7 +122,7 @@ class ASTVisitor(path: Path) {
     case s: EchoStatement => {
 
       val expr = s._expr
-      visit(expr, ASTVisitor.getStatementLineNr(s))
+      visit(expr)
     }
 
     /**
@@ -128,20 +131,17 @@ class ASTVisitor(path: Path) {
     case s: ExprStatement => {
       val expr = s._expr
       
-      if (expr.isInstanceOf[FunIncludeExpr] || expr.isInstanceOf[FunIncludeOnceExpr]) {
-        val path = Paths.get(this.path.getParent.toString + "/" + expr.toString.replace("\"", ""))
-        val includeVisitor = new ASTVisitor(path)
-        stringLiterals ++= includeVisitor.retrieveStringLiterals()
-      } else {
-        visit(expr, ASTVisitor.getStatementLineNr(s))
-      }
+      visit(expr)
       
     }
 
     /**
      * Case for AST node class ForeachStatement.
      */
-    case s: ForeachStatement => ???
+    case s: ForeachStatement => {
+      visit(s._objExpr)
+      visit(s._block)
+    }
 
     /**
      * Case for AST node class ForStatement.
@@ -154,12 +154,14 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class FunctionDefStatement.
      */
-    case s: FunctionDefStatement => ???
+    case s: FunctionDefStatement => {
+      visit(s._fun._statement)
+    }
 
     /**
      * Case for AST node class GlobalStatement.
      */
-    case s: GlobalStatement => ???
+    case s: GlobalStatement => {}
 
     /**
      * Case for AST node class IfStatement.
@@ -179,7 +181,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class NullStatement.
      */
-    case s: NullStatement => ???
+    case s: NullStatement => {}
 
     /**
      * Case for AST node class ReturnRefStatement.
@@ -191,13 +193,15 @@ class ASTVisitor(path: Path) {
      */
     case s: ReturnStatement => {
       val expr = s._expr
-      visit(expr, ASTVisitor.getStatementLineNr(s))
+      visit(expr)
     }
 
     /**
      * Case for AST node class StaticStatement.
      */
-    case s: StaticStatement => ???
+    case s: StaticStatement => {
+      visit(s._initValue)
+    }
 
     /**
      * Case for AST node class SwitchStatement.
@@ -224,12 +228,14 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ThrowStatement.
      */
-    case s: ThrowStatement => ???
+    case s: ThrowStatement => { }
 
     /**
      * Case for AST node class TryStatement.
      */
-    case s: TryStatement => ???
+    case s: TryStatement => {
+      visit(s._block)
+    }
 
     /**
      * Case for AST node class VarGlobalStatement.
@@ -241,7 +247,7 @@ class ASTVisitor(path: Path) {
      */
     case s: WhileStatement => {
       val expr = s._test
-      visit(expr, ASTVisitor.getStatementLineNr(s))
+      visit(expr)
 
       visit(s._block)
     }
@@ -250,14 +256,14 @@ class ASTVisitor(path: Path) {
   /**
    *
    */
-  def visit(expr: Expr, loc: Int): Unit = expr match {
+  def visit(expr: Expr): Unit = expr match {
 
     /**
      * Case for AST node class AbstractBinaryExpr.
      */
     case e: AbstractBinaryExpr => {
-      visit(e._left, loc)
-      visit(e._right, loc)
+      visit(e._left)
+      visit(e._right)
     }
 
     /**
@@ -309,9 +315,9 @@ class ASTVisitor(path: Path) {
      * Case for AST node class BinaryAppendExpr.
      */
     case e: BinaryAppendExpr => {
-      visit(e._value, loc);
+      visit(e._value);
       val next = e._next
-      if (next != null) { visit(next, loc) }
+      if (next != null) { visit(next) }
     }
 
     /**
@@ -320,21 +326,21 @@ class ASTVisitor(path: Path) {
     case e: BinaryAssignExpr => {
       val _var = e._var
       val value = e._value
-      visit(_var, loc)
-      visit(value, loc)
+      visit(_var)
+      visit(value)
     }
 
     /**
      * Case for AST node class BinaryAssignListEachExpr.
      */
-    case e: BinaryAssignListEachExpr => ???
+    case e: BinaryAssignListEachExpr => { }
 
     /**
      * Case for AST node class BinaryAssignListExpr.
      */
     case e: BinaryAssignListExpr => {
       val value = e._value
-      visit(value, loc)
+      visit(value)
     }
 
     /**
@@ -457,18 +463,18 @@ class ASTVisitor(path: Path) {
      */
     case e: CallExpr => {
       val args = e._args
-      args.foreach { a => visit(a, loc) }
+      args.foreach { a => visit(a) }
     }
 
-    /**
-     * Case for AST node class CallVarExpr.
+    /**zeit
+     * 
      */
-    case e: CallVarExpr => ???
+    case e: CallVarExpr => { }
 
     /**
      * Case for AST node class ClassConstExpr.
      */
-    case e: ClassConstExpr => ???
+    case e: ClassConstExpr => { }
 
     /**
      * Case for AST node class ClassConstructExpr.
@@ -568,15 +574,15 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ClosureExpr.
      */
-    case e: ClosureExpr => ???
+    case e: ClosureExpr => { }
 
     /**
      * Case for AST node class ConditionalExpr.
      */
     case e: ConditionalExpr => {
-      visit(e._test, loc)
-      visit(e._trueExpr, loc)
-      visit(e._falseExpr, loc)
+      visit(e._test)
+      visit(e._trueExpr)
+      visit(e._falseExpr)
     }
 
     /**
@@ -602,7 +608,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ConstFileExpr.
      */
-    case e: ConstFileExpr => ???
+    case e: ConstFileExpr => {}
 
     /**
      * Case for AST node class DieExpr.
@@ -614,7 +620,7 @@ class ASTVisitor(path: Path) {
      */
     case e: FunArrayExpr => {
       val values = e._values
-      values.foreach { v => visit(v, loc) }
+      values.foreach { v => visit(v) }
     }
 
     /**
@@ -637,12 +643,12 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class FunEmptyExpr.
      */
-    case e: FunEmptyExpr => ???
+    case e: FunEmptyExpr => {}
 
     /**
      * Case for AST node class FunExitExpr.
      */
-    case e: FunExitExpr => ???
+    case e: FunExitExpr => {}
 
     /**
      * Case for AST node class FunGetCalledClassExpr.
@@ -699,7 +705,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class LiteralLongExpr.
      */
-    case e: LiteralLongExpr => ???
+    case e: LiteralLongExpr => { }
 
     /**
      * Case for AST node class LiteralNullExpr.
@@ -712,8 +718,7 @@ class ASTVisitor(path: Path) {
      * Case for AST node class LiteralStringExpr.
      */
     case e: LiteralStringExpr => {
-
-      val string = StringValue(e._value.toString(), e._location)
+      val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
       stringLiterals += string
     }
 
@@ -721,7 +726,7 @@ class ASTVisitor(path: Path) {
      * Case for AST node class LiteralUnicodeExpr.
      */
     case e: LiteralUnicodeExpr => {
-      val string = StringValue(e._value.toString(), e._location)
+      val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
       stringLiterals += string
     }
 
@@ -743,7 +748,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ObjectMethodVarExpr.
      */
-    case e: ObjectMethodVarExpr => ???
+    case e: ObjectMethodVarExpr => { }
 
     /**
      * Case for AST node class ObjectNewExpr.
@@ -758,7 +763,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ObjectNewVarExpr.
      */
-    case e: ObjectNewVarExpr => ???
+    case e: ObjectNewVarExpr => { }
 
     /**
      * Case for AST node class ParamDefaultExpr.
@@ -920,6 +925,7 @@ class ASTVisitor(path: Path) {
      */
     case e: VarVarExpr => ???
 
+    case _ => {}
   }
 
 }
@@ -928,20 +934,4 @@ object ASTVisitor {
   
   var rootPath: Path = null
 
-  /**
-   * Auxiliary method to retrieve the line nr of a given
-   * statement AST node.
-   *
-   * @param Statement statement AST node to inspect
-   *
-   * @return line nr
-   */
-  def getStatementLineNr(stmt: Statement): Int = {
-    val location = try {
-      stmt._location
-    } catch {
-      case e: Exception => throw new RuntimeException(e)
-    }
-    return location.getLineNumber
-  }
 }

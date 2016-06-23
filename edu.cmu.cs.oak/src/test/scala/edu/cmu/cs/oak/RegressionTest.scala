@@ -4,7 +4,6 @@ import java.net.URL
 
 import scala.io.Source
 
-import edu.cmu.cs.oak.analysis.PrecisionCalculator
 import edu.cmu.cs.oak.core.OakEngine
 import edu.cmu.cs.oak.core.OakInterpreter
 import edu.cmu.cs.oak.env.Environment

@@ -630,7 +630,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val fieldName = t._name.toString()
 
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
-        thisArray.getRef(StringValue(fieldName, t._location))
+        thisArray.getRef(StringValue(fieldName, t._location.getFileName(), t._location.getLineNumber()))
       }
       case v: VarExpr => {
         env.getVariables().get(v.toString).get
@@ -860,7 +860,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   def evaluate(e: LiteralUnicodeExpr, env: Environment): (OakValue, Environment) = {
-    val sv = StringValue(e.toString.slice(1, e.toString.length - 1), e._location)
+    val sv = StringValue(e.toString.slice(1, e.toString.length - 1), e._location.getFileName(), e._location.getLineNumber())
     return (sv, env)
   }
 
@@ -1316,7 +1316,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def evaluate(t: ThisFieldExpr, env: Environment): (OakValue, Environment) = {
     val fieldName = t._name.toString()
 
-    val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName, t._location))
+    val ref = env.lookup("$this").asInstanceOf[ArrayValue].getRef(StringValue(fieldName, t._location.getFileName(), t._location.getLineNumber()))
     val value = env.heap.extract(ref)
     (value, env)
   }
@@ -1474,7 +1474,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
           // 
           val ref = if (obj.fields.getKeys contains fieldName) {
-            obj.fields.getRef(StringValue(fieldName, of._location))
+            obj.fields.getRef(StringValue(fieldName, of._location.getFileName, of._location.getLineNumber))
           } else {
             OakVariable(fieldName + OakHeap.index, objName + "." + fieldName)
           }
@@ -1520,7 +1520,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         (null, env)
       }
       case tfve: ThisFieldVarExpr => {
-        val fieldName = StringValue(tfve._nameExpr.toString, tfve._location)
+        val fieldName = StringValue(tfve._nameExpr.toString, tfve._location.getFileName, tfve._location.getLineNumber)
         val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
         thisArray.set(fieldName, evaluate(expr, env)._1, env)
         env.update("$this", thisArray)
@@ -1582,7 +1582,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       val opt = constants.get(e.toString)
       return (opt.get, env)
     } else {
-      (StringValue("", e._location), env)
+      (StringValue("", e._location.getFileName, e._location.getLineNumber), env)
     }
   }
 
@@ -1664,7 +1664,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   def evaluate(e: ThisFieldVarExpr, env: Environment): (OakValue, Environment) = {
     val thisV = env.lookup("$this").asInstanceOf[ArrayValue]
-    val t = thisV.get(StringValue(e._nameExpr.toString, e._location), env)
+    val t = thisV.get(StringValue(e._nameExpr.toString, e._location.getFileName, e._location.getLineNumber), env)
     (t, env)
   }
 

@@ -17,13 +17,13 @@ case class ObjectValue(name: String, stereotype: ClassDef) extends OakValue {
   
   def get(fieldKey: String, env: Environment): OakValue = {
     //assert(stereotype.getFields.contains(fieldKey))
-    return fields.get(StringValue(fieldKey, null), env) //FIXME is this right?
+    return fields.get(StringValue(fieldKey, null, 0), env) //FIXME is this right?
   }
   
   def set(fieldKey: String, value: OakValue, env: Environment): Unit = {
     
     //assert(stereotype.getFields.contains(fieldKey), fieldKey)
-    fields.set(StringValue(fieldKey, null), value, env) //FIXME is this right?
+    fields.set(StringValue(fieldKey, null, 0), value, env) //FIXME is this right?
   }
   
   override def toXml = {
