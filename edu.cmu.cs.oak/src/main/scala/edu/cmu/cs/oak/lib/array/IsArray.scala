@@ -24,7 +24,7 @@ class IsArray extends InterpreterPlugin {
      * been called with exactly one argument. */
     assert(args.size == 1)
     
-    val v = provider.asInstanceOf[Interpreter].evaluate(args(0), env)._1
+    val v = provider.asInstanceOf[Interpreter].evaluate(args(0), env)
     return BooleanValue(v match {
       case a: ArrayValue => true
       case _ => false

@@ -28,15 +28,15 @@ class DirName extends InterpreterPlugin {
       try {
         return env.lookup(args.head.toString)
       } catch {
-        case vnfe: VariableNotFoundException => SymbolValue("", OakHeap.index)
+        case vnfe: VariableNotFoundException => SymbolValue("", OakHeap.index, null)
       }
     } else if (args.head.toString endsWith(")")) {
       try {
-        val arg = interpreter.evaluate(args.head, env)._1.toString
+        val arg = interpreter.evaluate(args.head, env).toString
         val dirname = arg.substring(0, arg.lastIndexOf("/"))
         return StringValue(dirname, args.head._location.getFileName(), args.head._location.getLineNumber())
       } catch {
-        case _ : Throwable => SymbolValue("", OakHeap.index)
+        case _ : Throwable => SymbolValue("", OakHeap.index, null)
       }
     } else {
       try {
@@ -44,7 +44,7 @@ class DirName extends InterpreterPlugin {
         val dirname = arg.substring(0, arg.lastIndexOf("/"))
         return StringValue(dirname, args.head._location.getFileName(), args.head._location.getLineNumber())
       } catch {
-        case _ : Throwable => SymbolValue("", OakHeap.index)
+        case _ : Throwable => SymbolValue("", OakHeap.index, null)
       }
     }
   }

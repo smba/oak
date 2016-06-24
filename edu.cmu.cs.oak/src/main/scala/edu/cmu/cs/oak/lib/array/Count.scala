@@ -19,18 +19,16 @@ class Count extends InterpreterPlugin {
   
   override def visit(provider: InterpreterPluginProvider, args: List[Expr],loc: Path, env: Environment): OakValue = {
     
-    
-    
     /* Assert that the function has only 
      * been called with exactly one argument. */
     assert(args.size == 1)
     
-    val res = provider.asInstanceOf[Interpreter].evaluate(args(0), env)._1 
+    val res = provider.asInstanceOf[Interpreter].evaluate(args(0), env)
     res match {
       case a: ArrayValue => {
         return IntValue(a.getSize)
       }
-      case _ =>  return SymbolValue(args(0).toString, OakHeap.getIndex())
+      case _ =>  return SymbolValue(args(0).toString, OakHeap.getIndex(), null)
     }
     
   }

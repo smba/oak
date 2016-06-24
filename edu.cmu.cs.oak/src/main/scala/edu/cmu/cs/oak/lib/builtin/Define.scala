@@ -24,10 +24,10 @@ class Define extends InterpreterPlugin {
     /* Assert that the function has two arguments */
     assert(args.size == 2)
 
-    val constantIdentifier = interpreter.evaluate(args(0), env)._1
-    val constantValue = interpreter.evaluate(args(1), env)._1
+    val constantIdentifier = interpreter.evaluate(args(0), env)
+    val constantValue = interpreter.evaluate(args(1), env)
     
-    interpreter.addConstants( constantIdentifier.toString , constantValue )
+    interpreter.defineConstant( constantIdentifier.toString , constantValue )
     
     null 
   }

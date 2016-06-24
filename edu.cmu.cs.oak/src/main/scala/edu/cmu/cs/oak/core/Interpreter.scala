@@ -16,20 +16,9 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import scala.collection.mutable.Stack
 import edu.cmu.cs.oak.value.ObjectValue
+import org.slf4j.LoggerFactory
 
-trait Interpreter {
-
-  /** Path to the currently executed script */
-  var path: Path = null
-
-  /** Root path; where to find the program entry point. */
-  var rootPath: Path = null
-
-  /** Constants */
-  var constants = Map[String, OakValue]()
-
-  /* Keep track of the includes */
-  val includes = Stack[Path]()
+abstract class Interpreter {
 
   /**
    * Evaluates an expression in the context of a given environment.
@@ -37,9 +26,9 @@ trait Interpreter {
    * @param e Expression to evaluate
    * @param env Environment/Context to evaluate the expression in
    *
-   * @return Tuple containing (a) the resulting OakValue, (b) the resulting environment with regard to possible side effects
+   * @return  the resulting OakValue, 
    */
-  def evaluate(e: Expr, env: Environment): (OakValue, Environment)
+  def evaluate(expr: Expr, env: Environment): OakValue
 
   /**
    * Executes a statement in the context of a given environment.
@@ -47,18 +36,45 @@ trait Interpreter {
    * @param s Statement to execute
    * @param env Environment/Context to execute the statement in
    *
-   * @return Tuple containing (a) a control code, (b) the resulting environment
+   * @return A ControlCode indicating success or failure of the statement execution
    */
   def execute(s: Statement, env: Environment): ControlCode.Value
+  
+  // Logger for the interpreter instance
+  val logger = LoggerFactory.getLogger(classOf[Interpreter])
 
-  def addConstants(name: String, value: OakValue) {
-    constants += (name -> value)
-  }
+  /** 
+   *  Path to the *currently* executed source file. This path is cached and changed
+   *  while including references source files.  
+   *  */
+  var path: Path = null
+
+  /** Entry point of the program, i.e., the 
+   *  project's root folder. 
+   *  */
+  var rootPath: Path = null
+
+  /** Map of constants that are defined during the execution 
+   *  of a PHP script. 
+   *  */
+  var constants = Map[String, OakValue]()
 
   /**
-   * TODO Einbinden in das generieren eines functionEnv!
+   * (Mutable) include stack (similar to a call stack) to keep track 
+   * of recent includes in order to avoid recursion and manage
+   * "require_once" statements.
    */
-  def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Expr]): Environment = {
+  val includes = Stack[Path]()
+
+  /**
+   * Assigns passed arguments to the corresponding function context (environment).
+   * 
+   * @param function FunctionDef instance representing the function or method to execute
+   * @param env Environment The current environment of the outer program (caller's) context
+   * @param functionEnv Environment The function/method (callee's) context to prepare 
+   * @param args List of Exprs that are passed for the function/method call
+   */
+  def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Expr]) {
     (function.getArgs.slice(0, args.length) zip args).foreach {
       t =>
         {
@@ -71,7 +87,7 @@ trait Interpreter {
               }
             }
           } else {
-            evaluate(t._2, env)._1
+            evaluate(t._2, env)
           }
           functionEnv.update("$" + t._1.replace("&", ""), functionVal)
         }
@@ -87,13 +103,21 @@ trait Interpreter {
                 throw new NoSuchElementException("Default argument not found")
               }
             }
-            val defaultValue = evaluate(default, env)._1
+            val defaultValue = evaluate(default, env)
             functionEnv.update("$" + a.replace("&", ""), defaultValue)
           }
       }
     }
-    functionEnv
   }
-
-   
+  
+  /**
+   * Defines a constant used during the program execution.
+   * 
+   * @param name Name of the constant
+   * @param value Value of the Constant
+   */
+  def defineConstant(name: String, value: OakValue) {
+    constants += (name -> value)
+  }
+  
 }

@@ -30,7 +30,7 @@ class Print extends InterpreterPlugin {
     /* Assert that the function has been o*/
     assert(args.size == 1)
     
-    val value = interpreter.evaluate(args.head, env)._1
+    val value = interpreter.evaluate(args.head, env)
 
     env.addOutput( DNode.createDNode(value, expr = args.head) )
 
