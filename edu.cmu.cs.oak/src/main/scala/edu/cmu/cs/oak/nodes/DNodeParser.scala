@@ -43,7 +43,7 @@ object DNodeParser extends App {
   }
   
   def parseSymbolicNode(node: scala.xml.Node): DNode = {
-    SymbolNode(SymbolValue((node \ "Text").text.trim, OakHeap.index))
+    SymbolNode(SymbolValue((node \ "Text").text.trim, OakHeap.index, null))
   }
   
   def parseLiteralNode(node: scala.xml.Node): DNode = {
