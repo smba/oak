@@ -32,9 +32,7 @@ class OakEngine {
 
     val parser = {
       val context = OakEngine.getQuercus("UTF-8", true)
-      println(path.toString())
       val pathObject = new FilePath(path.toString())
-      //context.setPwd(pathObject)
       new QuercusParser(context, pathObject, reader)
     }
     return parser.parse()

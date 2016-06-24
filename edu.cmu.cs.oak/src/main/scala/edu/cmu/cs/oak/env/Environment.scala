@@ -2,6 +2,7 @@ package edu.cmu.cs.oak.env
 
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
+import scala.xml.PrettyPrinter
 
 import org.slf4j.LoggerFactory
 
@@ -13,6 +14,7 @@ import com.caucho.quercus.statement.Statement
 
 import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
+import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.ArrayValue
@@ -26,10 +28,6 @@ import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.nodes.SelectNode
-import edu.cmu.cs.oak.nodes.ConcatNode
-import javax.sql.rowset.JoinRowSet
-import scala.xml.PrettyPrinter
 
 /**
  * Programs state and program state operations.
@@ -112,7 +110,6 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       if (!opt.isEmpty) {
         opt.get
       } else {
-        //println("Unassigned variable " + name + ".")
         throw new VariableNotFoundException("Unassigned variable " + name + ".")
       }
     }
@@ -122,7 +119,7 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       case e: Exception => throw new RuntimeException(e)
     }
     if (ret == null) {
-      throw new RuntimeException(name)
+      NullValue("")
     }
     ret
   }
@@ -366,6 +363,17 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       throw new RuntimeException("Function " + name + " is undefined.")
     }
   }
+  
+  def getDelta(): Delta = {
+    new Delta(this.getOutput(), this.variables, this.heap.varval, Set(), Set())
+  }
+  
+  def weaveReferences(that: Environment) {
+    that.heap.varval.filter{ case (ref, value) => !(this.heap.varval.keySet contains ref)}.foreach {
+      case (ref, value) => this.heap.insert(ref, value)
+    }
+  }
+  
 }
 
 /**
@@ -447,6 +455,11 @@ object Environment {
     dis.classDefs.foreach {
       cd => env.addClass(cd._2)
     }
+    dis.heap.varval.foreach {
+      case (reference, value) => {
+        env.heap.insert(reference, value)
+      }
+    }
     env
   }
 
@@ -470,6 +483,26 @@ object Environment {
     env
   }
   
+  /**
+   * Creates a new function environment that is used to
+   * execute a 
+   * 
+   *  - function call or 
+   *  - method call
+   *  
+   * The function call is documented via the 
+   * environment's call stack.
+   *
+   * @param dis Parent environment to bounce output to
+   * @param f Name of the function
+   * @return FunctionEnv
+   */
+  def createMethodEnvironment(dis: Environment, obj: ObjectValue, m: String): Environment = {
+    val env = createFunctionEnvironment(dis, m)
+    env.update("$this", obj)
+    env
+  }
+  
   def createLoopEnvironment(dis: Environment): LoopEnv = {
     val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
     dis.funcs.foreach {
@@ -486,4 +519,5 @@ object Environment {
     }
     env
   }
+  
 }

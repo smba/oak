@@ -11,6 +11,7 @@ import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
+import com.caucho.quercus.Location
 
 /**
  * Model for  output of a symbolically executed PHP program.
@@ -71,22 +72,22 @@ abstract class DNode {
  */
 object DNode {
 
-  def createDNode(value: OakValue, expr: Expr = null): DNode = {
+  def createDNode(value: OakValue, location: Location = null): DNode = {
     value match {
       case s: SymbolValue => {
         SymbolNode(s)
       }
       case c: Choice => {
-        SelectNode(c.p, createDNode(c.v1, expr), createDNode(c.v2, expr))
+        SelectNode(c.p, createDNode(c.v1, location), createDNode(c.v2, location))
       }
       case se: OakValueSequence => {
-        ConcatNode(se.getSequence.reverse.map { v => createDNode(v, expr) } )
+        ConcatNode(se.getSequence.reverse.map { v => createDNode(v, location) } )
       }
       case sv: StringValue => {
         LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
       }
       case _ => {
-        LiteralNode(value.toString(), expr._location.getFileName, expr._location.getLineNumber)
+        LiteralNode(value.toString(), location.getFileName, location.getLineNumber)
       }
     }
   }

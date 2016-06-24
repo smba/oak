@@ -12,11 +12,6 @@ case class SymbolValue(e: String, id: Long, flag: SymbolFlag.Value) extends Symb
   
   OakInterpreter.symbolSet += this
   
-  //System.err.println("Symbol σ" + id + " for " + e + ".")
-  
   override def toString = "[Symbolic:" + e + "]"
   
-  override def toXml = {
-    <Symbolic Text={e} />
-  }
 }

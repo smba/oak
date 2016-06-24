@@ -46,9 +46,4 @@ case class DoubleValue(value:Double) extends NumericValue {
     }
   }
   def getValue: Double = value
-  override def toXml = {
-    <double>
-			{value}
-		</double>
-  }
 }

@@ -7,10 +7,4 @@ case class BooleanValue(v:Boolean) extends OakValue {
   def ||(v2:BooleanValue): BooleanValue = BooleanValue(v || v2.value)
   def not(): BooleanValue = BooleanValue(!v)
   def value = v
-  
-  override def toXml = {
-    <boolean>
-			{v.toString}
-		</boolean>
-  }
-}
+ }

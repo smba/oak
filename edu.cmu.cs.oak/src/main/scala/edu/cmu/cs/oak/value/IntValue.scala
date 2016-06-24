@@ -49,9 +49,4 @@ case class IntValue(value: Long) extends NumericValue {
   
   override def toString() = value.toString
   
-  override def toXml = {
-    <int>
-			{value}
-		</int>
-  }
 }

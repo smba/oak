@@ -23,7 +23,4 @@ class LoopEnv(parent: EnvListener, calls: Stack[String], constraint: String) ext
     RepeatNode(this.output)
   }
   
-  def getDelta() = {
-    new Delta(this.getOutput(), this.variables, this.heap.varval, Set(), Set())
-  }
 }

@@ -4,14 +4,27 @@ import scala.annotation.elidable.ASSERTION
 
 import edu.cmu.cs.oak.env.Environment
 
+/**
+ * Representation of an object value in PHP.
+ */
+case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
 
-case class ObjectValue(name: String, stereotype: ClassDef) extends OakValue {
-
-  val fields = new ArrayValue
+  /**
+   * Internally an object is implemented using an array
+   * whereby the classes fields represent the indices.
+   */
+  private val fields = new ArrayValue()
   
+  /**
+   * Name of the object
+   */
   def getName(): String = name
   
-  def getClassdef(): ClassDef = stereotype
+  /**
+   * Returns the class definition of the object value.
+   * @return ClassDef
+   */
+  def getClassDef(): ClassDef = objectClass
   
   def getFields(): ArrayValue = fields
   
@@ -24,12 +37,5 @@ case class ObjectValue(name: String, stereotype: ClassDef) extends OakValue {
     
     //assert(stereotype.getFields.contains(fieldKey), fieldKey)
     fields.set(StringValue(fieldKey, null, 0), value, env) //FIXME is this right?
-  }
-  
-  override def toXml = {
-    <object name={name}>
-			{fields.toXml}
-    </object>
-  }
-  
+  }  
 }

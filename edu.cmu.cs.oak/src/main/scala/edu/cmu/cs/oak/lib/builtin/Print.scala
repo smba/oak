@@ -32,7 +32,7 @@ class Print extends InterpreterPlugin {
     
     val value = interpreter.evaluate(args.head, env)
 
-    env.addOutput( DNode.createDNode(value, expr = args.head) )
+    env.addOutput( DNode.createDNode(value, location = args.head._location) )
 
     return IntValue(1)
   }

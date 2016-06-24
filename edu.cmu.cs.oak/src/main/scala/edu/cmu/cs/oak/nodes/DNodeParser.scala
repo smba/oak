@@ -13,7 +13,6 @@ object DNodeParser extends App {
   var i = 0
   
   def parseNode(node: scala.xml.Node): DNode = {
-    println(i)
     i += 1
     node.label match {
       case "DataModel"  => parseDataModel(node)

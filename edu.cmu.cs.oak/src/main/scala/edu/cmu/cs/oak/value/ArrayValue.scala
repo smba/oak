@@ -43,9 +43,4 @@ class ArrayValue extends OakValue {
 
   override def toString(): String = "[" + array.mkString(", ") + "]"
 
-  override def toXml = {
-    <array>
-
-		</array>
-  }
 }

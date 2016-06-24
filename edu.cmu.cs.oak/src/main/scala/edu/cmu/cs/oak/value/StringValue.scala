@@ -23,9 +23,4 @@ case class StringValue(value:String, var file: String, var lineNr: Int) extends 
   
   def getLineNr(): Int = lineNr
   
-  override def toXml = {
-    <string>
-
-    </string>
-  }
 }
