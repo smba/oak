@@ -488,7 +488,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val v = try {
       evaluate(expr, env)
     } catch {
-      case vnfe: VariableNotFoundException => SymbolValue("return", OakHeap.index, SymbolFlag.EXPR_UNEVALUATED)
+      case vnfe: VariableNotFoundException => null
     }
     env.update("$return", v)
     return ControlCode.OK
@@ -686,7 +686,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val loopEnv = Environment.createLoopEnvironment(env)
 
     // Initialize the loop environment
-    loopEnv.update(value.toString(), SymbolValue("foreach::", OakHeap.index, SymbolFlag.EXPR_UNEVALUATED))
+    loopEnv.update(value.toString(), SymbolValue("foreach::", OakHeap.index, SymbolFlag.DUMMY))
     execute(block, loopEnv)
     env.weaveDelta(loopEnv.getDelta())
     ControlCode.OK
@@ -886,7 +886,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val function = try {
       env.getFunction(name)
     } catch {
-      case ex: Exception => return SymbolValue(e.toString, OakHeap.getIndex(), SymbolFlag.EXPR_UNEVALUATED)
+      case ex: Exception => return SymbolValue(e.toString, OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
     }
     // Assert that the number of arguments in the function call and declaration match
     //assert(function.getArgs.length == args.length)
@@ -970,29 +970,46 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   * 
   */
   private def evaluateObjectMethodExpr(e: ObjectMethodExpr, env: Environment): OakValue = {
-    val obj = evaluate(e._objExpr, env)
-    
-    val methodName = e._methodName.toString()
-    val args = e._args.toList
-    obj match {
-      case objectValue: ObjectValue => {
-        val methodEnv = Environment.createMethodEnvironment(env, objectValue, objectValue.getClassDef().name + "." + methodName)
-        prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
-        execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
-        env.weaveDelta(methodEnv.getDelta())
-        
-        // try return value
-        return try {
-          methodEnv.lookup("$return")
-        } catch {
-          case _ => null
+
+    /**
+     * Recursively applies method to a variational object.
+     * @param value Choice of objects or ObjectValue
+     * @param methodName Name of the objects method
+     * @param args List of argument expressions
+     * @param Environment to start with
+     * 
+     * @return Choice of return values
+     */
+    def applyMethod(value: OakValue, methodName: String, args: List[Expr], env: Environment): OakValue = {
+      value match {
+        case objectValue: ObjectValue => {
+          val methodEnv = Environment.createMethodEnvironment(env, objectValue, objectValue.getClassDef().name + "." + methodName)
+          prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
+          execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
+          env.weaveDelta(methodEnv.getDelta())
+          return try {
+            methodEnv.lookup("$return")
+          } catch {
+            case _ : Throwable => null
+          }
+        }
+        case choice: Choice => {
+          val branches = Environment.fork(env, List(choice.p)) // 2
+          val r1 = applyMethod(choice.v1, methodName, args, branches.head)
+          val r2 = applyMethod(choice.v2, methodName, args, branches(1))
+          env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
+          Choice(choice.p, r1, r2)
+        }
+        case _ => {
+          null
         }
       }
-      case _ => {
-        null
-      }
     }
-    null
+
+    val obj = evaluate(e._objExpr, env)
+    val methodName = e._methodName.toString()
+    val args = e._args.toList
+    applyMethod(obj, methodName, args, env)
   }
 
   private def evaluateObjectNewExpr(b: ObjectNewExpr, env: Environment): OakValue = {
@@ -1499,7 +1516,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case e: ToBooleanExpr => {
         evaluateToBooleanExpr(e, env)
       }
-      case _ => return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      case _ => throw new RuntimeException(e.getClass + " not implemented.")//return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
   }
 
