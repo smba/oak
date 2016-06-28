@@ -14,7 +14,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
   
   override def ifdefy(): List[String] = {
     var sequence = List[String]()
-    sequence ++= List("#ifdef //" + condition)
+    sequence ++= List("#ifdef")
     sequence ++= v1.ifdefy()
     sequence ++= List("#else")
     sequence ++= v2.ifdefy()
