@@ -45,10 +45,10 @@ import java.util.ArrayList;
 public class ObjectNewVarExpr extends Expr {
   private static final L10N L = new L10N(ObjectNewExpr.class);
   
-  protected final Expr _name;
-  protected final Expr []_args;
+  public final Expr _name;
+  public final Expr []_args;
 
-  protected Expr []_fullArgs;
+  public Expr []_fullArgs;
 
   public ObjectNewVarExpr(Location location, Expr name, ArrayList<Expr> args)
   {

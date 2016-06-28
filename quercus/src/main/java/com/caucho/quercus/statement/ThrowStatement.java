@@ -39,7 +39,7 @@ import com.caucho.quercus.expr.Expr;
  * Represents a throw expression statement in a Quercus program.
  */
 public class ThrowStatement extends Statement {
-  protected Expr _expr;
+	public Expr _expr;
   
   /**
    * Creates the echo statement.

@@ -38,16 +38,7 @@ class OakEngine {
     return parser.parse()
   }
 
-  def loadFromFile2(pathe: Path): QuercusProgram = {
-    val filename = pathe.toString()
-    val path = new FilePath(filename)
-    val sb = new StringBuilder()
-    for (line <- Source.fromFile(filename).getLines) {
-      sb.append(line)
-    }
-    val engine = new OakEngine
-    engine.loadFromScript(sb.mkString("\n"), path)
-  }
+
   
   def loadAndParse(path: Path): QuercusProgram = {
     
@@ -68,7 +59,7 @@ class OakEngine {
    * @param script source code to parse, e.g. "<?php echo 'Hi!'; ?>"
    * @return QuercusProgram parsed AST
    */
-  def loadFromScript(script: String, path: com.caucho.vfs.Path): QuercusProgram = {
+  def loadFromScript(script: String): QuercusProgram = {
 
     val contentReader = new StringReader(script)
 
@@ -79,11 +70,11 @@ class OakEngine {
      */
     val program: QuercusProgram = try {
       if ( /* TODO isUnicodeSemantics*/ true) {
-        QuercusParser.parse(quercus, path, contentReader);
+        QuercusParser.parse(quercus, null, contentReader);
       } else {
         val is = EncoderStream.open(contentReader, quercus.getScriptEncoding());
         val rs = new ReadStream(new VfsStream(is, null));
-        QuercusParser.parse(quercus, path, rs)
+        QuercusParser.parse(quercus, null, rs)
       }
     } catch {
       case e: Exception => throw new RuntimeException(e)

@@ -46,8 +46,8 @@ import com.caucho.util.L10N;
 public class ClassFieldExpr extends AbstractVarExpr {
   private static final L10N L = new L10N(ClassFieldExpr.class);
 
-  protected final String _className;
-  protected final StringValue _varName;
+  public final String _className;
+  public final StringValue _varName;
 
   public ClassFieldExpr(String className, StringValue varName)
   {

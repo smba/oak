@@ -45,8 +45,8 @@ import com.caucho.util.L10N;
 public class ClassConstExpr extends Expr {
   private static final L10N L = new L10N(ClassMethodExpr.class);
 
-  protected final String _className;
-  protected final StringValue _name;
+  public final String _className;
+  public final StringValue _name;
 
   public ClassConstExpr(Location location, String className, StringValue name)
   {

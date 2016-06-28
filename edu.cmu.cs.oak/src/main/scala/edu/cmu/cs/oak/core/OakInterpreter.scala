@@ -113,6 +113,10 @@ import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.DoubleValue
 import com.caucho.quercus.expr.ToObjectExpr
+import com.caucho.quercus.statement.ThrowStatement
+import com.caucho.quercus.expr.ClassFieldExpr
+import com.caucho.quercus.expr.ClassConstExpr
+import com.caucho.quercus.expr.ObjectNewVarExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -146,6 +150,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+    execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
     execute(program, env)
 
     (ControlCode.OK, env)
@@ -713,6 +718,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     ControlCode.OK
   }
 
+  private def executeThrowStatement(s: ThrowStatement, env: Environment): ControlCode.Value = {
+    evaluate(s._expr, env)
+    ControlCode.OK
+  }
+  
   override def execute(stmt: Statement, env: Environment): ControlCode.Value = {
     //logger.info(">>> " + stmt)
     stmt match {
@@ -773,6 +783,9 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case s: TryStatement => {
         executeTryStatement(s, env)
       }
+      case s: ThrowStatement => {
+        executeThrowStatement(s, env)
+      }
       case _ => throw new RuntimeException(stmt + " unimplemented.")
     }
   }
@@ -780,9 +793,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   private def evaluateLiteralExpr(e: LiteralExpr, env: Environment): OakValue = {
     val value = e._value
 
-    /*
-     * Boolean Value
-     */
     if (e.isBoolean) {
       if (e.isTrue()) {
         return BooleanValue(true)
@@ -794,11 +804,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     } else if (e.isNumber) { //numeric
       return try {
         if (e.isLong) {
-          return IntValue(e.toString.toInt)
+          return IntValue(e.toString.toLong)
         } else if (e.isDouble) {
           return DoubleValue(e.toString.toDouble)
         } else {
-          throw new NumberFormatException()
+          try {
+            return IntValue(e.toString.toInt)
+          } catch {
+            case nfe: NumberFormatException => throw new RuntimeException()
+          }
         }
       } catch {
         case e: NumberFormatException => throw new RuntimeException(e)
@@ -902,9 +916,6 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       var functionEnv = Environment.createFunctionEnvironment(env, name)
       prepareFunctionOrMethod(function, env, functionEnv, args.toList)
       execute(function.getStatement, functionEnv)
-
-      //write output during the function call to the parent environment
-      functionEnv.getParent().receiveOutput(functionEnv.getOutput())
 
       val returnValue = try {
         functionEnv.lookup("$return")
@@ -1270,6 +1281,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         env.update("$this", thisArray)
         null
       }
+      
+      case e: ClassFieldExpr => {
+        evaluate(e, env)
+      }
       case _ => throw new RuntimeException(name.getClass + " unexpected " + expr.toString())
     }
   }
@@ -1430,11 +1445,26 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   private def evaluateToBooleanExpr(e: ToBooleanExpr, env: Environment): OakValue = {
-    SymbolValue(e._expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+    SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
   private def evaluateToObjectExpr(e: ToObjectExpr, env: Environment): OakValue = {
-    SymbolValue(e._expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+    SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
+  }
+  
+  // TODO implement reference to class fields
+  private def evaluateClassFieldExpr(e: ClassFieldExpr, env: Environment): OakValue = {
+    SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
+  }
+  
+  // TODO implement reference to class constants
+  private def evaluateClassConstExpr(e: ClassConstExpr, env: Environment): OakValue = {
+    SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
+  }
+  
+  // TODO implement ObjectNewVarExpr
+  private def evaluateObjectNewVarExpr(e: ObjectNewVarExpr, env: Environment): OakValue = {
+    SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
   }
   
   override def evaluate(e: Expr, env: Environment): OakValue = {
@@ -1538,7 +1568,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case e: ToObjectExpr => {
         evaluateToObjectExpr(e, env)
       }
-
+      case e: ClassFieldExpr => {
+        evaluateClassFieldExpr(e, env)
+      }
+      case e: ClassConstExpr => {
+        evaluateClassConstExpr(e, env)
+      }
+      case e: ObjectNewVarExpr => {
+        evaluateObjectNewVarExpr(e, env)
+      }
       case _ => throw new RuntimeException(e.getClass + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
   }
@@ -1546,7 +1584,8 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   def getInlcudePath(expr: Expr, env: Environment): Path = {
     var path = evaluate(expr, env).toString.replace("\"", "")
     if (!(path startsWith ("/"))) {
-      path = this.rootPath + "/" + path
+      val current = this.path.toString
+      path = current.slice(0, current.lastIndexOf("/")) + "/" + path
     }
     Paths.get(path)
   }
