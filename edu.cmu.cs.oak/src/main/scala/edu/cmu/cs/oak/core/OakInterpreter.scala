@@ -112,6 +112,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.DoubleValue
+import com.caucho.quercus.expr.ToObjectExpr
 
 class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
@@ -977,7 +978,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
      * @param methodName Name of the objects method
      * @param args List of argument expressions
      * @param Environment to start with
-     * 
+     *
      * @return Choice of return values
      */
     def applyMethod(value: OakValue, methodName: String, args: List[Expr], env: Environment): OakValue = {
@@ -990,7 +991,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           return try {
             methodEnv.lookup("$return")
           } catch {
-            case _ : Throwable => null
+            case _: Throwable => null
           }
         }
         case choice: Choice => {
@@ -1424,6 +1425,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     SymbolValue(e._expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
   }
 
+  private def evaluateToObjectExpr(e: ToObjectExpr, env: Environment): OakValue = {
+    SymbolValue(e._expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+  }
+  
   override def evaluate(e: Expr, env: Environment): OakValue = {
     e match {
       case e: LiteralExpr => {
@@ -1516,7 +1521,17 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case e: ToBooleanExpr => {
         evaluateToBooleanExpr(e, env)
       }
-      case _ => throw new RuntimeException(e.getClass + " not implemented.")//return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      case e: BinaryInstanceOfExpr => {
+        evaluateBinaryInstanceOfExpr(e, env)
+      }
+      case e: ObjectFieldExpr => {
+        evaluateObjectFieldExpr(e, env)
+      }
+      case e: ToObjectExpr => {
+        evaluateToObjectExpr(e, env)
+      }
+
+      case _ => throw new RuntimeException(e.getClass + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
   }
 
