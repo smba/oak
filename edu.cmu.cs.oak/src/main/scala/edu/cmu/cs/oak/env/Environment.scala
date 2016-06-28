@@ -54,16 +54,6 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    */
   var globalVariables = Set[String]()
 
-  /**
-   * Map of fuńction names and function definitions
-   */
-  var funcs = Map[String, FunctionDef]()
-  /**
-   * Map of class definitions. All classes defined during the program execution
-   * are stored here.
-   */
-  var classDefs = Map[String, ClassDef]()
-  
   var loopModeEnabled = false;
 
   /**
@@ -180,14 +170,6 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
   }
 
   /**
-   * Adds a function definition to the environment.
-   * @param value Function definition to add
-   */
-  def addFunction(value: FunctionDef) {
-    defineFunction(value)
-  }
-
-  /**
    * Returns the current call stack at runtime.
    * @return Stack of strings where each string denotes a function call
    */
@@ -270,31 +252,6 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
   }
 
   /**
-   * Adds a class definition to the environment.
-   * @param value ClassDef to add
-   */
-  def addClass(value: ClassDef) {
-    this.classDefs += (value.getName -> value)
-  }
-
-  /**
-   * Looks up a class definition in the environment.
-   * @param name Name of the class
-   * @return corresponding class definition
-   */
-  def getClass(name: String): ClassDef = {
-
-    if (name equals "Exception") {
-      // TODO implement built-in class(es)?
-    }
-    try {
-      classDefs.get(name).get
-    } catch {
-      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined at " + this + " " + this.parent)
-    }
-  }
-
-  /**
    * Defines a function. The defined function will be accessible during the
    * program execution.
    *
@@ -340,32 +297,14 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
       case (name, value) => this.update(name, value)
     }
     
-    // 4) Update new classDefs
-    joinResult.joinedClassDefs.foreach {
-      cd => this.addClass(cd) 
-    }
-    
     // 5 Globals
     joinResult.joinedGlobals.foreach {
       g => this.addToGlobal(g)
     }
   }
 
-  def defineFunction(f: FunctionDef): Unit = {
-    funcs += (f.getName -> f)
-  }
-
-  def getFunction(name: String): FunctionDef = {
-    val opt = funcs.get(name)
-    if (!opt.isEmpty) {
-      return opt.get
-    } else {
-      throw new RuntimeException("Function " + name + " is undefined.")
-    }
-  }
-  
   def getDelta(): Delta = {
-    new Delta(this.getOutput(), this.variables, this.heap.varval, Set(), Set())
+    new Delta(this.getOutput(), this.variables, this.heap.varval, Set())
   }
   
   def weaveReferences(that: Environment) {
@@ -381,6 +320,16 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
  * configurations.
  */
 object Environment {
+  
+  /**
+   * Map of fuńction names and function definitions
+   */
+  var funcs = Map[String, FunctionDef]()
+  /**
+   * Map of class definitions. All classes defined during the program execution
+   * are stored here.
+   */
+  var classDefs = Map[String, ClassDef]()
 
   /**
    * Splits an environment into two branch environments that
@@ -406,20 +355,6 @@ object Environment {
         b1.heap.insert(reference, value)
         b2.heap.insert(reference, value)
       }
-    }
-    parent.funcs.foreach {
-      f =>
-        {
-          b1.defineFunction(f._2)
-          b2.defineFunction(f._2)
-        }
-    }
-    parent.classDefs.foreach {
-      cd =>
-        {
-          b1.addClass(cd._2)
-          b2.addClass(cd._2)
-        }
     }
     return (b1, b2)
   }
@@ -449,12 +384,6 @@ object Environment {
    */
   def createFunctionEnvironment(dis: Environment, f: String): Environment = {
     val env = new Environment(dis, dis.getCalls push f, dis.getConstraint)
-    dis.funcs.foreach {
-      f => env.defineFunction(f._2)
-    }
-    dis.classDefs.foreach {
-      cd => env.addClass(cd._2)
-    }
     dis.heap.varval.foreach {
       case (reference, value) => {
         env.heap.insert(reference, value)
@@ -474,12 +403,6 @@ object Environment {
   def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
     val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
     env.update("$this", obj)
-    dis.funcs.foreach {
-      f => env.defineFunction(f._2)
-    }
-    dis.classDefs.foreach {
-      cd => env.addClass(cd._2)
-    }
     env
   }
   
@@ -505,12 +428,6 @@ object Environment {
   
   def createLoopEnvironment(dis: Environment): LoopEnv = {
     val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
-    dis.funcs.foreach {
-      f => env.defineFunction(f._2)
-    }
-    dis.classDefs.foreach {
-      cd => env.addClass(cd._2)
-    }
     dis.variables.foreach {
       case (name, reference) => env.setRef(name, reference)
     }
@@ -518,6 +435,44 @@ object Environment {
       case (reference, value) => env.heap.insert(reference, value)
     }
     env
+  }
+  
+  def defineFunction(f: FunctionDef): Unit = {
+    funcs += (f.getName -> f)
+  }
+
+  def getFunction(name: String): FunctionDef = {
+    val opt = funcs.get(name)
+    if (!opt.isEmpty) {
+      return opt.get
+    } else {
+      throw new RuntimeException("Function " + name + " is undefined.")
+    }
+  }
+  
+    /**
+   * Adds a class definition to the environment.
+   * @param value ClassDef to add
+   */
+  def addClass(value: ClassDef) {
+    this.classDefs += (value.getName -> value)
+  }
+
+  /**
+   * Looks up a class definition in the environment.
+   * @param name Name of the class
+   * @return corresponding class definition
+   */
+  def getClassDef(name: String): ClassDef = {
+
+    if (name equals "Exception") {
+      // TODO implement built-in class(es)?
+    }
+    try {
+      classDefs.get(name).get
+    } catch {
+      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
+    }
   }
   
 }

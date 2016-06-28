@@ -42,15 +42,6 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) e
     updates += name
   }
   
-  /**
-   * Adds a class definition to the environment.
-   * @param value ClassDef to add
-   */
-  override def addClass(value: ClassDef) {
-    super.addClass(value)
-    updatedClassDefs += value.name
-  }
-  
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint +"]"
 
 }
@@ -122,16 +113,6 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
   private def joinHeaps(envs: List[BranchEnv]): Map[OakVariable, OakValue] = {
     envs.map { m => m.heap.varval } reduce (_ ++ _)
   }
-
-  private def joinClassDefs(envs: List[BranchEnv]): Set[ClassDef] = {
-    var classDefs = Set[ClassDef]()
-    envs.foreach {
-      env => env.updatedClassDefs.foreach { 
-        x => classDefs += env.getClass(x)
-      }
-    }
-    classDefs
-  }
   
   def join(envs: List[BranchEnv], constraints: List[String]): Delta = {
 
@@ -154,16 +135,11 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     val joinedOutput = joinOutput(envs, constraints)
     
     /**
-     * 4) JOIN new class definitions
-     */
-    val classDefs = joinClassDefs(envs)
-
-    /**
-     * 5) Globals
+     * 4) Globals
      */
     var allGlobals = Set[String]()
     val gloabls = envs.map { e => e.globalVariables.foreach { g => allGlobals += g } }
     
-    new Delta(joinedOutput, updatedVariableMap, joinedHeap, classDefs, allGlobals)
+    new Delta(joinedOutput, updatedVariableMap, joinedHeap, allGlobals)
   }
 }

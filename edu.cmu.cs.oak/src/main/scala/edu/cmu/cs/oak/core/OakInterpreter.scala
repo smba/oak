@@ -159,7 +159,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       val func = env.defineFunction(funcIterator.next())
 
       // Add function to the global environment
-      env.addFunction(func)
+      Environment.defineFunction(func)
     }
     execute(program.getStatement, env)
     return ControlCode.OK
@@ -404,7 +404,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
         // ClassName::ClassName(<args>) called, but not a 
         if (cme._className equals cme._methodName.toString()) {
-          val classDef = env.getClass(cme._className)
+          val classDef = Environment.getClassDef(cme._className)
           val constructor = classDef.getConstructor(cme._args.size)
           execute(constructor.statement, env)
           null
@@ -534,7 +534,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     /* Retrieve all parent classes */
     if ((classDefCasted._parentName != null) && (!(classDefCasted._parentName equals "WP_HTTP_Streams"))) {
-      val parentClassDef = env.getClass(classDefCasted._parentName)
+      val parentClassDef = Environment.getClassDef(classDefCasted._parentName)
 
       classFieldNames ++= parentClassDef.getFields()
       parentClassDef.methods.foreach {
@@ -551,7 +551,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }.foreach {
       fd => classDef.addConstructor(fd.args.size, fd)
     }
-    env.addClass(classDef)
+    Environment.addClass(classDef)
     return ControlCode.OK
   }
 
@@ -703,7 +703,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   private def executeFunctionDefStatement(s: FunctionDefStatement, env: Environment): ControlCode.Value = {
     val function = s._fun
-    env.addFunction(env.defineFunction(function))
+    Environment.defineFunction(env.defineFunction(function))
     ControlCode.OK
   }
 
@@ -885,7 +885,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
        * loading the function, we return with a symbol value, i.e., the called function
        * is either undefined or unimplemented. */
     val function = try {
-      env.getFunction(name)
+      Environment.getFunction(name)
     } catch {
       case ex: Exception => return SymbolValue(e.toString, OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
     }
@@ -1018,10 +1018,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val args = b._args
 
     val objectValue = try {
-      val constructor = env.getClass(name).getConstructor(args.size) // match by number of args
+      val constructor = Environment.getClassDef(name).getConstructor(args.size) // match by number of args
 
       /** Create a new object Value */
-      val obj = ObjectValue("Object Doe", env.getClass(name))
+      val obj = ObjectValue("Object Doe", Environment.getClassDef(name))
       val objEnv = Environment.createObjectEnvironment(env, obj)
 
       /* Execute constructor in the object environment and keep its variable $this:
@@ -1049,7 +1049,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
     } catch {
       case nsee: NoSuchElementException => {
-        env.getClass(name).getDefaultObject(env)
+        Environment.getClassDef(name).getDefaultObject(env)
       }
     }
     objectValue
@@ -1346,12 +1346,12 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     // ClassName::ClassName(<args>) called, but not a 
     if (cme._className equals cme._methodName.toString()) {
 
-      val classDef = env.getClass(cme._className)
+      val classDef = Environment.getClassDef(cme._className)
       val constructor = classDef.getConstructor(cme._args.size)
       execute(constructor.statement, env)
       null
     } else {
-      val classDef = env.getClass(cme._className)
+      val classDef = Environment.getClassDef(cme._className)
       val method = classDef.getMethods(cme._methodName.toString)
       val cmEnv = Environment.createFunctionEnvironment(env, cme._className + "::" + cme._methodName.toString())
       val args = cme._args
