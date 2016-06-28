@@ -72,7 +72,7 @@ abstract class DNode {
  */
 object DNode {
 
-  def createDNode(value: OakValue, location: Location = null): DNode = {
+  def createDNode(value: OakValue, location: Location): DNode = {
     value match {
       case s: SymbolValue => {
         SymbolNode(s)
@@ -86,6 +86,7 @@ object DNode {
       case sv: StringValue => {
         LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
       }
+      case null => null
       case _ => {
         LiteralNode(value.toString(), location.getFileName, location.getLineNumber)
       }

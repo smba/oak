@@ -190,6 +190,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       }
       case _ => value
     }
+    println(valueX)
     env.addOutput(DNode.createDNode(valueX, stmt._location))
     return ControlCode.OK
   }
