@@ -24,6 +24,7 @@ import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.DoubleValue
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.core.ControlCode
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -32,8 +33,8 @@ import edu.cmu.cs.oak.value.SymbolValue
  */
 
 @RunWith(classOf[JUnitRunner]) //optional
-object OakUnitTest extends FunSuite {
-/*
+class OakUnitTest extends FunSuite {
+
   
   // engine and interpreter instance for testing
   val engine = new OakEngine()
@@ -42,22 +43,12 @@ object OakUnitTest extends FunSuite {
   //val pp = new PrettyPrinter(200, 0)
 
   /**
-   * Reads a PHP source code string, parses & executes it.
-   *
-   * @param script PHP source code
-   * @return (ControlCode, Environment)
-   */
-  def readAndExecute(script: String): (String, Environment) = {
-    return interpreter.execute(engine.loadFromScript("<?php " + script + " ?>"), new Environment(null, Stack[String](), "true"))
-  }
-
-  /**
    * Read a PHP source code from file, parses & executes it.
    *
    * @param script PHP source code file
    * @return (ControlCode, Environment)
    */
-  def loadAndExecute(path: Path): (String) = {
+  def loadAndExecute(path: Path): (ControlCode.Value, Environment) = {
     return interpreter.execute(path)
   }
 
@@ -66,7 +57,7 @@ object OakUnitTest extends FunSuite {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
   
-  
+  /*
   test("BinaryExpression + BooleanExpr") {
     assert(readAndExecute("$b = true; $j = $b && false;")._2.lookup("$j") == BooleanValue(false))
     assert(readAndExecute("$b = true; $j = $b || false;")._2.lookup("$j") == BooleanValue(true))
@@ -135,24 +126,6 @@ object OakUnitTest extends FunSuite {
   test("Objects") {
     //assert(RegressionTest.test(url("testScripts/objects01.php"))._1)
   }
-  
-  test("Schoolmate") {
-    //assert(RegressionTest.test(url("schoolmate/index.php"))._1)
-  }
-  
-  test("Env1") {
-    val result = loadAndExecute(url("environments/env01.php"))
-    assert(result._2.getOutput().toString() equals "π(($x < 0),A,B)CSymbolNode([Symbolic:(\"a\" < 9)])beceZ")
-  }
-  
- test("switch") {
-    val result = loadAndExecute(url("environments/switch.php"))
-    assert(result._2.output+"" equals "π($o == 1,A,π($o == 2,B,π($o == 3,C,D)))π($o == 1,5,π($o == 2,6,π($o == 3,4,4)))") 
-  }
- 
- test("While") {
-   val result = loadAndExecute(url("environments/while.php"))
-   assert(result._2.getOutput().toString() equals "ρ(AC)Bb")
- }
-	*/
+  * */
+	
 }
