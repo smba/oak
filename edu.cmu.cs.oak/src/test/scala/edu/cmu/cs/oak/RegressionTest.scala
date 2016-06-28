@@ -18,22 +18,22 @@ import java.nio.file.Paths
  * TODO Comment
  */
 object RegressionTest {
-  
-  lazy val engine = new OakEngine
-  lazy val interpreter = new OakInterpreter
 
   /**
    * @param URL to test
    * @return (passed?, (found, available))
    */
   def test(fileName: String): Boolean = {
+    val engine = new OakEngine
+    val interpreter = new OakInterpreter
+
     val res = interpreter.execute(url(fileName))._2
-    val parsed = DNodeParser.parseNode(scala.xml.XML.load(url(fileName+"t").toString))
+    val parsed = DNodeParser.parseNode(scala.xml.XML.load(url(fileName + "t").toString))
     parsed compare res.output
   }
-  
+
   private def url(fileName: String): Path = {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
-	
+
 }
