@@ -994,13 +994,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
             case _: Throwable => null
           }
         }
-        case choice: Choice => {
-          val branches = Environment.fork(env, List(choice.p)) // 2
-          val r1 = applyMethod(choice.v1, methodName, args, branches.head)
-          val r2 = applyMethod(choice.v2, methodName, args, branches(1))
-          env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
-          Choice(choice.p, r1, r2)
-        }
+        
+//      XXX Support for method execution with choices
+//        case choice: Choice => {
+//          val branches = Environment.fork(env, List(choice.p))
+//          val r1 = applyMethod(choice.v1, methodName, args, branches.head)
+//          val r2 = applyMethod(choice.v2, methodName, args, branches(1))
+//          env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
+//          Choice(choice.p, r1, r2)
+//        }
         case _ => {
           null
         }
@@ -1008,6 +1010,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     }
 
     val obj = evaluate(e._objExpr, env)
+    
+    /** TODO For performance, a method is only executed for concrete objects 
+     *  rather than choices for now. ApplyMethod() enables the execution for 
+     *  choices.
+     */
     val methodName = e._methodName.toString()
     val args = e._args.toList
     applyMethod(obj, methodName, args, env)
