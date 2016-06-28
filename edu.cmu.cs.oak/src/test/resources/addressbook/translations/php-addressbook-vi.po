@@ -1,0 +1,478 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE COPYRIGHT HOLDER
+# This file is distributed under BSD and AGPL
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-25 14:49+0200\n"
+"PO-Revision-Date: 2013-11-20 09:20+0000\n"
+"Last-Translator: Vu Huy Phuong <phuongcuba@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-01-04 20:36+0000\n"
+"X-Generator: Launchpad (build 17286)\n"
+
+msgid "LANGUAGE"
+msgstr "NGÔN NGỮ"
+
+msgid "auto"
+msgstr "tự động"
+
+msgid "USER"
+msgstr "NGƯỜI DÙNG"
+
+msgid "PASSWORD"
+msgstr "MẬT KHẨU"
+
+msgid "LOGIN"
+msgstr "ĐĂNG NHẬP"
+
+msgid "LOGOUT"
+msgstr "ĐĂNG XUẤT"
+
+msgid "JANUARY"
+msgstr "THÁNG MỘT"
+
+msgid "FEBRUARY"
+msgstr "THÁNG HAI"
+
+msgid "MARCH"
+msgstr "THÁNG BA"
+
+msgid "APRIL"
+msgstr "THÁNG TƯ"
+
+msgid "MAY"
+msgstr "THÁNG NĂM"
+
+msgid "JUNE"
+msgstr "THÁNG SÁU"
+
+msgid "JULY"
+msgstr "THÁNG BẢY"
+
+msgid "AUGUST"
+msgstr "THÁNG TÁM"
+
+msgid "SEPTEMBER"
+msgstr "THÁNG CHÍN"
+
+msgid "OCTOBER"
+msgstr "THÁNG MƯỜI"
+
+msgid "NOVEMBER"
+msgstr "THÁNG MƯỜI MỘT"
+
+msgid "DECEMBER"
+msgstr "THÁNG MƯỜI HAI"
+
+msgid "ADDRESS_BOOK"
+msgstr "SỔ ĐỊA CHỈ"
+
+msgid "FOR"
+msgstr "ĐỂ"
+
+msgid "SEARCH"
+msgstr "TÌM KIẾM"
+
+msgid "HOME"
+msgstr "TRANG CHỦ"
+
+msgid "NEXT_BIRTHDAYS"
+msgstr "NGÀY SINH NHẬT KẾ TIẾP"
+
+msgid "ADD_NEW"
+msgstr "THÊM MỚI"
+
+msgid "PRINT_ALL"
+msgstr "IN TẤT CẢ"
+
+msgid "PRINT_PHONES"
+msgstr "IN SỐ ĐIỆN THOẠI"
+
+msgid "EXPORT_CSV"
+msgstr "XUẤT CSV"
+
+msgid "EXPORT"
+msgstr "XUẤT"
+
+msgid "IMPORT"
+msgstr "NHẬP"
+
+msgid "MAP"
+msgstr "BẢN ĐỒ"
+
+msgid "MORE"
+msgstr "THÊM"
+
+msgid "GROUP"
+msgstr "NHÓM"
+
+msgid "GROUPS"
+msgstr "NHÓM"
+
+msgid "MANAGE_GROUPS"
+msgstr "QUẢN LÝ NHÓM"
+
+msgid "NEW_GROUP"
+msgstr "TẠO NHÓM MỚI"
+
+msgid "DELETE_GROUPS"
+msgstr "XÓA NHÓM"
+
+msgid "EDIT_GROUP"
+msgstr "SỬA NHÓM"
+
+msgid "GROUP_NAME"
+msgstr "TÊN NHÓM"
+
+msgid "GROUP_HEADER"
+msgstr "HEADER NHÓM"
+
+msgid "GROUP_FOOTER"
+msgstr "FOOTER NHÓM"
+
+msgid "GROUP_PARENT"
+msgstr "NHÓM CHA"
+
+msgid "SEARCH_FOR_ANY_TEXT"
+msgstr "TÌM BẤT KỲ"
+
+msgid "NUMBER_OF_RESULTS"
+msgstr "SỐ KẾT QUẢ"
+
+msgid "ALL"
+msgstr "TẤT CẢ"
+
+msgid "NONE"
+msgstr "KHÔNG"
+
+msgid "SELECT_ALL"
+msgstr "CHỌN TẤT CẢ"
+
+msgid "REMOVE_FROM"
+msgstr "XÓA KHỎI"
+
+msgid "MAIL_CLIENT"
+msgstr "TRÌNH EMAIL"
+
+msgid "SEND_EMAIL"
+msgstr "GỬI EMAIL"
+
+msgid "ADD_TO"
+msgstr "THÊM VÀO"
+
+msgid "DETAILS"
+msgstr "CHI TIẾT"
+
+msgid "EDIT"
+msgstr "SỬA"
+
+msgid "MODIFY"
+msgstr "SỬA"
+
+msgid "PRINT"
+msgstr "IN"
+
+msgid "EDIT_ADD_ENTRY"
+msgstr "SỬA MỤC THÊM"
+
+msgid "GUESSED_HOMEPAGE"
+msgstr "WEBSITE"
+
+msgid "PREFERENCES"
+msgstr "THIẾT LẬP"
+
+msgid "NAME_PREFIX"
+msgstr "DANH XƯNG"
+
+msgid "FIRSTNAME"
+msgstr "TÊN"
+
+msgid "MIDDLENAME"
+msgstr "ĐỆM"
+
+msgid "LASTNAME"
+msgstr "HỌ"
+
+msgid "NAME_SUFFIX"
+msgstr "TÊN HẬU"
+
+msgid "NICKNAME"
+msgstr "TÊN THƯỜNG GỌI"
+
+msgid "COMPANY"
+msgstr "ĐƠN VỊ"
+
+msgid "DEPT"
+msgstr "PHÒNG BAN"
+
+msgid "OCCUPATION"
+msgstr "NGHỀ NGHIỆP"
+
+msgid "TITLES"
+msgstr "CHỨC DANH"
+
+msgid "ADDRESS"
+msgstr "ĐỊA CHỈ"
+
+msgid "POB"
+msgstr "ĐỊA CHỈ HỘP THƯ"
+
+msgid "APT"
+msgstr "APT"
+
+msgid "STREET"
+msgstr "ĐƯỜNG"
+
+msgid "STATE"
+msgstr "TỈNH"
+
+msgid "COUNTRY"
+msgstr "QUỐC GIA"
+
+msgid "TELEPHONE"
+msgstr "ĐIỆN THOẠI"
+
+msgid "PHONE_HOME"
+msgstr "SỐ NHÀ"
+
+msgid "HOME_SHORT"
+msgstr ""
+
+msgid "PHONE_MOBILE"
+msgstr "SỐ DI ĐỘNG"
+
+msgid "MOBILE_SHORT"
+msgstr ""
+
+msgid "PHONE_WORK"
+msgstr "SỐ CƠ QUAN"
+
+msgid "WORK_SHORT"
+msgstr ""
+
+msgid "FAX"
+msgstr "FAX"
+
+msgid "FAX_SHORT"
+msgstr ""
+
+msgid "PHONE2_SHORT"
+msgstr ""
+
+msgid "PAGER"
+msgstr ""
+
+msgid "EMAIL"
+msgstr "EMAIL"
+
+msgid "HOMEPAGE"
+msgstr "TRANG CHỦ"
+
+msgid "ZIP"
+msgstr "MÃ VÙNG"
+
+msgid "CITY"
+msgstr "THÀNH PHỐ"
+
+msgid "E_MAIL_HOME"
+msgstr "EMAIL CÁ NHÂN"
+
+msgid "E_MAIL_OFFICE"
+msgstr "EMAIL CƠ QUAN"
+
+msgid "2ND_ADDRESS"
+msgstr "e-mail văn phòng"
+
+msgid "2ND_PHONE"
+msgstr "Địa chỉ thứ hai"
+
+msgid "NOTES"
+msgstr "GHI CHÚ"
+
+msgid "MISC"
+msgstr "KHÁC"
+
+msgid "BIRTHDAY"
+msgstr "SINH NHẬT"
+
+msgid "ANNIVERSARY"
+msgstr ""
+
+msgid "CREATED"
+msgstr "ĐƯỢC TẠO"
+
+msgid "MODIFIED"
+msgstr "ĐÃ SỬA"
+
+msgid "UPDATE"
+msgstr "CẬP NHẬT"
+
+msgid "DELETE"
+msgstr "XÓA"
+
+msgid "INVALID"
+msgstr "KHÔNG HỢP LỆ"
+
+msgid "ENTER"
+msgstr "NHẬP"
+
+msgid "MEMBER_OF"
+msgstr "THÀNH VIÊN CỦA"
+
+msgid "SECONDARY"
+msgstr "THÔNG TIN PHỤ"
+
+msgid "CREATE_ACCOUNT"
+msgstr "TẠO TÀI KHOẢN"
+
+msgid "FORGOT_PASSWORD"
+msgstr "QUÊN MẬT KHẨU"
+
+msgid "UPDATED"
+msgstr "ĐÃ CẬP NHẬT"
+
+msgid "TRANSLATOR"
+msgstr "NGƯỜI DỊCH"
+
+msgid "TITLE"
+msgstr "CHỨC DANH"
+
+msgid "MOBILE"
+msgstr "DI DỘNG"
+
+msgid "WORK"
+msgstr "Số cơ quan"
+
+msgid "FIRST_LAST"
+msgstr "Tên họ"
+
+msgid "NEXT"
+msgstr "Kê tiếp"
+
+msgid "PHOTO"
+msgstr "Ảnh"
+
+msgid "ALL_PHONES"
+msgstr "Điện thoại"
+
+msgid "ALL_EMAILS"
+msgstr "Email"
+
+msgid "SIGN_IN_WITH"
+msgstr "Đăng nhập với"
+
+msgid "LAST_FIRST"
+msgstr "Họ tên"
+
+msgid "GRP_NAME"
+msgstr "Tên nhóm"
+
+msgid "ab"
+msgstr ""
+
+msgid "ar"
+msgstr "Argentina"
+
+msgid "be"
+msgstr "Bỉ"
+
+msgid "bg"
+msgstr "Bungari"
+
+msgid "ca"
+msgstr "Canada"
+
+msgid "cs"
+msgstr "Tiếng Anh"
+
+msgid "da"
+msgstr "Đan Mạch"
+
+msgid "de"
+msgstr "Đức"
+
+msgid "el"
+msgstr "Tiếng Bồ Đào Nha"
+
+msgid "en"
+msgstr "tiếng Anh"
+
+msgid "es"
+msgstr "Tây Ban Nha"
+
+msgid "fa"
+msgstr "Tiếng Farsi"
+
+msgid "fi"
+msgstr "Phần Lan"
+
+msgid "fr"
+msgstr "Pháp"
+
+msgid "he"
+msgstr "Do Thái"
+
+msgid "hi"
+msgstr "Hindi"
+
+msgid "hu"
+msgstr "Hungary"
+
+msgid "it"
+msgstr "Ý"
+
+msgid "ja"
+msgstr "Nhật Bản"
+
+msgid "ko"
+msgstr "Hàn Quốc"
+
+msgid "nl"
+msgstr "Hà Lan"
+
+msgid "no"
+msgstr "không"
+
+msgid "pl"
+msgstr "Ba Lan"
+
+msgid "pt"
+msgstr "Bồ Đào Nha"
+
+msgid "rm"
+msgstr "Rhaeto-Romance"
+
+msgid "ru"
+msgstr "Nga"
+
+msgid "sk"
+msgstr "Slovakia"
+
+msgid "sl"
+msgstr "Slovenia"
+
+msgid "sr"
+msgstr "Serbia"
+
+msgid "sv"
+msgstr "Thụy Điển"
+
+msgid "th"
+msgstr "Thái"
+
+msgid "tr"
+msgstr "Thổ Nhĩ Kỳ"
+
+msgid "ua"
+msgstr ""
+
+msgid "vi"
+msgstr "Việt"
+
+msgid "zh"
+msgstr "Tiếng Pháp"
