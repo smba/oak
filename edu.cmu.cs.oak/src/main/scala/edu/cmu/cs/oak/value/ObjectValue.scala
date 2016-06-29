@@ -2,8 +2,9 @@ package edu.cmu.cs.oak.value
 
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.ClassDef
+
 /**
- * Representation of an object value in PHP.
+ * Representation olsf an object value in PHP.
  */
 case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
 

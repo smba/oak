@@ -1,9 +1,6 @@
 package edu.cmu.cs.oak.value
 
 import com.caucho.quercus.Location
-import edu.cmu.cs.oak.core.Interpreter
-import java.net.URL
-import java.nio.file.Path
 
 case class StringValue(value:String, var file: String, var lineNr: Int) extends OakValue {
 
