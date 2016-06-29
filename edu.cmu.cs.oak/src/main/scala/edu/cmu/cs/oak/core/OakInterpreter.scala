@@ -118,7 +118,7 @@ import com.caucho.quercus.expr.ClassFieldExpr
 import com.caucho.quercus.expr.ClassConstExpr
 import com.caucho.quercus.expr.ObjectNewVarExpr
 
-class OakInterpreter extends Interpreter with InterpreterPluginProvider {
+class OakInterpreter extends InterpreterPluginProvider {
 
   this.loadPlugin(new Count)
   this.loadPlugin(new Print)
@@ -127,6 +127,86 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   this.loadPlugin(new Defined)
   this.loadPlugin(new IsArray)
   this.loadPlugin(new IsSet)
+  
+    // Logger for the interpreter instance
+  val logger = LoggerFactory.getLogger(classOf[OakInterpreter])
+
+  /** 
+   *  Path to the *currently* executed source file. This path is cached and changed
+   *  while including references source files.  
+   *  */
+  var path: Path = null
+
+  /** Entry point of the program, i.e., the 
+   *  project's root folder. 
+   *  */
+  var rootPath: Path = null
+
+  /** Map of constants that are defined during the execution 
+   *  of a PHP script. 
+   *  */
+  var constants = Map[String, OakValue]()
+
+  /**
+   * (Mutable) include stack (similar to a call stack) to keep track 
+   * of recent includes in order to avoid recursion and manage
+   * "require_once" statements.
+   */
+  val includes = Stack[Path]()
+
+  /**
+   * Assigns passed arguments to the corresponding function context (environment).
+   * 
+   * @param function FunctionDef instance representing the function or method to execute
+   * @param env Environment The current environment of the outer program (caller's) context
+   * @param functionEnv Environment The function/method (callee's) context to prepare 
+   * @param args List of Exprs that are passed for the function/method call
+   */
+  def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Expr]) {
+    (function.getArgs.slice(0, args.length) zip args).foreach {
+      t =>
+        {
+          val functionVal = if (t._1.startsWith("&")) {
+            try {
+              env.getVariables.get(t._2.toString).get
+            } catch {
+              case nsee: NoSuchElementException => {
+                throw new RuntimeException("Only variables can be passed by reference.")
+              }
+            }
+          } else {
+            evaluate(t._2, env)
+          }
+          functionEnv.update("$" + t._1.replace("&", ""), functionVal)
+        }
+    }
+    if (function.getArgs.length > args.length) {
+      function.getArgs.slice(args.length, function.getArgs.length).foreach {
+        a =>
+          {
+            val default = try {
+              function.defaults.get(a).get
+            } catch {
+              case nsee: NoSuchElementException => {
+                throw new NoSuchElementException("Default argument not found")
+              }
+            }
+            val defaultValue = evaluate(default, env)
+            functionEnv.update("$" + a.replace("&", ""), defaultValue)
+          }
+      }
+    }
+  }
+  
+  /**
+   * Defines a constant used during the program execution.
+   * 
+   * @param name Name of the constant
+   * @param value Value of the Constant
+   */
+  def defineConstant(name: String, value: OakValue) {
+    constants += (name -> value)
+  }
 
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
@@ -723,7 +803,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     ControlCode.OK
   }
   
-  override def execute(stmt: Statement, env: Environment): ControlCode.Value = {
+  def execute(stmt: Statement, env: Environment): ControlCode.Value = {
     //logger.info(">>> " + stmt)
     stmt match {
       case s: ClassDefStatement => {
@@ -1467,7 +1547,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
   }
   
-  override def evaluate(e: Expr, env: Environment): OakValue = {
+  def evaluate(e: Expr, env: Environment): OakValue = {
     e match {
       case e: LiteralExpr => {
         evaluateLiteralExpr(e, env)

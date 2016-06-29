@@ -1,17 +1,18 @@
 package edu.cmu.cs.oak.lib.array
 
-import edu.cmu.cs.oak.lib.InterpreterPlugin
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.core.InterpreterPluginProvider
-import com.caucho.quercus.expr.Expr
-import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.core.Interpreter
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.env.heap.OakHeap
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.IntValue
-import java.net.URL
 import java.nio.file.Path
+
+import com.caucho.quercus.expr.Expr
+
+import edu.cmu.cs.oak.core.InterpreterPluginProvider
+import edu.cmu.cs.oak.core.OakInterpreter
+import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.lib.InterpreterPlugin
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.SymbolValue
 
 class Count extends InterpreterPlugin {
   
@@ -23,7 +24,7 @@ class Count extends InterpreterPlugin {
      * been called with exactly one argument. */
     assert(args.size == 1)
     
-    val res = provider.asInstanceOf[Interpreter].evaluate(args(0), env)
+    val res = provider.asInstanceOf[OakInterpreter].evaluate(args(0), env)
     res match {
       case a: ArrayValue => {
         return IntValue(a.getSize)

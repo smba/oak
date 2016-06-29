@@ -1,14 +1,15 @@
 package edu.cmu.cs.oak.lib.builtin
 
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.lib.InterpreterPlugin
-import edu.cmu.cs.oak.core.InterpreterPluginProvider
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.env.Environment
 import java.nio.file.Path
+
 import com.caucho.quercus.expr.Expr
-import edu.cmu.cs.oak.core.Interpreter
+
+import edu.cmu.cs.oak.core.InterpreterPluginProvider
+import edu.cmu.cs.oak.core.OakInterpreter
+import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.BooleanValue
+import edu.cmu.cs.oak.value.OakValue
 
 class IsSet extends InterpreterPlugin {
 
@@ -16,7 +17,7 @@ class IsSet extends InterpreterPlugin {
 
   override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
 
-    val interpreter = provider.asInstanceOf[Interpreter]
+    val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has been o */
     assert(args.size == 1)
