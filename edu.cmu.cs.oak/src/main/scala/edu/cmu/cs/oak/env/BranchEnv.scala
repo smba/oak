@@ -13,6 +13,7 @@ import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.ClassDef
+import edu.cmu.cs.oak.env.heap.OakHeap
 
 /**
  * This class encapsulates all merging functionality used for branching
@@ -20,7 +21,7 @@ import edu.cmu.cs.oak.value.ClassDef
  *
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  */
-class BranchEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], constraint: String) {
+class BranchEnv(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) {
 
   /**
    * Set of changed ("dirty") variables. These variables are considered
@@ -111,7 +112,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
    * TODO (optional) Garbage collecting.
    */
   private def joinHeaps(envs: List[BranchEnv]): Map[OakVariable, OakValue] = {
-    envs.map { m => m.heap.varval } reduce (_ ++ _)
+    envs.map { m => m.getHeap.varval } reduce (_ ++ _)
   }
   
   def join(envs: List[BranchEnv], constraints: List[String]): Delta = {

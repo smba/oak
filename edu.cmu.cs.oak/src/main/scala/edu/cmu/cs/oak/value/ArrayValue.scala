@@ -17,7 +17,7 @@ class ArrayValue extends OakValue {
     } else {
       OakVariable("arrayVal" + OakHeap.getIndex, "") //FIXME find variable name
     }
-    env.heap.insert(ref, value)
+    env.getHeap.insert(ref, value)
     array.put(index, ref)
   }
 
@@ -25,7 +25,7 @@ class ArrayValue extends OakValue {
 
   def get(index: OakValue, env: Environment): OakValue = {
     if (array.keySet.contains(index)) {
-      return env.heap.extract(array.get(index).get)
+      return env.getHeap.extract(array.get(index).get)
     } else {
       throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")
     }

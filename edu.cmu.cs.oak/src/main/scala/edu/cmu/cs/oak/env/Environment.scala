@@ -34,13 +34,7 @@ import edu.cmu.cs.oak.value.SymbolValue
  *
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
-class Environment(parent: EnvListener, calls: Stack[String], constraint: String) extends EnvListener {
-
-  /**
-   * HEAP of the environment. This heap manages the mapping from references to 
-   * actual values.
-   */
-  val heap = new OakHeap()
+class Environment(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) extends EnvListener {
 
   /**
    * Map of variable identifiers and variable references.
@@ -181,14 +175,8 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
    */
   def getParent(): EnvListener = parent
 
-  /**
-   * Receive and store output from a child environment
-   * @param value Sequence of output values to add
-   */
-  def receiveOutput(node: DNode) = {
-    addOutput(node)
-  }
-
+  def getHeap(): OakHeap = heap
+  
   /**
    * Returns the environments path condition
    * @return path condition
@@ -308,9 +296,15 @@ class Environment(parent: EnvListener, calls: Stack[String], constraint: String)
   }
   
   def weaveReferences(that: Environment) {
-    that.heap.varval.filter{ case (ref, value) => !(this.heap.varval.keySet contains ref)}.foreach {
+    that.getHeap.varval.filter{ case (ref, value) => !(this.heap.varval.keySet contains ref)}.foreach {
       case (ref, value) => this.heap.insert(ref, value)
     }
+  }
+  
+  def copyHeap(): OakHeap = {
+    val copy = new OakHeap(heap.varval)
+    copy.varval = heap.varval
+    copy
   }
   
 }
@@ -339,8 +333,8 @@ object Environment {
    * @param Tuple of two branch environments
    */
   private def simpleFork(parent: Environment, newConstraint: String): (BranchEnv, BranchEnv) = {
-    val b1 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && " + newConstraint)
-    val b2 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
+    val b1 = new BranchEnv(parent, parent.getCalls(), parent.copyHeap(), parent.getConstraint() + " && " + newConstraint)
+    val b2 = new BranchEnv(parent, parent.getCalls(), parent.copyHeap(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
 
     /* Add variables of parent environment to the branch environments. */
     parent.variables.foreach {
@@ -349,12 +343,6 @@ object Environment {
           b1.setRef(name, reference)
           b2.setRef(name, reference)
         }
-    }
-    parent.heap.varval.foreach {
-      case (reference, value) => {
-        b1.heap.insert(reference, value)
-        b2.heap.insert(reference, value)
-      }
     }
     return (b1, b2)
   }
@@ -383,12 +371,7 @@ object Environment {
    * @return FunctionEnv
    */
   def createFunctionEnvironment(dis: Environment, f: String): Environment = {
-    val env = new Environment(dis, dis.getCalls push f, dis.getConstraint)
-    dis.heap.varval.foreach {
-      case (reference, value) => {
-        env.heap.insert(reference, value)
-      }
-    }
+    val env = new Environment(dis, dis.getCalls push f, dis.copyHeap(), dis.getConstraint)
     env
   }
 
@@ -401,7 +384,7 @@ object Environment {
    * @return ObjectEnv
    */
   def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
-    val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
+    val env = new Environment(dis, dis.getCalls(), dis.copyHeap(), dis.getConstraint)
     env.update("$this", obj)
     env
   }
@@ -427,12 +410,9 @@ object Environment {
   }
   
   def createLoopEnvironment(dis: Environment): LoopEnv = {
-    val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
+    val env = new LoopEnv(dis, dis.getCalls, dis.copyHeap(), dis.getConstraint)
     dis.variables.foreach {
       case (name, reference) => env.setRef(name, reference)
-    }
-    dis.heap.varval.foreach {
-      case (reference, value) => env.heap.insert(reference, value)
     }
     env
   }

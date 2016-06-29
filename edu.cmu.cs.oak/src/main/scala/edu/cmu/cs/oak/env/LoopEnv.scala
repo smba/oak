@@ -4,6 +4,7 @@ import scala.collection.immutable.Stack
 
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.nodes.RepeatNode
+import edu.cmu.cs.oak.env.heap.OakHeap
 
 /**
  * Separate environment used to keep track of repeatable output 
@@ -13,7 +14,7 @@ import edu.cmu.cs.oak.nodes.RepeatNode
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  * 
  */
-class LoopEnv(parent: EnvListener, calls: Stack[String], constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], constraint: String) { 
+class LoopEnv(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) { 
 
   /*
    * Get the output sequence from the environment.

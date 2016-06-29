@@ -5,5 +5,5 @@ import edu.cmu.cs.oak.nodes.DNode
 
 trait EnvListener {
   //def receiveOutput(value: OakValue)
-  def receiveOutput(value: DNode)
+  //def receiveOutput(value: DNode)
 }
