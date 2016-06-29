@@ -12,6 +12,7 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("environments/switch.php")
     RegressionTest.test("environments/while.php")
     RegressionTest.test("testScripts/classes01.php")
+    RegressionTest.test("testScripts/objects01.php")
   }
   
   test("Schoolmate") {

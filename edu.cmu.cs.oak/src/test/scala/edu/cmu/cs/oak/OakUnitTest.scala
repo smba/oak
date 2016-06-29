@@ -25,6 +25,8 @@ import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.DoubleValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.core.ControlCode
+import java.io.PrintWriter
+import java.io.File
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -32,10 +34,9 @@ import edu.cmu.cs.oak.core.ControlCode
  * for basic code coverage.
  */
 
-@RunWith(classOf[JUnitRunner]) //optional
-class OakUnitTest extends FunSuite {
+//@RunWith(classOf[JUnitRunner]) //optional
+object OakUnitTest extends App {
 
-  
   // engine and interpreter instance for testing
   val engine = new OakEngine()
   val interpreter = new OakInterpreter()
@@ -56,7 +57,7 @@ class OakUnitTest extends FunSuite {
   def url(fileName: String): Path = {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
-  
+
   /*
   test("BinaryExpression + BooleanExpr") {
     assert(readAndExecute("$b = true; $j = $b && false;")._2.lookup("$j") == BooleanValue(false))
@@ -122,10 +123,10 @@ class OakUnitTest extends FunSuite {
     env = readAndExecute("function foo(&$x) { $x *= 2; } $a = 2; foo($a); echo $a;")._2
     assert(env.lookup("$a") == IntValue(4))
   }
+* */
+  val env = loadAndExecute(url("testScripts/objects01.php"))
+  val pw = new PrintWriter(new File("/home/stefan/Desktop/output.xml"))
+  pw.write(env._2.getOutputAsPrettyXML())
+  pw.close
 
-  test("Objects") {
-    //assert(RegressionTest.test(url("testScripts/objects01.php"))._1)
-  }
-  * */
-	
 }

@@ -150,7 +150,7 @@ class OakInterpreter extends InterpreterPluginProvider {
    * of recent includes in order to avoid recursion and manage
    * "require_once" statements.
    */
-  val includes = Stack[Path]()
+  var includes = Stack[Path]()
 
   /**
    * Assigns passed arguments to the corresponding function context (environment).
@@ -273,7 +273,6 @@ class OakInterpreter extends InterpreterPluginProvider {
       }
       case _ => value
     }
-    println(valueX)
     env.addOutput(DNode.createDNode(valueX, stmt._location))
     return ControlCode.OK
   }
@@ -283,7 +282,9 @@ class OakInterpreter extends InterpreterPluginProvider {
    * <Var> = <Expr>;
    */
   private def executeExprStatement(s: ExprStatement, env: Environment): ControlCode.Value = {
+    
     val e = s._expr
+    
     e match {
       case exit: FunExitExpr => {
         ControlCode.OK
@@ -365,8 +366,9 @@ class OakInterpreter extends InterpreterPluginProvider {
            * actually is a OakVariable/reference
            */
           case ome: ObjectMethodExpr => {
-            val envi = evaluate(ome, env) // return value
-            val ref = envi.asInstanceOf[OakVariable]
+            evaluate(ome, env) // return value
+            val returnref = env.getRef("$returnref")
+            val ref = returnref
             ref
           }
           case _ => throw new RuntimeException(value + " (" + value.getClass + ") is unimplemented.")
@@ -399,13 +401,13 @@ class OakInterpreter extends InterpreterPluginProvider {
               return ControlCode.ERROR
             }
           }
-          this.includes.push(includePath)
+          this.includes = this.includes.push(includePath)
           //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
           this.path = includePath
           logger.info("Including " + includePath)
           execute(program, env)
 
-          this.includes.pop
+          this.includes = this.includes.pop
           this.path = oldURL
           logger.info("Resuming " + this.path)
           ControlCode.OK
@@ -423,13 +425,13 @@ class OakInterpreter extends InterpreterPluginProvider {
           if (this.includes contains includePath) {
             return ControlCode.ERROR
           }
-          this.includes.push(includePath)
+          this.includes = this.includes.push(includePath)
           //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
           this.path = includePath
           logger.info("Including " + includePath)
           execute(program, env)
           this.path = oldURL
-          this.includes.pop
+          this.includes = this.includes.pop
           logger.info("Resuming " + this.path)
           ControlCode.OK
         } else {
@@ -640,12 +642,20 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   private def executeReturnRefStatement(s: ReturnRefStatement, env: Environment): ControlCode.Value = {
+    
+    logger.info("here")
+    
     val u = s._expr
     val returnRef = u match {
       case t: ThisFieldExpr => {
         val fieldName = t._name.toString()
-        val thisArray = env.lookup("$this").asInstanceOf[ArrayValue]
-        thisArray.getRef(StringValue(fieldName, t._location.getFileName(), t._location.getLineNumber()))
+        try {
+          val thisObj = env.lookup("$this").asInstanceOf[ObjectValue]
+          thisObj.getFieldRef(fieldName)//thisArray.getRef(StringValue(fieldName, t._location.getFileName(), t._location.getLineNumber()))
+        } catch {
+          case cce: ClassCastException => null
+        }
+        
       }
       case v: VarExpr => {
         env.getVariables().get(v.toString).get
@@ -656,7 +666,7 @@ class OakInterpreter extends InterpreterPluginProvider {
         array.getRef(index)
       }
     }
-    env.setRef("$return", returnRef)
+    env.setRef("$returnref", returnRef)
     return ControlCode.OK
   }
 
@@ -1306,21 +1316,19 @@ class OakInterpreter extends InterpreterPluginProvider {
        * $<objName> -> <fieldName> = <Expr>
        */
       case of: ObjectFieldExpr => {
+        println("-- " + of, of.getClass+"")
         val objName = of._objExpr.toString()
         try {
           val obj = env.lookup(objName).asInstanceOf[ObjectValue]
           val fieldName = of._name.toString()
-          val ref = if (obj.getFields().getKeys contains fieldName) {
-            obj.getFields().getRef(StringValue(fieldName, of._location.getFileName, of._location.getLineNumber))
-          } else {
-            OakVariable(fieldName + OakHeap.getIndex, objName + "." + fieldName)
-          }
+          val ref = obj.getFieldRef(fieldName)
           val value = evaluate(expr, env)
           val valueX = value match {
             case sv: StringValue =>
               sv
             case _ => value
           }
+          println("... " + ref + " "+ valueX)
           env.getHeap.insert(ref, valueX)
         } catch {
           case vnfe: VariableNotFoundException => {}

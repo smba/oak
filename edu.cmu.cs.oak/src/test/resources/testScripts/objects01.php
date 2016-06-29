@@ -17,6 +17,7 @@ class foo {
 
 $obj = new foo;
 $myValue = &$obj->getValueRef();
+echo $myValue;
 $obj->value = 2;
 echo $obj->getValue();
 echo $myValue;

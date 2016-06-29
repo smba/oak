@@ -28,13 +28,14 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
   def getFields(): ArrayValue = fields
   
   def get(fieldKey: String, env: Environment): OakValue = {
-    //assert(stereotype.getFields.contains(fieldKey))
     return fields.get(StringValue(fieldKey, null, 0), env) //FIXME is this right?
   }
   
   def set(fieldKey: String, value: OakValue, env: Environment): Unit = {
-    
-    //assert(stereotype.getFields.contains(fieldKey), fieldKey)
     fields.set(StringValue(fieldKey, null, 0), value, env) //FIXME is this right?
   }  
+  
+  def getFieldRef(fieldKey: String): OakVariable = {
+    return fields.getRef(StringValue(fieldKey, null, 0))
+  }
 }

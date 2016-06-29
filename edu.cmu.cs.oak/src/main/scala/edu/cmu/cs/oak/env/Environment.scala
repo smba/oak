@@ -26,6 +26,7 @@ import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.nodes.ConcatNode
 
 /**
  * Programs state and program state operations.
