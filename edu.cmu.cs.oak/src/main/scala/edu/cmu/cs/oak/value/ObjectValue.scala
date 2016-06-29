@@ -3,6 +3,7 @@ package edu.cmu.cs.oak.value
 import scala.annotation.elidable.ASSERTION
 
 import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.env.ClassDef
 
 /**
  * Representation of an object value in PHP.

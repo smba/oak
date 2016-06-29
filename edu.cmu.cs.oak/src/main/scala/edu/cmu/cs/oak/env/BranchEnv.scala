@@ -11,8 +11,8 @@ import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.env.Delta
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.FunctionDef
-import edu.cmu.cs.oak.value.ClassDef
+import edu.cmu.cs.oak.env.FunctionDef
+import edu.cmu.cs.oak.env.ClassDef
 import edu.cmu.cs.oak.env.OakHeap
 
 /**

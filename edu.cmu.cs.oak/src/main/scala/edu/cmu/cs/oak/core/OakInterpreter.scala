@@ -91,9 +91,9 @@ import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.ClassDef
+import edu.cmu.cs.oak.env.ClassDef
 import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.FunctionDef
+import edu.cmu.cs.oak.vaenvunctionDef
 import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NumericValue
