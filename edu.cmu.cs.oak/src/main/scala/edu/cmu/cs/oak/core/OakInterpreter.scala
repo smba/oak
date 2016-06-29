@@ -1,9 +1,9 @@
 package edu.cmu.cs.oak.core
 
+import java.io.FileNotFoundException
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import scala.annotation.elidable
 import scala.annotation.elidable.ASSERTION
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
@@ -13,6 +13,7 @@ import scala.util.control.Breaks.breakable
 import org.slf4j.LoggerFactory
 
 import com.caucho.quercus.expr.AbstractBinaryExpr
+import com.caucho.quercus.expr.AbstractUnaryExpr
 import com.caucho.quercus.expr.ArrayGetExpr
 import com.caucho.quercus.expr.ArrayTailExpr
 import com.caucho.quercus.expr.BinaryAppendExpr
@@ -21,6 +22,8 @@ import com.caucho.quercus.expr.BinaryAssignListExpr
 import com.caucho.quercus.expr.BinaryAssignRefExpr
 import com.caucho.quercus.expr.BinaryInstanceOfExpr
 import com.caucho.quercus.expr.CallExpr
+import com.caucho.quercus.expr.ClassConstExpr
+import com.caucho.quercus.expr.ClassFieldExpr
 import com.caucho.quercus.expr.ClassMethodExpr
 import com.caucho.quercus.expr.ConditionalExpr
 import com.caucho.quercus.expr.ConstExpr
@@ -39,6 +42,7 @@ import com.caucho.quercus.expr.LiteralUnicodeExpr
 import com.caucho.quercus.expr.ObjectFieldExpr
 import com.caucho.quercus.expr.ObjectMethodExpr
 import com.caucho.quercus.expr.ObjectNewExpr
+import com.caucho.quercus.expr.ObjectNewVarExpr
 import com.caucho.quercus.expr.ThisExpr
 import com.caucho.quercus.expr.ThisFieldExpr
 import com.caucho.quercus.expr.ThisFieldVarExpr
@@ -46,6 +50,7 @@ import com.caucho.quercus.expr.ThisMethodExpr
 import com.caucho.quercus.expr.ToArrayExpr
 import com.caucho.quercus.expr.ToBooleanExpr
 import com.caucho.quercus.expr.ToLongExpr
+import com.caucho.quercus.expr.ToObjectExpr
 import com.caucho.quercus.expr.ToStringExpr
 import com.caucho.quercus.expr.UnaryMinusExpr
 import com.caucho.quercus.expr.UnaryNotExpr
@@ -72,13 +77,16 @@ import com.caucho.quercus.statement.Statement
 import com.caucho.quercus.statement.StaticStatement
 import com.caucho.quercus.statement.SwitchStatement
 import com.caucho.quercus.statement.TextStatement
+import com.caucho.quercus.statement.ThrowStatement
 import com.caucho.quercus.statement.TryStatement
 import com.caucho.quercus.statement.WhileStatement
 
 import edu.cmu.cs.oak.env.BranchEnv
+import edu.cmu.cs.oak.env.ClassDef
 import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.env.ObjectEnv
+import edu.cmu.cs.oak.env.FunctionDef
 import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.lib.array.Count
 import edu.cmu.cs.oak.lib.array.IsArray
@@ -91,10 +99,12 @@ import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.env.ClassDef
+import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.vaenvunctionDef
+import edu.cmu.cs.oak.value.DoubleValue
 import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NumericValue
 import edu.cmu.cs.oak.value.OakValue
@@ -103,20 +113,8 @@ import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.SymbolicValue
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import java.io.FileNotFoundException
-import com.caucho.quercus.expr.AbstractUnaryExpr
-import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.DoubleValue
-import com.caucho.quercus.expr.ToObjectExpr
-import com.caucho.quercus.statement.ThrowStatement
-import com.caucho.quercus.expr.ClassFieldExpr
-import com.caucho.quercus.expr.ClassConstExpr
-import com.caucho.quercus.expr.ObjectNewVarExpr
+import edu.cmu.cs.oak.value.SymbolicValue
 
 class OakInterpreter extends InterpreterPluginProvider {
 

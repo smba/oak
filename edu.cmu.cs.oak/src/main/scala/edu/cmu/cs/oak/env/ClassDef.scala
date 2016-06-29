@@ -1,8 +1,6 @@
 package edu.cmu.cs.oak.env
 
-import edu.cmu.cs.oak.env.Environment
-i
-import edu.cmu.cs.oak.env.FunctionDefmport edu.cmu.cs.oak.value.FunctionDef
+import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.ObjectValue
 
 case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef], parent: String) {

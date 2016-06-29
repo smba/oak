@@ -12,14 +12,13 @@ import com.caucho.quercus.program.Arg
 import com.caucho.quercus.program.Function
 import com.caucho.quercus.statement.Statement
 
+import edu.cmu.cs.oak.env.ClassDef
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.env.ClassDef
-import edu.cmu.cs.oak.vaenvunctionDef
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
