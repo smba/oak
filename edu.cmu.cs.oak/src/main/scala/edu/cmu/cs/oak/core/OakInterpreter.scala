@@ -138,15 +138,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val engine = new OakEngine()
     val program = engine.loadFromFile(path)
-    var env: Environment = new Environment(null, Stack[String](), "true")
+    var env = new Environment(null, Stack[String](), new OakHeap(Map[OakVariable, OakValue]()), "true")
 
     OakHeap.clear()
 
-    env.update("$_POST", SymbolValue("$_POST", OakHeap.index, SymbolFlag.BUILTIN_VALUE))
-    env.update("$_GET", SymbolValue("$_GET", OakHeap.index, SymbolFlag.BUILTIN_VALUE))
+    env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
 
     env.addToGlobal("$_SERVER")
-    env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.index, SymbolFlag.BUILTIN_VALUE))
+    env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
 
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
@@ -368,7 +368,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val e = p._expr
         val i = p._incr
         val result = evaluate(e, env) match {
-          case a: SymbolicValue => SymbolValue(p.toString, OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE)
+          case a: SymbolicValue => SymbolValue(p.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
           case b: NumericValue => {
             b + IntValue(i)
           }
@@ -394,12 +394,12 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           case a: ArrayValue => {
             assert(a.array.size == vars.size)
             (vars zipWithIndex).foreach {
-              case (v, av) => env.update(v.toString, env.heap.extract(a.array.get(IntValue(av)).get))
+              case (v, av) => env.update(v.toString, env.getHeap.extract(a.array.get(IntValue(av)).get))
             }
           }
           case s: SymbolicValue => {
             vars.foreach {
-              v => env.update(v.toString, SymbolValue(v.toString, OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE))
+              v => env.update(v.toString, SymbolValue(v.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE))
             }
           }
         }
@@ -693,7 +693,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val loopEnv = Environment.createLoopEnvironment(env)
 
     // Initialize the loop environment
-    loopEnv.update(value.toString(), SymbolValue("foreach::", OakHeap.index, SymbolFlag.DUMMY))
+    loopEnv.update(value.toString(), SymbolValue("foreach::", OakHeap.getIndex, SymbolFlag.DUMMY))
     execute(block, loopEnv)
     env.weaveDelta(loopEnv.getDelta())
     ControlCode.OK
@@ -832,10 +832,10 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val value = try {
       env.lookup(e.toString)
     } catch {
-      case vnfe: VariableNotFoundException => return SymbolValue(e.toString, OakHeap.index, SymbolFlag.DUMMY)
+      case vnfe: VariableNotFoundException => return SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     }
     return value match {
-      case ref: OakVariable => env.heap.extract(ref)
+      case ref: OakVariable => env.getHeap.extract(ref)
       case _ => value
     }
   }
@@ -861,7 +861,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         BooleanValue(b)
       }
 
-      case _ => SymbolValue(e.toString, OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE)
+      case _ => SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
     }
   }
 
@@ -925,7 +925,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       env.weaveDelta(functionEnv.getDelta())
       returnValue
     } catch {
-      case nsee: NoSuchElementException => SymbolValue(e.toString, OakHeap.index, SymbolFlag.DUMMY)
+      case nsee: NoSuchElementException => SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     }
   }
 
@@ -942,7 +942,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
     val exx = arrayGet._expr
     if (exx.toString.equals("$_POST") || exx.toString.equals("$_GET") || exx.toString.equals("$_SESSION") || exx.toString.equals("$_SERVER")) {
-      return SymbolValue(exx.toString, OakHeap.index, SymbolFlag.BUILTIN_VALUE)
+      return SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE)
     }
 
     val expr = evaluate(exx, env)
@@ -952,15 +952,15 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
         val value = try {
           av.get(index, env)
         } catch {
-          case _: Throwable => SymbolValue("", OakHeap.index, SymbolFlag.EXPR_UNEVALUATED)
+          case _: Throwable => SymbolValue("", OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
         }
         value
       }
       case _ => {
-        SymbolValue(exx.toString, OakHeap.index, SymbolFlag.EXPR_UNEVALUATED)
+        SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
       }
     }
-    SymbolValue(arrayGet.toString, OakHeap.index, SymbolFlag.EXPR_UNEVALUATED)
+    SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
   }
 
   private def evaluateBinaryAppendExpr(b: BinaryAppendExpr, env: Environment): OakValue = {
@@ -974,7 +974,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       expressions.append(expr.getValue)
     } while (expr.getNext != null)
 
-    val value = new OakValueSequence(expressions.toList.map { e => try { evaluate(e, env) } catch { case aioob: ArrayIndexOutOfBoundsException => SymbolValue(e.toString(), OakHeap.index, SymbolFlag.EXPR_UNEVALUATED) } })
+    val value = new OakValueSequence(expressions.toList.map { e => try { evaluate(e, env) } catch { case aioob: ArrayIndexOutOfBoundsException => SymbolValue(e.toString(), OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED) } })
     value
   }
 
@@ -1063,7 +1063,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           obj
         }
         case sym: SymbolicValue => {
-          SymbolValue(sym.toString(), OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE)
+          SymbolValue(sym.toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
         }
       }
     } catch {
@@ -1084,7 +1084,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     return obj match {
       case objectValue: ObjectValue => {
         val ref = objectValue.getFields().getRef(StringValue(fieldName, null, 0))
-        env.heap.extract(ref)
+        env.getHeap.extract(ref)
       }
       case _ => SymbolValue(t.toString, OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE)
     }
@@ -1165,7 +1165,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           val av = env.lookup(arrayValueName)
 
           if (av.isInstanceOf[SymbolicValue]) {
-            env.update(arrayValueName, SymbolValue(a.toString, OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE))
+            env.update(arrayValueName, SymbolValue(a.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE))
             return null
           }
 
@@ -1235,7 +1235,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
           val ref = if (obj.getFields().getKeys contains fieldName) {
             obj.getFields().getRef(StringValue(fieldName, of._location.getFileName, of._location.getLineNumber))
           } else {
-            OakVariable(fieldName + OakHeap.index, objName + "." + fieldName)
+            OakVariable(fieldName + OakHeap.getIndex, objName + "." + fieldName)
           }
           val value = evaluate(expr, env)
           val valueX = value match {
@@ -1243,7 +1243,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
               sv
             case _ => value
           }
-          env.heap.insert(ref, valueX)
+          env.getHeap.insert(ref, valueX)
         } catch {
           case vnfe: VariableNotFoundException => {}
           case cce: ClassCastException => {}
@@ -1323,7 +1323,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
       case n: NumericValue => {
         IntValue(-1) * n
       }
-      case _ => SymbolValue(e.toString, OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE)
+      case _ => SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
     }
   }
 
@@ -1399,12 +1399,12 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
 
   // TODO Präziser nachimplementieren
   private def evaluateThisMethodExpr(e: ThisMethodExpr, env: Environment): OakValue = {
-    SymbolValue(e.toString(), OakHeap.index, SymbolFlag.EXPR_UNIMPLEMENTED)
+    SymbolValue(e.toString(), OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
   }
 
   private def evaluateToLongExpr(e: ToLongExpr, env: Environment): OakValue = {
     val expr = e._expr
-    SymbolValue(expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+    SymbolValue(expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
   private def evaluateObjectFieldExpr(e: ObjectFieldExpr, env: Environment): OakValue = {
@@ -1414,7 +1414,7 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
     val value = if (obj.isInstanceOf[ObjectValue]) {
       obj.asInstanceOf[ObjectValue].get(e._name.toString(), env)
     } else {
-      SymbolValue(e.toString, OakHeap.index, SymbolFlag.AMBIGUOUS_VALUE)
+      SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
     }
     value
   }
@@ -1426,11 +1426,11 @@ class OakInterpreter extends Interpreter with InterpreterPluginProvider {
   }
 
   private def evaluateBinaryInstanceOfExpr(e: BinaryInstanceOfExpr, env: Environment): OakValue = {
-    SymbolValue(e.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+    SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
   private def evaluateToStringExpr(e: ToStringExpr, env: Environment): OakValue = {
-    SymbolValue(e._expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+    SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
   private def evaluateThisExpr(e: ThisExpr, env: Environment): OakValue = {
