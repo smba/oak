@@ -115,6 +115,7 @@ import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
+import edu.cmu.cs.oak.env.Call
 
 class OakInterpreter extends InterpreterPluginProvider {
 
@@ -216,7 +217,7 @@ class OakInterpreter extends InterpreterPluginProvider {
 
     val engine = new OakEngine()
     val program = engine.loadFromFile(path)
-    var env = new Environment(null, Stack[String](), new OakHeap(Map[OakVariable, OakValue]()), "true")
+    var env = new Environment(null, Stack[Call](), new OakHeap(Map[OakVariable, OakValue]()), "true")
 
     OakHeap.clear()
 
@@ -1001,7 +1002,8 @@ class OakInterpreter extends InterpreterPluginProvider {
      * Create a new (function) environment with pre-assigned arguments
      */
     try {
-      var functionEnv = Environment.createFunctionEnvironment(env, name)
+      val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber))
+      val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
       prepareFunctionOrMethod(function, env, functionEnv, args.toList)
       execute(function.getStatement, functionEnv)
 
@@ -1084,7 +1086,8 @@ class OakInterpreter extends InterpreterPluginProvider {
     def applyMethod(value: OakValue, methodName: String, args: List[Expr], env: Environment): OakValue = {
       value match {
         case objectValue: ObjectValue => {
-          val methodEnv = Environment.createMethodEnvironment(env, objectValue, objectValue.getClassDef().name + "." + methodName)
+          val methodCall = Call(objectValue.objectClass.name+"."+methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber))
+          val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
           prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
           execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
           env.weaveDelta(methodEnv.getDelta())
@@ -1462,7 +1465,11 @@ class OakInterpreter extends InterpreterPluginProvider {
     } else {
       val classDef = Environment.getClassDef(cme._className)
       val method = classDef.getMethods(cme._methodName.toString)
-      val cmEnv = Environment.createFunctionEnvironment(env, cme._className + "::" + cme._methodName.toString())
+      
+      
+      val classMethodCall = Call(cme._className+"::"+cme._methodName.toString(), (Paths.get(cme._location.getFileName), cme._location.getLineNumber))
+          
+      val cmEnv = Environment.createFunctionEnvironment(env, classMethodCall)
       val args = cme._args
 
       //default stuff

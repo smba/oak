@@ -33,7 +33,7 @@ import edu.cmu.cs.oak.nodes.ConcatNode
  *
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
-class Environment(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) extends EnvListener {
+class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constraint: String) extends EnvListener {
 
   /**
    * Map of variable identifiers and variable references.
@@ -166,7 +166,7 @@ class Environment(parent: EnvListener, calls: Stack[String], heap: OakHeap, cons
    * Returns the current call stack at runtime.
    * @return Stack of strings where each string denotes a function call
    */
-  def getCalls(): Stack[String] = calls
+  def getCalls(): Stack[Call] = calls
 
   /**
    * Returns the environment's parent environment (null if top-level env)
@@ -369,8 +369,8 @@ object Environment {
    * @param f Name of the function
    * @return FunctionEnv
    */
-  def createFunctionEnvironment(dis: Environment, f: String): Environment = {
-    val env = new Environment(dis, dis.getCalls push f, dis.copyHeap(), dis.getConstraint)
+  def createFunctionEnvironment(dis: Environment, fc: Call): Environment = {
+    val env = new Environment(dis, dis.getCalls push fc, dis.copyHeap(), dis.getConstraint)
     env
   }
 
@@ -402,8 +402,8 @@ object Environment {
    * @param f Name of the function
    * @return FunctionEnv
    */
-  def createMethodEnvironment(dis: Environment, obj: ObjectValue, m: String): Environment = {
-    val env = createFunctionEnvironment(dis, m)
+  def createMethodEnvironment(dis: Environment, obj: ObjectValue, mc: Call): Environment = {
+    val env = createFunctionEnvironment(dis, mc)
     env.update("$this", obj)
     env
   }
