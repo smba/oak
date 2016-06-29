@@ -3,7 +3,7 @@ package edu.cmu.cs.oak.lib.builtin
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.lib.InterpreterPlugin
-import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.core.InterpreterPluginProvider
 import edu.cmu.cs.oak.env.Environment

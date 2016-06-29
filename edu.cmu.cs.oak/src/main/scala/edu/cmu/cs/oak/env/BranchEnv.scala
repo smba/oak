@@ -13,7 +13,7 @@ import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.FunctionDef
 import edu.cmu.cs.oak.value.ClassDef
-import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.OakHeap
 
 /**
  * This class encapsulates all merging functionality used for branching

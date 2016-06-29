@@ -2,7 +2,7 @@ package edu.cmu.cs.oak.env
 
 import edu.cmu.cs.oak.value.ObjectValue
 import scala.collection.immutable.Stack
-import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.OakHeap
 
 /**
  * This environment is used for method execution.

@@ -4,7 +4,7 @@ import scala.collection.immutable.Stack
 
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.nodes.RepeatNode
-import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.OakHeap
 
 /**
  * Separate environment used to keep track of repeatable output 

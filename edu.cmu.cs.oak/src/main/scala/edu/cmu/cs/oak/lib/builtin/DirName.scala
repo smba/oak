@@ -11,7 +11,7 @@ import com.caucho.quercus.expr.Expr
 import edu.cmu.cs.oak.core.Interpreter
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.OakHeap
 
 class DirName extends InterpreterPlugin {
 

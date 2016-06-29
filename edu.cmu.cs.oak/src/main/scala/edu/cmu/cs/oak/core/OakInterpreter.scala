@@ -78,7 +78,7 @@ import com.caucho.quercus.statement.WhileStatement
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.ObjectEnv
-import edu.cmu.cs.oak.env.heap.OakHeap
+import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.lib.array.Count
 import edu.cmu.cs.oak.lib.array.IsArray

@@ -12,7 +12,6 @@ import com.caucho.quercus.program.Arg
 import com.caucho.quercus.program.Function
 import com.caucho.quercus.statement.Statement
 
-import edu.cmu.cs.oak.env.heap.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.ConcatNode
