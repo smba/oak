@@ -14,6 +14,8 @@ import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.env.FunctionDef
 import edu.cmu.cs.oak.env.ClassDef
 import edu.cmu.cs.oak.env.OakHeap
+import java.time.Instant
+import java.time.Duration
 
 /**
  * This class encapsulates all merging functionality used for branching
@@ -21,13 +23,13 @@ import edu.cmu.cs.oak.env.OakHeap
  *
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  */
-class BranchEnv(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) extends Environment(parent: EnvListener, calls: Stack[String], heap: OakHeap, constraint: String) {
+class BranchEnv(parent: Environment, calls: Stack[Call], constraint: String) extends Environment(parent: Environment, calls: Stack[Call], constraint: String) {
 
   /**
    * Set of changed ("dirty") variables. These variables are considered
    * when merging different environments.
    */
-  var updates = Set[String]()
+  //var updates = Set[String]()
   
   /**
    * "New" (conditional) class definitions
@@ -40,7 +42,7 @@ class BranchEnv(parent: EnvListener, calls: Stack[String], heap: OakHeap, constr
    */
   override def update(name: String, value: OakValue): Unit = {
     super.update(name, value)
-    updates += name
+    //updates += name
   }
   
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint +"]"
@@ -109,10 +111,10 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
    * @param envs List of BranchEnvironments of which we want to merge
    * @return mapping from OakVariables to OakValues of all BranchEnvs passed
    *
-   * TODO (optional) Garbage collecting.
+   * 
    */
   private def joinHeaps(envs: List[BranchEnv]): Map[OakVariable, OakValue] = {
-    envs.map { m => m.getHeap.varval } reduce (_ ++ _)
+    envs.map { env => env.references.toMap } reduce (_ ++ _)
   }
   
   def join(envs: List[BranchEnv], constraints: List[String]): Delta = {
@@ -121,7 +123,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
      * All variables that have been changed during at least one branch execution
      * are selected and joined separately.
      */
-    val updatedVariableNames = envs.map { env => env.updates }.foldLeft(Set[String]())(_ union _)
+    val updatedVariableNames = envs.map { env => env.variables.map(vv=>vv._1).toSet }.foldLeft(Set[String]())(_ union _)
     val updatedVariableMap = updatedVariableNames.map { name => (name, joinVariable(envs, constraints, name)) }.toMap
 
     /* 2) JOIN (or UNION) HEAP

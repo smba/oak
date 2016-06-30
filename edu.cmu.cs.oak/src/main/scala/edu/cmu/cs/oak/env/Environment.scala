@@ -33,14 +33,18 @@ import edu.cmu.cs.oak.nodes.ConcatNode
  *
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
-class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constraint: String) extends EnvListener {
+class Environment(parent: Environment, calls: Stack[Call], constraint: String) extends EnvListener {
 
   /**
    * Map of variable identifiers and variable references.
    * In various contexts, variables can refer to the same value.
-   * For variable reference handling {@see {@link #edu.cmu.cs.oak.env.OakHeap}}.
+   * For variable reference handling {@see {@link #edu.cmu.cs.oak.env.Oa kHeap}}.
    */
-  var variables = Map[String, OakVariable]()
+  //  val variables = collection.mutable.Map[String, OakVariable]()
+  val variables = collection.mutable.Map[String, OakVariable]()
+
+  //  val references = collection.mutable.Map[OakVariable, OakValue]()
+  val references = collection.mutable.Map[OakVariable, OakValue]()
 
   /**
    * Map of global variable identifiers and variable references.
@@ -63,48 +67,32 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
-
+    
     if (name equals "$wp_local_package") throw new RuntimeException()
     
-    value match {
-      case a: OakVariable => {
-        variables += (name -> a)
-      }
-      case _ => {
-        if (variables.contains(name)) {
-          heap.insert(variables.get(name).get, value)
-        } else {
-          val variable = OakVariable(name + OakHeap.getIndex(), name)
-          heap.insert(variable, value)
-          variables += (name -> variable)
-        }
-      }
+    if (variables.contains(name)) {
+      references.put(variables.get(name).get, value)
+    } else {
+      val variable = OakVariable(name + OakHeap.getIndex(), name)
+      references.put(variable, value)
+      variables.put(name, variable)
     }
   }
 
+  def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
   /**
    * Looks up an variable and returns its context-dependent value.
    * @param name Name of the variable
    * @return value Value of the variable
    */
   def lookup(name: String): OakValue = {
-    val variable = {
-      val opt = variables.get(name)
-      if (!opt.isEmpty) {
-        opt.get
-      } else {
-        throw new VariableNotFoundException("Unassigned variable " + name + ".")
-      }
-    }
-    val ret = try {
-      heap.extract(variable)
+    val reference = getRef(name)
+    val value = try {
+      this.extract(reference)
     } catch {
-      case e: Exception => throw new RuntimeException(e)
+      case vnfe: VariableNotFoundException => throw new RuntimeException(vnfe)
     }
-    if (ret == null) {
-      NullValue("")
-    }
-    ret
+    value
   }
 
   /**
@@ -121,31 +109,43 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
    */
   def getOutput(): DNode = output
 
-
   /**
    * pretty-printed XML
    */
   def getOutputAsPrettyXML(): String = {
-    
+
     val wrapXML = {
       <DataModel>
-			  { this.output.toXml() }
-			</DataModel> 
+        { this.output.toXml() }
+      </DataModel>
     }
-    
-    var out = (new PrettyPrinter(200, 2)).format( wrapXML )  
-    out = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" + out 
+
+    var out = (new PrettyPrinter(200, 2)).format(wrapXML)
+    out = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" + out
     out
   }
-  
 
   /**
    * Manipulation of references via the environment
-   *  @param name of the variabke
+   *  @param name of the variable
    *  @param reference to point to
    */
   def setRef(name: String, ref: OakVariable): Unit = {
-    variables += (name -> ref)
+    variables.put(name, ref)
+  }
+
+  def extract(reference: OakVariable): OakValue = {
+    if (references.contains(reference)) {
+      references.get(reference).get
+    } else if ((parent != null)) {
+      parent.extract(reference)
+    } else {
+      throw new RuntimeException("Reference not found " + reference)
+    }
+  }
+
+  def insert(reference: OakVariable, value: OakValue) {
+      references.put(reference, value)
   }
 
   /**
@@ -154,12 +154,14 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
    * @return reference that variable 'name points to
    */
   def getRef(name: String): OakVariable = {
-    val opt = variables.get(name)
-    if (!opt.isEmpty) {
-      opt.get
+    if (variables.contains(name)) {
+      variables.get(name).get
+    } else if ((parent != null) && !this.isFunctionEnv()) {
+      parent.getRef(name)
     } else {
-      null
+      throw new VariableNotFoundException("Unassigned variable " + name + ".")
     }
+
   }
 
   /**
@@ -172,10 +174,8 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
    * Returns the environment's parent environment (null if top-level env)
    * @param parent environment
    */
-  def getParent(): EnvListener = parent
+  def getParent(): Environment = parent
 
-  def getHeap(): OakHeap = heap
-  
   /**
    * Returns the environments path condition
    * @return path condition
@@ -186,14 +186,12 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
    * Returns the environments map of variable names to references
    * @return map of variable names to references
    */
-  def getVariables(): Map[String, OakVariable] = variables
 
   def unsetArrayElement(name: String, index: OakValue) {
     val arrayValueO = lookup(name)
     assert(arrayValueO.isInstanceOf[ArrayValue])
     val arrayValue = arrayValueO.asInstanceOf[ArrayValue]
-
-    heap.unsetVariable(arrayValue.getRef(index))
+    //heap.unsetVariable(arrayValue.getRef(index))
     arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"), this)
   }
 
@@ -218,8 +216,7 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
   }
 
   def unset(name: String) {
-    heap.unsetVariable(getRef(name))
-    variables -= name
+    variables.remove(name)
   }
 
   def ifdefy(): List[String] = output.ifdefy()
@@ -228,8 +225,8 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
     val parents = new ListBuffer[Environment]
     var cParent = this.parent
     while (cParent != null) {
-      parents += cParent.asInstanceOf[Environment]
-      cParent = cParent.asInstanceOf[Environment].getParent()
+      parents += cParent
+      cParent = cParent.getParent()
     }
     parents.toList
   }
@@ -273,17 +270,21 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
     }
 
     // 2) Update the references on the environment's heap
+    //    joinResult.joinedHeap.foreach {
+    //      case (reference, value) => {
+    //        this.heap.insert(reference, value)
+    //      }
+    //    }
+    //    val sizes = (this.heap.varval.size, joinResult.joinedHeap.size)
     joinResult.joinedHeap.foreach {
-      case (reference, value) => {
-        this.heap.insert(reference, value)
-      }
+      case (reference, value) => this.insert(reference, value)
     }
-    
+
     // 3) Update the variables that have changed during the execution of the branches
     joinResult.joinedVariables.foreach {
       case (name, value) => this.update(name, value)
     }
-    
+
     // 5 Globals
     joinResult.joinedGlobals.foreach {
       g => this.addToGlobal(g)
@@ -291,21 +292,28 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
   }
 
   def getDelta(): Delta = {
-    new Delta(this.getOutput(), this.variables, this.heap.varval, Set())
+    var returnMap = Map[String, OakVariable]()
+    if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
+    if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
+    
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, Set())
   }
-  
-  def weaveReferences(that: Environment) {
-    that.getHeap.varval.filter{ case (ref, value) => !(this.heap.varval.keySet contains ref)}.foreach {
-      case (ref, value) => this.heap.insert(ref, value)
-    }
-  }
-  
-  def copyHeap(): OakHeap = {
-    val copy = new OakHeap(heap.varval)
-    copy.varval = heap.varval
-    copy
-  }
-  
+
+  //  def weaveReferences(that: Environment) {
+  //    val references = that.getHeap.varval.filter { case (ref, value) => !(this.heap.varval.keySet contains ref) }
+  //    this.heap.varval = (this.heap.varval.toSeq ++ references.toSeq).toMap
+  //    
+  //  }
+
+  /**
+   * Creates a new Heap linked to the parents heap
+   */
+  //  def copyHeap(): OakHeap = {
+  //    val copy = new OakHeap(heap.varval)
+  //    copy.varval = heap.varval
+  //    copy
+  //  }
+
 }
 
 /**
@@ -313,7 +321,9 @@ class Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constr
  * configurations.
  */
 object Environment {
-  
+
+  var forks = 0
+
   /**
    * Map of fuńction names and function definitions
    */
@@ -332,17 +342,18 @@ object Environment {
    * @param Tuple of two branch environments
    */
   private def simpleFork(parent: Environment, newConstraint: String): (BranchEnv, BranchEnv) = {
-    val b1 = new BranchEnv(parent, parent.getCalls(), parent.copyHeap(), parent.getConstraint() + " && " + newConstraint)
-    val b2 = new BranchEnv(parent, parent.getCalls(), parent.copyHeap(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
+    Environment.forks += 1
+    val b1 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && " + newConstraint)
+    val b2 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
 
     /* Add variables of parent environment to the branch environments. */
-    parent.variables.foreach {
-      case (name, reference) =>
-        {
-          b1.setRef(name, reference)
-          b2.setRef(name, reference)
-        }
-    }
+//    parent.variables.foreach {
+//      case (name, reference) =>
+//        {
+//          b1.setRef(name, reference)
+//          b2.setRef(name, reference)
+//        }
+//    }
     return (b1, b2)
   }
 
@@ -354,15 +365,15 @@ object Environment {
       forked._1 :: fork(forked._2, conditions.tail)
     }
   }
-  
+
   /**
    * Creates a new function environment that is used to
-   * execute a 
-   * 
-   *  - function call or 
+   * execute a
+   *
+   *  - function call or
    *  - method call
-   *  
-   * The function call is documented via the 
+   *
+   * The function call is documented via the
    * environment's call stack.
    *
    * @param dis Parent environment to bounce output to
@@ -370,7 +381,7 @@ object Environment {
    * @return FunctionEnv
    */
   def createFunctionEnvironment(dis: Environment, fc: Call): Environment = {
-    val env = new Environment(dis, dis.getCalls push fc, dis.copyHeap(), dis.getConstraint)
+    val env = new Environment(dis, dis.getCalls push fc, dis.getConstraint)
     env
   }
 
@@ -383,19 +394,19 @@ object Environment {
    * @return ObjectEnv
    */
   def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
-    val env = new Environment(dis, dis.getCalls(), dis.copyHeap(), dis.getConstraint)
+    val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
     env.update("$this", obj)
     env
   }
-  
+
   /**
    * Creates a new function environment that is used to
-   * execute a 
-   * 
-   *  - function call or 
+   * execute a
+   *
+   *  - function call or
    *  - method call
-   *  
-   * The function call is documented via the 
+   *
+   * The function call is documented via the
    * environment's call stack.
    *
    * @param dis Parent environment to bounce output to
@@ -407,15 +418,15 @@ object Environment {
     env.update("$this", obj)
     env
   }
-  
+
   def createLoopEnvironment(dis: Environment): LoopEnv = {
-    val env = new LoopEnv(dis, dis.getCalls, dis.copyHeap(), dis.getConstraint)
-    dis.variables.foreach {
-      case (name, reference) => env.setRef(name, reference)
-    }
+    val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
+//    dis.variables.foreach {
+//      case (name, reference) => env.setRef(name, reference)
+//    }
     env
   }
-  
+
   def defineFunction(f: FunctionDef): Unit = {
     funcs += (f.getName -> f)
   }
@@ -428,8 +439,8 @@ object Environment {
       throw new RuntimeException("Function " + name + " is undefined.")
     }
   }
-  
-    /**
+
+  /**
    * Adds a class definition to the environment.
    * @param value ClassDef to add
    */
@@ -453,5 +464,5 @@ object Environment {
       case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
     }
   }
-  
+
 }

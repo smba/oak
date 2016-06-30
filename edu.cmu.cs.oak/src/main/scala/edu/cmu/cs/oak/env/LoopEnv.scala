@@ -14,7 +14,7 @@ import edu.cmu.cs.oak.env.OakHeap
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  * 
  */
-class LoopEnv(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constraint: String) extends Environment(parent: EnvListener, calls: Stack[Call], heap: OakHeap, constraint: String) { 
+class LoopEnv(parent: Environment, calls: Stack[Call], constraint: String) extends Environment(parent: Environment, calls: Stack[Call], constraint: String) { 
 
   /*
    * Get the output sequence from the environment.
