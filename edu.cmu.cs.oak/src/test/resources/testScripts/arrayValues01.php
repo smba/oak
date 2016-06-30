@@ -1,18 +1,13 @@
 <?php 
 
 	/* Assignments */
-	$i = array(1,2,4,8);
-	$i[5] = 16;
+	$i = array(0,1);
+	$i[0] = 42;
 	
-	$x = 8;
-	
-	/* Access array variables */
-	$j["key"] = $i[1] * 2;
-	$j["i"] = $i;
+// 	/* Access array variables */
+// 	$j["key"] = $i[1] * 2;
+ 	$j["i"] = $i;
 	
 	/* Print */
-	echo $j["i"][2];
-
-	$k = "a" . "b" . ($x < 9);
-	echo "a" . "b" . ($x < 9);
+	echo $j["i"][0];
 ?>

@@ -1,24 +1,14 @@
 <?php 
 class foo {
-    public $value;
+    public $value = 42;
 
-    function __construct() {
-    	$this->value = 42;
-    }
-
-    public function getValue() {
-    	return $this->value;
-    }
-    
-    public function &getValueRef() {
+    public function &getValue() {
         return $this->value;
     }
 }
 
 $obj = new foo;
-$myValue = &$obj->getValueRef();
-echo $myValue;
+$myValue = &$obj->getValue(); // $myValue is a reference to $obj->value, which is 42.
 $obj->value = 2;
-echo $obj->getValue();
-echo $myValue;
+echo $myValue;                // prints the new value of $obj->value, i.e. 2.
 ?>

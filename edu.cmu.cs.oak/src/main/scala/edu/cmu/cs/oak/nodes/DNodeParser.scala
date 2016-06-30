@@ -19,11 +19,16 @@ object DNodeParser extends App {
       case "Select" => parseSelectNode(node)
       case "Symbolic" => parseSymbolicNode(node)
       case "Literal" => parseLiteralNode(node)
+      case "Undef" => parseUndefNode(node)
     }
   }
   
   def parseDataModel(node: scala.xml.Node): DNode = {
     parseNode( (node \ "Concat")(0) )
+  }
+  
+  def parseUndefNode(node: scala.xml.Node): DNode = {
+    UndefNode
   }
   
   def parseConcatNode(node: scala.xml.Node): DNode = {

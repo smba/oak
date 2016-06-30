@@ -11,5 +11,13 @@ case class Choice(p: String, var v1: OakValue, var v2: OakValue) extends Symboli
   
   def setV1(v1: OakValue) { this.v1 = v1 }
   def setV2(v2: OakValue) { this.v2 = v2 }
+  
+  def flattened(): Seq[OakValue] = {
+    val aux = (v: OakValue) => v match {
+      case choice: Choice => choice.flattened()
+      case nchoice: OakValue => Seq(nchoice)
+    }
+    aux(v1) ++ aux(v2)
+  }
 
 }

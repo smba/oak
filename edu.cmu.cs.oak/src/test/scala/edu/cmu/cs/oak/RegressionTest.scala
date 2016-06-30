@@ -23,13 +23,13 @@ object RegressionTest {
    * @param URL to test
    * @return (passed?, (found, available))
    */
-  def test(fileName: String): Boolean = {
+  def test(fileName: String) {
     val engine = new OakEngine
     val interpreter = new OakInterpreter
 
     val res = interpreter.execute(url(fileName))._2
     val parsed = DNodeParser.parseNode(scala.xml.XML.load(url(fileName + "t").toString))
-    parsed compare res.output
+    assert(parsed compare res.output)
   }
 
   private def url(fileName: String): Path = {

@@ -8,7 +8,7 @@ case class ConcatNode(var values: List[DNode]) extends DNode {
   def getChildren(): Seq[DNode] = values.toSeq
   
   def addOutput(outputNode: DNode) {
-    if (!outputNode.isEmpty()) {
+    if ((outputNode != null) && (!outputNode.isEmpty())) {
       this.values ::= outputNode
     }
   }

@@ -4,23 +4,43 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class RegressionTests extends FunSuite {
 
-  test("Base unit tests") {
+  test("1") {
     RegressionTest.test("environments/env01.php")
+  }
+  test("2") {
     RegressionTest.test("environments/switch.php")
+  }
+  
+  test("3") {
     RegressionTest.test("environments/while.php")
+  }
+  
+  test("4") {
     RegressionTest.test("testScripts/classes01.php")
+  }
+  
+  test("objects") {
     RegressionTest.test("testScripts/objects01.php")
   }
   
+  test("arrays") {
+    RegressionTest.test("testScripts/arrayValues01.php")
+  }
+  
+  test("References") {
+    RegressionTest.test("testScripts/references01.php")
+    RegressionTest.test("testScripts/references02.php")
+  }
+
   test("Schoolmate") {
     RegressionTest.test("schoolmate/index.php")
   }
-  
+
   test("Addressbook") {
     RegressionTest.test("addressbook/z-push/index.php")
   }
-  
+	
 }

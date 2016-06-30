@@ -27,6 +27,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.core.ControlCode
 import java.io.PrintWriter
 import java.io.File
+import edu.cmu.cs.oak.nodes.DNodeParser
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -124,9 +125,9 @@ object OakUnitTest extends App {
     assert(env.lookup("$a") == IntValue(4))
   }
 * */
-  val env = loadAndExecute(url("testScripts/objects01.php"))
+//  val env = loadAndExecute(url("environments/env02.php"))
+  val env = loadAndExecute(url("schoolmate/index.php"))
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close
-
 }

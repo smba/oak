@@ -58,7 +58,7 @@ abstract class DNode {
     
     if (ifd1.size == ifd2.size) {
       (ifd1 zip ifd2).map { 
-        case (x, y) => chop(x) equals chop(y) 
+        case (x, y) => assert(chop(x) equals chop(y) ); chop(x) equals chop(y); 
       }.fold(true)(_ && _)
     } else {
       false
@@ -91,7 +91,7 @@ object DNode {
       case sv: StringValue => {
         LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
       }
-      case null => null
+      case null => UndefNode
       case _ => {
         LiteralNode(value.toString(), location.getFileName, location.getLineNumber)
       }

@@ -2,6 +2,7 @@ package edu.cmu.cs.oak.nodes
 
 case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     
+  assert((v1 != null) && (v2 != null))
   def getChildren(): Seq[DNode] = List(v1, v2)
   
   override def toXml() = {
