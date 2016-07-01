@@ -126,7 +126,7 @@ object OakUnitTest extends App {
   }
 * */
 //  val env = loadAndExecute(url("environments/env02.php"))
-  val env = loadAndExecute(url("schoolmate/index.php"))
+  val env = loadAndExecute(url("wordpress/index.php"))
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close

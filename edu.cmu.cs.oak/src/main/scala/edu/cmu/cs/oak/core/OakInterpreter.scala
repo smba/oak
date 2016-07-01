@@ -193,6 +193,7 @@ class OakInterpreter extends InterpreterPluginProvider {
                 av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
                 deepCopy
               }
+              case null => null
               case value: OakValue => value
             }
             functionEnv.update("$" + t._1.replace("&", ""), functionVal)
@@ -1203,7 +1204,7 @@ class OakInterpreter extends InterpreterPluginProvider {
     val obj = env.lookup("$this")
     return obj match {
       case objectValue: ObjectValue => {
-        val ref = objectValue.getFields().getRef(StringValue(fieldName, null, 0))
+        val ref = objectValue.getFields().getRef(StringValue(fieldName, "", 0))
         env.extract(ref)
       }
       case _ => SymbolValue(t.toString, OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE)
@@ -1298,7 +1299,7 @@ class OakInterpreter extends InterpreterPluginProvider {
               env.lookup(arrayValueName).asInstanceOf[ArrayValue].setRef(index, reference)
               env.insert(reference, evaluate(expr, env))
             }
-            case sym: SymbolValue => {
+            case sym: SymbolicValue => {
               
             }
           }
@@ -1528,6 +1529,7 @@ class OakInterpreter extends InterpreterPluginProvider {
     val obj = evaluate(e._objExpr, env)
 
     val value = if (obj.isInstanceOf[ObjectValue]) {
+      println(obj.asInstanceOf[ObjectValue].getFields())
       obj.asInstanceOf[ObjectValue].get(e._name.toString(), env)
     } else {
       SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)

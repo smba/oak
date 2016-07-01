@@ -28,14 +28,14 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
   def getFields(): ArrayValue = fields
   
   def get(fieldKey: String, env: Environment): OakValue = {
-    return fields.get(StringValue(fieldKey, null, 0), env) //FIXME is this right?
+    return fields.get(StringValue(fieldKey, "", 0), env) //FIXME is this right?
   }
   
   def set(fieldKey: String, value: OakValue, env: Environment): Unit = {
-    fields.set(StringValue(fieldKey, null, 0), value, env) //FIXME is this right?
+    fields.set(StringValue(fieldKey, "", 0), value, env) //FIXME is this right?
   }  
   
   def getFieldRef(fieldKey: String): OakVariable = {
-    return fields.getRef(StringValue(fieldKey, null, 0))
+    return fields.getRef(StringValue(fieldKey, "", 0))
   }
 }
