@@ -499,8 +499,8 @@ abstract public class ClassDef implements InstanceInitializer {
   }
 
   public static class StaticFieldEntry {
-    private final Expr _value;
-    private final String _comment;
+	  public final Expr _value;
+	  public final String _comment;
 
     public StaticFieldEntry(Expr value)
     {

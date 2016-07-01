@@ -46,8 +46,8 @@ import java.util.ArrayList;
 public class CallVarExpr extends Expr {
   private static final L10N L = new L10N(CallExpr.class);
   
-  protected final Expr _name;
-  protected final Expr []_args;
+  public final Expr _name;
+  public final Expr []_args;
 
   public CallVarExpr(Location location, Expr name, ArrayList<Expr> args)
   {
