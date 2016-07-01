@@ -5245,15 +5245,285 @@
                                                                       <Literal Text="&lt;/td&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="46"/>
                                                                     </Concat>
                                                                     <Concat>
-                                                                      <Literal Text="OakVariable($monday911,$monday)" Length="31" Line="0"/>
+                                                                      <Select>
+                                                                        <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                        <Select>
+                                                                          <Constraint Text="($monday != &quot;&lt;td&gt;&quot;)"/>
+                                                                          <Concat>
+                                                                            <Concat>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                              <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="64"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="65"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="66"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="67"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="67"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                            </Concat>
+                                                                            <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="70"/>
+                                                                          </Concat>
+                                                                          <Concat>
+                                                                            <Concat>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                              <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="64"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="65"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="66"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="67"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="67"/>
+                                                                              <Symbolic Text="[Symbol]"/>
+                                                                            </Concat>
+                                                                            <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="72"/>
+                                                                          </Concat>
+                                                                        </Select>
+                                                                        <Select>
+                                                                          <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                          <Select>
+                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                            <Select>
+                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                              </Select>
+                                                                            </Select>
+                                                                          </Select>
+                                                                        </Select>
+                                                                      </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
-                                                                      <Literal Text="OakVariable($tuesday905,$tuesday)" Length="33" Line="0"/>
+                                                                      <Select>
+                                                                        <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                        <Select>
+                                                                          <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                          <Select>
+                                                                            <Constraint Text="($tuesday != &quot;&lt;td&gt;&quot;)"/>
+                                                                            <Concat>
+                                                                              <Concat>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                                <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="78"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="79"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="80"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="81"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="81"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                              </Concat>
+                                                                              <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="83"/>
+                                                                            </Concat>
+                                                                            <Concat>
+                                                                              <Concat>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                                <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="78"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="79"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="80"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="81"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="81"/>
+                                                                                <Symbolic Text="[Symbol]"/>
+                                                                              </Concat>
+                                                                              <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="85"/>
+                                                                            </Concat>
+                                                                          </Select>
+                                                                          <Select>
+                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                            <Select>
+                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                              </Select>
+                                                                            </Select>
+                                                                          </Select>
+                                                                        </Select>
+                                                                      </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
-                                                                      <Literal Text="OakVariable($wednesday909,$wednesday)" Length="37" Line="0"/>
+                                                                      <Select>
+                                                                        <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                        <Select>
+                                                                          <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                          <Select>
+                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                            <Select>
+                                                                              <Constraint Text="($wednesday != &quot;&lt;td&gt;&quot;)"/>
+                                                                              <Concat>
+                                                                                <Concat>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                                  <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="92"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="93"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="94"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="95"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="95"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                </Concat>
+                                                                                <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="97"/>
+                                                                              </Concat>
+                                                                              <Concat>
+                                                                                <Concat>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                                  <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="92"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="93"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="94"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="95"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="95"/>
+                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                </Concat>
+                                                                                <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="99"/>
+                                                                              </Concat>
+                                                                            </Select>
+                                                                            <Select>
+                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                              </Select>
+                                                                            </Select>
+                                                                          </Select>
+                                                                        </Select>
+                                                                      </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
-                                                                      <Literal Text="OakVariable($thursday908,$thursday)" Length="35" Line="0"/>
+                                                                      <Select>
+                                                                        <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                        <Select>
+                                                                          <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                          <Select>
+                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                            <Select>
+                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                              <Select>
+                                                                                <Constraint Text="($thursday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                <Concat>
+                                                                                  <Concat>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                                    <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="105"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="106"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="107"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="108"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="108"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                  </Concat>
+                                                                                  <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="110"/>
+                                                                                </Concat>
+                                                                                <Concat>
+                                                                                  <Concat>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                                    <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="105"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="106"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="107"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="108"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                    <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="108"/>
+                                                                                    <Symbolic Text="[Symbol]"/>
+                                                                                  </Concat>
+                                                                                  <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="112"/>
+                                                                                </Concat>
+                                                                              </Select>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                              </Select>
+                                                                            </Select>
+                                                                          </Select>
+                                                                        </Select>
+                                                                      </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
-                                                                      <Literal Text="OakVariable($friday906,$friday)" Length="31" Line="0"/>
+                                                                      <Select>
+                                                                        <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                        <Select>
+                                                                          <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                          <Select>
+                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                            <Select>
+                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                <Select>
+                                                                                  <Constraint Text="($friday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                  <Concat>
+                                                                                    <Concat>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                                      <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="118"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="119"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="120"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="121"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="121"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                    </Concat>
+                                                                                    <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="123"/>
+                                                                                  </Concat>
+                                                                                  <Concat>
+                                                                                    <Concat>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                                      <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="118"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="119"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="120"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="121"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="121"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                    </Concat>
+                                                                                    <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="125"/>
+                                                                                  </Concat>
+                                                                                </Select>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                              </Select>
+                                                                            </Select>
+                                                                          </Select>
+                                                                        </Select>
+                                                                      </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
                                                                     </Concat>
                                                                     <Literal Text="&lt;/tr&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="135"/>
@@ -6012,15 +6282,285 @@
                                                                               <Literal Text="&lt;/td&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="44"/>
                                                                             </Concat>
                                                                             <Concat>
-                                                                              <Literal Text="OakVariable($monday1290,$monday)" Length="32" Line="0"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                                <Select>
+                                                                                  <Constraint Text="($monday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                  <Concat>
+                                                                                    <Concat>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                      <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="68"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="69"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="70"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="71"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="71"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                    </Concat>
+                                                                                    <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="74"/>
+                                                                                  </Concat>
+                                                                                  <Concat>
+                                                                                    <Concat>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                      <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="68"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="69"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="70"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="71"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                      <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="71"/>
+                                                                                      <Symbolic Text="[Symbol]"/>
+                                                                                    </Concat>
+                                                                                    <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="76"/>
+                                                                                  </Concat>
+                                                                                </Select>
+                                                                                <Select>
+                                                                                  <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                      <Select>
+                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                      </Select>
+                                                                                    </Select>
+                                                                                  </Select>
+                                                                                </Select>
+                                                                              </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
-                                                                              <Literal Text="OakVariable($tuesday1284,$tuesday)" Length="34" Line="0"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                <Select>
+                                                                                  <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="($tuesday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                    <Concat>
+                                                                                      <Concat>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                        <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="82"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="83"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="84"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="85"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="85"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                      </Concat>
+                                                                                      <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="87"/>
+                                                                                    </Concat>
+                                                                                    <Concat>
+                                                                                      <Concat>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                        <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="82"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="83"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="84"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="85"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                        <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="85"/>
+                                                                                        <Symbolic Text="[Symbol]"/>
+                                                                                      </Concat>
+                                                                                      <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="89"/>
+                                                                                    </Concat>
+                                                                                  </Select>
+                                                                                  <Select>
+                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                      <Select>
+                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                      </Select>
+                                                                                    </Select>
+                                                                                  </Select>
+                                                                                </Select>
+                                                                              </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
-                                                                              <Literal Text="OakVariable($wednesday1288,$wednesday)" Length="38" Line="0"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                <Select>
+                                                                                  <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="($wednesday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                      <Concat>
+                                                                                        <Concat>
+                                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                          <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="96"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="97"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="98"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="99"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="99"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                        </Concat>
+                                                                                        <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="101"/>
+                                                                                      </Concat>
+                                                                                      <Concat>
+                                                                                        <Concat>
+                                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                          <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="96"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="97"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="98"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="99"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="99"/>
+                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                        </Concat>
+                                                                                        <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="103"/>
+                                                                                      </Concat>
+                                                                                    </Select>
+                                                                                    <Select>
+                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                      <Select>
+                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                      </Select>
+                                                                                    </Select>
+                                                                                  </Select>
+                                                                                </Select>
+                                                                              </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
-                                                                              <Literal Text="OakVariable($thursday1287,$thursday)" Length="36" Line="0"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                <Select>
+                                                                                  <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                                      <Select>
+                                                                                        <Constraint Text="($thursday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                        <Concat>
+                                                                                          <Concat>
+                                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                            <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="109"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="110"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="111"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="112"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="112"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                          </Concat>
+                                                                                          <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="114"/>
+                                                                                        </Concat>
+                                                                                        <Concat>
+                                                                                          <Concat>
+                                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                            <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="109"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="110"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="111"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="112"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="112"/>
+                                                                                            <Symbolic Text="[Symbol]"/>
+                                                                                          </Concat>
+                                                                                          <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="116"/>
+                                                                                        </Concat>
+                                                                                      </Select>
+                                                                                      <Select>
+                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                      </Select>
+                                                                                    </Select>
+                                                                                  </Select>
+                                                                                </Select>
+                                                                              </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
-                                                                              <Literal Text="OakVariable($friday1285,$friday)" Length="32" Line="0"/>
+                                                                              <Select>
+                                                                                <Constraint Text="$days[$j] == &quot;M&quot;"/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                <Select>
+                                                                                  <Constraint Text="$days[$j] == &quot;T&quot;"/>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                      <Select>
+                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
+                                                                                        <Select>
+                                                                                          <Constraint Text="($friday != &quot;&lt;td&gt;&quot;)"/>
+                                                                                          <Concat>
+                                                                                            <Concat>
+                                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                              <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="122"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="123"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="124"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="125"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="125"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                            </Concat>
+                                                                                            <Literal Text="&lt;br /&gt;&lt;br /&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="127"/>
+                                                                                          </Concat>
+                                                                                          <Concat>
+                                                                                            <Concat>
+                                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                              <Literal Text="&lt;b&gt;" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="122"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text="&lt;/b&gt;&lt;br /&gt; Section: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="123"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text="&lt;br /&gt; Room: " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="124"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text="&lt;br /&gt; Teacher: " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="125"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="125"/>
+                                                                                              <Symbolic Text="[Symbol]"/>
+                                                                                            </Concat>
+                                                                                            <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="129"/>
+                                                                                          </Concat>
+                                                                                        </Select>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                      </Select>
+                                                                                    </Select>
+                                                                                  </Select>
+                                                                                </Select>
+                                                                              </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
                                                                             </Concat>
                                                                             <Literal Text="&lt;/tr&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="139"/>

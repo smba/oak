@@ -44,9 +44,5 @@ class RegressionTests extends FunSuite {
   test("Schoolmate") {
     RegressionTest.test("schoolmate/index.php")
   }
-
-  test("Addressbook") {
-    RegressionTest.test("addressbook/z-push/index.php")
-  }
 	
 }

@@ -249,6 +249,7 @@ class OakInterpreter extends InterpreterPluginProvider {
 
     env.addToGlobal("$_SERVER")
     env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //execute(engine.loadFromFile(Paths.get(getClass.getResource("/zpush/lib/core/zpush.php").toURI())), env)
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
     execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
