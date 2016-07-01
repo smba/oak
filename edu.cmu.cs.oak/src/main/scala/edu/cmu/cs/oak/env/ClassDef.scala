@@ -3,8 +3,9 @@ package edu.cmu.cs.oak.env
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.value.OakValue
 
-case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef], parent: String) {
+case class ClassDef(name: String, fields: List[String], methods: Map[String, FunctionDef], constants: Map[String, OakValue], staticFields: Map[String, OakValue],  parent: String) {
   
   /**
    * Constructors
@@ -35,7 +36,7 @@ case class ClassDef(name: String, fields: List[String], methods: Map[String, Fun
   def getName(): String = name
   def getMethods(fname: String): FunctionDef = methods.get(fname).get
   def getFields(): List[String] = fields
-  
-  
+  def getConstants() = constants
+  def getStaticFields() = staticFields
   
 }

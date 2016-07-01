@@ -1,88 +1,33 @@
-<concat>
-  <concatItem>
-    <literal>
-      <string>
-        <content>A</content>
-        <url>/functions01.php</url>
-        <line>2</line>
-      </string>
-    </literal>
-  </concatItem>
-  <concatItem>
-    <literal>
-      <string>
-        <content>pre</content>
-        <url>/functions01.php</url>
-        <line>5</line>
-      </string>
-    </literal>
-  </concatItem>
-  <concatItem>
-    <literal>
-      <string>
-        <content>B2D</content>
-        <url>/functions01.php</url>
-        <line>7</line>
-      </string>
-    </literal>
-  </concatItem>
-  <concatItem>
-    <literal>
-      <string>
-        <content>post</content>
-        <url>/functions01.php</url>
-        <line>11</line>
-      </string>
-    </literal>
-  </concatItem>
-  <concatItem>
-    <literal>
-      <string>
-        <content>pre</content>
-        <url>/functions01.php</url>
-        <line>5</line>
-      </string>
-    </literal>
-  </concatItem>
-  <concatItem>
-    <select>
-      <condition> true &amp;&amp; ($x &gt; 0) </condition>
-      <trueNode>
-        <literal>
-          <string>
-            <content>B2D</content>
-            <url>/functions01.php</url>
-            <line>7</line>
-          </string>
-        </literal>
-      </trueNode>
-      <falseNode>
-        <literal>
-          <string>
-            <content>B3</content>
-            <url>/functions01.php</url>
-            <line>9</line>
-          </string>
-        </literal>
-      </falseNode>
-    </select>
-  </concatItem>
-  <concatItem>
-    <literal>
-      <string>
-        <content>post</content>
-        <url>/functions01.php</url>
-        <line>11</line>
-      </string>
-    </literal>
-  </concatItem>
-  <concatItem>
-    <literal>
-      <string>
-        <content>Z</content>
-        <url>/functions01.php</url>
-        <line>15</line>
-      </string>
-    </literal>
-  </concatItem>
-</concat>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<DataModel>
+  <Concat>
+    <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="2"/>
+    <Concat>
+      <Literal Text="pre" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="5"/>
+      <Select>
+        <Constraint Text="($x &gt; 0)"/>
+        <Concat>
+          <Literal Text="B2D" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="7"/>
+        </Concat>
+        <Concat>
+          <Literal Text="B3" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="9"/>
+        </Concat>
+      </Select>
+      <Literal Text="post" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="11"/>
+    </Concat>
+    <Concat>
+      <Literal Text="pre" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="5"/>
+      <Select>
+        <Constraint Text="($x &gt; 0)"/>
+        <Concat>
+          <Literal Text="B2D" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="7"/>
+        </Concat>
+        <Concat>
+          <Literal Text="B3" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="9"/>
+        </Concat>
+      </Select>
+      <Literal Text="post" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="11"/>
+    </Concat>
+    <Literal Text="Z" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="15"/>
+  </Concat>
+</DataModel>

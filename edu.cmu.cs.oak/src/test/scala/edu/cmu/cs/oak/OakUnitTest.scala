@@ -28,6 +28,8 @@ import edu.cmu.cs.oak.core.ControlCode
 import java.io.PrintWriter
 import java.io.File
 import edu.cmu.cs.oak.nodes.DNodeParser
+import java.time.Instant
+import java.time.Duration
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -126,7 +128,10 @@ object OakUnitTest extends App {
   }
 * */
 //  val env = loadAndExecute(url("environments/env02.php"))
-  val env = loadAndExecute(url("wordpress/index.php"))
+  val before = Instant.now()
+  val env = loadAndExecute(url("wordpress/wp-admin/install.php"))
+  val after = Instant.now()
+  println(Duration.between(before, after).toString())
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close

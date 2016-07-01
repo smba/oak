@@ -27,6 +27,7 @@ import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.value.OakValue
 
 /**
  * Programs state and program state operations.
@@ -67,9 +68,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
-    
+
     if (name equals "$wp_local_package") throw new RuntimeException()
-    
+
     if (variables.contains(name)) {
       references.put(variables.get(name).get, value)
     } else {
@@ -86,9 +87,16 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * @return value Value of the variable
    */
   def lookup(name: String): OakValue = {
-    val reference = getRef(name)
+    var reference = getRef(name)
+    def recursiveLookup(reference: OakVariable): OakValue = {
+      this.extract(reference) match {
+        case ref2: OakVariable => recursiveLookup(ref2)
+        case null => null
+        case ov: OakValue => ov
+      }
+    }
     val value = try {
-      this.extract(reference)
+      recursiveLookup(reference)
     } catch {
       case vnfe: VariableNotFoundException => throw new RuntimeException(vnfe)
     }
@@ -145,7 +153,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
   }
 
   def insert(reference: OakVariable, value: OakValue) {
-      references.put(reference, value)
+    references.put(reference, value)
   }
 
   /**
@@ -295,7 +303,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
     var returnMap = Map[String, OakVariable]()
     if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
     if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
-    
+
     new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, Set())
   }
 
@@ -347,13 +355,13 @@ object Environment {
     val b2 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
 
     /* Add variables of parent environment to the branch environments. */
-//    parent.variables.foreach {
-//      case (name, reference) =>
-//        {
-//          b1.setRef(name, reference)
-//          b2.setRef(name, reference)
-//        }
-//    }
+    //    parent.variables.foreach {
+    //      case (name, reference) =>
+    //        {
+    //          b1.setRef(name, reference)
+    //          b2.setRef(name, reference)
+    //        }
+    //    }
     return (b1, b2)
   }
 
@@ -421,9 +429,9 @@ object Environment {
 
   def createLoopEnvironment(dis: Environment): LoopEnv = {
     val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
-//    dis.variables.foreach {
-//      case (name, reference) => env.setRef(name, reference)
-//    }
+    //    dis.variables.foreach {
+    //      case (name, reference) => env.setRef(name, reference)
+    //    }
     env
   }
 
