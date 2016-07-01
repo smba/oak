@@ -614,7 +614,7 @@ class OakInterpreter extends InterpreterPluginProvider {
     // TODO class declaration 
     // TODO kompakter schreiben
     val name = interpreted.getName
-    logger.info(name)
+    
     val fields = interpreted._fieldMap
 
     val staticFields = interpreted._staticFieldMap
@@ -641,7 +641,6 @@ class OakInterpreter extends InterpreterPluginProvider {
         }
     }
 
-    /* Get all field names */
     val classFieldNamez = List(fields.keySet().toArray: _*)
     var classFieldNames = classFieldNamez.map { name => name.toString() }
 
@@ -664,7 +663,7 @@ class OakInterpreter extends InterpreterPluginProvider {
     }.toMap
 
     val parent = if (interpreted._parentName != null) interpreted._parentName else ""
-    val classDef = ClassDef(name, classFieldNames, classMethodDefMap, constantz, staticFieldz, parent)
+    val classDef = ClassDef(name, Map[String, OakValue](), classMethodDefMap, constantz, staticFieldz, parent)
 
     /* Add construcotrs to the class definition. */
     classMethodDefs.takeWhile {
@@ -673,6 +672,14 @@ class OakInterpreter extends InterpreterPluginProvider {
       fd => classDef.addConstructor(fd.args.size, fd)
     }
     Environment.addClass(classDef)
+    
+    /* Get all field names */
+    val classFieldMap = fields.map {
+      case (sv, cf) => (sv.toString() -> evaluate(cf._initValue, env))
+    }
+    
+    Environment.getClassDef(name).initFields(classFieldMap.toMap)
+    logger.info("Class " + name + " defined!")
     return ControlCode.OK
   }
 
@@ -1211,8 +1218,13 @@ class OakInterpreter extends InterpreterPluginProvider {
     val obj = env.lookup("$this")
     return obj match {
       case objectValue: ObjectValue => {
-        val ref = objectValue.getFields().getRef(StringValue(fieldName, "", 0))
-        env.extract(ref)
+        val bener = objectValue.getFields()
+        try {
+          val ref = objectValue.getFields().getRef(StringValue(fieldName, "", 0))
+          env.extract(ref)
+        } catch {
+          case _ => objectValue.getClassDef().getFieldMap().get(fieldName).get
+        }
       }
       case _ => SymbolValue(t.toString, OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE)
     }

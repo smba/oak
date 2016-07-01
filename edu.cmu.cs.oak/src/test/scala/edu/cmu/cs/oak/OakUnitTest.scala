@@ -129,7 +129,7 @@ object OakUnitTest extends App {
 * */
 //  val env = loadAndExecute(url("environments/env02.php"))
   val before = Instant.now()
-  val env = loadAndExecute(url("wordpress/wp-admin/install.php"))
+  val env = loadAndExecute(url("testScripts/outer_to_inner_scope/createFunctionOrMethodEnvironment.php"))
   val after = Instant.now()
   println(Duration.between(before, after).toString())
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output.xml"))
