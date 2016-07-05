@@ -2,7 +2,6 @@ package edu.cmu.cs.oak.nodes
 
 import com.caucho.quercus.expr.Expr
 
-import edu.cmu.cs.oak.nodes.SymbolNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NumericValue

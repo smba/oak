@@ -3,7 +3,6 @@ package edu.cmu.cs.oak.env
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakVariable
 import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.env.ClassDef
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.nodes.SelectNode
 

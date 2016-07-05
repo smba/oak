@@ -3,7 +3,6 @@ package edu.cmu.cs.oak.nodes
 import scala.xml.XML
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
-import edu.cmu.cs.oak.nodes.LiteralNode
 
 /**
  * Parser XML -> DNode

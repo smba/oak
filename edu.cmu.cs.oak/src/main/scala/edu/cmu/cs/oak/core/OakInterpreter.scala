@@ -1293,7 +1293,7 @@ class OakInterpreter extends InterpreterPluginProvider {
         val arrayValueName = try {
           (pattern replaceFirstIn (name.toString.reverse, "")).reverse
         } catch {
-          case t: Throwable => logger.info(t.getClass + ""); null
+          case t: Throwable => throw new RuntimeException("Could not determine array name")
         }
         /* Check if there is already a variable with name 
                * name stored in the environment. If so, use this
@@ -1316,7 +1316,7 @@ class OakInterpreter extends InterpreterPluginProvider {
               env.lookup(arrayValueName).asInstanceOf[ArrayValue].setRef(index, reference)
               env.insert(reference, evaluate(expr, env))
             }
-            case null => {}
+            case null => throw new RuntimeException("got null")
             case sym: SymbolicValue => {
 
             }
@@ -1355,7 +1355,6 @@ class OakInterpreter extends InterpreterPluginProvider {
             //logger.info("Object is symbolic")
           }
         }
-
         null
       }
 
@@ -1503,34 +1502,25 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   private def evaluateClassMethodExpr(cme: ClassMethodExpr, env: Environment): OakValue = {
-    // ClassName::ClassName(<args>) called, but not a 
+    val classDef = Environment.getClassDef(cme._className)
+    
     if (cme._className equals cme._methodName.toString()) {
-
-      val classDef = Environment.getClassDef(cme._className)
       val constructor = classDef.getConstructor(cme._args.size)
       execute(constructor.statement, env)
       null
     } else {
-      val classDef = Environment.getClassDef(cme._className)
       val method = classDef.getMethods(cme._methodName.toString)
-
-      val classMethodCall = Call(cme._className + "::" + cme._methodName.toString(), (Paths.get(cme._location.getFileName), cme._location.getLineNumber))
-
-      val cmEnv = Environment.createFunctionEnvironment(env, classMethodCall)
       val args = cme._args
-
-      //default stuff
-      (method.args zip args).foreach {
-        case (name, expr) => {
-          cmEnv.update(name, evaluate(expr, env))
-        }
-      }
+      val classMethodCall = Call(cme._className + "::" + cme._methodName.toString(), (Paths.get(cme._location.getFileName), cme._location.getLineNumber))
+      
+      val cmEnv = Environment.createFunctionEnvironment(env, classMethodCall)
+      prepareFunctionOrMethod(method, env, cmEnv, args.toList)
 
       execute(method.statement, cmEnv)
       val returnValue = try {
         env.lookup("$return")
       } catch {
-        case e: VariableNotFoundException => null
+        case e: VariableNotFoundException => NullValue("$return")
       }
       returnValue
     }
@@ -1566,7 +1556,7 @@ class OakInterpreter extends InterpreterPluginProvider {
             return try {
               methodEnv.lookup("$return")
             } catch {
-              case _: Throwable => null
+              case _: Throwable => NullValue("$return")
             }
           } else {
             SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.RECURSION)

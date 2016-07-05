@@ -8,14 +8,8 @@ import edu.cmu.cs.oak.nodes.SelectNode
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakVariable
-import edu.cmu.cs.oak.env.Delta
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.env.FunctionDef
-import edu.cmu.cs.oak.env.ClassDef
-import edu.cmu.cs.oak.env.OakHeap
-import java.time.Instant
-import java.time.Duration
 import scala.collection.mutable.ListBuffer
 
 
