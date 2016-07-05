@@ -43,4 +43,11 @@ class ArrayValue extends OakValue {
 
   override def toString(): String = "[" + array.mkString(", ") + "]"
 
+  def cloneArrayValue(): ArrayValue = {
+    val av = new ArrayValue()
+    array.foreach {
+      case (k, v) => av.setRef(k, v) 
+    }
+    av
+  }
 }

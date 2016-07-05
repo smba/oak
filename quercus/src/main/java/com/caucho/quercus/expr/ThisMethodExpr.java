@@ -44,8 +44,8 @@ import java.util.ArrayList;
 public class ThisMethodExpr extends ObjectMethodExpr {
   protected final InterpretedClassDef _classDef;
 
-  protected final int _hashCodeInsensitive;
-  protected boolean _isInit;
+  public final int _hashCodeInsensitive;
+  public boolean _isInit;
 
   protected AbstractFunction _fun;
 

@@ -44,9 +44,9 @@ import com.caucho.quercus.expr.VarExpr;
 public class ClassStaticStatement
   extends Statement
 {
-  protected final VarExpr _var;
-  protected final Expr _initValue;
-  protected StringValue _staticName;
+	public final VarExpr _var;
+	public final Expr _initValue;
+	public StringValue _staticName;
 
   /**
    * Creates the echo statement.

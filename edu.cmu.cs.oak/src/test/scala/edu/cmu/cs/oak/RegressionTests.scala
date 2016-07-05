@@ -4,26 +4,19 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
-//@RunWith(classOf[JUnitRunner])
+@RunWith(classOf[JUnitRunner])
 class RegressionTests extends FunSuite {
 
-  test("1") {
+  test("Simple Statements") {
     RegressionTest.test("environments/env01.php")
-  }
-  test("2") {
     RegressionTest.test("environments/switch.php")
-  }
-  
-  test("3") {
     RegressionTest.test("environments/while.php")
   }
   
-  test("4") {
+  test("OOP") {
     RegressionTest.test("testScripts/classes01.php")
-  }
-  
-  test("objects") {
     RegressionTest.test("testScripts/objects01.php")
+    RegressionTest.test("testScripts/staticFields.php")
   }
   
   test("arrays") {
@@ -37,8 +30,16 @@ class RegressionTests extends FunSuite {
   }
   
   test("Outer to inner scope") {
-    //RegressionTest.test("testScripts/outer_to_inner_scope/createLoopEnvironment.php")
+    RegressionTest.test("testScripts/outer_to_inner_scope/createLoopEnvironment.php")
     RegressionTest.test("testScripts/outer_to_inner_scope/createFunctionOrMethodEnvironment.php")
+  }
+  
+  test("Global variables") {
+    RegressionTest.test("testScripts/globals01.php")
+  }
+  
+  test("Inner to outer scope") {
+    RegressionTest.test("testScripts/inner_to_outer_scope/join01.php")
   }
 
   test("Schoolmate") {

@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 import com.caucho.quercus.expr.Expr
 
-import edu.cmu.cs.oak.core.InterpreterPluginProvider
+import edu.cmu.cs.oak.lib.InterpreterPluginProvider
 import edu.cmu.cs.oak.core.OakInterpreter
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.lib.InterpreterPlugin

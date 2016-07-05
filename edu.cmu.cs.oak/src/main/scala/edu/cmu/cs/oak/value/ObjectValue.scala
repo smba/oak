@@ -12,7 +12,7 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
    * Internally an object is implemented using an array
    * whereby the classes fields represent the indices.
    */
-  private val fields = new ArrayValue()
+  private var fields = new ArrayValue()
   
   /**
    * Name of the object
@@ -37,5 +37,11 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
   
   def getFieldRef(fieldKey: String): OakVariable = {
     return fields.getRef(StringValue(fieldKey, "", 0))
+  }
+  
+  def cloneObjectValue(): ObjectValue = {
+    val obj = ObjectValue(name, objectClass)
+    obj.fields = fields.cloneArrayValue()
+    obj
   }
 }

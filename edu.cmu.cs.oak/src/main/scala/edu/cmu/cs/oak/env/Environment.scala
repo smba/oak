@@ -28,6 +28,9 @@ import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.value.NullValue
+import scala.collection.mutable.HashSet
 
 /**
  * Programs state and program state operations.
@@ -44,15 +47,20 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
   //  val variables = collection.mutable.Map[String, OakVariable]()
   val variables = collection.mutable.Map[String, OakVariable]()
 
+  /**
+   * Changes in the static class fields
+   */
+  val staticClassFields = collection.mutable.Map[String, collection.mutable.Map[String, OakValue]]()
+  
   //  val references = collection.mutable.Map[OakVariable, OakValue]()
   val references = collection.mutable.Map[OakVariable, OakValue]()
 
   /**
    * Map of global variable identifiers and variable references.
    */
-  var globalVariables = Set[String]()
+  val globalVariables = HashSet[String]()
 
-  var loopModeEnabled = false;
+  //var loopModeEnabled = false;
 
   /**
    * Output (D Model) of the environment.
@@ -81,13 +89,28 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
   }
 
   def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
+  
+  def isGlobalVariable(varname: String): Boolean = {
+    if (this.globalVariables contains varname) {
+      true
+    } else if (this.parent != null) {
+      this.parent.isGlobalVariable(varname)
+    } else {
+      false
+    }
+  }
   /**
    * Looks up an variable and returns its context-dependent value.
    * @param name Name of the variable
    * @return value Value of the variable
    */
   def lookup(name: String): OakValue = {
-    var reference = getRef(name)
+    var reference = if (this.isGlobalVariable(name)) {
+      getRef(name, false)
+    } else {
+      getRef(name)
+    }
+    
     def recursiveLookup(reference: OakVariable): OakValue = {
       this.extract(reference) match {
         case ref2: OakVariable => recursiveLookup(ref2)
@@ -95,6 +118,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
         case ov: OakValue => ov
       }
     }
+    
     val value = try {
       recursiveLookup(reference)
     } catch {
@@ -161,10 +185,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * @param name Name of the variable
    * @return reference that variable 'name points to
    */
-  def getRef(name: String): OakVariable = {
+  def getRef(name: String, limitScope: Boolean = true): OakVariable = {
     if (variables.contains(name)) {
       variables.get(name).get
-    } else if ((parent != null) && !this.isFunctionEnv()) {
+    } else if ((parent != null) && (limitScope && !this.isFunctionEnv())) {
       parent.getRef(name)
     } else {
       throw new VariableNotFoundException("Unassigned variable " + name + ".")
@@ -293,9 +317,20 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
       case (name, value) => this.update(name, value)
     }
 
-    // 5 Globals
+    // 4 Globals
     joinResult.joinedGlobals.foreach {
       g => this.addToGlobal(g)
+    }
+    
+    // 5 Static fields
+    joinResult.joinedStaticClassVariables.foreach {
+      case (c, m) => {
+        m.foreach {
+          case (f, v) => {
+            this.setStaticClassField(c, f, v)
+          }
+        }
+      }
     }
   }
 
@@ -303,8 +338,14 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
     var returnMap = Map[String, OakVariable]()
     if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
     if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
-
-    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, Set())
+    
+    globalVariables.foreach { gv => returnMap += (gv -> this.getRef(gv, false)) }
+    
+    var t = Map[String, Map[String, OakValue]]()
+    this.staticClassFields.foreach {
+      case (m1, m2) => t += (m1 -> m2.toMap)
+    }
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, t, this.globalVariables.toSet)
   }
 
   //  def weaveReferences(that: Environment) {
@@ -322,6 +363,22 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
   //    copy
   //  }
 
+  def getStaticClassField(className: String, fieldName: String): OakValue = {
+    if (!this.staticClassFields.get(className).isEmpty && !this.staticClassFields.get(className).get.get(fieldName).isEmpty) {
+        this.staticClassFields.get(className).get.get(fieldName).get
+    } else if (this.parent != null) {
+      this.parent.getStaticClassField(className, fieldName)
+    } else {
+      Environment.getClassDef(className).getStaticFields().get(fieldName).get
+    }
+  }
+  
+  def setStaticClassField(className: String, fieldName: String, value: OakValue) = {
+    if (this.staticClassFields.get(className).isEmpty) {
+      this.staticClassFields += (className -> collection.mutable.Map[String, OakValue]())
+    }
+    this.staticClassFields.get(className).get.put(fieldName, value)
+  }
 }
 
 /**

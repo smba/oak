@@ -37,14 +37,14 @@ import com.caucho.quercus.expr.Expr;
 
 public class ClassField
 {
-  private final StringValue _name;
-  private final StringValue _canonicalName;
-  private final String _declaringClassName;
+	public final StringValue _name;
+	public final StringValue _canonicalName;
+	public final String _declaringClassName;
 
-  private Expr _initValue;
-  private boolean _isTraitField;
+	public Expr _initValue;
+	public boolean _isTraitField;
 
-  private final String _comment;
+	public final String _comment;
 
   public ClassField(StringValue name,
                     StringValue canonicalName,

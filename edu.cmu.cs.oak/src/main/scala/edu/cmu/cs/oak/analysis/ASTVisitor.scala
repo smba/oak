@@ -219,10 +219,9 @@ class ASTVisitor(path: Path) {
      * Case for AST node class TextStatement.
      */
     case s: TextStatement => {
-
-      val loc = s._location
-
       val value = s._value.toString()
+      val string = StringValue(value, s._location.getFileName(), s._location.getLineNumber())
+      stringLiterals += string
     }
 
     /**
