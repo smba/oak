@@ -1094,7 +1094,7 @@ class OakInterpreter extends InterpreterPluginProvider {
       val returnValue = try {
         functionEnv.lookup("$return")
       } catch {
-        case e: Exception => null
+        case e: Exception => NullValue("$return")
       }
       env.weaveDelta(functionEnv.getDelta())
       returnValue
