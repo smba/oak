@@ -37,7 +37,7 @@ import com.caucho.quercus.env.Value;
  * Represents the die expression
  */
 public class FunDieExpr extends Expr {
-  protected Expr _value;
+	public Expr _value;
 
   public FunDieExpr(Location location, Expr value)
   {

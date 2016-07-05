@@ -75,9 +75,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
-
-    if (name equals "$wp_local_package") throw new RuntimeException()
-
     if (variables.contains(name)) {
       references.put(variables.get(name).get, value)
     } else {
@@ -190,7 +187,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
     } else if ((parent != null) && (limitScope && !this.isFunctionEnv())) {
       parent.getRef(name)
     } else {
-      throw new VariableNotFoundException("Unassigned variable " + name + ".")
+      throw new VariableNotFoundException("Unassigned variable " + name + limitScope + ".")
     }
 
   }
@@ -338,7 +335,14 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
     if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
     if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
     
-    globalVariables.foreach { gv => returnMap += (gv -> this.getRef(gv, false)) }
+    globalVariables.foreach { 
+      gv => {
+        if (!(variables.keySet contains gv)) {
+          update(gv, NullValue(gv))
+        }
+        returnMap += (gv -> this.getRef(gv, false)) 
+      }
+    }
     
     var t = Map[String, Map[String, OakValue]]()
     this.staticClassFields.foreach {

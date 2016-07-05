@@ -612,7 +612,10 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class DieExpr.
      */
-    case e: DieExpr => ???
+    case e: DieExpr => {
+      val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
+      stringLiterals += string
+    }
 
     /**
      * Case for AST node class FunArrayExpr.
@@ -631,7 +634,8 @@ class ASTVisitor(path: Path) {
      * Case for AST node class FunDieExpr.
      */
     case e: FunDieExpr => {
-      //visit(Interpreter.accessField(e, "_value").asInstanceOf[Expr], loc)
+      val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
+      stringLiterals += string
     }
 
     /**

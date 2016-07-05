@@ -12,6 +12,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
 import com.caucho.quercus.Location
 import java.security.MessageDigest
+import edu.cmu.cs.oak.value.NullValue
 
 /**
  * Model for  output of a symbolically executed PHP program.
@@ -90,6 +91,7 @@ object DNode {
       case sv: StringValue => {
         LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
       }
+      case n: NullValue => UndefNode
       case null => UndefNode
       case _ => {
         LiteralNode(value.toString(), location.getFileName, location.getLineNumber)

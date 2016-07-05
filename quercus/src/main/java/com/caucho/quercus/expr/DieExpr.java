@@ -40,7 +40,7 @@ import java.io.IOException;
  * Represents the die expression
  */
 public class DieExpr extends Expr {
-  protected Expr _value;
+	public Expr _value;
 
   public DieExpr(Location location, Expr value)
   {

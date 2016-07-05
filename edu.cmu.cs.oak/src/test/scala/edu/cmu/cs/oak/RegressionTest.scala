@@ -13,6 +13,7 @@ import java.nio.file.Path
 import java.io.PrintWriter
 import java.io.File
 import java.nio.file.Paths
+import edu.cmu.cs.oak.core.ControlCode
 
 /**
  * TODO Comment
@@ -31,8 +32,14 @@ object RegressionTest {
     val parsed = DNodeParser.parseNode(scala.xml.XML.load(url(fileName + "t").toString))
     assert(parsed compare res.output)
   }
+  
+  def loadAndExecute(fileName: String): (ControlCode.Value, Environment) = {
+    val engine = new OakEngine
+    val interpreter = new OakInterpreter
+    return interpreter.execute(url(fileName))
+  }
 
-  private def url(fileName: String): Path = {
+  def url(fileName: String): Path = {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 

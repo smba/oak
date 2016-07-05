@@ -127,7 +127,7 @@ object OakUnitTest extends App {
 * */
 //  val env = loadAndExecute(url("environments/env02.php"))
   //val before = Instant.now()
-  val env = loadAndExecute(url("testScripts/globals01.php"))
+  val env = loadAndExecute(url("schoolmate/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }
