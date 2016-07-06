@@ -45,7 +45,7 @@ class ASTVisitor(path: Path) {
   def init() {
     ASTVisitor.rootPath = path.getParent()
   }
-  
+
   /**
    * Loads a program from file and retrieves string literals.
    *
@@ -85,7 +85,7 @@ class ASTVisitor(path: Path) {
      */
     case s: ClassDefStatement => {
       val ic = s._cl
-      val functionMap = ic._functionMap//Interpreter.accessField(ic, "_functionMap").asInstanceOf[LinkedHashMap[com.caucho.quercus.env.StringValue, AbstractFunction]]
+      val functionMap = ic._functionMap //Interpreter.accessField(ic, "_functionMap").asInstanceOf[LinkedHashMap[com.caucho.quercus.env.StringValue, AbstractFunction]]
 
       val functions = functionMap.map { case (k, v) => (k.toString(), v) }
       functions.values.foreach {
@@ -96,7 +96,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ClassStaticStatement.
      */
-    case s: ClassStaticStatement => { }
+    case s: ClassStaticStatement => {}
 
     /**
      * Case for AST node class ClosureStaticStatement.
@@ -130,9 +130,9 @@ class ASTVisitor(path: Path) {
      */
     case s: ExprStatement => {
       val expr = s._expr
-      
+
       visit(expr)
-      
+
     }
 
     /**
@@ -227,7 +227,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ThrowStatement.
      */
-    case s: ThrowStatement => { }
+    case s: ThrowStatement => {}
 
     /**
      * Case for AST node class TryStatement.
@@ -332,7 +332,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class BinaryAssignListEachExpr.
      */
-    case e: BinaryAssignListEachExpr => { }
+    case e: BinaryAssignListEachExpr => {}
 
     /**
      * Case for AST node class BinaryAssignListExpr.
@@ -465,15 +465,16 @@ class ASTVisitor(path: Path) {
       args.foreach { a => visit(a) }
     }
 
-    /**zeit
-     * 
+    /**
+     * zeit
+     *
      */
-    case e: CallVarExpr => { }
+    case e: CallVarExpr => {}
 
     /**
      * Case for AST node class ClassConstExpr.
      */
-    case e: ClassConstExpr => { }
+    case e: ClassConstExpr => {}
 
     /**
      * Case for AST node class ClassConstructExpr.
@@ -573,7 +574,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ClosureExpr.
      */
-    case e: ClosureExpr => { }
+    case e: ClosureExpr => {}
 
     /**
      * Case for AST node class ConditionalExpr.
@@ -602,7 +603,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ConstExpr.
      */
-    case e: ConstExpr => { }
+    case e: ConstExpr => {}
 
     /**
      * Case for AST node class ConstFileExpr.
@@ -634,8 +635,10 @@ class ASTVisitor(path: Path) {
      * Case for AST node class FunDieExpr.
      */
     case e: FunDieExpr => {
-      val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
-      stringLiterals += string
+      if (e._value != null) {
+        val string = StringValue(e._value.toString(), e._value._location.getFileName(), e._value._location.getLineNumber())
+        stringLiterals += string
+      }
     }
 
     /**
@@ -674,7 +677,7 @@ class ASTVisitor(path: Path) {
      * Case for AST node class FunIncludeOnceExpr.
      */
     case e: FunIncludeOnceExpr => {
-      println(e)    
+      println(e)
     }
 
     /**
@@ -708,7 +711,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class LiteralLongExpr.
      */
-    case e: LiteralLongExpr => { }
+    case e: LiteralLongExpr => {}
 
     /**
      * Case for AST node class LiteralNullExpr.
@@ -751,7 +754,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ObjectMethodVarExpr.
      */
-    case e: ObjectMethodVarExpr => { }
+    case e: ObjectMethodVarExpr => {}
 
     /**
      * Case for AST node class ObjectNewExpr.
@@ -766,7 +769,7 @@ class ASTVisitor(path: Path) {
     /**
      * Case for AST node class ObjectNewVarExpr.
      */
-    case e: ObjectNewVarExpr => { }
+    case e: ObjectNewVarExpr => {}
 
     /**
      * Case for AST node class ParamDefaultExpr.
@@ -934,7 +937,7 @@ class ASTVisitor(path: Path) {
 }
 
 object ASTVisitor {
-  
+
   var rootPath: Path = null
 
 }

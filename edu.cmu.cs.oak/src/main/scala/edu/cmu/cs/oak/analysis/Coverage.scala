@@ -70,10 +70,7 @@ object Coverage extends App {
     (foundLiterals.size, projectLiterals.size)
   }
   
-  //val literals = getProjectLiterals(new File("/home/stefan/git/oak/edu.cmu.cs.oak/src/test/resources/wordpress"))
-  //println("Found " + literals.size + " literals with "  + literals.map{l=>l.value.size}.fold(0)(_ + _ ) + " characters.")
+  val literals = getProjectLiterals(new File("/home/stefan/git/oak/edu.cmu.cs.oak/src/test/resources/schoolmate"))
+  println("Found " + literals.size + " literals with "  + literals.map{l=>l.value.size}.fold(0)(_ + _ ) + " characters.")
 
-  val wp = new File("/home/stefan/git/oak/edu.cmu.cs.oak/src/test/resources/wordpress")
-  val eps = List("wordpress/index.php", "wordpress/wp-admin/install.php", "wordpress/wp-admin/index.php").map(ep => url(ep))
-  println(getCoverage(wp, eps))
 }

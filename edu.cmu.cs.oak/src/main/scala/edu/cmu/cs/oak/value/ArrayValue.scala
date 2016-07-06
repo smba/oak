@@ -3,6 +3,8 @@ package edu.cmu.cs.oak.value
 import scala.collection.mutable.HashMap
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
+import edu.cmu.cs.oak.core.SymbolFlag
 
 /**
  * 
@@ -25,7 +27,11 @@ class ArrayValue extends OakValue {
 
   def get(index: OakValue, env: Environment): OakValue = {
     if (array.keySet.contains(index)) {
-      return env.extract(array.get(index).get)
+      return try {
+        env.extract(array.get(index).get)
+      } catch {
+        case vnfe: VariableNotFoundException => SymbolValue("", OakHeap.getIndex(), SymbolFlag.DUMMY)
+      }
     } else {
       throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")
     }

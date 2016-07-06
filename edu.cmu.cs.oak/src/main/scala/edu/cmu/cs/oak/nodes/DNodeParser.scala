@@ -3,6 +3,7 @@ package edu.cmu.cs.oak.nodes
 import scala.xml.XML
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.env.Constraint
 
 /**
  * Parser XML -> DNode
@@ -10,6 +11,8 @@ import edu.cmu.cs.oak.env.OakHeap
  */
 object DNodeParser extends App {
 
+  def p(label: String): Boolean = !((label equals "#PCDATA") || (label equals "Constraint"))
+  
   def parseNode(node: scala.xml.Node): DNode = {
     node.label match {
       case "DataModel"  => parseDataModel(node)
@@ -31,20 +34,20 @@ object DNodeParser extends App {
   }
   
   def parseConcatNode(node: scala.xml.Node): DNode = {
-    ConcatNode(node.child.filter { n => !("#PCDATA" equals n.label) }.map(c => parseNode(c)).toList.reverse)
+    ConcatNode(node.child.filter { n => p(n.label) }.map(c => parseNode(c)).toList.reverse)
   }
   
   def parseRepeatNode(node: scala.xml.Node): DNode = {
-    RepeatNode(ConcatNode(node.child.filter { n => !("#PCDATA" equals n.label) }.map(c => parseNode(c)).toList.reverse))
+    RepeatNode(Constraint( (node \ "Constraint").text.trim), ConcatNode(node.child.filter { n => p(n.label) }.map(c => parseNode(c)).toList.reverse))
   }
   
   def parseSelectNode(node: scala.xml.Node): DNode = {
-    val children = node.child.filter { n => !("#PCDATA" equals n.label) }
-    SelectNode((node \ "Constraint").text.trim, parseNode(children(1)), parseNode(children(2)))
+    val children = node.child.filter { n => p(n.label) }
+    SelectNode(Constraint( (node \ "Constraint").text.trim), parseNode(children(0)), parseNode(children(1)))
   }
   
   def parseSymbolicNode(node: scala.xml.Node): DNode = {
-    SymbolNode(SymbolValue((node \ "Text").text.trim, OakHeap.getIndex, null))
+    SymbolNode(SymbolValue(node.attribute("Text").head.text.trim, OakHeap.getIndex, null))
   }
   
   def parseLiteralNode(node: scala.xml.Node): DNode = {
@@ -62,6 +65,6 @@ object DNodeParser extends App {
   }
   
   val xml = XML.loadFile("/home/stefan/Desktop/output2.xml")
-  println(DNodeParser.parseNode(xml).getClass)
+  println(DNode.extractStringLiterals(DNodeParser.parseNode(xml)).size)
   
 }

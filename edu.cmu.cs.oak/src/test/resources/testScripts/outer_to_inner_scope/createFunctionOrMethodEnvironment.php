@@ -1,7 +1,7 @@
 <?php 
 
 class Klaas {
-	var $name = "Klaas";
+	static $name = "Klaas";
 	var $nachname;
 	
 	function __construct($name) {
@@ -9,7 +9,7 @@ class Klaas {
 	}
 	
 	function say($word) {
-		echo $this->name . " says " . $word;
+		echo Klaas::$name . " says " . $word;
 		return 42;
 	}
 }

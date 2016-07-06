@@ -1,13 +1,15 @@
 package edu.cmu.cs.oak.nodes
 
-case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
+import edu.cmu.cs.oak.env.Constraint
+
+case class SelectNode(constraint: Constraint, v1: DNode, v2: DNode) extends DNode {
     
   assert((v1 != null) && (v2 != null))
   def getChildren(): Seq[DNode] = List(v1, v2)
   
   override def toXml() = {
     <Select>
-			<Constraint Text={condition} />
+			<Constraint Text={constraint.text} />
       {v1.toXml}
       {v2.toXml}
     </Select>
@@ -23,7 +25,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     sequence
   }
   
-  override def toString() = "π(" + condition + "," + v1 + "," + v2 + ")"
+  override def toString() = "π(" + constraint + "," + v1 + "," + v2 + ")"
   
   override def isEmpty() = (v1.isEmpty() && v2.isEmpty())
   

@@ -19,7 +19,7 @@ import scala.collection.mutable.ListBuffer
  *
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  */
-class BranchEnv(parent: Environment, calls: Stack[Call], constraint: String) extends Environment(parent: Environment, calls: Stack[Call], constraint: String) {
+class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint) extends Environment(parent: Environment, calls: Stack[Call], constraint: Constraint) {
 
   /**
    * Set of changed ("dirty") variables. These variables are considered
@@ -57,7 +57,7 @@ object BranchEnv {
    * @param constraints List of constraints of the environments we want to merge
    * @return merged output
    */
-  private def joinOutput(envs: List[BranchEnv], constraints: List[String]): DNode = {
+  private def joinOutput(envs: List[BranchEnv], constraints: List[Constraint]): DNode = {
     if ((envs.size == 2) && (constraints.size == 1)) {
       SelectNode(constraints.head, envs.head.output, envs(1).output)
     } else {
@@ -79,7 +79,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
    * @return Merged value (should be a Choice value)
    *
    */
-  private def joinVariable(envs: List[BranchEnv], constraints: List[String], variable: String): OakValue = {
+  private def joinVariable(envs: List[BranchEnv], constraints: List[Constraint], variable: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
       Choice(constraints(0), try { 
         envs(0).lookup(variable)
@@ -113,27 +113,27 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
     envs.map { env => env.references.toMap } reduce (_ ++ _)
   }
   
-  private def joinStaticClassField(envs: List[BranchEnv], constraints: List[String], className: String, fieldName: String): OakValue = {
+  private def joinStaticClassField(envs: List[BranchEnv], constraints: List[Constraint], className: String, fieldName: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
       Choice(constraints(0), try { 
         envs(0).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("")
+        case vnfe: NoSuchElementException => NullValue("")
       }, try {
         envs(1).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("")
+        case vnfe: NoSuchElementException => NullValue("")
       })
     } else {
       Choice(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("")
+        case vnfe: NoSuchElementException => NullValue("")
       }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))    
     }
   }
   
-  def join(envs: List[BranchEnv], constraints: List[String]): Delta = {
+  def join(envs: List[BranchEnv], constraints: List[Constraint]): Delta = {
 
     /* 1) JOIN UPDATED VARIABLES
      * All variables that have been changed during at least one branch execution

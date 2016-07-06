@@ -13,14 +13,14 @@ import edu.cmu.cs.oak.nodes.RepeatNode
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  * 
  */
-class LoopEnv(parent: Environment, calls: Stack[Call], constraint: String) extends Environment(parent: Environment, calls: Stack[Call], constraint: String) { 
+class LoopEnv(parent: Environment, calls: Stack[Call], constraint: Constraint) extends Environment(parent: Environment, calls: Stack[Call], constraint: Constraint) { 
 
   /*
    * Get the output sequence from the environment.
    * @return output as sequence of values
    */
   override final def getOutput(): DNode = {
-    RepeatNode(this.output)
+    RepeatNode(constraint, this.output)
   }
   
 }

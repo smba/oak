@@ -1,11 +1,14 @@
 package edu.cmu.cs.oak.nodes
 
-case class RepeatNode(node: DNode) extends DNode {
+import edu.cmu.cs.oak.env.Constraint
+
+case class RepeatNode(constraint: Constraint, node: DNode) extends DNode {
 
   def getChildren(): Seq[DNode] = List(node)
 
   def toXml(): scala.xml.Elem = {
     <Repeat>
+			<Constraint Text={constraint.text} />
 			{node.toXml}
 		</Repeat>
   }

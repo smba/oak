@@ -37,6 +37,7 @@ class RegressionTests extends FunSuite {
   
   test("Global variables") {
     RegressionTest.test("testScripts/globals01.php")
+    RegressionTest.test("testScripts/isGlobal.php")
   }
   
   test("Inner to outer scope") {

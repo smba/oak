@@ -13,6 +13,8 @@ import edu.cmu.cs.oak.value.SymbolicValue
 import com.caucho.quercus.Location
 import java.security.MessageDigest
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.nodes.UndefNode
+import edu.cmu.cs.oak.nodes.UndefNode
 
 /**
  * Model for  output of a symbolically executed PHP program.
@@ -128,4 +130,78 @@ object DNode {
     // apply utility method
     return extractStringLiterals(node, List[StringValue]()).toSet
   }
+  
+  def flatten(node: DNode): DNode = {
+    node match {
+      case c: ConcatNode => ConcatNode(c.values.map(v => flatten(v)))
+      case l: LiteralNode => l
+      case r: RepeatNode => RepeatNode(r.constraint, flatten(r.node))
+      case s: SymbolNode => s
+      case UndefNode => UndefNode
+      case p: SelectNode => {
+        
+        /*
+         *  		p						 p'' with (c && c')
+ 				 *  	 / \					/ \
+				 *  	p'  ⊥  --> 	 X	 ⊥
+				 *   / \
+				 *  X   ⊥
+         */
+        if (p.v1.isInstanceOf[SelectNode] && p.v2.isEmpty() && p.v1.asInstanceOf[SelectNode].v2.isEmpty() && !p.v1.asInstanceOf[SelectNode].v1.isEmpty()) {
+          val p1 = p.v1.asInstanceOf[SelectNode]
+          SelectNode(p.constraint AND p1.constraint, p1.v1, UndefNode)
+        } 
+        
+        /*
+         *  		p						 p'' with (c && !c')
+ 				 *  	 / \					/ \
+				 *  	p'  ⊥  --> 	 X	 ⊥
+				 *   / \
+				 *  ⊥   X
+         */
+        else if (p.v1.isInstanceOf[SelectNode] && p.v2.isEmpty() && p.v1.asInstanceOf[SelectNode].v1.isEmpty() && !p.v1.asInstanceOf[SelectNode].v2.isEmpty()) {
+          val p1 = p.v1.asInstanceOf[SelectNode]
+          SelectNode(p.constraint AND p1.constraint.NOT, p1.v2, UndefNode)
+        } 
+        
+        /*
+         *  		p						 p'' with (!c && c')
+ 				 *  	 / \					/ \
+				 *  	⊥   p' --> 	 X	 ⊥
+				 *   		 / \
+				 *      X   ⊥
+         */
+        else if (p.v2.isInstanceOf[SelectNode] && p.v1.isEmpty() && p.v2.asInstanceOf[SelectNode].v2.isEmpty() && !p.v2.asInstanceOf[SelectNode].v1.isEmpty()) {
+          val p1 = p.v2.asInstanceOf[SelectNode]
+          SelectNode(p.constraint.NOT AND p1.constraint, p1.v1, UndefNode)
+        } 
+        
+        /*
+         *  		p						 p'' with (!c && !c')
+ 				 *  	 / \					/ \
+				 *  	⊥   p' --> 	 X	 ⊥
+				 *   		 / \
+				 *      ⊥   X
+         */
+        else if (p.v2.isInstanceOf[SelectNode] && p.v1.isEmpty() && p.v2.asInstanceOf[SelectNode].v1.isEmpty() && !p.v2.asInstanceOf[SelectNode].v2.isEmpty()) {
+          val p1 = p.v2.asInstanceOf[SelectNode]
+          SelectNode(p.constraint.NOT AND p1.constraint.NOT, p1.v2, UndefNode)
+        } 
+        
+        /*
+         *  		p						 
+ 				 *  	 / \  -->   ⊥
+				 *  	⊥   ⊥
+         */
+        else if (p.v1.isEmpty() && p.v2.isEmpty()) {
+          UndefNode
+        } 
+        
+        else {
+          SelectNode(p.constraint, flatten(p.v1), flatten(p.v2))
+        }
+      }
+    }
+  }
 }
+

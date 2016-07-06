@@ -36,8 +36,10 @@ import scala.collection.mutable.HashSet
  *
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
-class Environment(parent: Environment, calls: Stack[Call], constraint: String) extends EnvListener {
-
+class Environment(parent: Environment, calls: Stack[Call], constraint: Constraint) extends EnvListener {
+  
+  var age = 0 
+  
   /**
    * Map of variable identifiers and variable references.
    * In various contexts, variables can refer to the same value.
@@ -75,6 +77,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
+    
     if (variables.contains(name)) {
       references.put(variables.get(name).get, value)
     } else {
@@ -87,12 +90,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
   def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
   
   def isGlobalVariable(varname: String): Boolean = {
-    if (this.globalVariables contains varname) {
-      true
-    } else if (this.parent != null) {
-      this.parent.isGlobalVariable(varname)
+    if (globalVariables contains varname) {
+      return true
+    } else if (parent != null  && (!(parent eq this))) {
+      return parent.isGlobalVariable(varname)
     } else {
-      false
+      return false
     }
   }
   /**
@@ -101,11 +104,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * @return value Value of the variable
    */
   def lookup(name: String): OakValue = {
-    var reference = if (this.isGlobalVariable(name)) {
+    var reference = if (isGlobalVariable(name)) {
       getRef(name, false)
     } else {
       getRef(name)
     }
+    logger.info(reference+"")
     
     def recursiveLookup(reference: OakVariable): OakValue = {
       this.extract(reference) match {
@@ -144,7 +148,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
 
     val wrapXML = {
       <DataModel>
-        { this.output.toXml() }
+        { DNode.flatten(this.output).toXml() }
       </DataModel>
     }
 
@@ -168,7 +172,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
     } else if ((parent != null)) {
       parent.extract(reference)
     } else {
-      throw new RuntimeException("Reference not found " + reference)
+      throw new VariableNotFoundException("Reference not found " + reference)
     }
   }
 
@@ -184,10 +188,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
   def getRef(name: String, limitScope: Boolean = true): OakVariable = {
     if (variables.contains(name)) {
       variables.get(name).get
-    } else if ((parent != null) && (limitScope && !this.isFunctionEnv())) {
+    } else if (parent != null) {
       parent.getRef(name)
     } else {
-      throw new VariableNotFoundException("Unassigned variable " + name + limitScope + ".")
+      throw new VariableNotFoundException("Unassigned variable " + name + ".")
     }
 
   }
@@ -208,7 +212,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: String) e
    * Returns the environments path condition
    * @return path condition
    */
-  def getConstraint(): String = constraint
+  def getConstraint(): Constraint = constraint
 
   /**
    * Returns the environments map of variable names to references
@@ -409,10 +413,10 @@ object Environment {
    * @param newConstraint Path constrained to add to the branches
    * @param Tuple of two branch environments
    */
-  private def simpleFork(parent: Environment, newConstraint: String): (BranchEnv, BranchEnv) = {
+  private def simpleFork(parent: Environment, newConstraint: Constraint): (BranchEnv, BranchEnv) = {
     Environment.forks += 1
-    val b1 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && " + newConstraint)
-    val b2 = new BranchEnv(parent, parent.getCalls(), parent.getConstraint() + " && NOT(" + newConstraint + ")")
+    val b1 = new BranchEnv(parent, parent.getCalls(), newConstraint)
+    val b2 = new BranchEnv(parent, parent.getCalls(), newConstraint.NOT())
 
     /* Add variables of parent environment to the branch environments. */
     //    parent.variables.foreach {
@@ -425,8 +429,10 @@ object Environment {
     return (b1, b2)
   }
 
-  def fork(environment: Environment, conditions: List[String]): List[BranchEnv] = {
+  def fork(environment: Environment, conditions: List[Constraint]): List[BranchEnv] = {
     val forked = Environment.simpleFork(environment, conditions(0))
+    forked._1.age = environment.age+1
+    forked._2.age = environment.age+1
     if (conditions.size == 1) {
       List(forked._1, forked._2)
     } else {
@@ -450,6 +456,7 @@ object Environment {
    */
   def createFunctionEnvironment(dis: Environment, fc: Call): Environment = {
     val env = new Environment(dis, dis.getCalls push fc, dis.getConstraint)
+    env.age = dis.age+1
     env
   }
 
@@ -464,6 +471,7 @@ object Environment {
   def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
     val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
     env.update("$this", obj)
+    env.age = dis.age+1
     env
   }
 
@@ -484,14 +492,13 @@ object Environment {
   def createMethodEnvironment(dis: Environment, obj: ObjectValue, mc: Call): Environment = {
     val env = createFunctionEnvironment(dis, mc)
     env.update("$this", obj)
+    env.age = dis.age+1
     env
   }
 
   def createLoopEnvironment(dis: Environment): LoopEnv = {
     val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
-    //    dis.variables.foreach {
-    //      case (name, reference) => env.setRef(name, reference)
-    //    }
+    env.age = dis.age+1
     env
   }
 
@@ -529,7 +536,7 @@ object Environment {
     try {
       classDefs.get(name).get
     } catch {
-      case nsee: NoSuchElementException => throw new RuntimeException("Class " + name + " is not defined.")
+      case nsee: NoSuchElementException => throw nsee
     }
   }
 
