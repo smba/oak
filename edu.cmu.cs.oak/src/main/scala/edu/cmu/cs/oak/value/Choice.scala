@@ -13,14 +13,6 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
   def setV1(v1: OakValue) { this.v1 = v1 }
   def setV2(v2: OakValue) { this.v2 = v2 }
   
-  def flattened(): Seq[OakValue] = {
-    val aux = (v: OakValue) => v match {
-      case choice: Choice => choice.flattened()
-      case nchoice: OakValue => Seq(nchoice)
-    }
-    aux(v1) ++ aux(v2)
-  }
-  
   def applyToObjects(func: ObjectValue => Unit) {
     v1 match {
       case c: Choice => c.applyToObjects(func)

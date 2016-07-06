@@ -184,7 +184,7 @@ class OakInterpreter extends InterpreterPluginProvider {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    /*try {
+    try {
       env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
       env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
       env.addToGlobal("$_SERVER")
@@ -195,7 +195,7 @@ class OakInterpreter extends InterpreterPluginProvider {
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
     } catch {
       case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    }*/
+    }
 
     // Execute the parsed program
     execute(program, env)
@@ -554,7 +554,11 @@ class OakInterpreter extends InterpreterPluginProvider {
 
     /* Retrieve all parent classes */
     if ((classDefCasted._parentName != null) && (!(classDefCasted._parentName equals "WP_HTTP_Streams"))) {
-      val parentClassDef = Environment.getClassDef(classDefCasted._parentName)
+      val parentClassDef = try {
+        Environment.getClassDef(classDefCasted._parentName)
+      } catch {
+        case nsee: NoSuchElementException => println(classDefCasted._parentName); System.exit(2); null
+      }
 
       classFieldNames ++= parentClassDef.getFields()
       parentClassDef.methods.foreach {
@@ -891,7 +895,11 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   private def evaluateVarExpr(e: VarExpr, env: Environment): OakValue = {
-    env.lookup(e.toString)
+    try {
+      env.lookup(e.toString)
+    } catch {
+      case vnfe: VariableNotFoundException => SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+    }
   }
 
   private def evaluateUnaryNotExpr(e: UnaryNotExpr, env: Environment): OakValue = {
@@ -1484,11 +1492,13 @@ class OakInterpreter extends InterpreterPluginProvider {
         }
 
         case choice: Choice => {
+          /*
           val branches = Environment.fork(env, List(choice.p))
           val r1 = applyMethod(choice.v1, methodName, args, branches.head)
           val r2 = applyMethod(choice.v2, methodName, args, branches(1))
           env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
-          Choice(choice.p, r1, r2)
+          Choice(choice.p, r1, r2)*/
+          SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
         }
         case _ => {
           null
@@ -1503,7 +1513,8 @@ class OakInterpreter extends InterpreterPluginProvider {
         }
       }
       case obj: ObjectMethodExpr => {
-        evaluate(obj._objExpr, env) match {
+        val r = evaluate(obj._objExpr, env)
+        r match {
           case o: ObjectValue => o
           case v: OakValue => v
           case null => null

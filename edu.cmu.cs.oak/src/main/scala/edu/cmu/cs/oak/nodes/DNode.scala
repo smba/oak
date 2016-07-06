@@ -131,6 +131,7 @@ object DNode {
     return extractStringLiterals(node, List[StringValue]()).toSet
   }
   
+  /*
   def flatten(node: DNode): DNode = {
     node match {
       case c: ConcatNode => ConcatNode(c.values.map(v => flatten(v)))
@@ -203,5 +204,7 @@ object DNode {
       }
     }
   }
+  * */
+  
 }
 

@@ -140,7 +140,12 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
      * are selected and joined separately.
      */
     val updatedVariableNames = envs.map { env => env.variables.map(vv=>vv._1).toSet }.foldLeft(Set[String]())(_ union _)
-    val updatedVariableMap = updatedVariableNames.map { name => (name, joinVariable(envs, constraints, name)) }.toMap
+    var updatedVariableMap = Map[String, OakValue]()
+    updatedVariableNames.foreach { 
+      name => {
+        updatedVariableMap += (name -> joinVariable(envs, constraints, name)) 
+      }
+    }
 
     /* 2) JOIN (or UNION) HEAP
      * In order to preserve references after the join, we union all references of

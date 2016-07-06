@@ -109,7 +109,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else {
       getRef(name)
     }
-    logger.info(reference+"")
     
     def recursiveLookup(reference: OakVariable): OakValue = {
       this.extract(reference) match {
@@ -148,7 +147,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
     val wrapXML = {
       <DataModel>
-        { DNode.flatten(this.output).toXml() }
+        { this.output.toXml() }
       </DataModel>
     }
 
