@@ -10,3 +10,6 @@ libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.3.0-SNAP2"
 libraryDependencies += "org.ow2.sat4j" % "org.ow2.sat4j.core" % "2.3.5"
 libraryDependencies += "de.fosd.typechef" % "javabdd_repackaged" % "1.0b2"
 
+// https://mvnrepository.com/artifact/de.fosd.typechef/featureexprlib_2.11
+libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.4.1"
+

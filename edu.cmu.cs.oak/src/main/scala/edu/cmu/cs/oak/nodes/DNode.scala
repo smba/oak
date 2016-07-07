@@ -1,20 +1,17 @@
 package edu.cmu.cs.oak.nodes
 
-import com.caucho.quercus.expr.Expr
+import java.security.MessageDigest
 
-import edu.cmu.cs.oak.value.ArrayValue
+import com.caucho.quercus.Location
+
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.NumericValue
+import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.SymbolicValue
-import com.caucho.quercus.Location
-import java.security.MessageDigest
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.nodes.UndefNode
-import edu.cmu.cs.oak.nodes.UndefNode
+import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.core.SymbolFlag
 
 /**
  * Model for  output of a symbolically executed PHP program.
@@ -45,22 +42,22 @@ abstract class DNode {
 
   /**
    * Compare method for DNodes.
-   * 
+   *
    * @param that DNode tree to compare
    * @return this.equals(that)?
    */
   def compare(that: DNode): Boolean = {
-    
+
     def chop(s: String): String = {
       s.split('\n').map(_.trim.filter(_ >= ' ')).mkString.replace(" ", "")
     }
 
     val ifd1 = this.ifdefy()
     val ifd2 = that.ifdefy()
-    
+
     if (ifd1.size == ifd2.size) {
-      (ifd1 zip ifd2).map { 
-        case (x, y) => assert(chop(x) equals chop(y) ); chop(x) equals chop(y); 
+      (ifd1 zip ifd2).map {
+        case (x, y) => assert(chop(x) equals chop(y)); chop(x) equals chop(y);
       }.fold(true)(_ && _)
     } else {
       false
@@ -69,8 +66,8 @@ abstract class DNode {
 
   def md5(s: String) = {
     MessageDigest.getInstance("MD5").digest(s.getBytes)
-}
-  
+  }
+
   def isEmpty(): Boolean
 }
 
@@ -88,7 +85,7 @@ object DNode {
         SelectNode(c.p, createDNode(c.v1, location), createDNode(c.v2, location))
       }
       case se: OakValueSequence => {
-        ConcatNode(se.getSequence.reverse.map { v => createDNode(v, location) } )
+        ConcatNode(se.getSequence.reverse.map { v => createDNode(v, location) })
       }
       case sv: StringValue => {
         LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
@@ -100,7 +97,7 @@ object DNode {
       }
     }
   }
-  
+
   /**
    * Extracts all string literals as StringValues from
    * the DModel tree.
@@ -130,81 +127,6 @@ object DNode {
     // apply utility method
     return extractStringLiterals(node, List[StringValue]()).toSet
   }
-  
-  /*
-  def flatten(node: DNode): DNode = {
-    node match {
-      case c: ConcatNode => ConcatNode(c.values.map(v => flatten(v)))
-      case l: LiteralNode => l
-      case r: RepeatNode => RepeatNode(r.constraint, flatten(r.node))
-      case s: SymbolNode => s
-      case UndefNode => UndefNode
-      case p: SelectNode => {
-        
-        /*
-         *  		p						 p'' with (c && c')
- 				 *  	 / \					/ \
-				 *  	p'  ⊥  --> 	 X	 ⊥
-				 *   / \
-				 *  X   ⊥
-         */
-        if (p.v1.isInstanceOf[SelectNode] && p.v2.isEmpty() && p.v1.asInstanceOf[SelectNode].v2.isEmpty() && !p.v1.asInstanceOf[SelectNode].v1.isEmpty()) {
-          val p1 = p.v1.asInstanceOf[SelectNode]
-          SelectNode(p.constraint AND p1.constraint, p1.v1, UndefNode)
-        } 
-        
-        /*
-         *  		p						 p'' with (c && !c')
- 				 *  	 / \					/ \
-				 *  	p'  ⊥  --> 	 X	 ⊥
-				 *   / \
-				 *  ⊥   X
-         */
-        else if (p.v1.isInstanceOf[SelectNode] && p.v2.isEmpty() && p.v1.asInstanceOf[SelectNode].v1.isEmpty() && !p.v1.asInstanceOf[SelectNode].v2.isEmpty()) {
-          val p1 = p.v1.asInstanceOf[SelectNode]
-          SelectNode(p.constraint AND p1.constraint.NOT, p1.v2, UndefNode)
-        } 
-        
-        /*
-         *  		p						 p'' with (!c && c')
- 				 *  	 / \					/ \
-				 *  	⊥   p' --> 	 X	 ⊥
-				 *   		 / \
-				 *      X   ⊥
-         */
-        else if (p.v2.isInstanceOf[SelectNode] && p.v1.isEmpty() && p.v2.asInstanceOf[SelectNode].v2.isEmpty() && !p.v2.asInstanceOf[SelectNode].v1.isEmpty()) {
-          val p1 = p.v2.asInstanceOf[SelectNode]
-          SelectNode(p.constraint.NOT AND p1.constraint, p1.v1, UndefNode)
-        } 
-        
-        /*
-         *  		p						 p'' with (!c && !c')
- 				 *  	 / \					/ \
-				 *  	⊥   p' --> 	 X	 ⊥
-				 *   		 / \
-				 *      ⊥   X
-         */
-        else if (p.v2.isInstanceOf[SelectNode] && p.v1.isEmpty() && p.v2.asInstanceOf[SelectNode].v1.isEmpty() && !p.v2.asInstanceOf[SelectNode].v2.isEmpty()) {
-          val p1 = p.v2.asInstanceOf[SelectNode]
-          SelectNode(p.constraint.NOT AND p1.constraint.NOT, p1.v2, UndefNode)
-        } 
-        
-        /*
-         *  		p						 
- 				 *  	 / \  -->   ⊥
-				 *  	⊥   ⊥
-         */
-        else if (p.v1.isEmpty() && p.v2.isEmpty()) {
-          UndefNode
-        } 
-        
-        else {
-          SelectNode(p.constraint, flatten(p.v1), flatten(p.v2))
-        }
-      }
-    }
-  }
-  * */
-  
+
 }
 

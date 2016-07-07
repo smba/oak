@@ -56,4 +56,6 @@ class ArrayValue extends OakValue {
     }
     av
   }
+  
+  override def isEmpty() = (array.size == 0)
 }

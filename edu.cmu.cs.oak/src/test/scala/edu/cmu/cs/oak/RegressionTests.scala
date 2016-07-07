@@ -44,6 +44,10 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/inner_to_outer_scope/join01.php")
   }
 
+  test("Join optimization") {
+    RegressionTest.test("testScripts/multiple.php")
+  }
+  
   test("Schoolmate") {
     RegressionTest.test("schoolmate/index.php")
   }

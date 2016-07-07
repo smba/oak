@@ -70,32 +70,34 @@ object BranchEnv {
    * Choice value that represents the variational value.
    *
    * @param envs List of BranchEnvironments of which we want to merge
-   * @param constraints List of constraints of the environments we want t
-import edu.cmu.cs.oak.analysis.inlcude.OutputGraphListener
-
-case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
-  o merge
+   * @param constraints List of constraints of the environments we want to merge
    * @param variable Name of the variable
    * @return Merged value (should be a Choice value)
    *
    */
   private def joinVariable(envs: List[BranchEnv], constraints: List[Constraint], variable: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
-      Choice(constraints(0), try { 
+      val a = try {
         envs(0).lookup(variable)
       } catch {
         case vnfe: VariableNotFoundException => NullValue("")
-      }, try {
+      }
+      val b = try {
         envs(1).lookup(variable)
       } catch {
         case vnfe: VariableNotFoundException => NullValue("")
-      })
+      }
+      if (a.isInstanceOf[NullValue] && b.isInstanceOf[NullValue]) {
+        NullValue("")
+      } else {
+        Choice.optimize(Choice(constraints(0), a, b))
+      }
     } else {
-      Choice(constraints(0), try {
+      Choice.optimize(Choice(constraints(0), try {
         envs(0).lookup(variable)
       } catch {
         case vnfe: VariableNotFoundException => NullValue("")
-      }, joinVariable(envs.tail, constraints.tail, variable))    
+      }, joinVariable(envs.tail, constraints.tail, variable)))
     }
   }
 
@@ -115,7 +117,7 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
   
   private def joinStaticClassField(envs: List[BranchEnv], constraints: List[Constraint], className: String, fieldName: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
-      Choice(constraints(0), try { 
+      Choice.optimize(Choice(constraints(0), try { 
         envs(0).getStaticClassField(className, fieldName)
       } catch {
         case vnfe: NoSuchElementException => NullValue("")
@@ -123,13 +125,13 @@ case class SelectNode(condition: String, v1: DNode, v2: DNode) extends DNode {
         envs(1).getStaticClassField(className, fieldName)
       } catch {
         case vnfe: NoSuchElementException => NullValue("")
-      })
+      }))
     } else {
-      Choice(constraints(0), try {
+      Choice.optimize(Choice(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
         case vnfe: NoSuchElementException => NullValue("")
-      }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))    
+      }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))    )
     }
   }
   

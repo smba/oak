@@ -44,4 +44,6 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
     obj.fields = fields.cloneArrayValue()
     obj
   }
+  
+  override def isEmpty() = false
 }

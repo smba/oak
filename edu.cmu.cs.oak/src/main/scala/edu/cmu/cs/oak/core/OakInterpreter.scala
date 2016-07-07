@@ -1487,21 +1487,19 @@ class OakInterpreter extends InterpreterPluginProvider {
               case _: Throwable => NullValue("$return")
             }
           } else {
-            SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.RECURSION)
+            NullValue("")
           }
         }
 
         case choice: Choice => {
-          /*
           val branches = Environment.fork(env, List(choice.p))
           val r1 = applyMethod(choice.v1, methodName, args, branches.head)
           val r2 = applyMethod(choice.v2, methodName, args, branches(1))
           env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
-          Choice(choice.p, r1, r2)*/
-          SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
+          Choice(choice.p, r1, r2)
         }
         case _ => {
-          null
+          NullValue("")//SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
         }
       }
     }
@@ -1705,11 +1703,11 @@ class OakInterpreter extends InterpreterPluginProvider {
     }
     null
   }
-  
+
   def evaluateToDoubleExpr(e: ToDoubleExpr, env: Environment): OakValue = {
     SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
-  
+
   def evaluate(e: Expr, env: Environment): OakValue = {
     e match {
       case e: LiteralExpr => {
@@ -1851,7 +1849,7 @@ class OakInterpreter extends InterpreterPluginProvider {
         evaluateToDoubleExpr(e, env)
       }
       case null => null
-      case _ => throw new RuntimeException(e.getClass + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      case _ => throw new RuntimeException(e.getClass + " " +  e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
   }
 

@@ -10,4 +10,6 @@ abstract class NumericValue extends OakValue {
   def <(v: NumericValue): BooleanValue
 
   def >(v: NumericValue): BooleanValue
+  
+  override def isEmpty() = false
 }

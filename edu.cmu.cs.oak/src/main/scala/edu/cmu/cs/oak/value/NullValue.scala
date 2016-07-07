@@ -7,4 +7,6 @@ case class NullValue(name: String) extends OakValue {
   def toXml = {
     <undef />
   }
+  
+  override def isEmpty() = true
 }

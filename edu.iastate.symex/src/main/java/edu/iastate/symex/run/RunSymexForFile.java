@@ -19,7 +19,7 @@ public class RunSymexForFile {
 	/**
 	 * PHP file to test
 	 */	
-	public static String PHP_FILE = "/home/stefan/Desktop/php/test1.php";
+	public static String PHP_FILE = "/home/stefan/git/oak/edu.cmu.cs.oak/src/test/resources/schoolmate/index.php";
 
 	/**
 	 * The entry point of the program
@@ -43,7 +43,7 @@ public class RunSymexForFile {
 		 * Print results
 		 */
 		MyLogger.log(MyLevel.INFO, dataModel.toIfdefString());
-		new ReadWriteDataModelToFromXml().writeDataModelToXmlFile(dataModel, "/home/stefan/Desktop/php/out.xml");
+		//new ReadWriteDataModelToFromXml().writeDataModelToXmlFile(dataModel, "/home/stefan/Desktop/schoolmate.index.html");
 		//MyLogger.writeLogMessagesToFile(new File("/Users/HUNG/Desktop/logs.txt"));
 	}
 	

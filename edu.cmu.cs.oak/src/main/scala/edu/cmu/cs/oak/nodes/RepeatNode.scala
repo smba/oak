@@ -15,8 +15,10 @@ case class RepeatNode(constraint: Constraint, node: DNode) extends DNode {
 
   def ifdefy(): List[String] = {
     var l =  List("# Repeat")
+//    var l =  List("<!-- # Repeat -->")
     l ++= node.ifdefy()
     l ++= List("# EndRepeat")
+//    l ++= List("<!-- # EndRepeat -->")
     l
   }
   

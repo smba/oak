@@ -7,11 +7,7 @@
     </Concat>
     <Concat>
       <Literal Text="&lt;html&gt; &lt;head&gt; &lt;title&gt;SchoolMate - " Length="36" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="17"/>
-      <Select>
-        <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-        <Symbolic Text="[Symbol]"/>
-        <Symbolic Text="[Symbol]"/>
-      </Select>
+      <Symbolic Text="[Symbol]"/>
       <Literal 
       Text="&lt;/title&gt;
  &lt;style type=&quot;text/css&quot;&gt;
@@ -317,11 +313,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-          <Select>
-            <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-            <Symbolic Text="[Symbol]"/>
-            <Symbolic Text="[Symbol]"/>
-          </Select>
+          <Symbolic Text="[Symbol]"/>
           <Literal 
           Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -587,11 +579,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-            <Select>
-              <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-              <Symbolic Text="[Symbol]"/>
-              <Symbolic Text="[Symbol]"/>
-            </Select>
+            <Symbolic Text="[Symbol]"/>
             <Literal 
             Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -823,6 +811,7 @@
                 <Symbolic Text="[Symbol]"/>
               </Concat>
               <Repeat>
+                <Constraint Text="$page2 == 0"/>
                 <Concat>
                   <Concat>
                     <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="182"/>
@@ -884,6 +873,7 @@
                   </Concat>
                   <Symbolic Text="[Symbol]"/>
                   <Repeat>
+                    <Constraint Text="($_POST[&quot;semester&quot;] != &quot;&quot;)"/>
                     <Concat>
                       <Select>
                         <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -960,6 +950,7 @@
   &lt;center&gt;Page: " Length="562" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="289">
 </Literal>
               <Repeat>
+                <Constraint Text="$page2 == 0"/>
                 <Concat>
                   <Select>
                     <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -1116,11 +1107,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="389" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="52">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                    <Symbolic Text="[Symbol]"/>
-                    <Symbolic Text="[Symbol]"/>
-                  </Select>
+                  <Symbolic Text="[Symbol]"/>
                   <Literal 
                   Text="' maxlength='50' name='schoolname' size=40&gt;
   &lt;/td&gt;
@@ -1348,6 +1335,9 @@
                             <Symbolic Text="[Symbol]"/>
                           </Concat>
                           <Repeat>
+                            <Constraint 
+                            Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;mi&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))">
+</Constraint>
                             <Concat>
                               <Select>
                                 <Constraint Text="($_POST[&quot;username&quot;] == $userlist[0])"/>
@@ -1518,6 +1508,7 @@
                     <Symbolic Text="[Symbol]"/>
                   </Concat>
                   <Repeat>
+                    <Constraint Text="$page2 == 2"/>
                     <Concat>
                       <Select>
                         <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -1566,6 +1557,7 @@
                     <Symbolic Text="[Symbol]"/>
                   </Concat>
                   <Repeat>
+                    <Constraint Text="$page2 == 2"/>
                     <Concat>
                       <Concat>
                         <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="186"/>
@@ -1594,6 +1586,7 @@
   &lt;center&gt;Page: " Length="358" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="197">
 </Literal>
                   <Repeat>
+                    <Constraint Text="$page2 == 2"/>
                     <Concat>
                       <Select>
                         <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -1719,6 +1712,7 @@
                               <Symbolic Text="[Symbol]"/>
                             </Concat>
                             <Repeat>
+                              <Constraint Text="((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))"/>
                               <Concat>
                                 <Select>
                                   <Constraint Text="($_POST[&quot;username&quot;] == $userlist[0])"/>
@@ -1886,6 +1880,7 @@
                       <Symbolic Text="[Symbol]"/>
                     </Concat>
                     <Repeat>
+                      <Constraint Text="$page2 == 3"/>
                       <Concat>
                         <Select>
                           <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -1925,6 +1920,7 @@
   &lt;center&gt;Page: " Length="347" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="167">
 </Literal>
                     <Repeat>
+                      <Constraint Text="$page2 == 3"/>
                       <Concat>
                         <Select>
                           <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -2146,6 +2142,7 @@
                         <Symbolic Text="[Symbol]"/>
                       </Concat>
                       <Repeat>
+                        <Constraint Text="$page2 == 4"/>
                         <Concat>
                           <Select>
                             <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -2185,6 +2182,7 @@
   &lt;center&gt;Page: " Length="372" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="147">
 </Literal>
                       <Repeat>
+                        <Constraint Text="$page2 == 4"/>
                         <Concat>
                           <Select>
                             <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -2409,6 +2407,7 @@
                           <Symbolic Text="[Symbol]"/>
                         </Concat>
                         <Repeat>
+                          <Constraint Text="$page2 == 5"/>
                           <Concat>
                             <Select>
                               <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -2460,6 +2459,7 @@
   &lt;center&gt;Page: " Length="494" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="160">
 </Literal>
                         <Repeat>
+                          <Constraint Text="$page2 == 5"/>
                           <Concat>
                             <Select>
                               <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -2678,6 +2678,7 @@
                             <Symbolic Text="[Symbol]"/>
                           </Concat>
                           <Repeat>
+                            <Constraint Text="$page2 == 6"/>
                             <Concat>
                               <Select>
                                 <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -2720,6 +2721,7 @@
   &lt;center&gt;Page: " Length="483" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="149">
 </Literal>
                           <Repeat>
+                            <Constraint Text="$page2 == 6"/>
                             <Concat>
                               <Select>
                                 <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -2853,6 +2855,7 @@
 	&lt;td&gt;&lt;select name='term'&gt;" Length="452" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddSemester.php" Line="20">
 </Literal>
                             <Repeat>
+                              <Constraint Text="$page2 == 7"/>
                               <Concat>
                                 <Concat>
                                   <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddSemester.php" Line="25"/>
@@ -3079,6 +3082,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
                                       <Concat>
                                         <Select>
                                           <Constraint Text="($type == &quot;Teacher&quot;)"/>
@@ -3103,6 +3107,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
                                       <Concat>
                                         <Concat>
                                           <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="42"/>
@@ -3126,6 +3131,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
                                       <Concat>
                                         <Select>
                                           <Constraint Text="($type == &quot;Substitute&quot;)"/>
@@ -3263,6 +3269,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
                                       <Concat>
                                         <Select>
                                           <Constraint Text="($type == &quot;Teacher&quot;)"/>
@@ -3287,6 +3294,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
                                       <Concat>
                                         <Concat>
                                           <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="145"/>
@@ -3303,6 +3311,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
                                       <Concat>
                                         <Concat>
                                           <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="156"/>
@@ -3326,6 +3335,7 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
                                       <Concat>
                                         <Select>
                                           <Constraint Text="($type == &quot;Substitute&quot;)"/>
@@ -3451,6 +3461,7 @@
                                         <Symbolic Text="[Symbol]"/>
                                       </Concat>
                                       <Repeat>
+                                        <Constraint Text="((($_POST[&quot;adduser&quot;] == 1) &amp;&amp; ($_POST[&quot;password&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;type&quot;] != &quot;&quot;))"/>
                                         <Concat>
                                           <Select>
                                             <Constraint Text="($_POST[&quot;username&quot;] == $userlist[0])"/>
@@ -3629,6 +3640,7 @@
                                     <Symbolic Text="[Symbol]"/>
                                   </Concat>
                                   <Repeat>
+                                    <Constraint Text="$page2 == 10"/>
                                     <Concat>
                                       <Select>
                                         <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -3667,6 +3679,7 @@
   &lt;center&gt;Page: " Length="333" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="173">
 </Literal>
                                   <Repeat>
+                                    <Constraint Text="$page2 == 10"/>
                                     <Concat>
                                       <Select>
                                         <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -4179,6 +4192,7 @@
                                           <Literal Text="' /&gt;&lt;/td&gt; &lt;td&gt;&lt;select name='term'&gt;" Length="35" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="27"/>
                                         </Concat>
                                         <Repeat>
+                                          <Constraint Text="$page2 == 13"/>
                                           <Concat>
                                             <Concat>
                                               <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="32"/>
@@ -4614,6 +4628,7 @@
                                                 <Symbolic Text="[Symbol]"/>
                                               </Concat>
                                               <Repeat>
+                                                <Constraint Text="$page2 == 16"/>
                                                 <Concat>
                                                   <Concat>
                                                     <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTeacher.php" Line="24"/>
@@ -5087,6 +5102,7 @@
                                                         <Symbolic Text="[Symbol]"/>
                                                       </Concat>
                                                       <Repeat>
+                                                        <Constraint Text="$page2 == 20"/>
                                                         <Concat>
                                                           <Concat>
                                                             <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddStudent.php" Line="26"/>
@@ -5343,8 +5359,14 @@
                                                                     <Symbolic Text="[Symbol]"/>
                                                                   </Concat>
                                                                   <Repeat>
+                                                                    <Constraint 
+                                                                    Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;student&quot;] != &quot;&quot;))">
+</Constraint>
                                                                     <Concat>
                                                                       <Repeat>
+                                                                        <Constraint 
+                                                                        Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;student&quot;] != &quot;&quot;))">
+</Constraint>
                                                                         <Concat>
                                                                           <Select>
                                                                             <Constraint Text="(($_POST[&quot;username&quot;] == $userlist[0]) &amp;&amp; ($_POST[&quot;student&quot;] == $student[0]))"/>
@@ -5530,6 +5552,7 @@
                                                             <Symbolic Text="[Symbol]"/>
                                                           </Concat>
                                                           <Repeat>
+                                                            <Constraint Text="$page2 == 22"/>
                                                             <Concat>
                                                               <Concat>
                                                                 <Literal Text="ManageParents.php: Unable to get a list of parents with the matching students - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="166"/>
@@ -5586,6 +5609,7 @@
   &lt;center&gt;Page: " Length="342" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="189">
 </Literal>
                                                           <Repeat>
+                                                            <Constraint Text="$page2 == 22"/>
                                                             <Concat>
                                                               <Select>
                                                                 <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -5724,6 +5748,7 @@
                                                               <Symbolic Text="[Symbol]"/>
                                                             </Concat>
                                                             <Repeat>
+                                                              <Constraint Text="$page2 == 23"/>
                                                               <Concat>
                                                                 <Concat>
                                                                   <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="25"/>
@@ -5742,6 +5767,7 @@
                                                               <Symbolic Text="[Symbol]"/>
                                                             </Concat>
                                                             <Repeat>
+                                                              <Constraint Text="$page2 == 23"/>
                                                               <Concat>
                                                                 <Concat>
                                                                   <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="37"/>
@@ -6041,6 +6067,7 @@
                                                                   <Symbolic Text="[Symbol]"/>
                                                                 </Concat>
                                                                 <Repeat>
+                                                                  <Constraint Text="$page2 == 25"/>
                                                                   <Concat>
                                                                     <Concat>
                                                                       <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="45"/>
@@ -6524,6 +6551,7 @@
                                                                     <Symbolic Text="[Symbol]"/>
                                                                   </Concat>
                                                                   <Repeat>
+                                                                    <Constraint Text="$page2 == 26"/>
                                                                     <Concat>
                                                                       <Concat>
                                                                         <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="160"/>
@@ -6552,6 +6580,7 @@
                                                                     <Symbolic Text="[Symbol]"/>
                                                                   </Concat>
                                                                   <Repeat>
+                                                                    <Constraint Text="$page2 == 26"/>
                                                                     <Concat>
                                                                       <Concat>
                                                                         <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="182"/>
@@ -6590,6 +6619,7 @@
                                                                         <Symbolic Text="[Symbol]"/>
                                                                       </Concat>
                                                                       <Repeat>
+                                                                        <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                                                                         <Concat>
                                                                           <Concat>
                                                                             <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
@@ -6617,6 +6647,7 @@
                                                                     <Symbolic Text="[Symbol]"/>
                                                                   </Concat>
                                                                   <Repeat>
+                                                                    <Constraint Text="$page2 == 26"/>
                                                                     <Concat>
                                                                       <Concat>
                                                                         <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="231"/>
@@ -6733,6 +6764,7 @@
                                                                       <Symbolic Text="[Symbol]"/>
                                                                     </Concat>
                                                                     <Repeat>
+                                                                      <Constraint Text="$page2 == 27"/>
                                                                       <Concat>
                                                                         <Concat>
                                                                           <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="27"/>
@@ -6777,6 +6809,7 @@
                                                                       <Symbolic Text="[Symbol]"/>
                                                                     </Concat>
                                                                     <Repeat>
+                                                                      <Constraint Text="$page2 == 27"/>
                                                                       <Concat>
                                                                         <Concat>
                                                                           <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="82"/>
@@ -6886,6 +6919,7 @@
                                                                         <Symbolic Text="[Symbol]"/>
                                                                       </Concat>
                                                                       <Repeat>
+                                                                        <Constraint Text="$page2 == 28"/>
                                                                         <Concat>
                                                                           <Concat>
                                                                             <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="23"/>
@@ -6950,6 +6984,7 @@
                                                                         <Symbolic Text="[Symbol]"/>
                                                                       </Concat>
                                                                       <Repeat>
+                                                                        <Constraint Text="$page2 == 28"/>
                                                                         <Concat>
                                                                           <Concat>
                                                                             <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="136"/>
@@ -7141,6 +7176,7 @@
                                                                           <Symbolic Text="[Symbol]"/>
                                                                         </Concat>
                                                                         <Repeat>
+                                                                          <Constraint Text="$page2 == 29"/>
                                                                           <Concat>
                                                                             <Concat>
                                                                               <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="43"/>
@@ -7160,6 +7196,7 @@
                                                                               <Symbolic Text="[Symbol]"/>
                                                                             </Concat>
                                                                             <Repeat>
+                                                                              <Constraint Text="$page2 == 29"/>
                                                                               <Concat>
                                                                                 <Concat>
                                                                                   <Literal Text="VisualizeRegistration.php: Unable to get class information - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="54"/>
@@ -7615,6 +7652,7 @@
                                                                             <Symbolic Text="[Symbol]"/>
                                                                           </Concat>
                                                                           <Repeat>
+                                                                            <Constraint Text="$page2 == 30"/>
                                                                             <Concat>
                                                                               <Concat>
                                                                                 <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="109"/>
@@ -7642,6 +7680,7 @@
                                                                             <Symbolic Text="[Symbol]"/>
                                                                           </Concat>
                                                                           <Repeat>
+                                                                            <Constraint Text="$page2 == 30"/>
                                                                             <Concat>
                                                                               <Concat>
                                                                                 <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="131"/>
@@ -7676,6 +7715,7 @@
                                                                                 <Symbolic Text="[Symbol]"/>
                                                                               </Concat>
                                                                               <Repeat>
+                                                                                <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                                                                                 <Concat>
                                                                                   <Concat>
                                                                                     <Literal Text="&lt;tr style='color: red; font-weight: bold;' align='center' class='" Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
@@ -7951,6 +7991,7 @@
                                                                                 <Symbolic Text="[Symbol]"/>
                                                                               </Concat>
                                                                               <Repeat>
+                                                                                <Constraint Text="$page2 == 32"/>
                                                                                 <Concat>
                                                                                   <Concat>
                                                                                     <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="24"/>
@@ -7981,6 +8022,7 @@
                                                                                     <Symbolic Text="[Symbol]"/>
                                                                                   </Concat>
                                                                                   <Repeat>
+                                                                                    <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                                                                                     <Concat>
                                                                                       <Concat>
                                                                                         <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
@@ -8016,6 +8058,7 @@
                                                                                 <Constraint Text="($_POST[&quot;selectclass&quot;] != null)"/>
                                                                                 <Concat>
                                                                                   <Repeat>
+                                                                                    <Constraint Text="($_POST[&quot;selectclass&quot;] != null)"/>
                                                                                     <Concat>
                                                                                       <Concat>
                                                                                         <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="108"/>
@@ -8247,11 +8290,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-              <Select>
-                <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                <Symbolic Text="[Symbol]"/>
-                <Symbolic Text="[Symbol]"/>
-              </Select>
+              <Symbolic Text="[Symbol]"/>
               <Literal 
               Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -8395,6 +8434,7 @@
                   <Symbolic Text="[Symbol]"/>
                 </Concat>
                 <Repeat>
+                  <Constraint Text="$page2 == 0"/>
                   <Concat>
                     <Concat>
                       <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="28"/>
@@ -8433,6 +8473,7 @@
                       <Symbolic Text="[Symbol]"/>
                     </Concat>
                     <Repeat>
+                      <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                       <Concat>
                         <Concat>
                           <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
@@ -8780,6 +8821,7 @@
                       <Symbolic Text="[Symbol]"/>
                     </Concat>
                     <Repeat>
+                      <Constraint Text="$page2 == 2"/>
                       <Concat>
                         <Select>
                           <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -8823,6 +8865,7 @@
   &lt;center&gt;Page: " Length="360" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="243">
 </Literal>
                     <Repeat>
+                      <Constraint Text="$page2 == 2"/>
                       <Concat>
                         <Select>
                           <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -9055,6 +9098,7 @@
                         <Symbolic Text="[Symbol]"/>
                       </Concat>
                       <Repeat>
+                        <Constraint Text="$page2 == 3"/>
                         <Concat>
                           <Concat>
                             <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="183"/>
@@ -9090,6 +9134,7 @@
                         <Symbolic Text="[Symbol]"/>
                       </Concat>
                       <Repeat>
+                        <Constraint Text="$page2 == 3"/>
                         <Concat>
                           <Concat>
                             <Literal Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="209"/>
@@ -9757,6 +9802,7 @@
                                   <Symbolic Text="[Symbol]"/>
                                 </Concat>
                                 <Repeat>
+                                  <Constraint Text="$page2 == 8"/>
                                   <Concat>
                                     <Concat>
                                       <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="74"/>
@@ -9896,6 +9942,7 @@
                                     <Symbolic Text="[Symbol]"/>
                                   </Concat>
                                   <Repeat>
+                                    <Constraint Text="$page2 == 9"/>
                                     <Concat>
                                       <Select>
                                         <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -9932,6 +9979,7 @@
                                   </Repeat>
                                   <Literal Text=" &lt;/table&gt; &lt;br&gt;&lt;br&gt; &lt;center&gt;Page: " Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="53"/>
                                   <Repeat>
+                                    <Constraint Text="$page2 == 9"/>
                                     <Concat>
                                       <Select>
                                         <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -10120,11 +10168,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                    <Symbolic Text="[Symbol]"/>
-                    <Symbolic Text="[Symbol]"/>
-                  </Select>
+                  <Symbolic Text="[Symbol]"/>
                   <Literal 
                   Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -10266,6 +10310,7 @@
                       <Symbolic Text="[Symbol]"/>
                     </Concat>
                     <Repeat>
+                      <Constraint Text="$page2 == 0"/>
                       <Concat>
                         <Concat>
                           <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="28"/>
@@ -10304,8 +10349,10 @@
                           <Symbolic Text="[Symbol]"/>
                         </Concat>
                         <Repeat>
+                          <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                           <Concat>
                             <Repeat>
+                              <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                               <Concat>
                                 <Concat>
                                   <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
@@ -10562,6 +10609,7 @@
                           <Symbolic Text="[Symbol]"/>
                         </Concat>
                         <Repeat>
+                          <Constraint Text="$page2 == 2"/>
                           <Concat>
                             <Select>
                               <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -10592,6 +10640,7 @@
                         </Repeat>
                         <Literal Text=" &lt;/table&gt; &lt;br&gt; &lt;center&gt;Page: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="71"/>
                         <Repeat>
+                          <Constraint Text="$page2 == 2"/>
                           <Concat>
                             <Select>
                               <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -10733,6 +10782,7 @@
                             <Symbolic Text="[Symbol]"/>
                           </Concat>
                           <Repeat>
+                            <Constraint Text="$page2 == 3"/>
                             <Concat>
                               <Concat>
                                 <Literal Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="41"/>
@@ -10957,6 +11007,7 @@
                               <Symbolic Text="[Symbol]"/>
                             </Concat>
                             <Repeat>
+                              <Constraint Text="$page2 == 4"/>
                               <Concat>
                                 <Select>
                                   <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -10993,6 +11044,7 @@
                             </Repeat>
                             <Literal Text=" &lt;/table&gt; &lt;br&gt;&lt;br&gt; &lt;center&gt;Page: " Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="53"/>
                             <Repeat>
+                              <Constraint Text="$page2 == 4"/>
                               <Concat>
                                 <Select>
                                   <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -11179,11 +11231,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                      <Symbolic Text="[Symbol]"/>
-                      <Symbolic Text="[Symbol]"/>
-                    </Select>
+                    <Symbolic Text="[Symbol]"/>
                     <Literal 
                     Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -11344,6 +11392,7 @@
                         <Symbolic Text="[Symbol]"/>
                       </Concat>
                       <Repeat>
+                        <Constraint Text="$page2 == 0"/>
                         <Concat>
                           <Concat>
                             <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewStudents.php" Line="33"/>
@@ -11592,6 +11641,7 @@
                             <Symbolic Text="[Symbol]"/>
                           </Concat>
                           <Repeat>
+                            <Constraint Text="$page2 == 2"/>
                             <Concat>
                               <Select>
                                 <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -11622,6 +11672,7 @@
                           </Repeat>
                           <Literal Text=" &lt;/table&gt; &lt;br&gt; &lt;center&gt;Page: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="71"/>
                           <Repeat>
+                            <Constraint Text="$page2 == 2"/>
                             <Concat>
                               <Select>
                                 <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -11763,6 +11814,7 @@
                               <Symbolic Text="[Symbol]"/>
                             </Concat>
                             <Repeat>
+                              <Constraint Text="$page2 == 3"/>
                               <Concat>
                                 <Concat>
                                   <Literal Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="41"/>
@@ -11987,6 +12039,7 @@
                                 <Symbolic Text="[Symbol]"/>
                               </Concat>
                               <Repeat>
+                                <Constraint Text="$page2 == 4"/>
                                 <Concat>
                                   <Select>
                                     <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
@@ -12023,6 +12076,7 @@
                               </Repeat>
                               <Literal Text=" &lt;/table&gt; &lt;br&gt;&lt;br&gt; &lt;center&gt;Page: " Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="53"/>
                               <Repeat>
+                                <Constraint Text="$page2 == 4"/>
                                 <Concat>
                                   <Select>
                                     <Constraint Text="($i == $_POST[&quot;onpage&quot;])"/>
@@ -12158,6 +12212,7 @@
                                   <Symbolic Text="[Symbol]"/>
                                 </Concat>
                                 <Repeat>
+                                  <Constraint Text="$page2 == 5"/>
                                   <Concat>
                                     <Concat>
                                       <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="29"/>
@@ -12196,8 +12251,10 @@
                                       <Symbolic Text="[Symbol]"/>
                                     </Concat>
                                     <Repeat>
+                                      <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                                       <Concat>
                                         <Repeat>
+                                          <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                                           <Concat>
                                             <Concat>
                                               <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
