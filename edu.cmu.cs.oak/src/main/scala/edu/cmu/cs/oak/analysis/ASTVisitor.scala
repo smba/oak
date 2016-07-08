@@ -39,6 +39,7 @@ class ASTVisitor(path: Path) {
   /** Logger instance. */
   lazy val logger = LoggerFactory.getLogger(classOf[ASTVisitor])
 
+  var location: Location = null
   /**
    * Set the global parent path for the ASTVisitor
    */
@@ -62,7 +63,12 @@ class ASTVisitor(path: Path) {
     stringLiterals.toSet
   }
 
-  def visit(stmt: Statement): Unit = stmt match {
+  def visit(stmt: Statement): Unit = {
+    
+    location = stmt._location
+    
+    stmt match {
+  
 
     /**
      * Case for AST node class BlockStatement.
@@ -221,6 +227,7 @@ class ASTVisitor(path: Path) {
     case s: TextStatement => {
       val value = s._value.toString()
       val string = StringValue(value, s._location.getFileName(), s._location.getLineNumber())
+      if (string.lineNr == 0) throw new RuntimeException()
       stringLiterals += string
     }
 
@@ -247,12 +254,11 @@ class ASTVisitor(path: Path) {
     case s: WhileStatement => {
       val expr = s._test
       visit(expr)
-
       visit(s._block)
     }
   }
 
-  /**
+  }/**
    *
    */
   def visit(expr: Expr): Unit = expr match {
@@ -614,8 +620,9 @@ class ASTVisitor(path: Path) {
      * Case for AST node class DieExpr.
      */
     case e: DieExpr => {
-      val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
-      stringLiterals += string
+      val value = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
+      if (value.lineNr == 0) throw new RuntimeException()
+      stringLiterals += value
     }
 
     /**
@@ -635,10 +642,7 @@ class ASTVisitor(path: Path) {
      * Case for AST node class FunDieExpr.
      */
     case e: FunDieExpr => {
-      if (e._value != null) {
-        val string = StringValue(e._value.toString(), e._value._location.getFileName(), e._value._location.getLineNumber())
-        stringLiterals += string
-      }
+      visit(e._value)
     }
 
     /**
@@ -670,14 +674,12 @@ class ASTVisitor(path: Path) {
      * Case for AST node class FunIncludeExpr.
      */
     case e: FunIncludeExpr => {
-      println(e)
     }
 
     /**
      * Case for AST node class FunIncludeOnceExpr.
      */
     case e: FunIncludeOnceExpr => {
-      println(e)
     }
 
     /**
@@ -725,6 +727,7 @@ class ASTVisitor(path: Path) {
      */
     case e: LiteralStringExpr => {
       val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
+      if (string.lineNr == 0) throw new RuntimeException()
       stringLiterals += string
     }
 
@@ -733,6 +736,9 @@ class ASTVisitor(path: Path) {
      */
     case e: LiteralUnicodeExpr => {
       val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
+      if (string.lineNr == 0) {
+        string.setLocation(location)
+      }
       stringLiterals += string
     }
 

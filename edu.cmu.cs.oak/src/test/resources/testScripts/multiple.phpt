@@ -29,11 +29,15 @@
         </Select>
       </Select>
       <Select>
-        <Constraint Text="&quot;E&quot; &amp;&amp; &quot;F&quot;"/>
-        <Concat>
-          <Literal Text="E" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/multiple.php" Line="30"/>
-          <Literal Text="N" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/multiple.php" Line="37"/>
-        </Concat>
+        <Constraint Text="&quot;E&quot;"/>
+        <Select>
+          <Constraint Text="&quot;F&quot;"/>
+          <Concat>
+            <Literal Text="E" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/multiple.php" Line="30"/>
+            <Literal Text="N" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/multiple.php" Line="37"/>
+          </Concat>
+          <Undef/>
+        </Select>
         <Undef/>
       </Select>
     </Select>

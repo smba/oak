@@ -4285,17 +4285,20 @@ public class QuercusParser {
     int token = parseToken();
     _peekToken = token;
 
+    Expr die;
     if (token == '(') {
       ArrayList<Expr> args = parseArgs();
 
       if (args.size() > 0)
-        return _factory.createDie(args.get(0));
+    	  die = _factory.createDie(args.get(0));
       else
-        return _factory.createDie(null);
+    	  die = _factory.createDie(null);
     }
     else {
-      return _factory.createDie(null);
+    	die =  _factory.createDie(null);
     }
+    die._location = getLocation();
+    return die;
   }
 
   /**
