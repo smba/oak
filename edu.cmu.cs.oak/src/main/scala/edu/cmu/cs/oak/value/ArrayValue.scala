@@ -5,13 +5,14 @@ import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.core.SymbolFlag
+import scala.collection.mutable.LinkedHashMap
 
 /**
  * 
  */
 class ArrayValue extends OakValue {
 
-  val array = HashMap[OakValue, OakVariable]()
+  val array = LinkedHashMap[OakValue, OakVariable]()
 
   def set(index: OakValue, value: OakValue, env: Environment) {
     val ref = if (array.keySet.contains(index)) {

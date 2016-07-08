@@ -132,6 +132,8 @@ import edu.cmu.cs.oak.value.SymbolicValue
 import com.caucho.quercus.expr.BinaryOrExpr
 import edu.cmu.cs.oak.env.Constraint
 import com.caucho.quercus.expr.ToDoubleExpr
+import edu.cmu.cs.oak.lib.builtin.CallUserFuncArray
+import edu.cmu.cs.oak.lib.builtin.Sprintf
 
 class OakInterpreter extends InterpreterPluginProvider {
 
@@ -1499,7 +1501,7 @@ class OakInterpreter extends InterpreterPluginProvider {
           Choice(choice.p, r1, r2)
         }
         case _ => {
-          NullValue("")//SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
+          NullValue("") //SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
         }
       }
     }
@@ -1849,7 +1851,7 @@ class OakInterpreter extends InterpreterPluginProvider {
         evaluateToDoubleExpr(e, env)
       }
       case null => null
-      case _ => throw new RuntimeException(e.getClass + " " +  e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
   }
 
@@ -1886,6 +1888,8 @@ class OakInterpreter extends InterpreterPluginProvider {
     loadPlugin(new Defined)
     loadPlugin(new IsArray)
     loadPlugin(new IsSet)
+    loadPlugin(new Sprintf)
+    loadPlugin(new CallUserFuncArray)
   }
 
   /**
@@ -1896,7 +1900,7 @@ class OakInterpreter extends InterpreterPluginProvider {
    * @param functionEnv Environment The function/method (callee's) context to prepare
    * @param args List of Exprs that are passed for the function/method call
    */
-  private def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Expr]) {
+  def prepareFunctionOrMethod(function: FunctionDef, env: Environment, functionEnv: Environment, args: List[Any]) {
     (function.getArgs.slice(0, args.length) zip args).foreach {
       t =>
         {
@@ -1904,7 +1908,11 @@ class OakInterpreter extends InterpreterPluginProvider {
             try {
               val functionRef = env.getRef(t._2.toString)
               functionEnv.setRef("$" + t._1.replace("&", ""), functionRef)
-              functionEnv.insert(functionRef, evaluate(t._2, env))
+              t._2 match {
+                case e: Expr => functionEnv.insert(functionRef, evaluate(e, env))
+                case v: OakValue => functionEnv.insert(functionRef, v)
+              }
+
             } catch {
               case nsee: VariableNotFoundException => {
                 val functionRef = OakVariable(t._1.toString, t._1.toString + OakHeap.getIndex())
@@ -1914,14 +1922,21 @@ class OakInterpreter extends InterpreterPluginProvider {
             }
 
           } else {
-            val functionVal = evaluate(t._2, env) match {
-              case av: ArrayValue => {
-                val deepCopy = new ArrayValue()
-                av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
-                deepCopy
+            val functionVal = t._2 match {
+              case e: Expr => {
+                val ev = evaluate(e, env)
+                ev match {
+                  case av: ArrayValue => {
+                    val deepCopy = new ArrayValue()
+                    av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
+                    deepCopy
+                  }
+                  case null => null
+                  case value: OakValue => value
+                }
               }
-              case null => null
-              case value: OakValue => value
+              case v: OakValue => v
+
             }
             functionEnv.update("$" + t._1.replace("&", ""), functionVal)
           }

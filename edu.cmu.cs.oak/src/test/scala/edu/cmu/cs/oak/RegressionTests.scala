@@ -48,6 +48,10 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/multiple.php")
   }
   
+  test("callbacks") {
+    RegressionTest.test("testScripts/callbacks.php")
+  }
+  
   test("Schoolmate") {
     RegressionTest.test("schoolmate/index.php")
   }
