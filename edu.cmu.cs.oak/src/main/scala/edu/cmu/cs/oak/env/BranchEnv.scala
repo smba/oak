@@ -12,7 +12,6 @@ import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.value.NullValue
 import scala.collection.mutable.ListBuffer
 
-
 /**
  * This class encapsulates all merging functionality used for branching
  * control flow.
@@ -26,7 +25,7 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
    * when merging different environments.
    */
   //var updates = Set[String]()
-  
+
   /**
    * "New" (conditional) class definitions
    */
@@ -40,8 +39,8 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
     super.update(name, value)
     //updates += name
   }
-  
-  override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint +"]"
+
+  override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint + "]"
 
 }
 /**
@@ -78,26 +77,32 @@ object BranchEnv {
   private def joinVariable(envs: List[BranchEnv], constraints: List[Constraint], variable: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
       val a = try {
-        envs(0).lookup(variable)
+        if (envs(0).hasChanged) {
+          envs(0).lookup(variable)
+        } else { NullValue("") }
       } catch {
         case vnfe: VariableNotFoundException => NullValue("")
       }
       val b = try {
-        envs(1).lookup(variable)
+        if (envs(1).hasChanged) {
+          envs(1).lookup(variable)
+        } else { NullValue("") }
       } catch {
         case vnfe: VariableNotFoundException => NullValue("")
       }
       if (a.isInstanceOf[NullValue] && b.isInstanceOf[NullValue]) {
         NullValue("")
       } else {
-        Choice.optimize(Choice(constraints(0), a, b))
+        Choice(constraints(0), a, b)
       }
     } else {
-      Choice.optimize(Choice(constraints(0), try {
-        envs(0).lookup(variable)
+      Choice(constraints(0), try {
+        if (envs(0).hasChanged) {
+          envs(0).lookup(variable)
+        } else { NullValue("") }
       } catch {
         case vnfe: VariableNotFoundException => NullValue("")
-      }, joinVariable(envs.tail, constraints.tail, variable)))
+      }, joinVariable(envs.tail, constraints.tail, variable))
     }
   }
 
@@ -109,15 +114,15 @@ object BranchEnv {
    * @param envs List of BranchEnvironments of which we want to merge
    * @return mapping from OakVariables to OakValues of all BranchEnvs passed
    *
-   * 
+   *
    */
   private def joinHeaps(envs: List[BranchEnv]): Map[OakVariable, OakValue] = {
     envs.map { env => env.references.toMap } reduce (_ ++ _)
   }
-  
+
   private def joinStaticClassField(envs: List[BranchEnv], constraints: List[Constraint], className: String, fieldName: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
-      Choice.optimize(Choice(constraints(0), try { 
+      Choice(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
         case vnfe: NoSuchElementException => NullValue("")
@@ -125,28 +130,29 @@ object BranchEnv {
         envs(1).getStaticClassField(className, fieldName)
       } catch {
         case vnfe: NoSuchElementException => NullValue("")
-      }))
+      })
     } else {
-      Choice.optimize(Choice(constraints(0), try {
+      Choice(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
         case vnfe: NoSuchElementException => NullValue("")
-      }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))    )
+      }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))
     }
   }
-  
+
   def join(envs: List[BranchEnv], constraints: List[Constraint]): Delta = {
 
     /* 1) JOIN UPDATED VARIABLES
      * All variables that have been changed during at least one branch execution
      * are selected and joined separately.
      */
-    val updatedVariableNames = envs.map { env => env.variables.map(vv=>vv._1).toSet }.foldLeft(Set[String]())(_ union _)
+    val updatedVariableNames = envs.map { env => env.variables.map(vv => vv._1).toSet }.foldLeft(Set[String]())(_ union _)
     var updatedVariableMap = Map[String, OakValue]()
-    updatedVariableNames.foreach { 
-      name => {
-        updatedVariableMap += (name -> joinVariable(envs, constraints, name)) 
-      }
+    updatedVariableNames.foreach {
+      name =>
+        {
+          updatedVariableMap += (name -> joinVariable(envs, constraints, name))
+        }
     }
 
     /* 2) JOIN (or UNION) HEAP
@@ -159,25 +165,26 @@ object BranchEnv {
      * 3) JOIN OUTPUT
      */
     val joinedOutput = joinOutput(envs, constraints)
-    
+
     /**
      * 4) Global variables
      */
-    val allGlobals = envs.map { e => e.globalVariables}.fold(Set[String]())(_ union _).toSet
-    
+    val allGlobals = envs.map { e => e.globalVariables }.fold(Set[String]())(_ union _).toSet
+
     /**
      * 5) Static class fields
      */
     val fieldNames = collection.mutable.Set[(String, String)]()
     envs.foreach {
-      env => env.staticClassFields.foreach {
-        case (c, m) => {
-          m.keySet.foreach { k => fieldNames.add((c, k)) }
+      env =>
+        env.staticClassFields.foreach {
+          case (c, m) => {
+            m.keySet.foreach { k => fieldNames.add((c, k)) }
+          }
         }
-      }
     }
     var updatedFields = collection.mutable.Map[String, collection.mutable.Map[String, OakValue]]()
-    val merged = fieldNames.foreach { 
+    val merged = fieldNames.foreach {
       case (c, f) => {
         if (!(updatedFields.keySet contains c)) {
           updatedFields.put(c, collection.mutable.Map[String, OakValue]())
@@ -185,8 +192,8 @@ object BranchEnv {
         updatedFields.get(c).get.put(f, joinStaticClassField(envs, constraints, c, f))
       }
     }
-    val updatedFieldz = updatedFields.map{ case (k, m) => (k -> m.toMap)}.toMap
-    
+    val updatedFieldz = updatedFields.map { case (k, m) => (k -> m.toMap) }.toMap
+
     new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals)
   }
 }

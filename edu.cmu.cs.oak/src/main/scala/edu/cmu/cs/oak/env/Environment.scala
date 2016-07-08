@@ -40,6 +40,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   
   var age = 0 
   
+  var changed = false
+  
   /**
    * Map of variable identifiers and variable references.
    * In various contexts, variables can refer to the same value.
@@ -77,7 +79,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
-    
+    changed = true
     if (variables.contains(name)) {
       references.put(variables.get(name).get, value)
     } else {
@@ -88,6 +90,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
 
   def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
+  
+  def hasChanged = changed
   
   def isGlobalVariable(varname: String): Boolean = {
     if (globalVariables contains varname) {
@@ -131,6 +135,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param DNode Value to add to output
    */
   def addOutput(o: DNode) {
+    changed = true
     output.addOutput(o)
   }
 
@@ -162,6 +167,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    *  @param reference to point to
    */
   def setRef(name: String, ref: OakVariable): Unit = {
+    changed = true
     variables.put(name, ref)
   }
 
@@ -176,6 +182,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
 
   def insert(reference: OakVariable, value: OakValue) {
+    changed = true
     references.put(reference, value)
   }
 
@@ -263,6 +270,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
 
   def addToGlobal(name: String) {
+    changed = true
     this.globalVariables += name
   }
 
@@ -380,6 +388,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
   
   def setStaticClassField(className: String, fieldName: String, value: OakValue) = {
+    changed = true
     if (this.staticClassFields.get(className).isEmpty) {
       this.staticClassFields += (className -> collection.mutable.Map[String, OakValue]())
     }
