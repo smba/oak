@@ -967,7 +967,7 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   private def evaluateCallExpr(e: CallExpr, env: Environment): OakValue = {
-    
+
     val name = e._name.toString()
 
     val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber))
@@ -1023,8 +1023,7 @@ class OakInterpreter extends InterpreterPluginProvider {
       } catch {
         case e: Exception => NullValue("$return")
       }
-      
-      
+
       env.weaveDelta(functionEnv.getDelta())
       returnValue
     } else {
@@ -1123,6 +1122,9 @@ class OakInterpreter extends InterpreterPluginProvider {
           //  key => println(key);obj.set(key.asInstanceOf[StringValue].value.toString, thisArray.get(key, env), env)
           //}
           obj
+        }
+        case n: NullValue => {
+          SymbolValue(n.toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
         }
         case sym: SymbolicValue => {
           SymbolValue(sym.toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
@@ -1285,6 +1287,7 @@ class OakInterpreter extends InterpreterPluginProvider {
             thisValue.set(fieldName.toString(), valueX, env)
             env.update("$this", thisValue)
           }
+          case n: NullValue => {}
           case s: SymbolicValue => {
             //logger.info("Object is symbolic")
           }
@@ -1419,12 +1422,7 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   private def evaluateConstExpr(e: ConstExpr, env: Environment): OakValue = {
-    val c = env.getConstant(e.toString())
-    if (c.isInstanceOf[NullValue]) {
-      StringValue("", e._location.getFileName, e._location.getLineNumber)
-    } else {
-      c
-    }
+    env.getConstant(e._var)
   }
 
   private def evaluateFunEmptyExpr(e: FunEmptyExpr, env: Environment): OakValue = {
@@ -1518,12 +1516,12 @@ class OakInterpreter extends InterpreterPluginProvider {
         }
 
         case choice: Choice => {
-//          val branches = Environment.fork(env, List(choice.p))
-//          val r1 = applyMethod(choice.v1, methodName, args, branches.head)
-//          val r2 = applyMethod(choice.v2, methodName, args, branches(1))
-//          env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
-//          Choice.optimized(choice.p, r1, r2)
-                    NullValue("")
+          val branches = Environment.fork(env, List(choice.p))
+          val r1 = applyMethod(choice.v1, methodName, args, branches.head)
+          val r2 = applyMethod(choice.v2, methodName, args, branches(1))
+          env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
+          Choice.optimized(choice.p, r1, r2)
+          //          NullValue("")
         }
         case _ => {
           NullValue("applyMethod02") //SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
@@ -1895,7 +1893,24 @@ class OakInterpreter extends InterpreterPluginProvider {
    * @return java.nio.Path includePath
    */
   private def getInlcudePath(expr: Expr, env: Environment): Path = {
-    var path = evaluate(expr, env).toString.replace("\"", "")
+    val s = evaluate(expr, env)
+    val path2 = s match {
+      case seq: OakValueSequence => {
+        seq.getSequence.map { v =>
+          {
+            v match {
+              case c: Choice => {
+                c.getElements().filter { x => !x.isInstanceOf[NullValue] }.head
+              }
+              case v: OakValue => v
+            }
+          }
+        }
+      }
+      case s: StringValue => List(s)
+      case n: NullValue => List()
+    }
+    var path = path2.mkString("").replace("\"", "")
     if (!(path startsWith ("/"))) {
       val current = this.path.toString
       path = current.slice(0, current.lastIndexOf("/")) + "/" + path

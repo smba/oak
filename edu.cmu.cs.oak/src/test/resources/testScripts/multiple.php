@@ -32,7 +32,6 @@
 		} else {
 		}
 	}
-	
 	$a = new K("A");
 	echo $obj->full_name("N");
 ?>

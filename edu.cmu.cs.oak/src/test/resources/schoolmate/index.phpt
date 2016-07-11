@@ -7,7 +7,11 @@
     </Concat>
     <Concat>
       <Literal Text="&lt;html&gt; &lt;head&gt; &lt;title&gt;SchoolMate - " Length="36" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="17"/>
-      <Symbolic Text="[Symbol]"/>
+      <Select>
+        <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+        <Symbolic Text="[Symbol]"/>
+        <Undef/>
+      </Select>
       <Literal 
       Text="&lt;/title&gt;
  &lt;style type=&quot;text/css&quot;&gt;
@@ -313,7 +317,11 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-          <Symbolic Text="[Symbol]"/>
+          <Select>
+            <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+            <Symbolic Text="[Symbol]"/>
+            <Undef/>
+          </Select>
           <Literal 
           Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -397,43 +405,7 @@
           <Select>
             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
             <Literal Text="0" Length="1" Line="0"/>
-            <Select>
-              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-              <Select>
-                <Constraint Text="(md5() != $result)"/>
-                <Literal Text="0" Length="1" Line="0"/>
-                <Select>
-                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                  <Literal Text="1" Length="1" Line="0"/>
-                  <Select>
-                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                    <Literal Text="2" Length="1" Line="0"/>
-                    <Select>
-                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                      <Literal Text="2" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                        <Literal Text="4" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                          <Literal Text="5" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="($page == null)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Select>
-                        </Select>
-                      </Select>
-                    </Select>
-                  </Select>
-                </Select>
-              </Select>
-              <Select>
-                <Constraint Text="($page == null)"/>
-                <Literal Text="0" Length="1" Line="0"/>
-                <Symbolic Text="[Symbol]"/>
-              </Select>
-            </Select>
+            <Undef/>
           </Select>
           <Literal 
           Text="'&gt;
@@ -579,7 +551,11 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-            <Symbolic Text="[Symbol]"/>
+            <Select>
+              <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+              <Symbolic Text="[Symbol]"/>
+              <Undef/>
+            </Select>
             <Literal 
             Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -643,43 +619,7 @@
             <Select>
               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
               <Literal Text="0" Length="1" Line="0"/>
-              <Select>
-                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                <Select>
-                  <Constraint Text="(md5() != $result)"/>
-                  <Literal Text="0" Length="1" Line="0"/>
-                  <Select>
-                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                    <Literal Text="1" Length="1" Line="0"/>
-                    <Select>
-                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                      <Literal Text="2" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                        <Literal Text="2" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                          <Literal Text="4" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                            <Literal Text="5" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="($page == null)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Select>
-                          </Select>
-                        </Select>
-                      </Select>
-                    </Select>
-                  </Select>
-                </Select>
-                <Select>
-                  <Constraint Text="($page == null)"/>
-                  <Literal Text="0" Length="1" Line="0"/>
-                  <Symbolic Text="[Symbol]"/>
-                </Select>
-              </Select>
+              <Undef/>
             </Select>
             <Literal 
             Text="'&gt;
@@ -1006,43 +946,7 @@
                 <Select>
                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                   <Literal Text="0" Length="1" Line="0"/>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                    <Select>
-                      <Constraint Text="(md5() != $result)"/>
-                      <Literal Text="0" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                        <Literal Text="1" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                          <Literal Text="2" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                            <Literal Text="2" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                              <Literal Text="4" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                <Literal Text="5" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="($page == null)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                      </Select>
-                    </Select>
-                    <Select>
-                      <Constraint Text="($page == null)"/>
-                      <Literal Text="0" Length="1" Line="0"/>
-                      <Symbolic Text="[Symbol]"/>
-                    </Select>
-                  </Select>
+                  <Undef/>
                 </Select>
                 <Literal 
                 Text="'&gt;
@@ -1107,7 +1011,11 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="389" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="52">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Select>
+                    <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+                    <Symbolic Text="[Symbol]"/>
+                    <Undef/>
+                  </Select>
                   <Literal 
                   Text="' maxlength='50' name='schoolname' size=40&gt;
   &lt;/td&gt;
@@ -1262,43 +1170,7 @@
                   <Select>
                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                     <Literal Text="0" Length="1" Line="0"/>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                      <Select>
-                        <Constraint Text="(md5() != $result)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                          <Literal Text="1" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                            <Literal Text="2" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                              <Literal Text="2" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                <Literal Text="4" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                  <Literal Text="5" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="($page == null)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                      </Select>
-                      <Select>
-                        <Constraint Text="($page == null)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Symbolic Text="[Symbol]"/>
-                      </Select>
-                    </Select>
+                    <Undef/>
                   </Select>
                   <Literal 
                   Text="'&gt;
@@ -1358,44 +1230,8 @@
 </Literal>
                                     <Select>
                                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                        <Select>
-                                          <Constraint Text="(md5() != $result)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                              <Literal Text="2" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                  <Literal Text="4" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                    <Literal Text="5" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="($page == null)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Symbolic Text="[Symbol]"/>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
+                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="23"/>
+                                      <Undef/>
                                     </Select>
                                     <Literal Text="'&gt; &lt;/form&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="23"/>
                                   </Concat>
@@ -1642,43 +1478,7 @@
                     <Select>
                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                       <Literal Text="0" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                        <Select>
-                          <Constraint Text="(md5() != $result)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                            <Literal Text="1" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                              <Literal Text="2" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                <Literal Text="2" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                  <Literal Text="4" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                    <Literal Text="5" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="($page == null)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                        <Select>
-                          <Constraint Text="($page == null)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Symbolic Text="[Symbol]"/>
-                        </Select>
-                      </Select>
+                      <Undef/>
                     </Select>
                     <Literal 
                     Text="'&gt;
@@ -1733,44 +1533,8 @@
 </Literal>
                                       <Select>
                                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                          <Select>
-                                            <Constraint Text="(md5() != $result)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                              <Literal Text="1" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                    <Literal Text="4" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                      <Literal Text="5" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="($page == null)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Symbolic Text="[Symbol]"/>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
+                                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="23"/>
+                                        <Undef/>
                                       </Select>
                                       <Literal Text="'&gt; &lt;/form&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="23"/>
                                     </Concat>
@@ -1976,43 +1740,7 @@
                       <Select>
                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                         <Literal Text="0" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                          <Select>
-                            <Constraint Text="(md5() != $result)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                              <Literal Text="1" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                <Literal Text="2" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                    <Literal Text="4" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                      <Literal Text="5" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="($page == null)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                          <Select>
-                            <Constraint Text="($page == null)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Select>
-                        </Select>
+                        <Undef/>
                       </Select>
                       <Literal 
                       Text="'&gt;
@@ -2240,43 +1968,7 @@
                         <Select>
                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                           <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                            <Select>
-                              <Constraint Text="(md5() != $result)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                <Literal Text="1" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                      <Literal Text="4" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                        <Literal Text="5" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                            <Select>
-                              <Constraint Text="($page == null)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Select>
-                          </Select>
+                          <Undef/>
                         </Select>
                         <Literal 
                         Text="'&gt;
@@ -2515,43 +2207,7 @@
                           <Select>
                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                             <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                              <Select>
-                                <Constraint Text="(md5() != $result)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                        <Literal Text="4" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                          <Literal Text="5" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                              <Select>
-                                <Constraint Text="($page == null)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Select>
-                            </Select>
+                            <Undef/>
                           </Select>
                           <Literal 
                           Text="'&gt;
@@ -2777,43 +2433,7 @@
                             <Select>
                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                               <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                <Select>
-                                  <Constraint Text="(md5() != $result)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                          <Literal Text="4" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                            <Literal Text="5" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="($page == null)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Symbolic Text="[Symbol]"/>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                                <Select>
-                                  <Constraint Text="($page == null)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                </Select>
-                              </Select>
+                              <Undef/>
                             </Select>
                             <Literal 
                             Text="'&gt;
@@ -2902,43 +2522,7 @@
                               <Select>
                                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                 <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                  <Select>
-                                    <Constraint Text="(md5() != $result)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                      <Literal Text="1" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                          <Literal Text="2" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                            <Literal Text="4" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                              <Literal Text="5" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="($page == null)"/>
-                                                <Literal Text="0" Length="1" Line="0"/>
-                                                <Symbolic Text="[Symbol]"/>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                  <Select>
-                                    <Constraint Text="($page == null)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                  </Select>
-                                </Select>
+                                <Undef/>
                               </Select>
                               <Literal 
                               Text="'&gt;
@@ -2998,43 +2582,7 @@
                                 <Select>
                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                   <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                    <Select>
-                                      <Constraint Text="(md5() != $result)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                        <Literal Text="1" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                          <Literal Text="2" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                            <Literal Text="2" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                              <Literal Text="4" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                <Literal Text="5" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="($page == null)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Symbolic Text="[Symbol]"/>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                    <Select>
-                                      <Constraint Text="($page == null)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Select>
-                                  </Select>
+                                  <Undef/>
                                 </Select>
                                 <Literal 
                                 Text="'&gt;
@@ -3189,43 +2737,7 @@
                                       <Select>
                                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                         <Literal Text="0" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                          <Select>
-                                            <Constraint Text="(md5() != $result)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                              <Literal Text="1" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                    <Literal Text="4" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                      <Literal Text="5" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="($page == null)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Symbolic Text="[Symbol]"/>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
+                                        <Undef/>
                                       </Select>
                                       <Literal 
                                       Text="' /&gt;
@@ -3394,43 +2906,7 @@
                                       <Select>
                                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                         <Literal Text="0" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                          <Select>
-                                            <Constraint Text="(md5() != $result)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                              <Literal Text="1" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                    <Literal Text="4" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                      <Literal Text="5" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="($page == null)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Symbolic Text="[Symbol]"/>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
+                                        <Undef/>
                                       </Select>
                                       <Literal 
                                       Text="' /&gt;
@@ -3482,44 +2958,8 @@
 </Literal>
                                                 <Select>
                                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                    <Select>
-                                                      <Constraint Text="(md5() != $result)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                        <Literal Text="1" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                              <Literal Text="4" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                <Literal Text="5" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="($page == null)"/>
-                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                  <Symbolic Text="[Symbol]"/>
-                                                                </Select>
-                                                              </Select>
-                                                            </Select>
-                                                          </Select>
-                                                        </Select>
-                                                      </Select>
-                                                    </Select>
-                                                    <Select>
-                                                      <Constraint Text="($page == null)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Symbolic Text="[Symbol]"/>
-                                                    </Select>
-                                                  </Select>
+                                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="21"/>
+                                                  <Undef/>
                                                 </Select>
                                                 <Literal Text="'&gt; &lt;/form&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="21"/>
                                               </Concat>
@@ -3735,43 +3175,7 @@
                                     <Select>
                                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                       <Literal Text="0" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                        <Select>
-                                          <Constraint Text="(md5() != $result)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                              <Literal Text="2" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                  <Literal Text="4" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                    <Literal Text="5" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="($page == null)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Symbolic Text="[Symbol]"/>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
+                                      <Undef/>
                                     </Select>
                                     <Literal 
                                     Text="'&gt;
@@ -3918,7 +3322,7 @@
                                           <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
                                         </Concat>
                                       </Select>
-                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="81"/>
+                                      <Undef/>
                                     </Select>
                                     <Literal 
                                     Text="	 &lt;/select&gt;
@@ -3998,43 +3402,7 @@
                                       <Select>
                                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                         <Literal Text="0" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                          <Select>
-                                            <Constraint Text="(md5() != $result)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                              <Literal Text="1" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                    <Literal Text="4" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                      <Literal Text="5" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="($page == null)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Symbolic Text="[Symbol]"/>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
+                                        <Undef/>
                                       </Select>
                                       <Literal 
                                       Text="'&gt;
@@ -4109,43 +3477,7 @@
                                         <Select>
                                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                           <Literal Text="0" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                            <Select>
-                                              <Constraint Text="(md5() != $result)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                <Literal Text="1" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                    <Literal Text="2" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                      <Literal Text="4" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                        <Literal Text="5" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="($page == null)"/>
-                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                          <Symbolic Text="[Symbol]"/>
-                                                        </Select>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                            <Select>
-                                              <Constraint Text="($page == null)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Symbolic Text="[Symbol]"/>
-                                            </Select>
-                                          </Select>
+                                          <Undef/>
                                         </Select>
                                         <Literal 
                                         Text="'&gt;
@@ -4264,43 +3596,7 @@
                                           <Select>
                                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                             <Literal Text="0" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                              <Select>
-                                                <Constraint Text="(md5() != $result)"/>
-                                                <Literal Text="0" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                  <Literal Text="1" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                    <Literal Text="2" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                      <Literal Text="2" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                        <Literal Text="4" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                          <Literal Text="5" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="($page == null)"/>
-                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                            <Symbolic Text="[Symbol]"/>
-                                                          </Select>
-                                                        </Select>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                              <Select>
-                                                <Constraint Text="($page == null)"/>
-                                                <Literal Text="0" Length="1" Line="0"/>
-                                                <Symbolic Text="[Symbol]"/>
-                                              </Select>
-                                            </Select>
+                                            <Undef/>
                                           </Select>
                                           <Literal 
                                           Text="'&gt;
@@ -4389,43 +3685,7 @@
                                             <Select>
                                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                               <Literal Text="0" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                <Select>
-                                                  <Constraint Text="(md5() != $result)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                    <Literal Text="1" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                      <Literal Text="2" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                        <Literal Text="2" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                          <Literal Text="4" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                            <Literal Text="5" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="($page == null)"/>
-                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                              <Symbolic Text="[Symbol]"/>
-                                                            </Select>
-                                                          </Select>
-                                                        </Select>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                                <Select>
-                                                  <Constraint Text="($page == null)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Symbolic Text="[Symbol]"/>
-                                                </Select>
-                                              </Select>
+                                              <Undef/>
                                             </Select>
                                             <Literal 
                                             Text="'&gt;
@@ -4549,43 +3809,7 @@
                                               <Select>
                                                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                 <Literal Text="0" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                  <Select>
-                                                    <Constraint Text="(md5() != $result)"/>
-                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                      <Literal Text="1" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                        <Literal Text="2" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                            <Literal Text="4" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                              <Literal Text="5" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="($page == null)"/>
-                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                <Symbolic Text="[Symbol]"/>
-                                                              </Select>
-                                                            </Select>
-                                                          </Select>
-                                                        </Select>
-                                                      </Select>
-                                                    </Select>
-                                                  </Select>
-                                                  <Select>
-                                                    <Constraint Text="($page == null)"/>
-                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                    <Symbolic Text="[Symbol]"/>
-                                                  </Select>
-                                                </Select>
+                                                <Undef/>
                                               </Select>
                                               <Literal 
                                               Text="'&gt;
@@ -4666,43 +3890,7 @@
                                                 <Select>
                                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                   <Literal Text="0" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                    <Select>
-                                                      <Constraint Text="(md5() != $result)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                        <Literal Text="1" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                              <Literal Text="4" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                <Literal Text="5" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="($page == null)"/>
-                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                  <Symbolic Text="[Symbol]"/>
-                                                                </Select>
-                                                              </Select>
-                                                            </Select>
-                                                          </Select>
-                                                        </Select>
-                                                      </Select>
-                                                    </Select>
-                                                    <Select>
-                                                      <Constraint Text="($page == null)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Symbolic Text="[Symbol]"/>
-                                                    </Select>
-                                                  </Select>
+                                                  <Undef/>
                                                 </Select>
                                                 <Literal 
                                                 Text="'&gt;
@@ -4809,43 +3997,7 @@
                                                   <Select>
                                                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                     <Literal Text="0" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                      <Select>
-                                                        <Constraint Text="(md5() != $result)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                          <Literal Text="1" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                              <Literal Text="2" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                <Literal Text="4" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                  <Literal Text="5" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="($page == null)"/>
-                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                    <Symbolic Text="[Symbol]"/>
-                                                                  </Select>
-                                                                </Select>
-                                                              </Select>
-                                                            </Select>
-                                                          </Select>
-                                                        </Select>
-                                                      </Select>
-                                                      <Select>
-                                                        <Constraint Text="($page == null)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Symbolic Text="[Symbol]"/>
-                                                      </Select>
-                                                    </Select>
+                                                    <Undef/>
                                                   </Select>
                                                   <Literal 
                                                   Text="'&gt;
@@ -4905,43 +4057,7 @@
                                                     <Select>
                                                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                       <Literal Text="0" Length="1" Line="0"/>
-                                                      <Select>
-                                                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                        <Select>
-                                                          <Constraint Text="(md5() != $result)"/>
-                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                            <Literal Text="1" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                              <Literal Text="2" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                <Literal Text="2" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                  <Literal Text="4" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                    <Literal Text="5" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="($page == null)"/>
-                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                      <Symbolic Text="[Symbol]"/>
-                                                                    </Select>
-                                                                  </Select>
-                                                                </Select>
-                                                              </Select>
-                                                            </Select>
-                                                          </Select>
-                                                        </Select>
-                                                        <Select>
-                                                          <Constraint Text="($page == null)"/>
-                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                          <Symbolic Text="[Symbol]"/>
-                                                        </Select>
-                                                      </Select>
+                                                      <Undef/>
                                                     </Select>
                                                     <Literal 
                                                     Text="'&gt;
@@ -5021,43 +4137,7 @@
                                                       <Select>
                                                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                         <Literal Text="0" Length="1" Line="0"/>
-                                                        <Select>
-                                                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                          <Select>
-                                                            <Constraint Text="(md5() != $result)"/>
-                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                              <Literal Text="1" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                <Literal Text="2" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                    <Literal Text="4" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                      <Literal Text="5" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="($page == null)"/>
-                                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                                        <Symbolic Text="[Symbol]"/>
-                                                                      </Select>
-                                                                    </Select>
-                                                                  </Select>
-                                                                </Select>
-                                                              </Select>
-                                                            </Select>
-                                                          </Select>
-                                                          <Select>
-                                                            <Constraint Text="($page == null)"/>
-                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                            <Symbolic Text="[Symbol]"/>
-                                                          </Select>
-                                                        </Select>
+                                                        <Undef/>
                                                       </Select>
                                                       <Literal 
                                                       Text="'&gt;
@@ -5140,43 +4220,7 @@
                                                         <Select>
                                                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                           <Literal Text="0" Length="1" Line="0"/>
-                                                          <Select>
-                                                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                            <Select>
-                                                              <Constraint Text="(md5() != $result)"/>
-                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                <Literal Text="1" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                    <Literal Text="2" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                      <Literal Text="4" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                        <Literal Text="5" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="($page == null)"/>
-                                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                                          <Symbolic Text="[Symbol]"/>
-                                                                        </Select>
-                                                                      </Select>
-                                                                    </Select>
-                                                                  </Select>
-                                                                </Select>
-                                                              </Select>
-                                                            </Select>
-                                                            <Select>
-                                                              <Constraint Text="($page == null)"/>
-                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                              <Symbolic Text="[Symbol]"/>
-                                                            </Select>
-                                                          </Select>
+                                                          <Undef/>
                                                         </Select>
                                                         <Literal 
                                                         Text="'&gt;
@@ -5289,43 +4333,7 @@
                                                           <Select>
                                                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                             <Literal Text="0" Length="1" Line="0"/>
-                                                            <Select>
-                                                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                              <Select>
-                                                                <Constraint Text="(md5() != $result)"/>
-                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                  <Literal Text="1" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                    <Literal Text="2" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                      <Literal Text="2" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                        <Literal Text="4" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                          <Literal Text="5" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="($page == null)"/>
-                                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                                            <Symbolic Text="[Symbol]"/>
-                                                                          </Select>
-                                                                        </Select>
-                                                                      </Select>
-                                                                    </Select>
-                                                                  </Select>
-                                                                </Select>
-                                                              </Select>
-                                                              <Select>
-                                                                <Constraint Text="($page == null)"/>
-                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                <Symbolic Text="[Symbol]"/>
-                                                              </Select>
-                                                            </Select>
+                                                            <Undef/>
                                                           </Select>
                                                           <Literal 
                                                           Text="'&gt;
@@ -5387,44 +4395,8 @@
 </Literal>
                                                                                 <Select>
                                                                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="(md5() != $result)"/>
-                                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                                        <Literal Text="1" Length="1" Line="0"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                                                          <Select>
-                                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                                                            <Select>
-                                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                              <Literal Text="4" Length="1" Line="0"/>
-                                                                                              <Select>
-                                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                                <Literal Text="5" Length="1" Line="0"/>
-                                                                                                <Select>
-                                                                                                  <Constraint Text="($page == null)"/>
-                                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                                  <Symbolic Text="[Symbol]"/>
-                                                                                                </Select>
-                                                                                              </Select>
-                                                                                            </Select>
-                                                                                          </Select>
-                                                                                        </Select>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                    <Select>
-                                                                                      <Constraint Text="($page == null)"/>
-                                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                                      <Symbolic Text="[Symbol]"/>
-                                                                                    </Select>
-                                                                                  </Select>
+                                                                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="26"/>
+                                                                                  <Undef/>
                                                                                 </Select>
                                                                                 <Literal Text="'&gt; &lt;/form&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="26"/>
                                                                               </Concat>
@@ -5666,43 +4638,7 @@
                                                             <Select>
                                                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                               <Literal Text="0" Length="1" Line="0"/>
-                                                              <Select>
-                                                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                <Select>
-                                                                  <Constraint Text="(md5() != $result)"/>
-                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                      <Literal Text="2" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                        <Literal Text="2" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                          <Literal Text="4" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                            <Literal Text="5" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="($page == null)"/>
-                                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                                              <Symbolic Text="[Symbol]"/>
-                                                                            </Select>
-                                                                          </Select>
-                                                                        </Select>
-                                                                      </Select>
-                                                                    </Select>
-                                                                  </Select>
-                                                                </Select>
-                                                                <Select>
-                                                                  <Constraint Text="($page == null)"/>
-                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                  <Symbolic Text="[Symbol]"/>
-                                                                </Select>
-                                                              </Select>
+                                                              <Undef/>
                                                             </Select>
                                                             <Literal 
                                                             Text="'&gt;
@@ -5805,43 +4741,7 @@
                                                               <Select>
                                                                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                 <Literal Text="0" Length="1" Line="0"/>
-                                                                <Select>
-                                                                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                  <Select>
-                                                                    <Constraint Text="(md5() != $result)"/>
-                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                      <Literal Text="1" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                        <Literal Text="2" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                            <Literal Text="4" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                              <Literal Text="5" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="($page == null)"/>
-                                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
-                                                                        </Select>
-                                                                      </Select>
-                                                                    </Select>
-                                                                  </Select>
-                                                                  <Select>
-                                                                    <Constraint Text="($page == null)"/>
-                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                    <Symbolic Text="[Symbol]"/>
-                                                                  </Select>
-                                                                </Select>
+                                                                <Undef/>
                                                               </Select>
                                                               <Literal 
                                                               Text="'&gt;
@@ -5974,43 +4874,7 @@
                                                                 <Select>
                                                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                   <Literal Text="0" Length="1" Line="0"/>
-                                                                  <Select>
-                                                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                    <Select>
-                                                                      <Constraint Text="(md5() != $result)"/>
-                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                        <Literal Text="1" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                              <Literal Text="4" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                <Literal Text="5" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="($page == null)"/>
-                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                  <Symbolic Text="[Symbol]"/>
-                                                                                </Select>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
-                                                                        </Select>
-                                                                      </Select>
-                                                                    </Select>
-                                                                    <Select>
-                                                                      <Constraint Text="($page == null)"/>
-                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                      <Symbolic Text="[Symbol]"/>
-                                                                    </Select>
-                                                                  </Select>
+                                                                  <Undef/>
                                                                 </Select>
                                                                 <Literal 
                                                                 Text="'&gt;
@@ -6134,7 +4998,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -6190,7 +5054,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -6246,7 +5110,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -6302,7 +5166,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -6358,7 +5222,7 @@
                                                                                     <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="125"/>
                                                                                   </Concat>
                                                                                 </Select>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -6388,43 +5252,7 @@
                                                                   <Select>
                                                                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                     <Literal Text="0" Length="1" Line="0"/>
-                                                                    <Select>
-                                                                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                      <Select>
-                                                                        <Constraint Text="(md5() != $result)"/>
-                                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                          <Literal Text="1" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                              <Literal Text="2" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                <Literal Text="4" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                  <Literal Text="5" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="($page == null)"/>
-                                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                                    <Symbolic Text="[Symbol]"/>
-                                                                                  </Select>
-                                                                                </Select>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
-                                                                        </Select>
-                                                                      </Select>
-                                                                      <Select>
-                                                                        <Constraint Text="($page == null)"/>
-                                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                                        <Symbolic Text="[Symbol]"/>
-                                                                      </Select>
-                                                                    </Select>
+                                                                    <Undef/>
                                                                   </Select>
                                                                   <Literal 
                                                                   Text="'&gt;
@@ -6687,43 +5515,7 @@
                                                                     <Select>
                                                                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                       <Literal Text="0" Length="1" Line="0"/>
-                                                                      <Select>
-                                                                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                        <Select>
-                                                                          <Constraint Text="(md5() != $result)"/>
-                                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                            <Literal Text="1" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                              <Literal Text="2" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                <Literal Text="2" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                  <Literal Text="4" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                    <Literal Text="5" Length="1" Line="0"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="($page == null)"/>
-                                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                                      <Symbolic Text="[Symbol]"/>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                </Select>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
-                                                                        </Select>
-                                                                        <Select>
-                                                                          <Constraint Text="($page == null)"/>
-                                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                                          <Symbolic Text="[Symbol]"/>
-                                                                        </Select>
-                                                                      </Select>
+                                                                      <Undef/>
                                                                     </Select>
                                                                     <Literal 
                                                                     Text="' /&gt;
@@ -6846,43 +5638,7 @@
                                                                       <Select>
                                                                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                         <Literal Text="0" Length="1" Line="0"/>
-                                                                        <Select>
-                                                                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                          <Select>
-                                                                            <Constraint Text="(md5() != $result)"/>
-                                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                              <Literal Text="1" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                <Literal Text="2" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                    <Literal Text="4" Length="1" Line="0"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                      <Literal Text="5" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="($page == null)"/>
-                                                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                                                        <Symbolic Text="[Symbol]"/>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                </Select>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
-                                                                          <Select>
-                                                                            <Constraint Text="($page == null)"/>
-                                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                                            <Symbolic Text="[Symbol]"/>
-                                                                          </Select>
-                                                                        </Select>
+                                                                        <Undef/>
                                                                       </Select>
                                                                       <Literal 
                                                                       Text="'&gt;
@@ -7081,43 +5837,7 @@
                                                                         <Select>
                                                                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                           <Literal Text="0" Length="1" Line="0"/>
-                                                                          <Select>
-                                                                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                            <Select>
-                                                                              <Constraint Text="(md5() != $result)"/>
-                                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                                <Literal Text="1" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                  <Literal Text="2" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                    <Literal Text="2" Length="1" Line="0"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                      <Literal Text="4" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                        <Literal Text="5" Length="1" Line="0"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="($page == null)"/>
-                                                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                        </Select>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                </Select>
-                                                                              </Select>
-                                                                            </Select>
-                                                                            <Select>
-                                                                              <Constraint Text="($page == null)"/>
-                                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                                              <Symbolic Text="[Symbol]"/>
-                                                                            </Select>
-                                                                          </Select>
+                                                                          <Undef/>
                                                                         </Select>
                                                                         <Literal 
                                                                         Text="'&gt;
@@ -7254,7 +5974,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -7310,7 +6030,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -7366,7 +6086,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -7422,7 +6142,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -7478,7 +6198,7 @@
                                                                                             <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="129"/>
                                                                                           </Concat>
                                                                                         </Select>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -7508,43 +6228,7 @@
                                                                           <Select>
                                                                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                             <Literal Text="0" Length="1" Line="0"/>
-                                                                            <Select>
-                                                                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                              <Select>
-                                                                                <Constraint Text="(md5() != $result)"/>
-                                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                                  <Literal Text="1" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                    <Literal Text="2" Length="1" Line="0"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                      <Literal Text="2" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                        <Literal Text="4" Length="1" Line="0"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                          <Literal Text="5" Length="1" Line="0"/>
-                                                                                          <Select>
-                                                                                            <Constraint Text="($page == null)"/>
-                                                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                                                            <Symbolic Text="[Symbol]"/>
-                                                                                          </Select>
-                                                                                        </Select>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                </Select>
-                                                                              </Select>
-                                                                              <Select>
-                                                                                <Constraint Text="($page == null)"/>
-                                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                              </Select>
-                                                                            </Select>
+                                                                            <Undef/>
                                                                           </Select>
                                                                           <Literal 
                                                                           Text="'&gt;
@@ -7734,13 +6418,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                                                                         <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                                                                        <Concat>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                          <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                          <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                        </Concat>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                       <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
                                                                                     </Select>
@@ -7750,13 +6428,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                                                                         <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                                                                        <Concat>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                          <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                          <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                                                                          <Symbolic Text="[Symbol]"/>
-                                                                                        </Concat>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                       <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
                                                                                     </Select>
@@ -7814,43 +6486,7 @@
                                                                             <Select>
                                                                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                               <Literal Text="0" Length="1" Line="0"/>
-                                                                              <Select>
-                                                                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="(md5() != $result)"/>
-                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                                    <Literal Text="1" Length="1" Line="0"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                      <Literal Text="2" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                        <Literal Text="2" Length="1" Line="0"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                          <Literal Text="4" Length="1" Line="0"/>
-                                                                                          <Select>
-                                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                            <Literal Text="5" Length="1" Line="0"/>
-                                                                                            <Select>
-                                                                                              <Constraint Text="($page == null)"/>
-                                                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                                                              <Symbolic Text="[Symbol]"/>
-                                                                                            </Select>
-                                                                                          </Select>
-                                                                                        </Select>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                </Select>
-                                                                                <Select>
-                                                                                  <Constraint Text="($page == null)"/>
-                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                  <Symbolic Text="[Symbol]"/>
-                                                                                </Select>
-                                                                              </Select>
+                                                                              <Undef/>
                                                                             </Select>
                                                                             <Literal 
                                                                             Text="' /&gt;
@@ -7919,43 +6555,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                                 <Literal Text="0" Length="1" Line="0"/>
-                                                                                <Select>
-                                                                                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="(md5() != $result)"/>
-                                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                                      <Literal Text="1" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                        <Literal Text="2" Length="1" Line="0"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                                                          <Select>
-                                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                            <Literal Text="4" Length="1" Line="0"/>
-                                                                                            <Select>
-                                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                              <Literal Text="5" Length="1" Line="0"/>
-                                                                                              <Select>
-                                                                                                <Constraint Text="($page == null)"/>
-                                                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                                                <Symbolic Text="[Symbol]"/>
-                                                                                              </Select>
-                                                                                            </Select>
-                                                                                          </Select>
-                                                                                        </Select>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                  <Select>
-                                                                                    <Constraint Text="($page == null)"/>
-                                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                                    <Symbolic Text="[Symbol]"/>
-                                                                                  </Select>
-                                                                                </Select>
+                                                                                <Undef/>
                                                                               </Select>
                                                                               <Literal 
                                                                               Text="'&gt;
@@ -8126,43 +6726,7 @@
                                                                                 <Select>
                                                                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                                                                   <Literal Text="0" Length="1" Line="0"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="(md5() != $result)"/>
-                                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                                                                        <Literal Text="1" Length="1" Line="0"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                                                                          <Literal Text="2" Length="1" Line="0"/>
-                                                                                          <Select>
-                                                                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                                                            <Literal Text="2" Length="1" Line="0"/>
-                                                                                            <Select>
-                                                                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                                                              <Literal Text="4" Length="1" Line="0"/>
-                                                                                              <Select>
-                                                                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                                                                <Literal Text="5" Length="1" Line="0"/>
-                                                                                                <Select>
-                                                                                                  <Constraint Text="($page == null)"/>
-                                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                                  <Symbolic Text="[Symbol]"/>
-                                                                                                </Select>
-                                                                                              </Select>
-                                                                                            </Select>
-                                                                                          </Select>
-                                                                                        </Select>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                    <Select>
-                                                                                      <Constraint Text="($page == null)"/>
-                                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                                      <Symbolic Text="[Symbol]"/>
-                                                                                    </Select>
-                                                                                  </Select>
+                                                                                  <Undef/>
                                                                                 </Select>
                                                                                 <Literal 
                                                                                 Text="' /&gt;
@@ -8290,7 +6854,11 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-              <Symbolic Text="[Symbol]"/>
+              <Select>
+                <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+                <Symbolic Text="[Symbol]"/>
+                <Undef/>
+              </Select>
               <Literal 
               Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -8355,43 +6923,7 @@
               <Select>
                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                 <Literal Text="0" Length="1" Line="0"/>
-                <Select>
-                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                  <Select>
-                    <Constraint Text="(md5() != $result)"/>
-                    <Literal Text="0" Length="1" Line="0"/>
-                    <Select>
-                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                      <Literal Text="1" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                        <Literal Text="2" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                          <Literal Text="2" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                            <Literal Text="4" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                              <Literal Text="5" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="($page == null)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                      </Select>
-                    </Select>
-                  </Select>
-                  <Select>
-                    <Constraint Text="($page == null)"/>
-                    <Literal Text="0" Length="1" Line="0"/>
-                    <Symbolic Text="[Symbol]"/>
-                  </Select>
-                </Select>
+                <Undef/>
               </Select>
               <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="88"/>
               <Symbolic Text="[Symbol]"/>
@@ -8511,43 +7043,7 @@
                   <Select>
                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                     <Literal Text="0" Length="1" Line="0"/>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                      <Select>
-                        <Constraint Text="(md5() != $result)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                          <Literal Text="1" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                            <Literal Text="2" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                              <Literal Text="2" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                <Literal Text="4" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                  <Literal Text="5" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="($page == null)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                      </Select>
-                      <Select>
-                        <Constraint Text="($page == null)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Symbolic Text="[Symbol]"/>
-                      </Select>
-                    </Select>
+                    <Undef/>
                   </Select>
                   <Literal 
                   Text="' /&gt;
@@ -8639,43 +7135,7 @@
                     <Select>
                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                       <Literal Text="0" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                        <Select>
-                          <Constraint Text="(md5() != $result)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                            <Literal Text="1" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                              <Literal Text="2" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                <Literal Text="2" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                  <Literal Text="4" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                    <Literal Text="5" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="($page == null)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                        <Select>
-                          <Constraint Text="($page == null)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Symbolic Text="[Symbol]"/>
-                        </Select>
-                      </Select>
+                      <Undef/>
                     </Select>
                     <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="42"/>
                     <Symbolic Text="[Symbol]"/>
@@ -8923,43 +7383,7 @@
                       <Select>
                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                         <Literal Text="0" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                          <Select>
-                            <Constraint Text="(md5() != $result)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                              <Literal Text="1" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                <Literal Text="2" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                    <Literal Text="4" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                      <Literal Text="5" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="($page == null)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                          <Select>
-                            <Constraint Text="($page == null)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Select>
-                        </Select>
+                        <Undef/>
                       </Select>
                       <Literal 
                       Text="'&gt;
@@ -9161,13 +7585,7 @@
                               <Select>
                                 <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                 <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                <Concat>
-                                  <Symbolic Text="[Symbol]"/>
-                                  <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                  <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                </Concat>
+                                <Undef/>
                               </Select>
                               <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="220"/>
                             </Select>
@@ -9282,43 +7700,7 @@
                         <Select>
                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                           <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                            <Select>
-                              <Constraint Text="(md5() != $result)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                <Literal Text="1" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                      <Literal Text="4" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                        <Literal Text="5" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                            <Select>
-                              <Constraint Text="($page == null)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Select>
-                          </Select>
+                          <Undef/>
                         </Select>
                         <Literal 
                         Text="' /&gt;
@@ -9385,43 +7767,7 @@
                           <Select>
                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                             <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                              <Select>
-                                <Constraint Text="(md5() != $result)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                        <Literal Text="4" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                          <Literal Text="5" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                              <Select>
-                                <Constraint Text="($page == null)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Select>
-                            </Select>
+                            <Undef/>
                           </Select>
                           <Literal 
                           Text="'&gt;
@@ -9480,13 +7826,7 @@
                             <Select>
                               <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                               <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                              <Concat>
-                                <Symbolic Text="[Symbol]"/>
-                                <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                <Symbolic Text="[Symbol]"/>
-                                <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Concat>
+                              <Undef/>
                             </Select>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
@@ -9495,13 +7835,7 @@
                             <Select>
                               <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                               <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                              <Concat>
-                                <Symbolic Text="[Symbol]"/>
-                                <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                <Symbolic Text="[Symbol]"/>
-                                <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Concat>
+                              <Undef/>
                             </Select>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
@@ -9539,43 +7873,7 @@
                             <Select>
                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                               <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                <Select>
-                                  <Constraint Text="(md5() != $result)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                          <Literal Text="4" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                            <Literal Text="5" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="($page == null)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Symbolic Text="[Symbol]"/>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                                <Select>
-                                  <Constraint Text="($page == null)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                </Select>
-                              </Select>
+                              <Undef/>
                             </Select>
                             <Literal 
                             Text="'&gt;
@@ -9639,13 +7937,7 @@
                                   <Select>
                                     <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                    <Concat>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Concat>
+                                    <Undef/>
                                   </Select>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="32"/>
                                 </Select>
@@ -9687,13 +7979,7 @@
                                   <Select>
                                     <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                    <Concat>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Concat>
+                                    <Undef/>
                                   </Select>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50"/>
                                 </Select>
@@ -9714,43 +8000,7 @@
                                 <Select>
                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                   <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                    <Select>
-                                      <Constraint Text="(md5() != $result)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                        <Literal Text="1" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                          <Literal Text="2" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                            <Literal Text="2" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                              <Literal Text="4" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                <Literal Text="5" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="($page == null)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Symbolic Text="[Symbol]"/>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                    <Select>
-                                      <Constraint Text="($page == null)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Select>
-                                  </Select>
+                                  <Undef/>
                                 </Select>
                                 <Literal 
                                 Text="'&gt;
@@ -9861,43 +8111,7 @@
                                   <Select>
                                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                     <Literal Text="0" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                      <Select>
-                                        <Constraint Text="(md5() != $result)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                          <Literal Text="1" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                            <Literal Text="2" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                              <Literal Text="2" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                <Literal Text="4" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                  <Literal Text="5" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="($page == null)"/>
-                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                    <Symbolic Text="[Symbol]"/>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                      <Select>
-                                        <Constraint Text="($page == null)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Select>
-                                    </Select>
+                                    <Undef/>
                                   </Select>
                                   <Literal 
                                   Text="' /&gt;
@@ -9962,13 +8176,7 @@
                                             <Select>
                                               <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                               <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                              <Concat>
-                                                <Symbolic Text="[Symbol]"/>
-                                                <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                                <Symbolic Text="[Symbol]"/>
-                                                <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                                <Symbolic Text="[Symbol]"/>
-                                              </Concat>
+                                              <Undef/>
                                             </Select>
                                             <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                           </Concat>
@@ -10029,43 +8237,7 @@
                                     <Select>
                                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                       <Literal Text="0" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                        <Select>
-                                          <Constraint Text="(md5() != $result)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                              <Literal Text="2" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                                <Literal Text="2" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                  <Literal Text="4" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                    <Literal Text="5" Length="1" Line="0"/>
-                                                    <Select>
-                                                      <Constraint Text="($page == null)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Symbolic Text="[Symbol]"/>
-                                                    </Select>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
+                                      <Undef/>
                                     </Select>
                                     <Literal 
                                     Text="'&gt;
@@ -10168,7 +8340,11 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Select>
+                    <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+                    <Symbolic Text="[Symbol]"/>
+                    <Undef/>
+                  </Select>
                   <Literal 
                   Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -10231,43 +8407,7 @@
                   <Select>
                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                     <Literal Text="0" Length="1" Line="0"/>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                      <Select>
-                        <Constraint Text="(md5() != $result)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                          <Literal Text="1" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                            <Literal Text="2" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                              <Literal Text="2" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                <Literal Text="4" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                  <Literal Text="5" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="($page == null)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                      </Select>
-                      <Select>
-                        <Constraint Text="($page == null)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Symbolic Text="[Symbol]"/>
-                      </Select>
-                    </Select>
+                    <Undef/>
                   </Select>
                   <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="80"/>
                   <Symbolic Text="[Symbol]"/>
@@ -10392,43 +8532,7 @@
                       <Select>
                         <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                         <Literal Text="0" Length="1" Line="0"/>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                          <Select>
-                            <Constraint Text="(md5() != $result)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                              <Literal Text="1" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                <Literal Text="2" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                    <Literal Text="4" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                      <Literal Text="5" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="($page == null)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                          <Select>
-                            <Constraint Text="($page == null)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Select>
-                        </Select>
+                        <Undef/>
                       </Select>
                       <Literal 
                       Text="' /&gt;
@@ -10515,43 +8619,7 @@
                         <Select>
                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                           <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                            <Select>
-                              <Constraint Text="(md5() != $result)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                <Literal Text="1" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                      <Literal Text="4" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                        <Literal Text="5" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                            <Select>
-                              <Constraint Text="($page == null)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Select>
-                          </Select>
+                          <Undef/>
                         </Select>
                         <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="40"/>
                         <Symbolic Text="[Symbol]"/>
@@ -10698,43 +8766,7 @@
                           <Select>
                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                             <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                              <Select>
-                                <Constraint Text="(md5() != $result)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                        <Literal Text="4" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                          <Literal Text="5" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                              <Select>
-                                <Constraint Text="($page == null)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Select>
-                            </Select>
+                            <Undef/>
                           </Select>
                           <Literal 
                           Text="'&gt;
@@ -10803,13 +8835,7 @@
                                   <Select>
                                     <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                    <Concat>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Concat>
+                                    <Undef/>
                                   </Select>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                 </Select>
@@ -10926,43 +8952,7 @@
                             <Select>
                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                               <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                <Select>
-                                  <Constraint Text="(md5() != $result)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                          <Literal Text="4" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                            <Literal Text="5" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="($page == null)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Symbolic Text="[Symbol]"/>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                                <Select>
-                                  <Constraint Text="($page == null)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                </Select>
-                              </Select>
+                              <Undef/>
                             </Select>
                             <Literal 
                             Text="' /&gt;
@@ -11027,13 +9017,7 @@
                                       <Select>
                                         <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                         <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                        <Concat>
-                                          <Symbolic Text="[Symbol]"/>
-                                          <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                          <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Concat>
+                                        <Undef/>
                                       </Select>
                                       <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                     </Concat>
@@ -11094,43 +9078,7 @@
                               <Select>
                                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                 <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                  <Select>
-                                    <Constraint Text="(md5() != $result)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                      <Literal Text="1" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                          <Literal Text="2" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                            <Literal Text="4" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                              <Literal Text="5" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="($page == null)"/>
-                                                <Literal Text="0" Length="1" Line="0"/>
-                                                <Symbolic Text="[Symbol]"/>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                  <Select>
-                                    <Constraint Text="($page == null)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                  </Select>
-                                </Select>
+                                <Undef/>
                               </Select>
                               <Literal 
                               Text="'&gt;
@@ -11231,7 +9179,11 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                    <Symbolic Text="[Symbol]"/>
+                    <Select>
+                      <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
+                      <Symbolic Text="[Symbol]"/>
+                      <Undef/>
+                    </Select>
                     <Literal 
                     Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -11309,43 +9261,7 @@
                     <Select>
                       <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                       <Literal Text="0" Length="1" Line="0"/>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                        <Select>
-                          <Constraint Text="(md5() != $result)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                            <Literal Text="1" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                              <Literal Text="2" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                <Literal Text="2" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                  <Literal Text="4" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                    <Literal Text="5" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="($page == null)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                          </Select>
-                        </Select>
-                        <Select>
-                          <Constraint Text="($page == null)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Symbolic Text="[Symbol]"/>
-                        </Select>
-                      </Select>
+                      <Undef/>
                     </Select>
                     <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="98"/>
                     <Symbolic Text="[Symbol]"/>
@@ -11430,43 +9346,7 @@
                         <Select>
                           <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                           <Literal Text="0" Length="1" Line="0"/>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                            <Select>
-                              <Constraint Text="(md5() != $result)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                <Literal Text="1" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                  <Literal Text="2" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                      <Literal Text="4" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                        <Literal Text="5" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="($page == null)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Symbolic Text="[Symbol]"/>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                            </Select>
-                            <Select>
-                              <Constraint Text="($page == null)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Select>
-                          </Select>
+                          <Undef/>
                         </Select>
                         <Literal 
                         Text="' /&gt;
@@ -11547,43 +9427,7 @@
                           <Select>
                             <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                             <Literal Text="0" Length="1" Line="0"/>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                              <Select>
-                                <Constraint Text="(md5() != $result)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                    <Literal Text="2" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                        <Literal Text="4" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                          <Literal Text="5" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="($page == null)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                              </Select>
-                              <Select>
-                                <Constraint Text="($page == null)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Select>
-                            </Select>
+                            <Undef/>
                           </Select>
                           <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="40"/>
                           <Symbolic Text="[Symbol]"/>
@@ -11730,43 +9574,7 @@
                             <Select>
                               <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                               <Literal Text="0" Length="1" Line="0"/>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                <Select>
-                                  <Constraint Text="(md5() != $result)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                      <Literal Text="2" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                          <Literal Text="4" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                            <Literal Text="5" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="($page == null)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Symbolic Text="[Symbol]"/>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                </Select>
-                                <Select>
-                                  <Constraint Text="($page == null)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                </Select>
-                              </Select>
+                              <Undef/>
                             </Select>
                             <Literal 
                             Text="'&gt;
@@ -11835,13 +9643,7 @@
                                     <Select>
                                       <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                       <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                      <Concat>
-                                        <Symbolic Text="[Symbol]"/>
-                                        <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                        <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Concat>
+                                      <Undef/>
                                     </Select>
                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                   </Select>
@@ -11958,43 +9760,7 @@
                               <Select>
                                 <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                 <Literal Text="0" Length="1" Line="0"/>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                  <Select>
-                                    <Constraint Text="(md5() != $result)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                      <Literal Text="1" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                        <Literal Text="2" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                          <Literal Text="2" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                            <Literal Text="4" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                              <Literal Text="5" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="($page == null)"/>
-                                                <Literal Text="0" Length="1" Line="0"/>
-                                                <Symbolic Text="[Symbol]"/>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                  </Select>
-                                  <Select>
-                                    <Constraint Text="($page == null)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                  </Select>
-                                </Select>
+                                <Undef/>
                               </Select>
                               <Literal 
                               Text="' /&gt;
@@ -12059,13 +9825,7 @@
                                         <Select>
                                           <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
                                           <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                          <Concat>
-                                            <Symbolic Text="[Symbol]"/>
-                                            <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                            <Literal Text="/" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="40"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Concat>
+                                          <Undef/>
                                         </Select>
                                         <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                       </Concat>
@@ -12126,43 +9886,7 @@
                                 <Select>
                                   <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                   <Literal Text="0" Length="1" Line="0"/>
-                                  <Select>
-                                    <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                    <Select>
-                                      <Constraint Text="(md5() != $result)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Select>
-                                        <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                        <Literal Text="1" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                          <Literal Text="2" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                            <Literal Text="2" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                              <Literal Text="4" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                <Literal Text="5" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="($page == null)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Symbolic Text="[Symbol]"/>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                    </Select>
-                                    <Select>
-                                      <Constraint Text="($page == null)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Select>
-                                  </Select>
+                                  <Undef/>
                                 </Select>
                                 <Literal 
                                 Text="'&gt;
@@ -12294,43 +10018,7 @@
                                   <Select>
                                     <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
                                     <Literal Text="0" Length="1" Line="0"/>
-                                    <Select>
-                                      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
-                                      <Select>
-                                        <Constraint Text="(md5() != $result)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Select>
-                                          <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
-                                          <Literal Text="1" Length="1" Line="0"/>
-                                          <Select>
-                                            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
-                                            <Literal Text="2" Length="1" Line="0"/>
-                                            <Select>
-                                              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
-                                              <Literal Text="2" Length="1" Line="0"/>
-                                              <Select>
-                                                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
-                                                <Literal Text="4" Length="1" Line="0"/>
-                                                <Select>
-                                                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                                                  <Literal Text="5" Length="1" Line="0"/>
-                                                  <Select>
-                                                    <Constraint Text="($page == null)"/>
-                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                    <Symbolic Text="[Symbol]"/>
-                                                  </Select>
-                                                </Select>
-                                              </Select>
-                                            </Select>
-                                          </Select>
-                                        </Select>
-                                      </Select>
-                                      <Select>
-                                        <Constraint Text="($page == null)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Select>
-                                    </Select>
+                                    <Undef/>
                                   </Select>
                                   <Literal 
                                   Text="' /&gt;

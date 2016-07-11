@@ -11,6 +11,7 @@ import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.BooleanValue
 
 class Defined extends InterpreterPlugin {
   

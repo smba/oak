@@ -48,7 +48,7 @@ class RegressionTests extends FunSuite {
     /*
      * Exempted from test suite
      */
-//    RegressionTest.test("testScripts/multiple.php")
+    RegressionTest.test("testScripts/multiple.php")
   }
   
   test("Builtin functions") {
@@ -62,6 +62,5 @@ class RegressionTests extends FunSuite {
   test("Schoolmate") {
     RegressionTest.test("schoolmate/index.php")
   }
-  
 	
 }

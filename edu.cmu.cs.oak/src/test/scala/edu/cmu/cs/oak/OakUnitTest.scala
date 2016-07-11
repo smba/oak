@@ -59,80 +59,13 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  /*
-  test("BinaryExpression + BooleanExpr") {
-    assert(readAndExecute("$b = true; $j = $b && false;")._2.lookup("$j") == BooleanValue(false))
-    assert(readAndExecute("$b = true; $j = $b || false;")._2.lookup("$j") == BooleanValue(true))
-    assert(readAndExecute("$b = true; $j = !$b;")._2.lookup("$j") == BooleanValue(false))
-  }
-
-  test("BinaryExpression + ArithmeticExpr") {
-    assert(readAndExecute("$i = 1 + 1")._2.lookup("$i") == IntValue(2))
-    assert(readAndExecute("$i = 1 + 1.1")._2.lookup("$i") == DoubleValue(2.1))
-    assert(readAndExecute("$i = 1.1 + 1.1")._2.lookup("$i") == DoubleValue(2.2))
-
-    assert(readAndExecute("$i = 1 - 1")._2.lookup("$i") == IntValue(0))
-    assert(readAndExecute("$i = 1 - 0.5")._2.lookup("$i") == DoubleValue(0.5))
-    assert(readAndExecute("$i = 1.2 - 0.6")._2.lookup("$i") == DoubleValue(0.6))
-
-    assert(readAndExecute("$i = 1 * 2")._2.lookup("$i") == IntValue(2))
-    assert(readAndExecute("$i = 1 * 2.1")._2.lookup("$i") == DoubleValue(2.1))
-    assert(readAndExecute("$i = 1.0 * 2.1")._2.lookup("$i") == DoubleValue(2.1))
-
-    assert(readAndExecute("$i = 6 / 2")._2.lookup("$i") == IntValue(3))
-    assert(readAndExecute("$i = 6 / 2.0")._2.lookup("$i") == IntValue(3))
-    assert(readAndExecute("$i = 5.2 / 2.0")._2.lookup("$i") == DoubleValue(2.6))
-
-    assert(readAndExecute("$i = 6 % 5")._2.lookup("$i") == IntValue(1))
-    assert(readAndExecute("$i = 6 % 5.0")._2.lookup("$i") == IntValue(1))
-  }
-
-  test("IfStatement") {
-    //assert(RegressionTest.test(url("testScripts/ifStatement01.php"))._1)
-    assert(loadAndExecute(url("testScripts/ifStatement04.php"))._2.lookup("$j").toString() equals "Π⟨1, 0⟩" )
-  }
-
-  test("WhileStatement") {
-    assert(readAndExecute("$i = 0; $j = 2; while ($i < 10) {$j = $j*$j; $i = $i+1;}")._2.lookup("$j") == IntValue(4))
-  }
-
-  test("Function calls, branching") {
-    var env = loadAndExecute(url("testScripts/functions02.php"))
-    assert(env._2.lookup("$i") == IntValue(1) && env._2.lookup("$j") == IntValue(3))
-
-    //env = loadAndExecute(url("testScripts/functions03.php"))
-    //assert(env._2.getOutput.last == StringValue("there"))
-
-    //assert(RegressionTest.test(url("testScripts/functions01.php"))._1)
-  }
-
-  test("count()") {
-    //assert(RegressionTest.test(url("testScripts/count01.php"))._1)
-  }
-  
-  test("Array values") {
-    //assert(RegressionTest.test(url("testScripts/arrayValues01.php"))._1)
-  }
-  
-  test("Reference values") {
-    var env = readAndExecute("$a = 1; $b = &$a;	$b += 1;echo $a;")._2
-    assert(env.lookup("$a").isInstanceOf[SymbolValue] && env.lookup("$b").isInstanceOf[SymbolValue])
-
-    env = readAndExecute("$a = array(3,2,1); $b = &$a[0]; $b *= $b; echo $a[0];")._2
-    assert(env.lookup("$b").isInstanceOf[SymbolValue] && env.lookup("$a").asInstanceOf[ArrayValue].get(IntValue(0), env).isInstanceOf[SymbolValue])
-
-    env = readAndExecute("function foo(&$x) { $x *= 2; } $a = 2; foo($a); echo $a;")._2
-    assert(env.lookup("$a") == IntValue(4))
-  }
-* */
-//  val env = loadAndExecute(url("environments/env02.php"))
-  //val before = Instant.now()
-  val env = loadAndExecute(url("wordpress/wp-admin/install.php"))
+  //val env = loadAndExecute(url("testScripts/constants.php"))
+  val env = loadAndExecute(url("schoolmate/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }
   groups.map{case (k, v) => (k -> v.size)}.foreach {case (k, v) => println(k + ", " + v)}
-  val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/src/main/resources/output/oak/output.html"))
-  pw.write(env._2.output.ifdefy().mkString("\n"))
+  val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/src/main/resources/output/oak/index.xml"))
+  pw.write(env._2.getOutputAsPrettyXML())
   pw.close
 }
