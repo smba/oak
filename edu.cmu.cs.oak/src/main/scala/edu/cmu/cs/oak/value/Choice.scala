@@ -7,6 +7,8 @@ import edu.cmu.cs.oak.env.OakHeap
 
 case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
 
+  assert(!((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue])))
+  
   def getConstraint(): Constraint = p
 
   def getV1(): OakValue = v1
@@ -14,6 +16,16 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
   
   def setV1(v1: OakValue) { this.v1 = v1 }
   def setV2(v2: OakValue) { this.v2 = v2 }
+  
+  def getElements(): Set[OakValue] = {
+    (v1 match {
+      case c: Choice => c.getElements
+      case v: OakValue => Set(v)
+    }) union (v2 match {
+      case c: Choice => c.getElements
+      case v: OakValue => Set(v)
+    })
+  }
   
   def applyToObjects(func: ObjectValue => Unit) {
     v1 match {
@@ -28,6 +40,14 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 }
 
 object Choice {
+  
+  def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
+    if ((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue])) {
+      NullValue("optimized choice")
+    } else {
+      Choice(p, v1, v2)
+    }
+  }
   
   /**
    * Utility method that discards unnecessary choice elements.
@@ -44,7 +64,7 @@ object Choice {
          */
         if (p.v1.isInstanceOf[Choice] && p.v2.isEmpty() && p.v1.asInstanceOf[Choice].v2.isEmpty() && !p.v1.asInstanceOf[Choice].v1.isEmpty()) {
           val p1 = p.v1.asInstanceOf[Choice]
-          Choice(p.getConstraint() AND p1.getConstraint(), optimize(p1.v1), NullValue(""))
+          Choice(p.getConstraint() AND p1.getConstraint(), optimize(p1.v1), NullValue("c"))
         } 
         
         /*
@@ -56,7 +76,7 @@ object Choice {
          */ 
         else if (p.v1.isInstanceOf[Choice] && p.v2.isEmpty() && p.v1.asInstanceOf[Choice].v1.isEmpty() && !p.v1.asInstanceOf[Choice].v2.isEmpty()) {
           val p1 = p.v1.asInstanceOf[Choice]
-          Choice(p.getConstraint() AND p1.getConstraint().NOT, optimize(p1.v2), NullValue(""))
+          Choice(p.getConstraint() AND p1.getConstraint().NOT, optimize(p1.v2), NullValue("c"))
         } 
         
         /*
@@ -68,7 +88,7 @@ object Choice {
          */ 
         else if (p.v2.isInstanceOf[Choice] && p.v1.isEmpty() && p.v2.asInstanceOf[Choice].v2.isEmpty() && !p.v2.asInstanceOf[Choice].v1.isEmpty()) {
           val p1 = p.v2.asInstanceOf[Choice]
-          Choice(p.getConstraint().NOT AND p1.getConstraint(), optimize(p1.v1), NullValue(""))
+          Choice(p.getConstraint().NOT AND p1.getConstraint(), optimize(p1.v1), NullValue("c"))
         } 
         
         /*
@@ -80,7 +100,7 @@ object Choice {
          */ 
         else if (p.v2.isInstanceOf[Choice] && p.v1.isEmpty() && p.v2.asInstanceOf[Choice].v1.isEmpty() && !p.v2.asInstanceOf[Choice].v2.isEmpty()) {
           val p1 = p.v2.asInstanceOf[Choice]
-          Choice(p.getConstraint().NOT AND p1.getConstraint().NOT, optimize(p1.v2), NullValue(""))
+          Choice(p.getConstraint().NOT AND p1.getConstraint().NOT, optimize(p1.v2), NullValue("c"))
         } 
         
         /*
@@ -89,7 +109,7 @@ object Choice {
 				 *  	⊥   ⊥
          */ 
         else if (p.v1.isEmpty() && p.v2.isEmpty()) {
-          NullValue("")
+          NullValue("c")
         } 
         
         /*

@@ -28,7 +28,7 @@ case class ClassDef(name: String, var fields: Map[String, OakValue], methods: Ma
   def getDefaultObject(env: Environment): ObjectValue = {
     val obj = new ObjectValue("default", this)
     fields.foreach {
-      field =>  obj.set(field._1, NullValue(""), env)
+      field =>  obj.set(field._1, NullValue("ClassDef"), env)
     }
     obj
   }

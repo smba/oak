@@ -9,6 +9,7 @@ import edu.cmu.cs.oak.core.OakInterpreter
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.NullValue
 
 class Define extends InterpreterPlugin {
   
@@ -24,7 +25,9 @@ class Define extends InterpreterPlugin {
     val constantIdentifier = interpreter.evaluate(args(0), env)
     val constantValue = interpreter.evaluate(args(1), env)
     
-    interpreter.defineConstant( constantIdentifier.toString , constantValue )
+    //assert(constantValue != null && (!constantValue.isInstanceOf[NullValue]),  constantIdentifier.toString + args(1))
+    
+    env.defineConstant( constantIdentifier.toString , constantValue )
     
     null 
   }

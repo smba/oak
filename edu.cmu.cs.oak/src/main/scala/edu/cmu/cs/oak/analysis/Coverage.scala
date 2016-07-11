@@ -12,6 +12,7 @@ import java.nio.file.Path
 import edu.cmu.cs.oak.nodes.DNode
 import scala.util.Random
 import java.io.PrintWriter
+import scala.collection.mutable.ListBuffer
 
 class Coverage {
 
@@ -20,9 +21,12 @@ class Coverage {
 object Coverage extends App {
   
   // engine and interpreter instance for testing
-  val engine = new OakEngine()
-  val interpreter = new OakInterpreter()
+  var engine = new OakEngine()
+  var interpreter = new OakInterpreter()
 
+  val SCHOOLMATE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate")
+    val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
+  val isRelevant = (lit: StringValue) => ((lit.value contains '<') || (lit.value contains '.'))
   //val pp = new PrettyPrinter(200, 0)
 
   /**
@@ -57,6 +61,7 @@ object Coverage extends App {
     var literalSet = Set[StringValue]()
     entryPoints.foreach {
       ep => {
+        interpreter = new OakInterpreter()
         literalSet = literalSet union DNode.extractStringLiterals(loadAndExecute(ep)._2.output)
       }
     }
@@ -76,20 +81,26 @@ object Coverage extends App {
   }
   
   def getCoverage(projectPath: File, entryPoints: Seq[Path], relevant: StringValue => Boolean): (Int, Int) = {
-
-    val isRelevant = (lit: StringValue) => ((lit.value contains '<') || (lit.value contains '.'))
-    val projectLiterals = getProjectLiterals(projectPath).filter { lit => isRelevant(lit) }//.map(s => s.value)
-    val foundLiterals = findProjectLiterals(entryPoints).filter { lit => isRelevant(lit) }//.map(s => s.value)
-    //println( projectLiterals.filter { x => x.value equals "<font color='red'><center>Invalid username or password!</center></font>" }.head.file )
-    //println( foundLiterals.filter { x => x.value equals "<font color='red'><center>Invalid username or password!</center></font>" }.head.file )
+    val projectLiterals = getProjectLiterals(projectPath).filter { lit => relevant(lit) }//.map(s => s.value)
+    val foundLiterals = findProjectLiterals(entryPoints).filter { lit => relevant(lit) }//.map(s => s.value)
     println((foundLiterals intersect projectLiterals).size *1.0 / projectLiterals.size * 100)
     (foundLiterals.size, projectLiterals.size)
   }
   
-  val SCHOOLMATE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate")
-  val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
-  getSample(200, List(SCHOOLMATE, WORDPRESS), Paths.get("/home/stefan/Desktop/bener.csv"))
-  //println(getCoverage(SCHOOLMATE, List(url("schoolmate/index.php"))))
+  def getSchoolmateCoverage() {
+    var entrypoints = List(url("schoolmate/index.php"))
+    println( getCoverage(SCHOOLMATE, entrypoints, isRelevant) )
+  }
   
-
+  def getWordpressCoverage() {
+    var entrypoints = new ListBuffer[Path]()
+    entrypoints += url("wordpress/index.php")
+    entrypoints += url("wordpress/wp-admin/index.php")
+    entrypoints += url("wordpress/wp-admin/install.php")
+    println( getCoverage(WORDPRESS, entrypoints, isRelevant) )
+  }
+  
+  getSchoolmateCoverage()
+  getWordpressCoverage()
+  
 }

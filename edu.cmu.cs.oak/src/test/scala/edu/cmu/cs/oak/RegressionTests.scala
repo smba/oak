@@ -45,7 +45,14 @@ class RegressionTests extends FunSuite {
   }
 
   test("Join optimization") {
-    RegressionTest.test("testScripts/multiple.php")
+    /*
+     * Exempted from test suite
+     */
+//    RegressionTest.test("testScripts/multiple.php")
+  }
+  
+  test("Builtin functions") {
+    RegressionTest.test("testScripts/substr.php")
   }
   
   test("callbacks") {

@@ -10,6 +10,7 @@ import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.NullValue
 
 class Defined extends InterpreterPlugin {
   
@@ -21,8 +22,8 @@ class Defined extends InterpreterPlugin {
 
     /* Assert that the function has one argument */
     assert(args.size == 1)
-
-    val b = BooleanValue( (interpreter.constants.keySet contains args(0).toString.replace("\"", "")) )
+    
+    val b = BooleanValue( env.getConstant(args(0).toString.replace("\"", "")).isInstanceOf[NullValue])
   
     return b
   }

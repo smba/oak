@@ -79,29 +79,29 @@ object BranchEnv {
       val a = try {
         if (envs(0).hasChanged) {
           envs(0).lookup(variable)
-        } else { NullValue("") }
+        } else { NullValue("joinV") }
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("")
+        case vnfe: VariableNotFoundException => NullValue("Vnf")
       }
       val b = try {
         if (envs(1).hasChanged) {
           envs(1).lookup(variable)
-        } else { NullValue("") }
+        } else { NullValue("joinV") }
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("")
+        case vnfe: VariableNotFoundException => NullValue("Vnf")
       }
       if (a.isInstanceOf[NullValue] && b.isInstanceOf[NullValue]) {
-        NullValue("")
+        NullValue("joinV")
       } else {
-        Choice(constraints(0), a, b)
+        Choice.optimized(constraints(0), a, b)
       }
     } else {
-      Choice(constraints(0), try {
+      Choice.optimized(constraints(0), try {
         if (envs(0).hasChanged) {
           envs(0).lookup(variable)
-        } else { NullValue("") }
+        } else { NullValue("joinV") }
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("")
+        case vnfe: VariableNotFoundException => NullValue("Vnf")
       }, joinVariable(envs.tail, constraints.tail, variable))
     }
   }
@@ -122,21 +122,41 @@ object BranchEnv {
 
   private def joinStaticClassField(envs: List[BranchEnv], constraints: List[Constraint], className: String, fieldName: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
-      Choice(constraints(0), try {
+      Choice.optimized(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: NoSuchElementException => NullValue("")
+        case vnfe: NoSuchElementException => NullValue("joinStCF")
       }, try {
         envs(1).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: NoSuchElementException => NullValue("")
+        case vnfe: NoSuchElementException => NullValue("joinStCF")
       })
     } else {
-      Choice(constraints(0), try {
+      Choice.optimized(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: NoSuchElementException => NullValue("")
+        case vnfe: NoSuchElementException => NullValue("joinStCF")
       }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))
+    }
+  }
+  
+  private def joinConstants(envs: List[BranchEnv], constraints: List[Constraint], cname: String): OakValue = {
+    if ((envs.size == 2) && (constraints.size == 1)) {
+      Choice.optimized(constraints(0), try {
+        envs(0).getConstant(cname)
+      } catch {
+        case vnfe: NoSuchElementException => NullValue("joinC")
+      }, try {
+        envs(1).getConstant(cname)
+      } catch {
+        case vnfe: NoSuchElementException => NullValue("joinC")
+      })
+    } else {
+      Choice.optimized(constraints(0), try {
+        envs(0).getConstant(cname)
+      } catch {
+        case vnfe: NoSuchElementException => NullValue("joinC")
+      }, joinConstants(envs.tail, constraints.tail, cname))
     }
   }
 
@@ -193,7 +213,12 @@ object BranchEnv {
       }
     }
     val updatedFieldz = updatedFields.map { case (k, m) => (k -> m.toMap) }.toMap
+    
+    // 6) constants
+    
+    val updated  = envs.map { e => e.constants.keySet }.fold(Set[String]())(_ union _).toSet
+    val constants = updated.map { cname => (cname -> joinConstants(envs, constraints, cname))}.toMap
 
-    new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals)
+    new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals, constants)
   }
 }

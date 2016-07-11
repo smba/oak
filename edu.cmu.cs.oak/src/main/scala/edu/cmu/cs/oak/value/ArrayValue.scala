@@ -31,7 +31,7 @@ class ArrayValue extends OakValue {
       return try {
         env.extract(array.get(index).get)
       } catch {
-        case vnfe: VariableNotFoundException => SymbolValue("", OakHeap.getIndex(), SymbolFlag.DUMMY)
+        case vnfe: VariableNotFoundException => null
       }
     } else {
       throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")

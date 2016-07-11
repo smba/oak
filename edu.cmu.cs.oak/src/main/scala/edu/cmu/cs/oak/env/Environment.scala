@@ -58,6 +58,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   //  val references = collection.mutable.Map[OakVariable, OakValue]()
   val references = collection.mutable.Map[OakVariable, OakValue]()
 
+  
+  /**
+   * Map of constants that are defined during the execution
+   *  of a PHP script.
+   */
+  val constants = collection.mutable.Map[String, OakValue]()
+  
   /**
    * Map of global variable identifiers and variable references.
    */
@@ -79,6 +86,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
+    
     changed = true
     if (variables.contains(name)) {
       references.put(variables.get(name).get, value)
@@ -283,7 +291,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @return FunctionDef instance to be stored by the Intepreter
    */
   def defineFunction(fu: AbstractFunction): FunctionDef = {
+    
+    
     val f = fu.asInstanceOf[Function]
+    
     val hasReturn = f._hasReturn //Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
     val returnsRef = f._isReturnsReference //Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()
@@ -339,6 +350,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
         }
       }
     }
+    
+    // 6) Constants
+    joinResult.joinedConstants.foreach {
+      case (n, c) => this.defineConstant(n, c)
+    }
   }
 
   def getDelta(): Delta = {
@@ -359,7 +375,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.staticClassFields.foreach {
       case (m1, m2) => t += (m1 -> m2.toMap)
     }
-    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, t, this.globalVariables.toSet)
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, t, this.globalVariables.toSet, constants.toMap)
   }
 
   //  def weaveReferences(that: Environment) {
@@ -393,6 +409,32 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       this.staticClassFields += (className -> collection.mutable.Map[String, OakValue]())
     }
     this.staticClassFields.get(className).get.put(fieldName, value)
+  }
+  
+    /**
+   * Defines a constant used during the program execution.
+   *
+   * @param name Name of the constant
+   * @param value Value of the Constant
+   */
+  def defineConstant(name: String, value: OakValue) {
+    constants.put(name, value)
+  }
+  
+   /**
+   * Defines a constant used during the program execution.
+   *
+   * @param name Name of the constant
+   * @param value Value of the Constant
+   */
+  def getConstant(name: String): OakValue = {
+    if (!constants.get(name).isEmpty) {
+      constants.get(name).get
+    } else if (parent != null) {
+      parent.getConstant(name)
+    } else {
+      NullValue("")
+    }
   }
 }
 
