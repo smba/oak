@@ -418,7 +418,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param value Value of the Constant
    */
   def defineConstant(name: String, value: OakValue) {
-    if (name equals "ABSPATH") println("ABSPATH")
     constants.put(name, value)
   }
   
@@ -434,7 +433,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else if (parent != null) {
       parent.getConstant(name)
     } else {
-      StringValue("", "", 0)//NullValue("constant "+name)
+      StringValue("", "", 0)//NullValue("not found")//
     }
   }
 }

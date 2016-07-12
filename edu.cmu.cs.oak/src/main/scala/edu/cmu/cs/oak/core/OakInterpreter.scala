@@ -137,6 +137,7 @@ import edu.cmu.cs.oak.lib.builtin.Sprintf
 import edu.cmu.cs.oak.lib.builtin.Substr
 import com.caucho.quercus.expr.UnaryBitNotExpr
 import edu.cmu.cs.oak.lib.builtin.StrReplace
+import edu.cmu.cs.oak.value.OakValueSequence
 
 class OakInterpreter extends InterpreterPluginProvider {
 
@@ -463,6 +464,7 @@ class OakInterpreter extends InterpreterPluginProvider {
     val branches = Environment.fork(env, List(condition))
 
     /* Execute both branches with the corresponding branch environments. */
+
     if (test.isInstanceOf[BooleanValue]) {
       val testB = test.asInstanceOf[BooleanValue]
       if (testB.v) {
@@ -1497,6 +1499,8 @@ class OakInterpreter extends InterpreterPluginProvider {
      */
     def applyMethod(value: OakValue, methodName: String, args: List[Expr], env: Environment): OakValue = {
 
+      if (methodName equals "apply_filters") throw new RuntimeException
+      
       value match {
         case objectValue: ObjectValue => {
           val methodCall = Call(objectValue.objectClass.name + "." + methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber))
@@ -1676,56 +1680,39 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   private def evaluateFunIncludeExpr(e: FunIncludeExpr, env: Environment): OakValue = {
-    val oldURL = this.path
-    val expr = e._expr
-    if (!(evaluate(expr, env).isInstanceOf[SymbolicValue])) {
-      val includePath = getInlcudePath(expr, env)
-      val program = try {
-        (new OakEngine).loadFromFile(includePath)
-      } catch {
-        case fnfe: FileNotFoundException => {
-          this.logger.error(includePath + " could not be found!");
-          return null
-        }
-      }
-      this.includes = this.includes.push(includePath)
-      //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), include.toString)
-      this.path = includePath
-      execute(program, env)
-
-      this.includes = this.includes.pop
-      this.path = oldURL
-    }
+    include(e._expr, env)
     null
   }
 
-  private def evaluateFunIncludeOnceExpr(e: FunIncludeOnceExpr, env: Environment): OakValue = {
+  def include(expr: Expr, env: Environment) {
     val oldURL = this.path
-    val expr = e._expr
     if (!(evaluate(expr, env).isInstanceOf[SymbolicValue])) {
-      val includePath = getInlcudePath(expr, env)
-      try {
-        val program = try {
-          (new OakEngine).loadFromFile(includePath)
-        } catch {
-          case fnfe: FileNotFoundException => {
-            this.logger.error(includePath + " could not be found!");
-            return null
+
+      val includePaths = getInlcudePath(expr, env)
+      includePaths.foreach {
+        includePath =>
+          {
+            try {
+              val program = (new OakEngine).loadFromFile(includePath)
+              this.includes = this.includes.push(includePath)
+              this.path = includePath
+              execute(program, env)
+              logger.info("Included " + includePath)
+              this.includes = this.includes.pop
+              this.path = oldURL
+            } catch {
+              case fnfe: FileNotFoundException => {
+                //this.logger.error(includePath + " could not be found!"); null
+              }
+            }
+
           }
-        }
-        if (this.includes contains includePath) {
-          return null
-        }
-        this.includes = this.includes.push(includePath)
-        //graphListener.addEdge(path.toString.substring(path.toString.lastIndexOf('/') + 1, path.toString.length()), includeOnce.toString)
-        this.path = includePath
-        execute(program, env)
-        this.path = oldURL
-        this.includes = this.includes.pop
-      } catch {
-        case fnfe: FileNotFoundException => null
       }
     }
+  }
+
+  private def evaluateFunIncludeOnceExpr(e: FunIncludeOnceExpr, env: Environment): OakValue = {
+    include(e._expr, env)
     null
   }
 
@@ -1892,30 +1879,39 @@ class OakInterpreter extends InterpreterPluginProvider {
    *
    * @return java.nio.Path includePath
    */
-  private def getInlcudePath(expr: Expr, env: Environment): Path = {
-    val s = evaluate(expr, env)
-    val path2 = s match {
-      case seq: OakValueSequence => {
-        seq.getSequence.map { v =>
-          {
+  private def getInlcudePath(expr: Expr, env: Environment): List[Path] = {
+
+    var paf = evaluate(expr, env) //
+
+    val pathsRaw = paf match {
+      case s: OakValueSequence => {
+        // Flatten all choices
+        val sequenceFlattened = s.getSequence.map {
+          v =>
             v match {
-              case c: Choice => {
-                c.getElements().filter { x => !x.isInstanceOf[NullValue] }.head
-              }
+              case c: Choice => new OakValueSequence(c.getElements.toList)
               case v: OakValue => v
             }
-          }
         }
+        val tree = Tree.construct(sequenceFlattened)
+        tree.traverse()
       }
-      case s: StringValue => List(s)
-      case n: NullValue => List()
+      case v: OakValue => List(v)
     }
-    var path = path2.mkString("").replace("\"", "")
-    if (!(path startsWith ("/"))) {
-      val current = this.path.toString
-      path = current.slice(0, current.lastIndexOf("/")) + "/" + path
+
+    val paths = pathsRaw.map {
+      paf =>
+        {
+          var path = paf.toString.replace("\"", "")
+          if (!(path startsWith ("/"))) {
+            val current = this.path.toString
+            path = /*if (!path.toString.startsWith("/")) current.slice(0, current.lastIndexOf("/")) + "/" + path else*/ path
+          }
+          Paths.get(path)
+        }
     }
-    Paths.get(path)
+    paths
+
   }
 
   private def defineFunctions(program: QuercusProgram, env: Environment) {

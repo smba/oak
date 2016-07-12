@@ -142,21 +142,9 @@ object BranchEnv {
   
   private def joinConstants(envs: List[BranchEnv], constraints: List[Constraint], cname: String): OakValue = {
     if ((envs.size == 2) && (constraints.size == 1)) {
-      Choice.optimized(constraints(0), try {
-        envs(0).getConstant(cname)
-      } catch {
-        case vnfe: NoSuchElementException => NullValue("joinC")
-      }, try {
-        envs(1).getConstant(cname)
-      } catch {
-        case vnfe: NoSuchElementException => NullValue("joinC")
-      })
+      Choice.optimized(constraints(0),envs(0).getConstant(cname), envs(1).getConstant(cname))
     } else {
-      Choice.optimized(constraints(0), try {
-        envs(0).getConstant(cname)
-      } catch {
-        case vnfe: NoSuchElementException => NullValue("joinC")
-      }, joinConstants(envs.tail, constraints.tail, cname))
+      Choice.optimized(constraints(0), envs(0).getConstant(cname), joinConstants(envs.tail, constraints.tail, cname))
     }
   }
 

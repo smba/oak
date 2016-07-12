@@ -17,6 +17,7 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
   def setV1(v1: OakValue) { this.v1 = v1 }
   def setV2(v2: OakValue) { this.v2 = v2 }
   
+  //
   def getElements(): Set[OakValue] = {
     (v1 match {
       case c: Choice => c.getElements
@@ -42,9 +43,11 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 object Choice {
   
   def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
+
     if ((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue])) {
       NullValue("optimized choice")
-    } else {
+    }
+    else {
       Choice(p, v1, v2)
     }
   }

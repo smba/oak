@@ -60,12 +60,12 @@ object OakUnitTest extends App {
   }
 
   //val env = loadAndExecute(url("testScripts/constants.php"))
-  val env = loadAndExecute(url("schoolmate/index.php"))
+  val env = loadAndExecute(url("wordpress/wp-admin/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }
   groups.map{case (k, v) => (k -> v.size)}.foreach {case (k, v) => println(k + ", " + v)}
-  val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/src/main/resources/output/oak/index.xml"))
+  val pw = new PrintWriter(new File("/home/stefan/Desktop/output2.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close
 }
