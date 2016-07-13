@@ -2,7 +2,7 @@ name := "oak" // with Quercus
 
 version := "1.0"
 
-scalaVersion := "2.10.6"
+scalaVersion := "2.11.8"
 
 // Add sources to eclipse project
 //EclipseKeys.withSource := true
@@ -15,5 +15,9 @@ libraryDependencies += "javax.servlet.jsp" % "jsp-api" % "2.2"
 libraryDependencies += "javax" % "javaee-api" % "7.0"
 
 libraryDependencies += "junit" % "junit" % "4.12"
-libraryDependencies += "org.scalacheck" % "scalacheck_2.10" % "1.13.1"
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.3.0-SNAP2"
+libraryDependencies += "org.scalacheck" % "scalacheck_2.11" % "1.13.1"
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.3.0-SNAP2"
+
+// https://mvnrepository.com/artifact/org.scala-lang/scala-xml
+libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
+
