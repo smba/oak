@@ -44,7 +44,9 @@ class Substr extends InterpreterPlugin {
           case e: ClassCastException => SymbolValue("substr", OakHeap.getIndex, SymbolFlag.FUNCTION_CALL)
         }
       }
-      case _ => SymbolValue("substr()", OakHeap.getIndex, SymbolFlag.FUNCTION_CALL)
+      case _ => {
+        s//SymbolValue("substr()", OakHeap.getIndex, SymbolFlag.FUNCTION_CALL)
+      }
     }
 
   }

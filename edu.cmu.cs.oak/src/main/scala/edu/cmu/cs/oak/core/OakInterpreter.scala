@@ -150,6 +150,9 @@ import edu.cmu.cs.oak.lib.builtin.PregReplace
 import edu.cmu.cs.oak.lib.array.Implode
 import edu.cmu.cs.oak.lib.array.Join
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.lib.builtin.PregSplit
+import edu.cmu.cs.oak.lib.builtin.PregReplace
+import edu.cmu.cs.oak.lib.builtin.PregReplace
 
 class OakInterpreter extends InterpreterPluginProvider {
 
@@ -177,7 +180,6 @@ class OakInterpreter extends InterpreterPluginProvider {
    */
   var includes = Stack[Path]()
 
-  
   val engine = new OakEngine()
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
@@ -1706,20 +1708,20 @@ class OakInterpreter extends InterpreterPluginProvider {
       includePaths.foreach {
         includePath =>
           {
-            if (includePath.toFile.exists()) {
-              try {
-                val program = this.engine.loadFromFile(includePath)
-                this.includes = this.includes.push(includePath)
-                this.path = includePath
-                execute(program, env)
-                logger.info("Included " + includePath)
-                this.includes = this.includes.pop
-                this.path = oldURL
-              } catch {
-                case fnfe: FileNotFoundException => {
-                  this.logger.error(includePath + " could not be found!"); null
-                }
-              }
+            var includePaf = includePath
+            if (!includePaf.toString.startsWith("/")) {
+              includePaf = Paths.get(this.rootPath + "/" + includePaf.toString())
+            }
+            if (includePaf.toFile.exists()) {
+              val program = this.engine.loadFromFile(includePaf)
+              this.includes = this.includes.push(includePaf)
+              this.path = includePath
+              execute(program, env)
+              logger.info("Included " + includePaf)
+              this.includes = this.includes.pop
+              this.path = oldURL
+            } else {
+              logger.error(includePaf + " is not a file!")
             }
           }
       }
@@ -1960,6 +1962,9 @@ class OakInterpreter extends InterpreterPluginProvider {
     loadPlugin(new PregReplace)
     loadPlugin(new Addslashes)
     loadPlugin(new Join)
+    loadPlugin(new Implode)
+
+    loadPlugin(new PregSplit)
     loadPlugin(new Implode)
   }
 
