@@ -23,6 +23,16 @@ import java.io.FileInputStream
  */
 class OakEngine {
 
+  private val quercus = new QuercusContext()
+
+//  def getQuercus(scriptEncoding: String, isUnicodeSemantics: Boolean): QuercusContext = {
+    quercus.setScriptEncoding("UTF-8")
+    quercus.setUnicodeSemantics(true)
+    quercus.init
+    quercus.start
+//    return quercus
+//  }
+  
   /**
    * @param path to the PHP source file to parse
    * @return QuercusProgram parsed AST
@@ -31,9 +41,9 @@ class OakEngine {
     val reader = new FileReader(path.toString)
 
     val parser = {
-      val context = OakEngine.getQuercus("UTF-8", true)
+//      val context = getQuercus("UTF-8", true)
       val pathObject = new FilePath(path.toString())
-      new QuercusParser(context, pathObject, reader)
+      new QuercusParser(quercus, pathObject, reader)
     }
     return parser.parse()
   }
@@ -49,10 +59,9 @@ class OakEngine {
     val sourcePath = new FilePath(path.getFileName.toString())
     
     // Get the Quercus context
-    val context = OakEngine.getQuercus("UTF-8", true)
-    context.setPwd(sourcePath)
+    quercus.setPwd(sourcePath)
     
-    QuercusParser.parse(context, sourcePath, fileInputStream)
+    QuercusParser.parse(quercus, sourcePath, fileInputStream)
   }
 
   /**
@@ -62,8 +71,6 @@ class OakEngine {
   def loadFromScript(script: String): QuercusProgram = {
 
     val contentReader = new StringReader(script)
-
-    val quercus = OakEngine.getQuercus("UTF-8", true) // TODO isUnicodeSemantics
 
     /*
      * TODO Check encoding of script string and/or source file
@@ -101,13 +108,5 @@ object Bener extends App {
 
 object OakEngine {
 
-  private val quercus = new QuercusContext();
-
-  def getQuercus(scriptEncoding: String, isUnicodeSemantics: Boolean): QuercusContext = {
-    quercus.setScriptEncoding(scriptEncoding)
-    quercus.setUnicodeSemantics(isUnicodeSemantics)
-    quercus.init
-    quercus.start
-    return quercus
-  }
+  
 }

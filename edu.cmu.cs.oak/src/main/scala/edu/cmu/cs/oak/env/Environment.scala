@@ -30,6 +30,8 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.value.NullValue
 import scala.collection.mutable.HashSet
+import edu.cmu.cs.oak.nodes.ConcatNode
+import scala.collection.mutable.AnyRefMap
 
 /**
  * Programs state and program state operations.
@@ -47,23 +49,20 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * In various contexts, variables can refer to the same value.
    * For variable reference handling {@see {@link #edu.cmu.cs.oak.env.Oa kHeap}}.
    */
-  //  val variables = collection.mutable.Map[String, OakVariable]()
-  val variables = collection.mutable.Map[String, OakVariable]()
+  val variables = AnyRefMap[String, OakValue]()
 
   /**
    * Changes in the static class fields
    */
   val staticClassFields = collection.mutable.Map[String, collection.mutable.Map[String, OakValue]]()
   
-  //  val references = collection.mutable.Map[OakVariable, OakValue]()
-  val references = collection.mutable.Map[OakVariable, OakValue]()
+  val references = AnyRefMap[OakVariable, OakValue]()
 
-  
   /**
    * Map of constants that are defined during the execution
    *  of a PHP script.
    */
-  val constants = collection.mutable.Map[String, OakValue]()
+  val constants = AnyRefMap[String, OakValue]()
   
   /**
    * Map of global variable identifiers and variable references.
@@ -89,7 +88,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     
     changed = true
     if (variables.contains(name)) {
-      references.put(variables.get(name).get, value)
+      val ref = variables.get(name).get.asInstanceOf[OakVariable]
+      references.put(ref, value)
     } else {
       val variable = OakVariable(name + OakHeap.getIndex(), name)
       references.put(variable, value)
@@ -201,7 +201,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    */
   def getRef(name: String, limitScope: Boolean = true): OakVariable = {
     if (variables.contains(name)) {
-      variables.get(name).get
+      val ref = variables.get(name).get.asInstanceOf[OakVariable]
+      ref
     } else if (parent != null) {
       parent.getRef(name)
     } else {
@@ -295,6 +296,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     
     val f = fu.asInstanceOf[Function]
     
+    
     val hasReturn = f._hasReturn //Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
     val returnsRef = f._isReturnsReference //Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()
@@ -358,7 +360,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
 
   def getDelta(): Delta = {
-    var returnMap = Map[String, OakVariable]()
+    var returnMap = AnyRefMap[String, OakValue]()
     if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
     if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
     
@@ -371,11 +373,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       }
     }
     
-    var t = Map[String, Map[String, OakValue]]()
+    var t = AnyRefMap[String, Map[String, OakValue]]()
     this.staticClassFields.foreach {
-      case (m1, m2) => t += (m1 -> m2.toMap)
+      case (m1, m2) => t.put(m1, m2.toMap)
     }
-    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables.toMap else returnMap, references.toMap, t, this.globalVariables.toSet, constants.toMap)
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap)
   }
 
   //  def weaveReferences(that: Environment) {

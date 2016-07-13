@@ -138,6 +138,18 @@ import edu.cmu.cs.oak.lib.builtin.Substr
 import com.caucho.quercus.expr.UnaryBitNotExpr
 import edu.cmu.cs.oak.lib.builtin.StrReplace
 import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.lib.array.ArrayPop
+import edu.cmu.cs.oak.lib.builtin.FuncGetArgs
+import edu.cmu.cs.oak.lib.array.ArraySlice
+import edu.cmu.cs.oak.lib.array.Next
+import edu.cmu.cs.oak.lib.array.Current
+import edu.cmu.cs.oak.lib.array.Reset
+import edu.cmu.cs.oak.lib.array.KSort
+import edu.cmu.cs.oak.lib.builtin.Addslashes
+import edu.cmu.cs.oak.lib.builtin.PregReplace
+import edu.cmu.cs.oak.lib.array.Implode
+import edu.cmu.cs.oak.lib.array.Join
+import edu.cmu.cs.oak.value.NullValue
 
 class OakInterpreter extends InterpreterPluginProvider {
 
@@ -165,6 +177,8 @@ class OakInterpreter extends InterpreterPluginProvider {
    */
   var includes = Stack[Path]()
 
+  
+  val engine = new OakEngine()
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
     // The current script is located at this.pathi
@@ -173,7 +187,6 @@ class OakInterpreter extends InterpreterPluginProvider {
     // The root directory is path.getParent()
     this.rootPath = path.getParent()
 
-    val engine = new OakEngine()
     val program = engine.loadFromFile(path)
     var env = new Environment(null, Stack[Call](), Constraint("true"))
 
@@ -972,8 +985,6 @@ class OakInterpreter extends InterpreterPluginProvider {
 
     val name = e._name.toString()
 
-    val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber))
-
     /* Retrieve the function call arguments. */
     var args = ListBuffer[Expr]()
     e._args.foreach {
@@ -983,7 +994,7 @@ class OakInterpreter extends InterpreterPluginProvider {
     /* If the function has already been called, i.e., its name
        * is contained in the call stack, we just return a symbol value
        * in order to avoid recursive function calls. */
-    if (!(env.getCalls().map(c => c.name) contains functionCall.name)) {
+    if (!(env.getCalls().map(c => c.name) contains name)) {
 
       /* If the function called refers to one implemented library function, such as
        * count($x) for arrays or concat/. for string literals, that implementation
@@ -1015,6 +1026,8 @@ class OakInterpreter extends InterpreterPluginProvider {
       /**
        * Create a new (function) environment with pre-assigned arguments
        */
+
+      val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
 
       val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
       prepareFunctionOrMethod(function, env, functionEnv, args.toList)
@@ -1399,7 +1412,7 @@ class OakInterpreter extends InterpreterPluginProvider {
             evaluate(falseExpr, env)
           }
         }
-        case _ => SymbolValue(e.toString, OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE) //throw new RuntimeException("Expression did not evaluate to BooleanExpression.")
+        case _ => Choice.optimized(Constraint(test.toString), evaluate(trueExpr, env), evaluate(falseExpr, env)) //throw new RuntimeException("Expression did not evaluate to BooleanExpression.")
       }
     }
   }
@@ -1458,7 +1471,8 @@ class OakInterpreter extends InterpreterPluginProvider {
       } else {
         val method = classDef.getMethods(cme._methodName.toString)
         val args = cme._args
-        val classMethodCall = Call(cme._className + "::" + cme._methodName.toString(), (Paths.get(cme._location.getFileName), cme._location.getLineNumber))
+
+        val classMethodCall = Call(cme._className + "::" + cme._methodName.toString(), (Paths.get(cme._location.getFileName), cme._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
         //
         val cmEnv = Environment.createFunctionEnvironment(env, classMethodCall)
         prepareFunctionOrMethod(method, env, cmEnv, args.toList)
@@ -1500,10 +1514,10 @@ class OakInterpreter extends InterpreterPluginProvider {
     def applyMethod(value: OakValue, methodName: String, args: List[Expr], env: Environment): OakValue = {
 
       if (methodName equals "apply_filters") throw new RuntimeException
-      
+
       value match {
         case objectValue: ObjectValue => {
-          val methodCall = Call(objectValue.objectClass.name + "." + methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber))
+          val methodCall = Call(objectValue.objectClass.name + "." + methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
           if (!(env.getCalls().map { c => c.name } contains methodCall.name)) {
             val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
             prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
@@ -1525,7 +1539,7 @@ class OakInterpreter extends InterpreterPluginProvider {
           val r2 = applyMethod(choice.v2, methodName, args, branches(1))
           env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
           Choice.optimized(choice.p, r1, r2)
-          //          NullValue("")
+          //                    NullValue("")
         }
         case _ => {
           NullValue("applyMethod02") //SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
@@ -1692,20 +1706,21 @@ class OakInterpreter extends InterpreterPluginProvider {
       includePaths.foreach {
         includePath =>
           {
-            try {
-              val program = (new OakEngine).loadFromFile(includePath)
-              this.includes = this.includes.push(includePath)
-              this.path = includePath
-              execute(program, env)
-              logger.info("Included " + includePath)
-              this.includes = this.includes.pop
-              this.path = oldURL
-            } catch {
-              case fnfe: FileNotFoundException => {
-                //this.logger.error(includePath + " could not be found!"); null
+            if (includePath.toFile.exists()) {
+              try {
+                val program = this.engine.loadFromFile(includePath)
+                this.includes = this.includes.push(includePath)
+                this.path = includePath
+                execute(program, env)
+                logger.info("Included " + includePath)
+                this.includes = this.includes.pop
+                this.path = oldURL
+              } catch {
+                case fnfe: FileNotFoundException => {
+                  this.logger.error(includePath + " could not be found!"); null
+                }
               }
             }
-
           }
       }
     }
@@ -1725,6 +1740,7 @@ class OakInterpreter extends InterpreterPluginProvider {
   }
 
   def evaluate(e: Expr, env: Environment): OakValue = {
+
     e match {
       case e: LiteralExpr => {
         evaluateLiteralExpr(e, env)
@@ -1879,7 +1895,7 @@ class OakInterpreter extends InterpreterPluginProvider {
    *
    * @return java.nio.Path includePath
    */
-  private def getInlcudePath(expr: Expr, env: Environment): List[Path] = {
+  def getInlcudePath(expr: Expr, env: Environment): List[Path] = {
 
     var paf = evaluate(expr, env) //
 
@@ -1893,8 +1909,11 @@ class OakInterpreter extends InterpreterPluginProvider {
               case v: OakValue => v
             }
         }
+
         val tree = Tree.construct(sequenceFlattened)
-        tree.traverse()
+        val paths = new ListBuffer[OakValueSequence]()
+        tree.plainTraverse(paths)
+        paths.toList
       }
       case v: OakValue => List(v)
     }
@@ -1903,14 +1922,10 @@ class OakInterpreter extends InterpreterPluginProvider {
       paf =>
         {
           var path = paf.toString.replace("\"", "")
-          if (!(path startsWith ("/"))) {
-            val current = this.path.toString
-            path = /*if (!path.toString.startsWith("/")) current.slice(0, current.lastIndexOf("/")) + "/" + path else*/ path
-          }
           Paths.get(path)
         }
     }
-    paths
+    paths // TODO remove duplicates
 
   }
 
@@ -1935,6 +1950,17 @@ class OakInterpreter extends InterpreterPluginProvider {
     loadPlugin(new CallUserFuncArray)
     loadPlugin(new Substr)
     loadPlugin(new StrReplace)
+    loadPlugin(new ArrayPop)
+    loadPlugin(new ArraySlice)
+    loadPlugin(new Current)
+    loadPlugin(new Next)
+    loadPlugin(new Reset)
+    loadPlugin(new KSort)
+    loadPlugin(new FuncGetArgs)
+    loadPlugin(new PregReplace)
+    loadPlugin(new Addslashes)
+    loadPlugin(new Join)
+    loadPlugin(new Implode)
   }
 
   /**

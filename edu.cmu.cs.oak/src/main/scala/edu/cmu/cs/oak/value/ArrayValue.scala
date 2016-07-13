@@ -12,9 +12,15 @@ import scala.collection.mutable.LinkedHashMap
  */
 class ArrayValue extends OakValue {
 
-  val array = LinkedHashMap[OakValue, OakVariable]()
+  var array = LinkedHashMap[OakValue, OakVariable]()
+  
+  var current = 0
 
   def set(index: OakValue, value: OakValue, env: Environment) {
+    
+    // initialize internal pointer (key)
+    if (current == null) current = 1
+    
     val ref = if (array.keySet.contains(index)) {
       this.getRef(index)
     } else {
@@ -22,6 +28,41 @@ class ArrayValue extends OakValue {
     }
     array.put(index, ref)
     env.insert(ref, value)
+  }
+  
+  def getCurrent(): OakVariable = {
+    if (array.size == 0) {
+      null
+    } else {
+      val key = array.keys.toList(current)
+      return  array.get(key).get
+    }
+  }
+  
+  def getNext(): OakVariable = {
+    if (array.size == 0) {
+      null
+    } else {
+      val key = array.keys.toList(current + 1)
+      return  array.get(key).get
+    }
+  }
+  
+  def reset() {
+    current = if (array.size == 0) 0 else 1
+  }
+  
+  def pop(): OakValue = {
+    if (array.size == 0) {
+      NullValue("Array is already empty (pop)")
+    } else {
+      val r = array.get( array.keys.toList.reverse.head ).get
+      
+      this.reset() // http://php.net/manual/en/function.array-pop.php
+      
+      array = array.slice(0, array.size - 1)
+      r
+    }
   }
 
   def getSize(): Int = array.size

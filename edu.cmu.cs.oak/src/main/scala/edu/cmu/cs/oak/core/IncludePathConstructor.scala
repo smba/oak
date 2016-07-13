@@ -5,19 +5,15 @@ import scala.collection.mutable.Stack
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
+import scala.collection.mutable.ListBuffer
 
-object IncludePathConstructor extends App {
-
-  val seq = new OakValueSequence(List(NullValue("1"), NullValue("2"), new OakValueSequence(List(NullValue("1"), NullValue("2"))), NullValue("4"), new OakValueSequence(List(NullValue("44"), NullValue("66")))))
-
-  val tri = Tree.construct(seq.getSequence)
-  println(tri.traverse())
-}
 
 class Tree(value: OakValue) {
 
   var children = List[Tree]()
 
+  override def toString = value.toString
+  
   def addLeave(value: OakValue) {
     children.size match {
       case 0 => children = new Tree(value) :: children
@@ -31,22 +27,18 @@ class Tree(value: OakValue) {
       case _ => children.foreach { c => c.addTrees(values) }
     }
   }
-
-  def traverse(stack: Stack[OakValue] = Stack[OakValue]()): List[OakValueSequence] = {
+  
+  def plainTraverse(paths: ListBuffer[OakValueSequence], stack: Stack[OakValue] = Stack[OakValue]()) {
     stack.push(value)
-    val list = children.size match {
-      case 0 => return List(new OakValueSequence(stack.reverse.toList.slice(1, stack.size)))
-      case _ => {
-        var list = List[OakValueSequence]()
-        children.foreach { c =>
-          list ++= c.traverse(stack)
-        }
-        list
+    children.size match {
+      case 0 => {
+        paths.append( new OakValueSequence(stack.reverse.toList.slice(1, stack.size)))
       }
+      case _ => children.foreach { c => c.plainTraverse(paths, stack)  }
     }
     stack.pop
-    list
   }
+
 }
 
 object Tree {

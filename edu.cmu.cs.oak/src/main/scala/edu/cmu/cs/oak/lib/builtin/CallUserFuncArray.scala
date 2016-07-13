@@ -45,7 +45,7 @@ class CallUserFuncArray extends InterpreterPlugin {
 
           case a: ArrayValue => {
             val args = a.array.map { case (k, v) => env.extract(v) }.toList
-            val functionCall = Call(sv.value, (Paths.get(sv.file), sv.lineNr))
+            val functionCall = Call(sv.value, (Paths.get(sv.file), sv.lineNr), args)
             val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
             interpreter.prepareFunctionOrMethod(function, env, functionEnv, args)
             interpreter.execute(function.statement, functionEnv)
@@ -73,7 +73,7 @@ class CallUserFuncArray extends InterpreterPlugin {
           case args: ArrayValue => {
             val arguments = args.array.map { case (k, v) => env.extract(v) }.toList
 
-            val methodCall = Call(obj.objectClass.name + "." + methodName, (Paths.get(methodName.file), methodName.lineNr))
+            val methodCall = Call(obj.objectClass.name + "." + methodName, (Paths.get(methodName.file), methodName.lineNr), arguments)
             val methodEnv = Environment.createMethodEnvironment(env, obj, methodCall)
             interpreter.prepareFunctionOrMethod(method, env, methodEnv, arguments)
             interpreter.execute(method.statement, methodEnv)

@@ -20,6 +20,8 @@ import com.caucho.quercus.statement._
 import edu.cmu.cs.oak.core.OakEngine
 import edu.cmu.cs.oak.value.StringValue
 
+import scala.collection.mutable.AnyRefMap
+
 /**
  * Traverses the PHP AST provided by Quercus and retrieves all
  * string literals, regardless of reachability. Besides, additoinal

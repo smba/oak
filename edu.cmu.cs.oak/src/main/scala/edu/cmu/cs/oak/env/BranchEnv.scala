@@ -2,15 +2,15 @@ package edu.cmu.cs.oak.env
 
 import scala.collection.immutable.Map
 import scala.collection.immutable.Stack
+import scala.collection.mutable.AnyRefMap
 
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.nodes.SelectNode
 import edu.cmu.cs.oak.value.Choice
+import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakVariable
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import edu.cmu.cs.oak.value.NullValue
-import scala.collection.mutable.ListBuffer
 
 /**
  * This class encapsulates all merging functionality used for branching
@@ -41,6 +41,10 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
   }
 
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint + "]"
+
+  def definesConstant(name: String): Boolean = {
+    (this.constants.contains(name))
+  }
 
 }
 /**
@@ -113,11 +117,14 @@ object BranchEnv {
    *
    * @param envs List of BranchEnvironments of which we want to merge
    * @return mapping from OakVariables to OakValues of all BranchEnvs passed
-   *
-   *
    */
-  private def joinHeaps(envs: List[BranchEnv]): Map[OakVariable, OakValue] = {
-    envs.map { env => env.references.toMap } reduce (_ ++ _)
+  private def joinHeaps(envs: List[BranchEnv]): AnyRefMap[OakVariable, OakValue] = {
+    def merge[A <: AnyRef, B](ms: List[collection.mutable.Map[A, B]]): AnyRefMap[A, B] = {
+      val d = AnyRefMap[A, B]()      
+      ms.foreach { m => m. foreach { case (k, v) => d.put(k, v) } }
+      d
+    }
+    merge(envs.map { env => env.references })
   }
 
   private def joinStaticClassField(envs: List[BranchEnv], constraints: List[Constraint], className: String, fieldName: String): OakValue = {
@@ -139,12 +146,14 @@ object BranchEnv {
       }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))
     }
   }
-  
+
   private def joinConstants(envs: List[BranchEnv], constraints: List[Constraint], cname: String): OakValue = {
+    val c1 = if (envs(0).definesConstant(cname)) envs(0).getConstant(cname) else NullValue("")
     if ((envs.size == 2) && (constraints.size == 1)) {
-      Choice.optimized(constraints(0),envs(0).getConstant(cname), envs(1).getConstant(cname))
+      val c2 = if (envs(1).definesConstant(cname)) envs(1).getConstant(cname) else NullValue("")
+      Choice.optimized(constraints(0), c1, c2)
     } else {
-      Choice.optimized(constraints(0), envs(0).getConstant(cname), joinConstants(envs.tail, constraints.tail, cname))
+      Choice.optimized(constraints(0), c1, joinConstants(envs.tail, constraints.tail, cname))
     }
   }
 
@@ -155,7 +164,7 @@ object BranchEnv {
      * are selected and joined separately.
      */
     val updatedVariableNames = envs.map { env => env.variables.map(vv => vv._1).toSet }.foldLeft(Set[String]())(_ union _)
-    var updatedVariableMap = Map[String, OakValue]()
+    var updatedVariableMap = AnyRefMap[String, OakValue]()
     updatedVariableNames.foreach {
       name =>
         {
@@ -191,7 +200,7 @@ object BranchEnv {
           }
         }
     }
-    var updatedFields = collection.mutable.Map[String, collection.mutable.Map[String, OakValue]]()
+    var updatedFields = AnyRefMap[String, collection.mutable.Map[String, OakValue]]()
     val merged = fieldNames.foreach {
       case (c, f) => {
         if (!(updatedFields.keySet contains c)) {
@@ -200,12 +209,11 @@ object BranchEnv {
         updatedFields.get(c).get.put(f, joinStaticClassField(envs, constraints, c, f))
       }
     }
-    val updatedFieldz = updatedFields.map { case (k, m) => (k -> m.toMap) }.toMap
-    
+    val updatedFieldz = updatedFields.map { case (k, m) => (k -> m.toMap) }.asInstanceOf[collection.mutable.Map[String, Map[String, OakValue]]]
+
     // 6) constants
-    
-    val updated  = envs.map { e => e.constants.keySet }.fold(Set[String]())(_ union _).toSet
-    val constants = updated.map { cname => (cname -> joinConstants(envs, constraints, cname))}.toMap
+    val updated = envs.map { e => e.constants.keySet }.fold(Set[String]())(_ union _).toSet
+    val constants = updated.map { cname => (cname -> joinConstants(envs, constraints, cname)) }.toMap
 
     new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals, constants)
   }

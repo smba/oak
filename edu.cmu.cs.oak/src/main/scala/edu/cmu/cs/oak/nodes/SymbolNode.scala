@@ -7,7 +7,7 @@ case class SymbolNode(sv: SymbolValue) extends DNode {
   def getChildren(): Seq[DNode] = null
 
   override def toXml = {
-    <Symbolic Text={sv.toString()} />
+    <Symbolic Text={sv.e.toString()} />
   }
   
   override def ifdefy(): List[String] = List(sv.toString())
