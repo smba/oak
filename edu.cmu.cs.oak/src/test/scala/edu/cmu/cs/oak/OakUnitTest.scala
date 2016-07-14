@@ -69,8 +69,5 @@ object OakUnitTest extends App {
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output2.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close
-  
-  val pw2 = new PrintWriter(new File("/home/stefan/Desktop/output2.html"))
-  pw2.write(env._2.ifdefy().mkString("\n"))
-  pw2.close
+
 }

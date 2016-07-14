@@ -1,160 +1,37 @@
 package edu.cmu.cs.oak.core
 
-import java.io.FileNotFoundException
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import scala.annotation.elidable.ASSERTION
-import scala.collection.JavaConversions._
+import scala.collection.JavaConversions.mapAsJavaMap
 import scala.collection.JavaConversions.mapAsScalaMap
+import scala.collection.JavaConversions.setAsJavaSet
 import scala.collection.immutable.Stack
+import scala.collection.mutable.AnyRefMap
 import scala.collection.mutable.ListBuffer
-import scala.util.control.Breaks.break
-import scala.util.control.Breaks.breakable
 
 import org.slf4j.LoggerFactory
 
-import com.caucho.quercus.expr.AbstractBinaryExpr
-import com.caucho.quercus.expr.AbstractUnaryExpr
-import com.caucho.quercus.expr.ArrayGetExpr
-import com.caucho.quercus.expr.ArrayTailExpr
-import com.caucho.quercus.expr.BinaryAppendExpr
-import com.caucho.quercus.expr.BinaryAssignExpr
-import com.caucho.quercus.expr.BinaryAssignListExpr
-import com.caucho.quercus.expr.BinaryAssignRefExpr
-import com.caucho.quercus.expr.BinaryInstanceOfExpr
-import com.caucho.quercus.expr.CallExpr
-import com.caucho.quercus.expr.CallVarExpr
-import com.caucho.quercus.expr.ClassConstExpr
-import com.caucho.quercus.expr.ClassFieldExpr
-import com.caucho.quercus.expr.ClassMethodExpr
-import com.caucho.quercus.expr.ConditionalExpr
-import com.caucho.quercus.expr.ConstExpr
-import com.caucho.quercus.expr.Expr
-import com.caucho.quercus.expr.FunArrayExpr
-import com.caucho.quercus.expr.FunCloneExpr
-import com.caucho.quercus.expr.FunDieExpr
-import com.caucho.quercus.expr.FunEmptyExpr
-import com.caucho.quercus.expr.FunExitExpr
-import com.caucho.quercus.expr.FunIncludeExpr
-import com.caucho.quercus.expr.FunIncludeOnceExpr
-import com.caucho.quercus.expr.FunIssetExpr
-import com.caucho.quercus.expr.LiteralExpr
-import com.caucho.quercus.expr.LiteralLongExpr
-import com.caucho.quercus.expr.LiteralNullExpr
-import com.caucho.quercus.expr.LiteralUnicodeExpr
-import com.caucho.quercus.expr.ObjectFieldExpr
-import com.caucho.quercus.expr.ObjectFieldVarExpr
-import com.caucho.quercus.expr.ObjectMethodExpr
-import com.caucho.quercus.expr.ObjectNewExpr
-import com.caucho.quercus.expr.ObjectNewVarExpr
-import com.caucho.quercus.expr.ThisExpr
-import com.caucho.quercus.expr.ThisFieldExpr
-import com.caucho.quercus.expr.ThisFieldVarExpr
-import com.caucho.quercus.expr.ThisMethodExpr
-import com.caucho.quercus.expr.ToArrayExpr
-import com.caucho.quercus.expr.ToBooleanExpr
-import com.caucho.quercus.expr.ToLongExpr
-import com.caucho.quercus.expr.ToObjectExpr
-import com.caucho.quercus.expr.ToStringExpr
-import com.caucho.quercus.expr.UnaryMinusExpr
-import com.caucho.quercus.expr.UnaryNotExpr
-import com.caucho.quercus.expr.UnaryPostIncrementExpr
-import com.caucho.quercus.expr.UnaryPreIncrementExpr
-import com.caucho.quercus.expr.UnaryRefExpr
-import com.caucho.quercus.expr.UnarySuppressErrorExpr
-import com.caucho.quercus.expr.VarExpr
-import com.caucho.quercus.expr.VarUnsetExpr
+import com.caucho.quercus.expr._
 import com.caucho.quercus.program.QuercusProgram
-import com.caucho.quercus.statement.BlockStatement
-import com.caucho.quercus.statement.BreakStatement
-import com.caucho.quercus.statement.ClassDefStatement
-import com.caucho.quercus.statement.ClassStaticStatement
-import com.caucho.quercus.statement.ContinueStatement
-import com.caucho.quercus.statement.DoStatement
-import com.caucho.quercus.statement.EchoStatement
-import com.caucho.quercus.statement.ExprStatement
-import com.caucho.quercus.statement.ForStatement
-import com.caucho.quercus.statement.ForeachStatement
-import com.caucho.quercus.statement.FunctionDefStatement
-import com.caucho.quercus.statement.GlobalStatement
-import com.caucho.quercus.statement.IfStatement
-import com.caucho.quercus.statement.ReturnRefStatement
-import com.caucho.quercus.statement.ReturnStatement
-import com.caucho.quercus.statement.Statement
-import com.caucho.quercus.statement.StaticStatement
-import com.caucho.quercus.statement.SwitchStatement
-import com.caucho.quercus.statement.TextStatement
-import com.caucho.quercus.statement.ThrowStatement
-import com.caucho.quercus.statement.TryStatement
-import com.caucho.quercus.statement.WhileStatement
+import com.caucho.quercus.statement._
 
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Call
 import edu.cmu.cs.oak.env.ClassDef
+import edu.cmu.cs.oak.env.Constraint
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.FunctionDef
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import edu.cmu.cs.oak.lib.InterpreterPluginProvider
-import edu.cmu.cs.oak.lib.array.Count
-import edu.cmu.cs.oak.lib.array.IsArray
-import edu.cmu.cs.oak.lib.builtin.Define
-import edu.cmu.cs.oak.lib.builtin.Defined
-import edu.cmu.cs.oak.lib.builtin.DirName
-import edu.cmu.cs.oak.lib.builtin.IsSet
-import edu.cmu.cs.oak.lib.builtin.Print
-import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.NumericValue
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.OakVariable
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.SymbolicValue
-import com.caucho.quercus.expr.BinaryOrExpr
-import edu.cmu.cs.oak.env.Constraint
-import com.caucho.quercus.expr.ToDoubleExpr
-import edu.cmu.cs.oak.lib.builtin.CallUserFuncArray
-import edu.cmu.cs.oak.lib.builtin.Sprintf
-import edu.cmu.cs.oak.lib.builtin.Substr
-import com.caucho.quercus.expr.UnaryBitNotExpr
-import edu.cmu.cs.oak.lib.builtin.StrReplace
-import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.lib.array.ArrayPop
-import edu.cmu.cs.oak.lib.builtin.FuncGetArgs
-import edu.cmu.cs.oak.lib.array.ArraySlice
-import edu.cmu.cs.oak.lib.array.Next
-import edu.cmu.cs.oak.lib.array.Current
-import edu.cmu.cs.oak.lib.array.Reset
-import edu.cmu.cs.oak.lib.array.KSort
-import edu.cmu.cs.oak.lib.builtin.Addslashes
-import edu.cmu.cs.oak.lib.builtin.PregReplace
-import edu.cmu.cs.oak.lib.array.Implode
-import edu.cmu.cs.oak.lib.array.Join
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.lib.builtin.PregSplit
-import edu.cmu.cs.oak.lib.builtin.PregReplace
-import edu.cmu.cs.oak.lib.builtin.PregReplace
 
-class OakInterpreter extends InterpreterPluginProvider {
+import edu.cmu.cs.oak.nodes.DNode
+import edu.cmu.cs.oak.value._
+import java.io.PrintWriter
+import java.io.File
+import edu.cmu.cs.oak.lib.InterpreterPluginProvider
+
+class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   loadPlugins()
 
@@ -181,6 +58,7 @@ class OakInterpreter extends InterpreterPluginProvider {
   var includes = Stack[Path]()
 
   val engine = new OakEngine()
+
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
     // The current script is located at this.pathi
@@ -214,6 +92,9 @@ class OakInterpreter extends InterpreterPluginProvider {
 
     // Execute the parsed program
     execute(program, env)
+
+    //serializeSymbolicCalls()
+    serializeUndefinedCalls()
 
     (ControlCode.OK, env)
   }
@@ -1010,6 +891,8 @@ class OakInterpreter extends InterpreterPluginProvider {
         return this.accept(getPlugin(name), args.toList, path, env)
       }
 
+      val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
+
       /* Retrieve the function definition from the environment. If we fail
        * loading the function, we return with a symbol value, i.e., the called function
        * is either undefined or unimplemented. */
@@ -1017,6 +900,10 @@ class OakInterpreter extends InterpreterPluginProvider {
         Environment.getFunction(name)
       } catch {
         case ex: Exception => {
+
+          // Record function call
+          recordUndefinedCall(functionCall)
+
           return SymbolValue(e.toString, OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
         }
       }
@@ -1028,9 +915,6 @@ class OakInterpreter extends InterpreterPluginProvider {
       /**
        * Create a new (function) environment with pre-assigned arguments
        */
-
-      val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
-
       val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
       prepareFunctionOrMethod(function, env, functionEnv, args.toList)
       execute(function.getStatement, functionEnv)
@@ -1040,6 +924,11 @@ class OakInterpreter extends InterpreterPluginProvider {
       } catch {
         case e: Exception => NullValue("$return")
       }
+
+      //      returnValue match {
+      //        case s: SymbolicValue => recordDefinedSymbolicCall(functionCall, s)
+      //        case _ => {}
+      //      }
 
       env.weaveDelta(functionEnv.getDelta())
       returnValue
@@ -1486,6 +1375,12 @@ class OakInterpreter extends InterpreterPluginProvider {
           } catch {
             case e: VariableNotFoundException => NullValue("$return")
           }
+
+          //          returnValue match {
+          //            case s: SymbolicValue => recordDefinedSymbolicCall(classMethodCall, s)
+          //            case _ => {}
+          //          }
+
           returnValue
         } else {
           SymbolValue(cme.toString, OakHeap.getIndex, SymbolFlag.RECURSION)
@@ -1525,11 +1420,18 @@ class OakInterpreter extends InterpreterPluginProvider {
             prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
             execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
             env.weaveDelta(methodEnv.getDelta())
-            return try {
+            val ret = try {
               methodEnv.lookup("$return")
             } catch {
               case _: Throwable => NullValue("$return")
             }
+
+            //            ret match {
+            //              case s: SymbolicValue => recordDefinedSymbolicCall(methodCall, s)
+            //              case _ => {}
+            //            }
+
+            return ret
           } else {
             NullValue("applyMethod01")
           }
@@ -1721,7 +1623,7 @@ class OakInterpreter extends InterpreterPluginProvider {
               this.includes = this.includes.pop
               this.path = oldURL
             } else {
-              logger.error(includePaf + " is not a file!")
+              // logger.error(includePaf + " is not a file!")
             }
           }
       }
@@ -1940,34 +1842,6 @@ class OakInterpreter extends InterpreterPluginProvider {
     }
   }
 
-  private def loadPlugins() {
-    loadPlugin(new Count)
-    loadPlugin(new Print)
-    loadPlugin(new DirName)
-    loadPlugin(new Define)
-    loadPlugin(new Defined)
-    loadPlugin(new IsArray)
-    loadPlugin(new IsSet)
-    loadPlugin(new Sprintf)
-    loadPlugin(new CallUserFuncArray)
-    loadPlugin(new Substr)
-    loadPlugin(new StrReplace)
-    loadPlugin(new ArrayPop)
-    loadPlugin(new ArraySlice)
-    loadPlugin(new Current)
-    loadPlugin(new Next)
-    loadPlugin(new Reset)
-    loadPlugin(new KSort)
-    loadPlugin(new FuncGetArgs)
-    loadPlugin(new PregReplace)
-    loadPlugin(new Addslashes)
-    loadPlugin(new Join)
-    loadPlugin(new Implode)
-
-    loadPlugin(new PregSplit)
-    loadPlugin(new Implode)
-  }
-
   /**
    * Assigns passed arguments to the corresponding function context (environment).
    *
@@ -2036,7 +1910,9 @@ class OakInterpreter extends InterpreterPluginProvider {
 }
 
 object OakInterpreter {
+
   var symbolSet = Set[SymbolValue]()
+
 }
 
 object SymbolFlag extends Enumeration {

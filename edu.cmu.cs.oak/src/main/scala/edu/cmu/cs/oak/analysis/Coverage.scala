@@ -25,7 +25,7 @@ object Coverage extends App {
   var interpreter = new OakInterpreter()
 
   val SCHOOLMATE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate")
-    val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
+  val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
   val isRelevant = (lit: StringValue) => ((lit.value contains '<') || (lit.value contains '.'))
   //val pp = new PrettyPrinter(200, 0)
 
@@ -92,15 +92,15 @@ object Coverage extends App {
     println( getCoverage(SCHOOLMATE, entrypoints, isRelevant) )
   }
   
-  def getWordpressCoverage() {
+  def getWordpressCoverage(): (Int, Int) = {
     var entrypoints = new ListBuffer[Path]()
-    entrypoints += url("wordpress/index.php")
+//    entrypoints += url("wordpress/index.php")
     entrypoints += url("wordpress/wp-admin/index.php")
-    entrypoints += url("wordpress/wp-admin/install.php")
-    println( getCoverage(WORDPRESS, entrypoints, isRelevant) )
+//    entrypoints += url("wordpress/wp-admin/install.php")
+    return getCoverage(WORDPRESS, entrypoints, isRelevant) 
   }
   
-  getSchoolmateCoverage()
-  getWordpressCoverage()
+  //getSchoolmateCoverage()
+  println(getWordpressCoverage())
   
 }

@@ -297,6 +297,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     val f = fu.asInstanceOf[Function]
     val s = f._name
     
+    if (s.equals("wptexturize")) {
+      println("hier")
+    }
+    
     val hasReturn = f._hasReturn //Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
     val returnsRef = f._isReturnsReference //Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()

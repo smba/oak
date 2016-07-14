@@ -45,7 +45,7 @@ class Implode extends InterpreterPlugin {
         StringValue(av.array.values.mkString(glue), "", 0)
       }
       case s: SymbolicValue => s
-      case _ => SymbolValue(env.getCalls().head.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+      case _ => pieces//SymbolValue(env.getCalls().head.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     }
 
     // TODO remove stub with implementation
