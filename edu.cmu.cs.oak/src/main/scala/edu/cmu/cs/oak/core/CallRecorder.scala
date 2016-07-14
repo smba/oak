@@ -41,7 +41,7 @@ trait CallRecorder {
       <Routines>
         {
           for (name <- undefinedCalls.keys.toSeq.sortWith(_ > _)) yield {
-            <Routine Name={ name }>
+            <Routine Name={ name } Calls = {undefinedCalls.get(name).get.size.toString}>
               {
                 for (call <- undefinedCalls.get(name).get) yield {
                   <Call File={ call.location._1.toString } Line={ call.location._2.toString }>
