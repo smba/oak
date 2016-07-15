@@ -60,7 +60,7 @@ object OakUnitTest extends App {
   }
 
   //val env = loadAndExecute(url("testScripts/constants.php"))
-  val env = loadAndExecute(url("wordpress/wp-admin/index.php"))
+  val env = loadAndExecute(url("testScripts/references01.php.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }

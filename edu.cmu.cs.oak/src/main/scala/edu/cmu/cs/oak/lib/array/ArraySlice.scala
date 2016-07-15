@@ -12,25 +12,26 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.value.IntValue
+import com.caucho.quercus.Location
 
 
 class ArraySlice extends InterpreterPlugin {
 
   override def getName(): String = "array_slice"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has two arguments */
     assert(args.size > 1) 
     
-    val array = interpreter.evaluate(args.head, env)
+    val array = args.head
     array match {
       case av: ArrayValue => {
         try {
-          val offset = interpreter.evaluate(args(1), env).asInstanceOf[IntValue].value
-          val length = if (args.size > 2) interpreter.evaluate(args(2), env).asInstanceOf[IntValue].value else av.array.size
+          val offset = args(1).asInstanceOf[IntValue].value
+          val length = if (args.size > 2) args(2).asInstanceOf[IntValue].value else av.array.size
           
           val start = if (offset < 0) av.array.size - offset else offset
           val end = if (length > 0) if (start + length > av.array.size) av.array.size else length else av.array.size + length

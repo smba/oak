@@ -595,5 +595,7 @@ object Environment {
       case nsee: NoSuchElementException => throw nsee
     }
   }
+  
+  def containsFunction(name: String) = !funcs.get(name).isEmpty
 
 }

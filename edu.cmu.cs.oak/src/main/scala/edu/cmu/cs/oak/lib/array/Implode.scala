@@ -17,23 +17,24 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
+import com.caucho.quercus.Location
 
 class Implode extends InterpreterPlugin {
 
   override def getName(): String = "implode"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has been o*/
     assert(args.size > 0)
-    val pieces = interpreter.evaluate( args(if (args.size == 1) 0 else 1), env)
+    val pieces = args(if (args.size == 1) 0 else 1)
     
     val glue = if (args.size == 1) {
       "" 
     } else { 
-      val p = interpreter.evaluate( args(1), env) 
+      val p = args(1)
       p match { 
         case null => "" 
         case _ => p.toString()
@@ -49,7 +50,7 @@ class Implode extends InterpreterPlugin {
     }
 
     // TODO remove stub with implementation
-    return interpreter.evaluate(args(2), env)
+    return args(2)
   }
 
 }

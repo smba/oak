@@ -13,12 +13,13 @@ import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
+import com.caucho.quercus.Location
 
 class DirName extends InterpreterPlugin {
 
   override def getName(): String = "dirname"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
@@ -33,9 +34,9 @@ class DirName extends InterpreterPlugin {
       }
     } else if (args.head.toString endsWith(")")) {
       try {
-        val arg = interpreter.evaluate(args.head, env).toString
+        val arg = args.head.toString
         val dirname = arg.substring(0, arg.lastIndexOf("/"))
-        return StringValue(dirname, args.head._location.getFileName(), args.head._location.getLineNumber())
+        return StringValue(dirname, loc.getFileName(), loc.getLineNumber())
       } catch {
         case _ : Throwable => SymbolValue("", OakHeap.getIndex, null)
       }
@@ -43,7 +44,7 @@ class DirName extends InterpreterPlugin {
       try {
         val arg = args.head.toString()
         val dirname = arg.substring(0, arg.lastIndexOf("/"))
-        return StringValue(dirname, args.head._location.getFileName(), args.head._location.getLineNumber())
+        return StringValue(dirname, loc.getFileName(), loc.getLineNumber())
       } catch {
         case _ : Throwable => SymbolValue("", OakHeap.getIndex, null)
       }

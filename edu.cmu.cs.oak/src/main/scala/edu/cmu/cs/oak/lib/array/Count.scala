@@ -13,18 +13,19 @@ import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.SymbolValue
+import com.caucho.quercus.Location
 
 class Count extends InterpreterPlugin {
   
   override def getName(): String = "count"
   
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr],loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     
     /* Assert that the function has only 
      * been called with exactly one argument. */
     assert(args.size == 1)
     
-    val res = provider.asInstanceOf[OakInterpreter].evaluate(args(0), env)
+    val res = args(0)
     res match {
       case a: ArrayValue => {
         return IntValue(a.getSize)

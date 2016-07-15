@@ -15,21 +15,22 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
 import java.util.regex.PatternSyntaxException
+import com.caucho.quercus.Location
 
 class StrReplace extends InterpreterPlugin {
 
   override def getName(): String = "str_replace"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has been o*/
     assert(args.size < 5 && args.size > 1, args.size)
 
-    var search = interpreter.evaluate(args.head, env)
-    var replace = interpreter.evaluate(args(1), env)
-    var subject = interpreter.evaluate(args(2), env)
+    var search = args.head
+    var replace = args(1)
+    var subject = args(2)
 
     if (search.isInstanceOf[StringValue] && replace.isInstanceOf[StringValue] && subject.isInstanceOf[StringValue]) {
       val searchs = search.asInstanceOf[StringValue].toString()

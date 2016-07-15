@@ -28,6 +28,7 @@ import edu.cmu.cs.oak.lib.array.Current
 import edu.cmu.cs.oak.lib.array.Join
 import edu.cmu.cs.oak.lib.array.Reset
 import edu.cmu.cs.oak.lib.builtin.Sprintf
+import com.caucho.quercus.Location
 
 /**
  * Via this plugin loader the interpreter can 
@@ -61,7 +62,7 @@ trait InterpreterPluginProvider {
     plugins.put(plugin.getName, plugin)
   }
 
-  protected def accept(plugin: InterpreterPlugin, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  protected def accept(plugin: InterpreterPlugin, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     plugin.visit(this, args, loc, env)
   }
   

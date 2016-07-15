@@ -18,20 +18,21 @@ import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.lib.InterpreterPluginProvider
+import com.caucho.quercus.Location
 
 
 class Reset extends InterpreterPlugin {
 
   override def getName(): String = "reset"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has two arguments */
     assert(args.size == 1) 
     
-    interpreter.evaluate(args.head, env) match {
+    args.head match {
       case av: ArrayValue => {
         av.reset()
         return av

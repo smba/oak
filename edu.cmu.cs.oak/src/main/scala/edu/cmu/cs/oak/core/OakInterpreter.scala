@@ -888,7 +888,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       if (getPlugins.contains(name)) {
 
         /* The library function plugin visits and evaluates the expression. */
-        return this.accept(getPlugin(name), args.toList, path, env)
+        return this.accept(getPlugin(name), args.map(e => evaluate(e, env)).toList, e._location, env)
       }
 
       val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))

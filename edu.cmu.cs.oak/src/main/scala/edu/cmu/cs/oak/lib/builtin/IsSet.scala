@@ -10,12 +10,13 @@ import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.OakValue
+import com.caucho.quercus.Location
 
 class IsSet extends InterpreterPlugin {
 
   override def getName(): String = "isset"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 

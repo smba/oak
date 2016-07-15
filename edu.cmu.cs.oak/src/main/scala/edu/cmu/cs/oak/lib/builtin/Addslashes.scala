@@ -15,12 +15,13 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
 import java.util.regex.PatternSyntaxException
+import com.caucho.quercus.Location
 
 class Addslashes extends InterpreterPlugin {
 
   override def getName(): String = "addslashes"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
@@ -28,7 +29,7 @@ class Addslashes extends InterpreterPlugin {
     assert(args.size == 1)
 
     // TODO remove stub with implementation
-    return interpreter.evaluate(args.head, env)    
+    return args.head   
   }
 
 }

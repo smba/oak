@@ -12,20 +12,21 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.value.IntValue
+import com.caucho.quercus.Location
 
 
 class ArrayPop extends InterpreterPlugin {
 
   override def getName(): String = "array_pop"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has two arguments */
     assert(args.size == 1) 
     
-    val array = interpreter.evaluate(args.head, env)
+    val array = args.head
     
     array match {
       case av: ArrayValue => {

@@ -10,6 +10,7 @@ import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.lib.InterpreterPluginProvider
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.nodes.DNode
+import com.caucho.quercus.Location
 
 
 // FIXME TODO Formatting
@@ -17,16 +18,16 @@ class Sprintf extends InterpreterPlugin {
 
   override def getName(): String = "sprintf"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has been o*/
     //assert(args.size == 1)
     
-    val value = interpreter.evaluate(args.head, env)
+    val value = args.head
 
-    env.addOutput( DNode.createDNode(value, location = args.head._location) )
+    env.addOutput( DNode.createDNode(value, loc) )
 
     return IntValue(1)
   }

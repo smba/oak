@@ -12,12 +12,13 @@ import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.BooleanValue
+import com.caucho.quercus.Location
 
 class Defined extends InterpreterPlugin {
   
   override def getName(): String = "defined"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 

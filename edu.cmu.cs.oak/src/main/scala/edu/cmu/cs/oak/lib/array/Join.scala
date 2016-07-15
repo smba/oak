@@ -17,19 +17,20 @@ import edu.cmu.cs.oak.value.SymbolicValue
 import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
+import com.caucho.quercus.Location
 
 class Join extends InterpreterPlugin {
 
   override def getName(): String = "join"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has been o*/
     assert(args.size > 0)
-    val pieces = interpreter.evaluate( args(if (args.size == 1) 0 else 1), env)
-    val glue = if (args.size == 1) "" else interpreter.evaluate( args(1), env).toString()
+    val pieces = args(if (args.size == 1) 0 else 1)
+    val glue = if (args.size == 1) "" else args(1).toString()
     
     return pieces match {
       case av: ArrayValue => {
@@ -39,7 +40,7 @@ class Join extends InterpreterPlugin {
       case _ => SymbolValue(env.getCalls().head.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     }
 
-    return interpreter.evaluate(args(2), env)
+    return args(2)
   }
 
 }

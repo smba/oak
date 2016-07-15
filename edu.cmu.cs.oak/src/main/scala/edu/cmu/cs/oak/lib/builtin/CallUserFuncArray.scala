@@ -20,19 +20,20 @@ import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.SymbolValue
+import com.caucho.quercus.Location
 
 class CallUserFuncArray extends InterpreterPlugin {
 
   override def getName(): String = "call_user_func_array"
 
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has two arguments */
     assert(args.size == 2)
 
-    val callback = interpreter.evaluate(args.head, env)
+    val callback = args.head
     val param_arr = args.last
 
     val rv = callback match {
@@ -40,7 +41,7 @@ class CallUserFuncArray extends InterpreterPlugin {
       // Case 1: Callback function
       case sv: StringValue => {
         val function = Environment.getFunction(sv.value)
-        val argsE = interpreter.evaluate(param_arr, env)
+        val argsE = param_arr
         argsE match {
 
           case a: ArrayValue => {
@@ -68,7 +69,7 @@ class CallUserFuncArray extends InterpreterPlugin {
         val methodName = av.get(IntValue(1), env).asInstanceOf[StringValue] // StringValue
 
         val method = obj.getClassDef().getMethods(methodName.value)
-        val args = interpreter.evaluate(param_arr, env)
+        val args = param_arr
         args match {
           case args: ArrayValue => {
             val arguments = args.array.map { case (k, v) => env.extract(v) }.toList

@@ -11,11 +11,12 @@ import edu.cmu.cs.oak.lib.InterpreterPlugin
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.BooleanValue
 import edu.cmu.cs.oak.value.OakValue
+import com.caucho.quercus.Location
 
 class IsArray extends InterpreterPlugin {
   override def getName(): String = "is_array"
   
-  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     
     
     
@@ -23,7 +24,7 @@ class IsArray extends InterpreterPlugin {
      * been called with exactly one argument. */
     assert(args.size == 1)
     
-    val v = provider.asInstanceOf[OakInterpreter].evaluate(args(0), env)
+    val v = args(0)
     return BooleanValue(v match {
       case a: ArrayValue => true
       case _ => false
