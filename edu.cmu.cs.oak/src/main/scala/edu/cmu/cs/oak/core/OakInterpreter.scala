@@ -78,14 +78,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * required libraries.
      */
     try {
-      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.addToGlobal("$_SERVER")
-      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+      //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      //      env.addToGlobal("$_SERVER")
+      //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
     } catch {
       case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
     }
@@ -124,7 +124,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     val valueX = value match {
       case sv: StringValue => sv
       case ov: OakVariable => env.extract(ov)
-      case a: ArrayValue => throw new RuntimeException("Can't echo an entire array.")
+      case a: ArrayValue => throw new RuntimeException("Can't echo an entire array (" + expr + ").")
       case _ => value
     }
     env.addOutput(DNode.createDNode(valueX, stmt._location))
@@ -1076,6 +1076,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   private def evaluateBinaryAssignExpr(e: BinaryAssignExpr, env: Environment): OakValue = {
     val name = e._var
     val expr = e._value
+
     return name match {
 
       /* name is a variable */
@@ -1117,64 +1118,88 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       /**
        * Assignment to array field:
        *
-       * $<arrayName>..[<Expr>] = <Expr>
+       * $<arrayName>..[<Expr>]* = <Expr>
        */
       case a: ArrayGetExpr => {
-        val indexRaw = evaluate(a._index, env)
-        val index = indexRaw match {
-          case s: StringValue => {
-            s.setLocation(null)
-            s
-          }
-          case _ => indexRaw
-        }
 
-        /* Utility, transfer names with $xxx[i] to $xxx */
-        val pattern = "\\](\\s|\\d|[^(\\[|\\])])*\\[".r
-        val arrayValueName = try {
-          (pattern replaceFirstIn (name.toString.reverse, "")).reverse
-        } catch {
-          case t: Throwable => throw new RuntimeException("Could not determine array name")
-        }
-        /* Check if there is already a variable with name 
-               * name stored in the environment. If so, use this
-               * value. Otherwise, 
-               * 	+ create a new array value and
-               * 	+ assign expr to it with key index, named name[index]
-               *  + update the array variable name in the environment.
-               * */
+        /* Gets the list of array expression indices, e.g.
+         * get_array_indices("$array[0]['a'][$b]") will return List('0', 'a', '$c') 
+         */
+        val get_array_indices = (e: String) => e.split("\\[").tail.map(s => s.slice(0, s.size - 1).replaceAll("\"", "")).toList
 
-        try {
-          env.lookup(arrayValueName) match {
-            case av: ArrayValue => {
-              val reference = if (av.array.keySet contains index) {
-                av.getRef(index)
+        /* Gets the identifier of the array, e.g.
+         * get_array_name("$array[0]['a'][$b]") will return "array"
+         */
+        val get_array_name = (e: String) => ("\\](\\s|\\d|[^(\\[|\\])])*\\[".r replaceAllIn (e.toString.reverse, "")).reverse
+
+        val value = evaluate(expr, env)
+        val array_name = get_array_name(a.toString)
+        
+        val array_indices = get_array_indices(a.toString).map {
+          i =>
+            {
+              if (i.startsWith("$")) {
+                env.lookup(i)
               } else {
-                val ref = OakVariable("arrayValue", arrayValueName + OakHeap.getIndex())
-                av.setRef(index, ref)
-                ref
+                try {
+                  IntValue(i.toLong)
+                } catch {
+                  case e: Exception => StringValue(i, "", 0)
+                }
               }
-              env.lookup(arrayValueName).asInstanceOf[ArrayValue].setRef(index, reference)
-              env.insert(reference, evaluate(expr, env))
             }
-            case n: NullValue => n
-            case null => NullValue("evaluateBinaryAssignExpr01")
-            case sym: SymbolicValue => {
+        }
 
+        /**
+         * Returns the reference to the next to last element, the array value to
+         * store the <expr> in.
+         * @param ref 			Reference to the variable $array
+         * @param indices		List of indices
+         *
+         * @return Reference to the array value to manipulate
+         */
+        def recursive_array_lookup(ref: OakVariable, indices: List[OakValue]): OakVariable = {
+          indices.size match {
+            case 1 => ref
+            case _ => env.extract(ref) match {
+              case av: ArrayValue => {
+                if (!av.hasKey(indices.head)) {
+                  val temp_ref = OakVariable(array_name + OakHeap.getIndex(), "")
+                  env.insert(temp_ref, new ArrayValue())
+                  av.setRef(indices.head, temp_ref)
+                }
+                recursive_array_lookup(av.getRef(indices.head), indices.tail)
+              }
             }
-          }
-        } catch {
-          // Array Value does not exist yet
-          case ex: VariableNotFoundException => {
-            val a = new ArrayValue()
-            a.set(index, evaluate(expr, env), env)
-            env.update(arrayValueName, a)
-            a
+
           }
         }
-        return null
-      }
+        val array_reference_first = try {
+          env.getRef(array_name, limitScope = false)
+        } catch {
+          case vnfe: VariableNotFoundException => {
+            val newRef = OakVariable(array_name + OakHeap.getIndex(), "")
+            env.insert(newRef, new ArrayValue())
+            env.setRef(array_name, newRef)
+            newRef
+          }
+        }
+        val array_reference_last = recursive_array_lookup(array_reference_first, array_indices)
+        val av = env.extract(array_reference_last)
+        
+        av match {
+          case av: ArrayValue => {
+            av.set(array_indices.last, value, env)
+          }
+          case _ => {
+            // FIXME What about Choices?
+          }
+        }
+        
 
+        null
+      }
+ 
       /**
        * Assignment to object field (inside method declaration):
        *  $this -> <fieldName> = <Expr>
@@ -1243,7 +1268,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
             env.update(name, array)
           }
           case _ => {
-            env.update(name, evaluate(expr, env))
+            // $abc[] = xyyz;
+            val av = new ArrayValue()
+            av.set(IntValue(0), evaluate(expr, env), env)
+            env.update(name, av)
+            return null
           }
         }
         null

@@ -99,5 +99,7 @@ class ArrayValue extends OakValue {
     av
   }
   
+  def hasKey(kc: OakValue) = this.array.contains(kc)
+  
   override def isEmpty() = (array.size == 0)
 }

@@ -29,6 +29,9 @@ import edu.cmu.cs.oak.lib.array.Join
 import edu.cmu.cs.oak.lib.array.Reset
 import edu.cmu.cs.oak.lib.builtin.Sprintf
 import com.caucho.quercus.Location
+import edu.cmu.cs.oak.lib.builtin.IsNull
+import edu.cmu.cs.oak.lib.builtin.IsObject
+import edu.cmu.cs.oak.lib.builtin.IsString
 
 /**
  * Via this plugin loader the interpreter can 
@@ -95,6 +98,9 @@ trait InterpreterPluginProvider {
     loadPlugin(new Implode)
     loadPlugin(new PregSplit)
     loadPlugin(new Implode)
+    loadPlugin(new IsNull)
+    loadPlugin(new IsString)
+    loadPlugin(new IsObject)
   }
 
 }

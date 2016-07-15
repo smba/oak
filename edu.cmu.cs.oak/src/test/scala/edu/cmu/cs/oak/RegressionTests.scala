@@ -22,6 +22,7 @@ class RegressionTests extends FunSuite {
   
   test("arrays") {
     RegressionTest.test("testScripts/arrayValues01.php")
+    RegressionTest.test("testScripts/nestedArrays.php")
   }
   
   test("References") {
