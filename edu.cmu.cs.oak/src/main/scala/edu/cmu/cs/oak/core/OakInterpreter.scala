@@ -78,14 +78,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * required libraries.
      */
     try {
-      //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      //      env.addToGlobal("$_SERVER")
-      //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_SERVER")
+      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
     } catch {
       case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
     }
@@ -93,7 +93,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     // Execute the parsed program
     execute(program, env)
 
-    //serializeSymbolicCalls()
+    serializeSymbolicCalls()
     serializeUndefinedCalls()
 
     (ControlCode.OK, env)
@@ -364,23 +364,28 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     if (test.isInstanceOf[BooleanValue]) {
       val testB = test.asInstanceOf[BooleanValue]
       if (testB.v) {
-        execute(trueBlock, branches(0))
+        execute(trueBlock, branches.head)
+        env.weaveDelta(branches.head.getDelta)
       } else {
         try {
-          execute(falseBlock, branches(1))
+          execute(falseBlock, branches.last)
+          env.weaveDelta(branches.last.getDelta)
         } catch {
-          case e: Throwable => branches(1)
+          case e: Throwable => branches.last // ?
         }
       }
     } else {
-      execute(trueBlock, branches(0))
+      execute(trueBlock, branches.head)
       try {
-        execute(falseBlock, branches(1))
+        execute(falseBlock, branches.last)
       } catch {
-        case e: Throwable => branches(1)
+        case e: Throwable => {
+          env.weaveDelta(branches.head.getDelta)
+          return ControlCode.OK
+        }
       }
+      env.weaveDelta(BranchEnv.join(List(branches.head, branches.last), List(condition)))
     }
-    env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(condition)))
     return ControlCode.OK
   }
 
@@ -1134,7 +1139,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
         val value = evaluate(expr, env)
         val array_name = get_array_name(a.toString)
-        
+
         val array_indices = get_array_indices(a.toString).map {
           i =>
             {
@@ -1162,6 +1167,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           indices.size match {
             case 1 => ref
             case _ => env.extract(ref) match {
+              case vref: OakVariable => {
+                recursive_array_lookup(vref, indices)
+              }
               case av: ArrayValue => {
                 if (!av.hasKey(indices.head)) {
                   val temp_ref = OakVariable(array_name + OakHeap.getIndex(), "")
@@ -1169,6 +1177,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
                   av.setRef(indices.head, temp_ref)
                 }
                 recursive_array_lookup(av.getRef(indices.head), indices.tail)
+              }
+              case n: AnyRef => {
+                null
               }
             }
 
@@ -1184,9 +1195,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
             newRef
           }
         }
+        
         val array_reference_last = recursive_array_lookup(array_reference_first, array_indices)
         val av = env.extract(array_reference_last)
-        
+
         av match {
           case av: ArrayValue => {
             av.set(array_indices.last, value, env)
@@ -1195,11 +1207,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
             // FIXME What about Choices?
           }
         }
-        
 
         null
       }
- 
+
       /**
        * Assignment to object field (inside method declaration):
        *  $this -> <fieldName> = <Expr>
