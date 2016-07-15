@@ -75,7 +75,15 @@ class ArrayValue extends OakValue {
         case vnfe: VariableNotFoundException => null
       }
     } else {
-      throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.")
+      return if (index.isInstanceOf[IntValue]) {
+        try {
+         env.extract(array.values.toList(index.asInstanceOf[IntValue].value.toInt))
+        } catch {
+          case e: Exception => throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.");
+        }
+      } else {
+        null
+      }
     }
   }
   

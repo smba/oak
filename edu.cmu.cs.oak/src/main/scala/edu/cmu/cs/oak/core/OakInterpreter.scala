@@ -77,18 +77,18 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    try {
-      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.addToGlobal("$_SERVER")
-      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-    } catch {
-      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    }
+    //    try {
+    //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //      env.addToGlobal("$_SERVER")
+    //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+    //    } catch {
+    //      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
+    //    }
 
     // Execute the parsed program
     execute(program, env)
@@ -944,10 +944,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   private def evaluateFunArrayExpr(arrayExpr: FunArrayExpr, env: Environment): OakValue = {
-    val valueExprList = arrayExpr._values
+    val keys = arrayExpr._keys.toList
+    val values = arrayExpr._values.toList
+
+    assert(keys.size == values.size)
     val array = new ArrayValue()
-    (valueExprList zipWithIndex).foreach {
-      case (v: Expr, i: Int) => array.set(IntValue(i), evaluate(v, env), env)
+    for (i <- 0 to keys.size - 1) {
+      array.set(if (keys(i) != null) evaluate(keys(i), env) else IntValue(i), evaluate(values(i), env), env)
     }
     array
   }
@@ -1144,7 +1147,16 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           i =>
             {
               if (i.startsWith("$")) {
-                env.lookup(i)
+                env.lookup(i) match {
+                  case sv: StringValue => {
+
+                    /* Since this StringValue is used by the ArrayValue internally, 
+                      * we omit the location information. */
+                    sv.setLocation(null)
+                    sv
+                  }
+                  case ov: OakValue => ov
+                }
               } else {
                 try {
                   IntValue(i.toLong)
@@ -1195,7 +1207,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
             newRef
           }
         }
-        
+
         val array_reference_last = recursive_array_lookup(array_reference_first, array_indices)
         val av = env.extract(array_reference_last)
 

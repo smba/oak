@@ -3,15 +3,11 @@
   <Concat>
     <Concat>
       <Literal Text="Unable to retrieve school name: " Length="32" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="4"/>
-      <Symbolic Text="[Symbol]"/>
+      <Symbolic Text="mysql_error()"/>
     </Concat>
     <Concat>
       <Literal Text="&lt;html&gt; &lt;head&gt; &lt;title&gt;SchoolMate - " Length="36" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="17"/>
-      <Select>
-        <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-        <Symbolic Text="[Symbol]"/>
-        <Undef/>
-      </Select>
+      <Symbolic Text="htmlspecialchars()"/>
       <Literal 
       Text="&lt;/title&gt;
  &lt;style type=&quot;text/css&quot;&gt;
@@ -253,53 +249,49 @@
  " Length="3420" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="254">
 </Literal>
     </Concat>
-    <Select>
-      <Constraint Text="($_POST[&quot;login&quot;] == 1)"/>
+    <Concat>
       <Concat>
+        <Literal Text="Unable to validate login and password with the database: " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="4"/>
+        <Symbolic Text="mysql_error()"/>
+      </Concat>
+      <Select>
+        <Constraint Text="(md5() != $result)"/>
+        <Concat> </Concat>
         <Concat>
-          <Literal Text="Unable to validate login and password with the database: " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="4"/>
-          <Symbolic Text="[Symbol]"/>
-        </Concat>
-        <Select>
-          <Constraint Text="(md5() != $result)"/>
-          <Concat> </Concat>
           <Concat>
-            <Concat>
-              <Literal Text="Unable to get user type: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="20"/>
-              <Symbolic Text="[Symbol]"/>
-            </Concat>
-            <Concat>
-              <Literal Text="Unable to get userid from users: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="27"/>
-              <Symbolic Text="[Symbol]"/>
-            </Concat>
+            <Literal Text="Unable to get user type: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="20"/>
+            <Symbolic Text="mysql_error()"/>
+          </Concat>
+          <Concat>
+            <Literal Text="Unable to get userid from users: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="27"/>
+            <Symbolic Text="mysql_error()"/>
+          </Concat>
+          <Select>
+            <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
+            <Concat> </Concat>
             <Select>
-              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
+              <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
               <Concat> </Concat>
               <Select>
-                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Teacher&quot;"/>
+                <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
                 <Concat> </Concat>
                 <Select>
-                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Substitute&quot;"/>
+                  <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
                   <Concat> </Concat>
                   <Select>
-                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Student&quot;"/>
+                    <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
                     <Concat> </Concat>
-                    <Select>
-                      <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Parent&quot;"/>
-                      <Concat> </Concat>
-                      <Concat>
-                        <Literal Text="ValidateLogin.php: Unable to determine the type of user. Please verify." Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="59"/>
-                      </Concat>
-                    </Select>
+                    <Concat>
+                      <Literal Text="ValidateLogin.php: Unable to determine the type of user. Please verify." Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="59"/>
+                    </Concat>
                   </Select>
                 </Select>
               </Select>
             </Select>
-          </Concat>
-        </Select>
-      </Concat>
-      <Concat> </Concat>
-    </Select>
+          </Select>
+        </Concat>
+      </Select>
+    </Concat>
     <Select>
       <Constraint Text="$page == 0"/>
       <Concat>
@@ -317,11 +309,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-          <Select>
-            <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-            <Symbolic Text="[Symbol]"/>
-            <Undef/>
-          </Select>
+          <Symbolic Text="htmlspecialchars()"/>
           <Literal 
           Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -362,7 +350,7 @@
 		&lt;div class='messagebox'&gt;
 		  " Length="435" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="31">
 </Literal>
-          <Symbolic Text="[Symbol]"/>
+          <Symbolic Text="mysql_result()"/>
           <Literal 
           Text="
 		&lt;/div&gt;
@@ -374,15 +362,11 @@
 		 &lt;form action='./index.php' method='post' name='login'&gt;" Length="159" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="38">
 </Literal>
         </Concat>
-        <Select>
-          <Constraint Text="($loginerror == 1)"/>
-          <Concat>
-            <Literal 
-            Text="&lt;font color='red'&gt;&lt;center&gt;Invalid username or password!&lt;/center&gt;&lt;/font&gt;" Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="42">
+        <Concat>
+          <Literal 
+          Text="&lt;font color='red'&gt;&lt;center&gt;Invalid username or password!&lt;/center&gt;&lt;/font&gt;" Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="42">
 </Literal>
-          </Concat>
-          <Concat> </Concat>
-        </Select>
+        </Concat>
         <Concat>
           <Literal 
           Text=" &lt;table width='100%' height='85%' border=0 cellspacing=0 cellpadding=0 align='center' class='y'&gt;
@@ -402,11 +386,7 @@
 		 &lt;/table&gt;
 	   &lt;input type='hidden' name='page' value='" Length="643" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="60">
 </Literal>
-          <Select>
-            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-            <Literal Text="0" Length="1" Line="0"/>
-            <Undef/>
-          </Select>
+          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="95"/>
           <Literal 
           Text="'&gt;
 	   &lt;input type='hidden' name='login'&gt;
@@ -435,7 +415,7 @@
 	  &lt;h2 class='message'&gt;Today's Message&lt;/h2&gt; &lt;br&gt;
 	   " Length="592" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="85">
 </Literal>
-          <Symbolic Text="[Symbol]"/>
+          <Symbolic Text="mysql_result()"/>
           <Literal 
           Text="
 	 &lt;/div&gt;
@@ -454,13 +434,9 @@
       <Select>
         <Constraint Text="$page == 1"/>
         <Concat>
-          <Select>
-            <Constraint Text="(($_SESSION[&quot;userid&quot;] == &quot;&quot;) || ($_SESSION[&quot;usertype&quot;] != &quot;Admin&quot;))"/>
-            <Concat>
-              <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AdminMain.php" Line="5"/>
-            </Concat>
-            <Concat> </Concat>
-          </Select>
+          <Concat>
+            <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AdminMain.php" Line="5"/>
+          </Concat>
           <Literal 
           Text="&lt;script language='JavaScript'&gt;
   function logoutAdmin()
@@ -551,11 +527,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-            <Select>
-              <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-              <Symbolic Text="[Symbol]"/>
-              <Undef/>
-            </Select>
+            <Symbolic Text="htmlspecialchars()"/>
             <Literal 
             Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -610,17 +582,13 @@
 
    &lt;input type='hidden' name='page2' value='" Length="2313" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AdminMain.php" Line="117">
 </Literal>
-            <Symbolic Text="[Symbol]"/>
+            <Symbolic Text="$_POST"/>
             <Literal 
             Text="'&gt;
    &lt;input type='hidden' name='logout'&gt;
    &lt;input type='hidden' name='page' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AdminMain.php" Line="119">
 </Literal>
-            <Select>
-              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-              <Literal Text="0" Length="1" Line="0"/>
-              <Undef/>
-            </Select>
+            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AdminMain.php" Line="126"/>
             <Literal 
             Text="'&gt;
  &lt;/form&gt;
@@ -635,51 +603,35 @@
           <Select>
             <Constraint Text="$page2 == 0"/>
             <Concat>
-              <Select>
-                <Constraint 
-                Text="(((((($_POST[&quot;addclass&quot;] == 1) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;teacher&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;semester&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;roomnum&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;periodnum&quot;] != &quot;&quot;))">
-</Constraint>
-                <Concat>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
+              <Concat>
+                <Select>
+                  <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
+                  <Concat>
+                    <Concat>
+                      <Literal Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="24"/>
+                      <Symbolic Text="mysql_error()"/>
+                    </Concat>
+                  </Concat>
+                  <Concat>
                     <Concat>
                       <Concat>
-                        <Literal Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="24"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Literal Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="40"/>
+                        <Symbolic Text="mysql_error()"/>
+                      </Concat>
+                      <Concat>
+                        <Literal Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="47"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                     </Concat>
-                    <Concat>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;semester&quot;] != $_POST[&quot;semester2&quot;])"/>
-                        <Concat>
-                          <Concat>
-                            <Literal Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="40"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
-                          <Concat>
-                            <Literal Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="47"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
-                        </Concat>
-                        <Concat> </Concat>
-                      </Select>
-                    </Concat>
-                  </Select>
-                </Concat>
-                <Concat> </Concat>
-              </Select>
-              <Select>
-                <Constraint 
-                Text="(((((($_POST[&quot;editclass&quot;] == 1) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;teacher&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;semester&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;roomnum&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;periodnum&quot;] != &quot;&quot;))">
-</Constraint>
-                <Concat>
-                  <Concat>
-                    <Literal Text="ManageClasses.php: Unable to update the class information - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="74"/>
-                    <Symbolic Text="[Symbol]"/>
                   </Concat>
+                </Select>
+              </Concat>
+              <Concat>
+                <Concat>
+                  <Literal Text="ManageClasses.php: Unable to update the class information - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="74"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
-                <Concat> </Concat>
-              </Select>
+              </Concat>
               <Literal 
               Text="&lt;script language='JavaScript'&gt;
   // Function to make sure the user wants to delete the class(es) //
@@ -748,7 +700,7 @@
 </Literal>
               <Concat>
                 <Literal Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="163"/>
-                <Symbolic Text="[Symbol]"/>
+                <Symbolic Text="mysql_error()"/>
               </Concat>
               <Repeat>
                 <Constraint Text="$page2 == 0"/>
@@ -807,69 +759,65 @@
                 <Concat>
                   <Concat>
                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="221"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal Text=" - ManageClasses.php: Unable to retrieve total number of classes - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="221"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="mysql_error()"/>
                   </Concat>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                   <Repeat>
                     <Constraint Text="($_POST[&quot;semester&quot;] != &quot;&quot;)"/>
                     <Concat>
-                      <Select>
-                        <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                      <Concat>
                         <Concat>
-                          <Concat>
-                            <Literal 
-                            Text="ManageClasses.php: Unable to get the semester title for the current course being displayed - " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="247">
+                          <Literal 
+                          Text="ManageClasses.php: Unable to get the semester title for the current course being displayed - " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="247">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
-                          <Concat>
-                            <Literal 
-                            Text="ManageClasses.php: Unable to get the teacher name for the current course being displayed - " Length="91" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="251">
-</Literal>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
-                          <Concat>
-                            <Literal 
-                            Text="ManageClasses.php: Unable to get the substitute name for the current corse being displayed - " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="255">
-</Literal>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
-                          <Concat>
-                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
-                            <Select>
-                              <Constraint Text="(($row % 2) == 0)"/>
-                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
-                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
-                            </Select>
-                            <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="259"/>
-                            <Undef/>
-                            <Literal Text="' onClick='updateboxes(1337);' /&gt;&lt;/td&gt; &lt;td&gt;" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="260"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="261"/>
-                            <Undef/>
-                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="261"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="262"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="263"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="264"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="265"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="266"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="267"/>
-                            <Undef/>
-                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="267"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="268"/>
-                          </Concat>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                        <Concat>
+                          <Literal 
+                          Text="ManageClasses.php: Unable to get the teacher name for the current course being displayed - " Length="91" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="251">
+</Literal>
+                          <Symbolic Text="mysql_error()"/>
+                        </Concat>
+                        <Concat>
+                          <Literal 
+                          Text="ManageClasses.php: Unable to get the substitute name for the current corse being displayed - " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="255">
+</Literal>
+                          <Symbolic Text="mysql_error()"/>
+                        </Concat>
+                        <Concat>
+                          <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
+                          <Select>
+                            <Constraint Text="(($row % 2) == 0)"/>
+                            <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
+                            <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
+                          </Select>
+                          <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="259"/>
+                          <Undef/>
+                          <Literal Text="' onClick='updateboxes(1337);' /&gt;&lt;/td&gt; &lt;td&gt;" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="260"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="261"/>
+                          <Undef/>
+                          <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="261"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="262"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="263"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="264"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="265"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="266"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="267"/>
+                          <Undef/>
+                          <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="267"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="268"/>
+                        </Concat>
+                      </Concat>
                     </Concat>
                   </Repeat>
                 </Concat>
@@ -899,13 +847,13 @@
                         <Literal 
                         Text="&lt;a href='JavaScript: document.classes.deleteclass.value=0;document.classes.page2.value=0;document.classes.onpage.value=" Length="119" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295">
 </Literal>
-                        <Literal Text="1" Length="1" Line="0"/>
+                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295"/>
                         <Literal 
                         Text=";document.classes.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="92" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295">
 </Literal>
-                        <Literal Text="1" Length="1" Line="0"/>
+                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295"/>
                         <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295"/>
-                        <Literal Text="1" Length="1" Line="0"/>
+                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295"/>
                         <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="295"/>
                       </Concat>
                     </Concat>
@@ -914,13 +862,13 @@
                         <Literal 
                         Text="&lt;a href='JavaScript: document.classes.deleteclass.value=0;document.classes.page2.value=0;document.classes.onpage.value=" Length="119" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299">
 </Literal>
-                        <Literal Text="1" Length="1" Line="0"/>
+                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299"/>
                         <Literal 
                         Text=";document.classes.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="84" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299">
 </Literal>
-                        <Literal Text="1" Length="1" Line="0"/>
+                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299"/>
                         <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299"/>
-                        <Literal Text="1" Length="1" Line="0"/>
+                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299"/>
                         <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="299"/>
                       </Concat>
                     </Concat>
@@ -935,19 +883,15 @@
   &lt;input type='hidden' name='selectclass'&gt;
   &lt;input type='hidden' name='page2' value='" Length="140" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="306">
 </Literal>
-                <Symbolic Text="[Symbol]"/>
+                <Symbolic Text="$_POST"/>
                 <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="307"/>
-                <Symbolic Text="[Symbol]"/>
+                <Symbolic Text="$_POST"/>
                 <Literal 
                 Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="309">
 </Literal>
-                <Select>
-                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                  <Literal Text="0" Length="1" Line="0"/>
-                  <Undef/>
-                </Select>
+                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="321"/>
                 <Literal 
                 Text="'&gt;
  &lt;/form&gt;
@@ -970,27 +914,27 @@
               <Concat>
                 <Concat>
                   <Literal Text="ManageSchoolInfo.php: Unable to retrieve School Address " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="5"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal Text="ManageSchoolInfo.php: Unable to retrieve PhoneNumber " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="10"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal Text="ManageSchoolInfo.php: Unable to retrieve NumSemesters " Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="15"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal Text="ManageSchoolInfo.php: Unable to retrieve NumPeriods " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="20"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal Text="ManageSchoolInfo.php: Unable to retrieve Point System " Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="25"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal Text="ManageSchoolInfo.php: Unable to retrieve sitetext " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="30"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal 
@@ -1011,11 +955,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="389" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="52">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                    <Symbolic Text="[Symbol]"/>
-                    <Undef/>
-                  </Select>
+                  <Symbolic Text="htmlspecialchars()"/>
                   <Literal 
                   Text="' maxlength='50' name='schoolname' size=40&gt;
   &lt;/td&gt;
@@ -1027,7 +967,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="168" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="60">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_result()"/>
                   <Literal 
                   Text="' name='schooladdress' maxlength='50' size=40&gt;
   &lt;/td&gt;
@@ -1039,7 +979,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="171" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="68">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_result()"/>
                   <Literal 
                   Text="' name='schoolphone' maxlength='14'&gt;
   &lt;/td&gt;
@@ -1051,7 +991,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="172" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="76">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_result()"/>
                   <Literal 
                   Text="' name='numsemesters' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1063,7 +1003,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="176" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="84">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_result()"/>
                   <Literal 
                   Text="' name='numperiods' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1075,7 +1015,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="171" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="92">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="number_format()"/>
                   <Literal 
                   Text="' name='apoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1087,7 +1027,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="100">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="number_format()"/>
                   <Literal 
                   Text="' name='bpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1099,7 +1039,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="108">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="number_format()"/>
                   <Literal 
                   Text="' name='cpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1111,7 +1051,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="116">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="number_format()"/>
                   <Literal 
                   Text="' name='dpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1123,7 +1063,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="124">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="number_format()"/>
                   <Literal 
                   Text="' name='fpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1161,17 +1101,13 @@
  &lt;input type='hidden' name='infoupdate' value=''&gt;
  &lt;input type='hidden' name='page2' value='" Length="373" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="150">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="$_POST"/>
                   <Literal 
                   Text="'&gt;
  &lt;input type='hidden' name='logout'&gt;
  &lt;input type='hidden' name='page' value='" Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="152">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                    <Literal Text="0" Length="1" Line="0"/>
-                    <Undef/>
-                  </Select>
+                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="166"/>
                   <Literal 
                   Text="'&gt;
  &lt;/form&gt;
@@ -1194,74 +1130,50 @@
               <Select>
                 <Constraint Text="$page2 == 2"/>
                 <Concat>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;addstudent&quot;] == 1)"/>
+                  <Concat>
                     <Concat>
-                      <Select>
+                      <Concat>
+                        <Literal Text="ManageStudents.php: Uanable to get list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="9"/>
+                        <Symbolic Text="mysql_error()"/>
+                      </Concat>
+                      <Repeat>
                         <Constraint 
                         Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;mi&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))">
 </Constraint>
                         <Concat>
                           <Concat>
-                            <Literal Text="ManageStudents.php: Uanable to get list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="9"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
-                          <Repeat>
-                            <Constraint 
-                            Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;mi&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))">
-</Constraint>
                             <Concat>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;username&quot;] == $userlist[0])"/>
-                                <Concat>
-                                  <Concat>
-                                    <Literal 
-                                    Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;That user is already assigned to a student!&lt;/font&gt;&lt;/h1&gt;
+                              <Literal 
+                              Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;That user is already assigned to a student!&lt;/font&gt;&lt;/h1&gt;
 	 &lt;br&gt;
 	 &lt;form name='uhoh' action='./index.php' method='POST'&gt;
 	 &lt;center&gt;&lt;input type='button' value='&amp;nbsp;Back&amp;nbsp;' onClick='document.uhoh.page2.value=2;document.uhoh.submit();'&gt;&lt;/center&gt;
 	 &lt;input type='hidden' name='page2' value='" Length="335" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="20">
 </Literal>
-                                    <Symbolic Text="[Symbol]"/>
-                                    <Literal 
-                                    Text="'&gt;
+                              <Symbolic Text="$_POST"/>
+                              <Literal 
+                              Text="'&gt;
 	 &lt;input type='hidden' name='logout'&gt;
 	 &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="22">
 </Literal>
-                                    <Select>
-                                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="23"/>
-                                      <Undef/>
-                                    </Select>
-                                    <Literal Text="'&gt; &lt;/form&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="23"/>
-                                  </Concat>
-                                </Concat>
-                                <Concat> </Concat>
-                              </Select>
+                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="23"/>
+                              <Literal Text="'&gt; &lt;/form&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="23"/>
                             </Concat>
-                          </Repeat>
-                          <Concat>
-                            <Literal Text="ManageStudents.php: Unable to insert new student - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="29"/>
-                            <Symbolic Text="[Symbol]"/>
                           </Concat>
                         </Concat>
-                        <Concat> </Concat>
-                      </Select>
-                    </Concat>
-                    <Concat> </Concat>
-                  </Select>
-                  <Select>
-                    <Constraint 
-                    Text="((((($_POST[&quot;editstudent&quot;] == 1) &amp;&amp; ($_POST[&quot;username&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;mi&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))">
-</Constraint>
-                    <Concat>
+                      </Repeat>
                       <Concat>
-                        <Literal Text="ManageStudents.php: Unable to update the student information - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="37"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Literal Text="ManageStudents.php: Unable to insert new student - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="29"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                     </Concat>
-                    <Concat> </Concat>
-                  </Select>
+                  </Concat>
+                  <Concat>
+                    <Concat>
+                      <Literal Text="ManageStudents.php: Unable to update the student information - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="37"/>
+                      <Symbolic Text="mysql_error()"/>
+                    </Concat>
+                  </Concat>
                   <Literal 
                   Text="&lt;script language='JavaScript'&gt;
 
@@ -1341,38 +1253,34 @@
 </Literal>
                   <Concat>
                     <Literal Text="Managestudents.php: Unable to retrieve total number of students - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="130"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="mysql_error()"/>
                   </Concat>
                   <Repeat>
                     <Constraint Text="$page2 == 2"/>
                     <Concat>
-                      <Select>
-                        <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                      <Concat>
                         <Concat>
-                          <Concat>
-                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="152"/>
-                            <Select>
-                              <Constraint Text="(($row % 2) == 0)"/>
-                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="152"/>
-                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="152"/>
-                            </Select>
-                            <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="153"/>
-                            <Undef/>
-                            <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="153"/>
-                            <Literal Text="1" Length="1" Line="0"/>
-                            <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="154"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="155"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="156"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="157"/>
-                            <Undef/>
-                            <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="158"/>
-                          </Concat>
+                          <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="152"/>
+                          <Select>
+                            <Constraint Text="(($row % 2) == 0)"/>
+                            <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="152"/>
+                            <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="152"/>
+                          </Select>
+                          <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="153"/>
+                          <Undef/>
+                          <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="153"/>
+                          <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="158"/>
+                          <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="154"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="155"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="156"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="157"/>
+                          <Undef/>
+                          <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="158"/>
                         </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                      </Concat>
                     </Concat>
                   </Repeat>
                   <Literal 
@@ -1390,7 +1298,7 @@
 </Literal>
                   <Concat>
                     <Literal Text="ManageStudents.php: Unable to get a list of terms for drop-down - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="175"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="mysql_error()"/>
                   </Concat>
                   <Repeat>
                     <Constraint Text="$page2 == 2"/>
@@ -1431,13 +1339,13 @@
                             <Literal 
                             Text="&lt;a href='JavaScript: document.students.deletestudent.value=0;document.students.page2.value=2;document.students.onpage.value=" Length="124" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203">
 </Literal>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203"/>
                             <Literal 
                             Text=";document.students.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203">
 </Literal>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203"/>
                             <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203"/>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203"/>
                             <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="203"/>
                           </Concat>
                         </Concat>
@@ -1446,13 +1354,13 @@
                             <Literal 
                             Text="&lt;a href='JavaScript: document.students.deletestudent.value=0;document.students.page2.value=2;document.students.onpage.value=" Length="124" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207">
 </Literal>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207"/>
                             <Literal 
                             Text=";document.students.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207">
 </Literal>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207"/>
                             <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207"/>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207"/>
                             <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="207"/>
                           </Concat>
                         </Concat>
@@ -1467,19 +1375,15 @@
   &lt;input type='hidden' name='selectstudent'&gt;
   &lt;input type='hidden' name='page2' value='" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="214">
 </Literal>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="215"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal 
                     Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="217">
 </Literal>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                      <Literal Text="0" Length="1" Line="0"/>
-                      <Undef/>
-                    </Select>
+                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="230"/>
                     <Literal 
                     Text="'&gt;
  &lt;/form&gt;
@@ -1501,68 +1405,48 @@
                 <Select>
                   <Constraint Text="$page2 == 3"/>
                   <Concat>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;addteacher&quot;] == 1)"/>
+                    <Concat>
                       <Concat>
-                        <Select>
+                        <Concat>
+                          <Literal Text="ManageTeachers.php: Uanable to get list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="9"/>
+                          <Symbolic Text="mysql_error()"/>
+                        </Concat>
+                        <Repeat>
                           <Constraint Text="((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))"/>
                           <Concat>
                             <Concat>
-                              <Literal Text="ManageTeachers.php: Uanable to get list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="9"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Concat>
-                            <Repeat>
-                              <Constraint Text="((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))"/>
                               <Concat>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;username&quot;] == $userlist[0])"/>
-                                  <Concat>
-                                    <Concat>
-                                      <Literal 
-                                      Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;That user is already assigned to a teacher!&lt;/font&gt;&lt;/h1&gt;
+                                <Literal 
+                                Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;That user is already assigned to a teacher!&lt;/font&gt;&lt;/h1&gt;
 	 &lt;br&gt;
 	 &lt;form name='uhoh' action='./index.php' method='POST'&gt;
 	 &lt;center&gt;&lt;input type='button' value='&amp;nbsp;Back&amp;nbsp;' onClick='document.uhoh.page2.value=3;document.uhoh.submit();'&gt;&lt;/center&gt;
 	 &lt;input type='hidden' name='page2' value='" Length="335" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="20">
 </Literal>
-                                      <Symbolic Text="[Symbol]"/>
-                                      <Literal 
-                                      Text="'&gt;
+                                <Symbolic Text="$_POST"/>
+                                <Literal 
+                                Text="'&gt;
 	 &lt;input type='hidden' name='logout'&gt;
 	 &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="22">
 </Literal>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="23"/>
-                                        <Undef/>
-                                      </Select>
-                                      <Literal Text="'&gt; &lt;/form&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="23"/>
-                                    </Concat>
-                                  </Concat>
-                                  <Concat> </Concat>
-                                </Select>
+                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="23"/>
+                                <Literal Text="'&gt; &lt;/form&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="23"/>
                               </Concat>
-                            </Repeat>
-                            <Concat>
-                              <Literal Text="ManageTeachers.php: Unable to insert new teacher - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="29"/>
-                              <Symbolic Text="[Symbol]"/>
                             </Concat>
                           </Concat>
-                          <Concat> </Concat>
-                        </Select>
-                      </Concat>
-                      <Concat> </Concat>
-                    </Select>
-                    <Select>
-                      <Constraint Text="((($_POST[&quot;editteacher&quot;] == 1) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;))"/>
-                      <Concat>
+                        </Repeat>
                         <Concat>
-                          <Literal Text="Manageteachers.php: Unable to update the teacher information - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="37"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Literal Text="ManageTeachers.php: Unable to insert new teacher - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="29"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                       </Concat>
-                      <Concat> </Concat>
-                    </Select>
+                    </Concat>
+                    <Concat>
+                      <Concat>
+                        <Literal Text="Manageteachers.php: Unable to update the teacher information - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="37"/>
+                        <Symbolic Text="mysql_error()"/>
+                      </Concat>
+                    </Concat>
                     <Literal 
                     Text="&lt;script language='JavaScript'&gt;
 
@@ -1641,36 +1525,32 @@
 </Literal>
                     <Concat>
                       <Literal Text="ManageTeachers.php: Unable to retrieve total number of teachers - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="129"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
                     <Repeat>
                       <Constraint Text="$page2 == 3"/>
                       <Concat>
-                        <Select>
-                          <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                        <Concat>
                           <Concat>
-                            <Concat>
-                              <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="151"/>
-                              <Select>
-                                <Constraint Text="(($row % 2) == 0)"/>
-                                <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="151"/>
-                                <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="151"/>
-                              </Select>
-                              <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="152"/>
-                              <Undef/>
-                              <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="152"/>
-                              <Literal Text="1" Length="1" Line="0"/>
-                              <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="153"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="154"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="155"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="156"/>
-                            </Concat>
+                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="151"/>
+                            <Select>
+                              <Constraint Text="(($row % 2) == 0)"/>
+                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="151"/>
+                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="151"/>
+                            </Select>
+                            <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="152"/>
+                            <Undef/>
+                            <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="152"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="156"/>
+                            <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="153"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="154"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="155"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="156"/>
                           </Concat>
-                          <Concat> </Concat>
-                        </Select>
+                        </Concat>
                       </Concat>
                     </Repeat>
                     <Literal 
@@ -1693,13 +1573,13 @@
                               <Literal 
                               Text="&lt;a href='JavaScript: document.teachers.deleteteacher.value=0;document.teachers.page2.value=3;document.teachers.onpage.value=" Length="124" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173"/>
                               <Literal 
                               Text=";document.teachers.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173"/>
                               <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173"/>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173"/>
                               <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="173"/>
                             </Concat>
                           </Concat>
@@ -1708,13 +1588,13 @@
                               <Literal 
                               Text="&lt;a href='JavaScript: document.teachers.deleteteacher.value=0;document.teachers.page2.value=3;document.teachers.onpage.value=" Length="124" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177"/>
                               <Literal 
                               Text=";document.teachers.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177"/>
                               <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177"/>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177"/>
                               <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="177"/>
                             </Concat>
                           </Concat>
@@ -1729,19 +1609,15 @@
   &lt;input type='hidden' name='selectteacher'&gt;
   &lt;input type='hidden' name='page2' value='" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="184">
 </Literal>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="$_POST"/>
                       <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="185"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="$_POST"/>
                       <Literal 
                       Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="187">
 </Literal>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Undef/>
-                      </Select>
+                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="200"/>
                       <Literal 
                       Text="'&gt;
  &lt;/form&gt;
@@ -1763,28 +1639,18 @@
                   <Select>
                     <Constraint Text="$page2 == 4"/>
                     <Concat>
-                      <Select>
-                        <Constraint Text="((($_POST[&quot;addannouncement&quot;] == 1) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;message&quot;] != &quot;&quot;))"/>
+                      <Concat>
                         <Concat>
-                          <Concat>
-                            <Literal Text="ManageAnnouncements.php: Unable to insert new announcement - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="9"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
+                          <Literal Text="ManageAnnouncements.php: Unable to insert new announcement - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="9"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
-                        <Concat> </Concat>
-                      </Select>
-                      <Select>
-                        <Constraint 
-                        Text="(((($_POST[&quot;editannouncement&quot;] == 1) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;message&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;date&quot;] != &quot;&quot;))">
-</Constraint>
+                      </Concat>
+                      <Concat>
                         <Concat>
-                          <Concat>
-                            <Literal Text="ManageAnnouncements.php: Unable to update the announcement information - " Length="73" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="16"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
+                          <Literal Text="ManageAnnouncements.php: Unable to update the announcement information - " Length="73" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="16"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                      </Concat>
                       <Literal 
                       Text="&lt;script language='JavaScript'&gt;
 
@@ -1863,40 +1729,36 @@
 </Literal>
                       <Concat>
                         <Literal Text="ManageAnnouncements.php: Unable to retrieve total number of announcements - " Length="76" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="108"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                       <Concat>
                         <Literal Text="ManageAnnouncements.php: Unable to retrieve the announcements - " Length="64" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="121"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 4"/>
                         <Concat>
-                          <Select>
-                            <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                          <Concat>
                             <Concat>
-                              <Concat>
-                                <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="131"/>
-                                <Select>
-                                  <Constraint Text="(($row % 2) == 0)"/>
-                                  <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="131"/>
-                                  <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="131"/>
-                                </Select>
-                                <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="132"/>
-                                <Undef/>
-                                <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="132"/>
-                                <Literal Text="1" Length="1" Line="0"/>
-                                <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="133"/>
-                                <Undef/>
-                                <Literal Text="&lt;/td&gt; &lt;td class='announcement'&gt;" Length="34" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="134"/>
-                                <Undef/>
-                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="135"/>
-                                <Symbolic Text="[Symbol]"/>
-                                <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="136"/>
-                              </Concat>
+                              <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="131"/>
+                              <Select>
+                                <Constraint Text="(($row % 2) == 0)"/>
+                                <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="131"/>
+                                <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="131"/>
+                              </Select>
+                              <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="132"/>
+                              <Undef/>
+                              <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="132"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="136"/>
+                              <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="133"/>
+                              <Undef/>
+                              <Literal Text="&lt;/td&gt; &lt;td class='announcement'&gt;" Length="34" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="134"/>
+                              <Undef/>
+                              <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="135"/>
+                              <Symbolic Text="convertfromdb()"/>
+                              <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="136"/>
                             </Concat>
-                            <Concat> </Concat>
-                          </Select>
+                          </Concat>
                         </Concat>
                       </Repeat>
                       <Literal 
@@ -1919,14 +1781,14 @@
                                 <Literal 
                                 Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153">
 </Literal>
-                                <Literal Text="1" Length="1" Line="0"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153"/>
                                 <Literal 
                                 Text=";document.announcements.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="98" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153">
 </Literal>
-                                <Literal Text="1" Length="1" Line="0"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153"/>
                                 <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153">
                                 </Literal>
-                                <Literal Text="1" Length="1" Line="0"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153"/>
                                 <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="153"/>
                               </Concat>
                             </Concat>
@@ -1935,14 +1797,14 @@
                                 <Literal 
                                 Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157">
 </Literal>
-                                <Literal Text="1" Length="1" Line="0"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157"/>
                                 <Literal 
                                 Text=";document.announcements.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157">
 </Literal>
-                                <Literal Text="1" Length="1" Line="0"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157"/>
                                 <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157">
                                 </Literal>
-                                <Literal Text="1" Length="1" Line="0"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157"/>
                                 <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="157"/>
                               </Concat>
                             </Concat>
@@ -1957,19 +1819,15 @@
   &lt;input type='hidden' name='selectannouncement'&gt;
   &lt;input type='hidden' name='page2' value='" Length="154" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="164">
 </Literal>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="165"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal 
                         Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="167">
 </Literal>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Undef/>
-                        </Select>
+                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="180"/>
                         <Literal 
                         Text="'&gt;
  &lt;/form&gt;
@@ -1991,30 +1849,18 @@
                     <Select>
                       <Constraint Text="$page2 == 5"/>
                       <Concat>
-                        <Select>
-                          <Constraint 
-                          Text="(((((($_POST[&quot;addsemester&quot;] == 1) &amp;&amp; ($_POST[&quot;term&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;startdate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;middate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;enddate&quot;] != &quot;&quot;))">
-</Constraint>
+                        <Concat>
                           <Concat>
-                            <Concat>
-                              <Literal Text="ManageSemesters.php: Unable to insert new semester - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="10"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Concat>
+                            <Literal Text="ManageSemesters.php: Unable to insert new semester - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="10"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
-                          <Concat> </Concat>
-                        </Select>
-                        <Select>
-                          <Constraint 
-                          Text="(((((($_POST[&quot;editsemester&quot;] == 1) &amp;&amp; ($_POST[&quot;term&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;startdate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;middate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;enddate&quot;] != &quot;&quot;))">
-</Constraint>
+                        </Concat>
+                        <Concat>
                           <Concat>
-                            <Concat>
-                              <Literal Text="ManageSemesters.php: Unable to update the semester information - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="20"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Concat>
+                            <Literal Text="ManageSemesters.php: Unable to update the semester information - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="20"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
-                          <Concat> </Concat>
-                        </Select>
+                        </Concat>
                         <Literal 
                         Text="&lt;script language='JavaScript'&gt;
 
@@ -2096,46 +1942,42 @@
 </Literal>
                         <Concat>
                           <Literal Text="ManageSemesters.php: Unable to retrieve total number of semesters - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="115"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                         <Repeat>
                           <Constraint Text="$page2 == 5"/>
                           <Concat>
-                            <Select>
-                              <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                            <Concat>
                               <Concat>
-                                <Concat>
-                                  <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="139"/>
-                                  <Select>
-                                    <Constraint Text="(($row % 2) == 0)"/>
-                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="139"/>
-                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="139"/>
-                                  </Select>
-                                  <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="140"/>
-                                  <Undef/>
-                                  <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="140"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
-                                  <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="141"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="142"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="143"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="144"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="145"/>
-                                  <Symbolic Text="[Symbol]"/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
-                                  <Select>
-                                    <Constraint Text="($smstr[6] == 1)"/>
-                                    <Literal Text="First" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
-                                    <Literal Text="Second" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
-                                  </Select>
-                                  <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="147"/>
-                                </Concat>
+                                <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="139"/>
+                                <Select>
+                                  <Constraint Text="(($row % 2) == 0)"/>
+                                  <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="139"/>
+                                  <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="139"/>
+                                </Select>
+                                <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="140"/>
+                                <Undef/>
+                                <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="140"/>
+                                <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="147"/>
+                                <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="141"/>
+                                <Undef/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="142"/>
+                                <Symbolic Text="mysql_result()"/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="143"/>
+                                <Symbolic Text="convertfromdb()"/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="144"/>
+                                <Symbolic Text="convertfromdb()"/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="145"/>
+                                <Symbolic Text="convertfromdb()"/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
+                                <Select>
+                                  <Constraint Text="($smstr[6] == 1)"/>
+                                  <Literal Text="First" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
+                                  <Literal Text="Second" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
+                                </Select>
+                                <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="147"/>
                               </Concat>
-                              <Concat> </Concat>
-                            </Select>
+                            </Concat>
                           </Concat>
                         </Repeat>
                         <Literal 
@@ -2160,13 +2002,13 @@
                                   <Literal 
                                   Text="&lt;a href='JavaScript: document.semesters.deletesemester.value=0;document.semesters.page2.value=5;document.semesters.onpage.value=" Length="128" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166"/>
                                   <Literal 
                                   Text=";document.semesters.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="94" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166"/>
                                   <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166"/>
                                   <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="166"/>
                                 </Concat>
                               </Concat>
@@ -2175,13 +2017,13 @@
                                   <Literal 
                                   Text="&lt;a href='JavaScript: document.semesters.deletesemester.value=0;document.semesters.page2.value=5;document.semesters.onpage.value=" Length="128" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170"/>
                                   <Literal 
                                   Text=";document.semesters.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="86" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170"/>
                                   <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170"/>
                                   <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="170"/>
                                 </Concat>
                               </Concat>
@@ -2196,19 +2038,15 @@
   &lt;input type='hidden' name='selectsemester'&gt;
   &lt;input type='hidden' name='page2' value='" Length="146" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="178">
 </Literal>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="179"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal 
                           Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="181">
 </Literal>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Undef/>
-                          </Select>
+                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="194"/>
                           <Literal 
                           Text="'&gt;
  &lt;/form&gt;
@@ -2230,30 +2068,18 @@
                       <Select>
                         <Constraint Text="$page2 == 6"/>
                         <Concat>
-                          <Select>
-                            <Constraint 
-                            Text="(((($_POST[&quot;addterm&quot;] == 1) &amp;&amp; ($_POST[&quot;startdate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;enddate&quot;] != &quot;&quot;))">
-</Constraint>
+                          <Concat>
                             <Concat>
-                              <Concat>
-                                <Literal Text="ManageTerms.php: Unable to insert new term - " Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="9"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Concat>
+                              <Literal Text="ManageTerms.php: Unable to insert new term - " Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="9"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
-                            <Concat> </Concat>
-                          </Select>
-                          <Select>
-                            <Constraint 
-                            Text="(((($_POST[&quot;editterm&quot;] == 1) &amp;&amp; ($_POST[&quot;startdate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;title&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;enddate&quot;] != &quot;&quot;))">
-</Constraint>
+                          </Concat>
+                          <Concat>
                             <Concat>
-                              <Concat>
-                                <Literal Text="ManageTerms.php: Unable to update the term information - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="18"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Concat>
+                              <Literal Text="ManageTerms.php: Unable to update the term information - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="18"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
-                            <Concat> </Concat>
-                          </Select>
+                          </Concat>
                           <Literal 
                           Text="&lt;script language='JavaScript'&gt;
   // Function to make sure the user wants to delete the term(s) //
@@ -2331,36 +2157,32 @@
 </Literal>
                           <Concat>
                             <Literal Text="ManageTerms.php: Unable to retrieve total number of terms - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="109"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Repeat>
                             <Constraint Text="$page2 == 6"/>
                             <Concat>
-                              <Select>
-                                <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                              <Concat>
                                 <Concat>
-                                  <Concat>
-                                    <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="130"/>
-                                    <Select>
-                                      <Constraint Text="(($row % 2) == 0)"/>
-                                      <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="130"/>
-                                      <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="130"/>
-                                    </Select>
-                                    <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="131"/>
-                                    <Undef/>
-                                    <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="131"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
-                                    <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="132"/>
-                                    <Undef/>
-                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="133"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="134"/>
-                                    <Symbolic Text="[Symbol]"/>
-                                    <Literal Text="&lt;/td&gt; &lt;tr&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="135"/>
-                                  </Concat>
+                                  <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="130"/>
+                                  <Select>
+                                    <Constraint Text="(($row % 2) == 0)"/>
+                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="130"/>
+                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="130"/>
+                                  </Select>
+                                  <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="131"/>
+                                  <Undef/>
+                                  <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="131"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="135"/>
+                                  <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="132"/>
+                                  <Undef/>
+                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="133"/>
+                                  <Symbolic Text="convertfromdb()"/>
+                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="134"/>
+                                  <Symbolic Text="convertfromdb()"/>
+                                  <Literal Text="&lt;/td&gt; &lt;tr&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="135"/>
                                 </Concat>
-                                <Concat> </Concat>
-                              </Select>
+                              </Concat>
                             </Concat>
                           </Repeat>
                           <Literal 
@@ -2386,13 +2208,13 @@
                                     <Literal 
                                     Text="&lt;a href='JavaScript: document.terms.deleteterm.value=0;document.terms.page2.value=6;document.terms.onpage.value=" Length="112" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155"/>
                                     <Literal 
                                     Text=";document.terms.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155"/>
                                     <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155"/>
                                     <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="155"/>
                                   </Concat>
                                 </Concat>
@@ -2401,13 +2223,13 @@
                                     <Literal 
                                     Text="&lt;a href='JavaScript: document.terms.deleteterm.value=0;document.terms.page2.value=6;document.terms.onpage.value=" Length="112" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159"/>
                                     <Literal 
                                     Text=";document.terms.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="82" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159"/>
                                     <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159"/>
                                     <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="159"/>
                                   </Concat>
                                 </Concat>
@@ -2422,19 +2244,15 @@
   &lt;input type='hidden' name='selectterm'&gt;
   &lt;input type='hidden' name='page2' value='" Length="138" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="167">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="168"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal 
                             Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="170">
 </Literal>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Undef/>
-                            </Select>
+                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="183"/>
                             <Literal 
                             Text="'&gt;
  &lt;/form&gt;
@@ -2513,17 +2331,13 @@
   &lt;input type='hidden' name='addsemester' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="862" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddSemester.php" Line="51">
 </Literal>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="$_POST"/>
                               <Literal 
                               Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddSemester.php" Line="53">
 </Literal>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Undef/>
-                              </Select>
+                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddSemester.php" Line="64"/>
                               <Literal 
                               Text="'&gt;
 
@@ -2573,17 +2387,13 @@
   &lt;input type='hidden' name='addterm' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="979" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTerm.php" Line="29">
 </Literal>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="$_POST"/>
                                 <Literal 
                                 Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTerm.php" Line="31">
 </Literal>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Undef/>
-                                </Select>
+                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTerm.php" Line="42"/>
                                 <Literal 
                                 Text="'&gt;
 
@@ -2627,32 +2437,28 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of teachers - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="24"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
                                       <Concat>
-                                        <Select>
-                                          <Constraint Text="($type == &quot;Teacher&quot;)"/>
+                                        <Concat>
                                           <Concat>
-                                            <Concat>
-                                              <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
-                                              <Undef/>
-                                              <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
-                                              <Undef/>
-                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
-                                              <Undef/>
-                                              <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
-                                            </Concat>
+                                            <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
+                                            <Undef/>
+                                            <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
+                                            <Undef/>
+                                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
+                                            <Undef/>
+                                            <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="30"/>
                                           </Concat>
-                                          <Concat> </Concat>
-                                        </Select>
+                                        </Concat>
                                       </Concat>
                                     </Repeat>
                                     <Literal Text="&lt;/select&gt; &lt;/td&gt; &lt;td&gt;&lt;select name='semester'&gt;" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="35"/>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of semesters - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="39"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
@@ -2676,26 +2482,22 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of substitutes - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="54"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
                                       <Concat>
-                                        <Select>
-                                          <Constraint Text="($type == &quot;Substitute&quot;)"/>
+                                        <Concat>
                                           <Concat>
-                                            <Concat>
-                                              <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
-                                              <Undef/>
-                                              <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
-                                              <Undef/>
-                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
-                                              <Undef/>
-                                              <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
-                                            </Concat>
+                                            <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
+                                            <Undef/>
+                                            <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
+                                            <Undef/>
+                                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
+                                            <Undef/>
+                                            <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="60"/>
                                           </Concat>
-                                          <Concat> </Concat>
-                                        </Select>
+                                        </Concat>
                                       </Concat>
                                     </Repeat>
                                     <Concat>
@@ -2728,17 +2530,13 @@
   &lt;input type='hidden' name='fullyear' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="1086" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="89">
 </Literal>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="$_POST"/>
                                       <Literal 
                                       Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="91">
 </Literal>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Undef/>
-                                      </Select>
+                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="102"/>
                                       <Literal 
                                       Text="' /&gt;
 
@@ -2778,32 +2576,28 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of teachers - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="127"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
                                       <Concat>
-                                        <Select>
-                                          <Constraint Text="($type == &quot;Teacher&quot;)"/>
+                                        <Concat>
                                           <Concat>
-                                            <Concat>
-                                              <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
-                                              <Undef/>
-                                              <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
-                                              <Undef/>
-                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
-                                              <Undef/>
-                                              <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
-                                            </Concat>
+                                            <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
+                                            <Undef/>
+                                            <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
+                                            <Undef/>
+                                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
+                                            <Undef/>
+                                            <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="133"/>
                                           </Concat>
-                                          <Concat> </Concat>
-                                        </Select>
+                                        </Concat>
                                       </Concat>
                                     </Repeat>
                                     <Literal Text="&lt;/select&gt; &lt;/td&gt; &lt;td&gt;&lt;select name='semester'&gt;" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="138"/>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of semesters - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="142"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
@@ -2820,7 +2614,7 @@
                                     <Literal Text="&lt;/select&gt;&lt;/td&gt; &lt;td&gt;&lt;select name='semester2'&gt;" Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="149"/>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of semesters - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="153"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
@@ -2844,26 +2638,22 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of substitutes - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="168"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
                                       <Concat>
-                                        <Select>
-                                          <Constraint Text="($type == &quot;Substitute&quot;)"/>
+                                        <Concat>
                                           <Concat>
-                                            <Concat>
-                                              <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
-                                              <Undef/>
-                                              <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
-                                              <Undef/>
-                                              <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
-                                              <Undef/>
-                                              <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
-                                            </Concat>
+                                            <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
+                                            <Undef/>
+                                            <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
+                                            <Undef/>
+                                            <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
+                                            <Undef/>
+                                            <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="174"/>
                                           </Concat>
-                                          <Concat> </Concat>
-                                        </Select>
+                                        </Concat>
                                       </Concat>
                                     </Repeat>
                                     <Concat>
@@ -2895,19 +2685,15 @@
   &lt;input type='hidden' name='addclass' value='' /&gt;
   &lt;input type='hidden' name='fullyear' value='" Length="1050" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="202">
 </Literal>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="$_POST"/>
                                       <Literal Text="' /&gt; &lt;input type='hidden' name='page2' value='" Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="203"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="$_POST"/>
                                       <Literal 
                                       Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="205">
 </Literal>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Undef/>
-                                      </Select>
+                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="216"/>
                                       <Literal 
                                       Text="' /&gt;
 
@@ -2929,73 +2715,57 @@
                               <Select>
                                 <Constraint Text="$page2 == 10"/>
                                 <Concat>
-                                  <Select>
-                                    <Constraint Text="((($_POST[&quot;adduser&quot;] == 1) &amp;&amp; ($_POST[&quot;password&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;type&quot;] != &quot;&quot;))"/>
+                                  <Concat>
                                     <Concat>
+                                      <Literal Text="ManageUsers.php: Uanable to get list of users - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="7"/>
+                                      <Symbolic Text="mysql_error()"/>
+                                    </Concat>
+                                    <Repeat>
+                                      <Constraint Text="((($_POST[&quot;adduser&quot;] == 1) &amp;&amp; ($_POST[&quot;password&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;type&quot;] != &quot;&quot;))"/>
                                       <Concat>
-                                        <Literal Text="ManageUsers.php: Uanable to get list of users - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="7"/>
-                                        <Symbolic Text="[Symbol]"/>
-                                      </Concat>
-                                      <Repeat>
-                                        <Constraint Text="((($_POST[&quot;adduser&quot;] == 1) &amp;&amp; ($_POST[&quot;password&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;type&quot;] != &quot;&quot;))"/>
                                         <Concat>
-                                          <Select>
-                                            <Constraint Text="($_POST[&quot;username&quot;] == $userlist[0])"/>
-                                            <Concat>
-                                              <Concat>
-                                                <Literal 
-                                                Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;Username already exists!&lt;/font&gt;&lt;/h1&gt;
+                                          <Concat>
+                                            <Literal 
+                                            Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;Username already exists!&lt;/font&gt;&lt;/h1&gt;
 	&lt;br&gt;
 	&lt;form name='uhoh' action='./index.php' method='POST'&gt;
 	&lt;center&gt;&lt;input type='button' value='&amp;nbsp;Back&amp;nbsp;' onClick='document.uhoh.page2.value=10;document.uhoh.submit();'&gt;&lt;/center&gt;
 	&lt;input type='hidden' name='page2' value='" Length="313" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="18">
 </Literal>
-                                                <Symbolic Text="[Symbol]"/>
-                                                <Literal 
-                                                Text="'&gt;
+                                            <Symbolic Text="$_POST"/>
+                                            <Literal 
+                                            Text="'&gt;
 	&lt;input type='hidden' name='logout'&gt;
 	&lt;input type='hidden' name='page' value='" Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="20">
 </Literal>
-                                                <Select>
-                                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="21"/>
-                                                  <Undef/>
-                                                </Select>
-                                                <Literal Text="'&gt; &lt;/form&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="21"/>
-                                              </Concat>
-                                            </Concat>
-                                            <Concat> </Concat>
-                                          </Select>
+                                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="21"/>
+                                            <Literal Text="'&gt; &lt;/form&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="21"/>
+                                          </Concat>
                                         </Concat>
-                                      </Repeat>
-                                      <Concat>
-                                        <Literal Text="ManageUsers.php: Unable to insert new user - " Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="27"/>
-                                        <Symbolic Text="[Symbol]"/>
                                       </Concat>
-                                    </Concat>
-                                    <Concat> </Concat>
-                                  </Select>
-                                  <Select>
-                                    <Constraint Text="((($_POST[&quot;edituser&quot;] == 1) &amp;&amp; ($_POST[&quot;password&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;type&quot;] != &quot;&quot;))"/>
+                                    </Repeat>
                                     <Concat>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;password&quot;] != &quot;&quot;)"/>
-                                        <Concat>
-                                          <Concat>
-                                            <Literal Text="ManageUsers.php: Unable to update the user information (password) - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="36"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Concat>
-                                        </Concat>
-                                        <Concat>
-                                          <Concat>
-                                            <Literal Text="ManageUsers.php: Unable to update the user information (no password) - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="41"/>
-                                            <Symbolic Text="[Symbol]"/>
-                                          </Concat>
-                                        </Concat>
-                                      </Select>
+                                      <Literal Text="ManageUsers.php: Unable to insert new user - " Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="27"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
-                                    <Concat> </Concat>
-                                  </Select>
+                                  </Concat>
+                                  <Concat>
+                                    <Select>
+                                      <Constraint Text="($_POST[&quot;password&quot;] != &quot;&quot;)"/>
+                                      <Concat>
+                                        <Concat>
+                                          <Literal Text="ManageUsers.php: Unable to update the user information (password) - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="36"/>
+                                          <Symbolic Text="mysql_error()"/>
+                                        </Concat>
+                                      </Concat>
+                                      <Concat>
+                                        <Concat>
+                                          <Literal Text="ManageUsers.php: Unable to update the user information (no password) - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="41"/>
+                                          <Symbolic Text="mysql_error()"/>
+                                        </Concat>
+                                      </Concat>
+                                    </Select>
+                                  </Concat>
                                   <Literal 
                                   Text="&lt;script language='JavaScript'&gt;
 
@@ -3073,38 +2843,34 @@
 </Literal>
                                   <Concat>
                                     <Literal Text="ManageUsers.php: Unable to retrieve total number of users - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="133"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="mysql_error()"/>
                                   </Concat>
                                   <Concat>
                                     <Literal Text="ManageUsers.php: Unable to retrieve user information - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="146"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="mysql_error()"/>
                                   </Concat>
                                   <Repeat>
                                     <Constraint Text="$page2 == 10"/>
                                     <Concat>
-                                      <Select>
-                                        <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                                      <Concat>
                                         <Concat>
-                                          <Concat>
-                                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="157"/>
-                                            <Select>
-                                              <Constraint Text="(($row % 2) == 0)"/>
-                                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="157"/>
-                                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="157"/>
-                                            </Select>
-                                            <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="158"/>
-                                            <Undef/>
-                                            <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="158"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
-                                            <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="159"/>
-                                            <Undef/>
-                                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="160"/>
-                                            <Undef/>
-                                            <Literal Text="&lt;/td&gt; &lt;tr&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="161"/>
-                                          </Concat>
+                                          <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="157"/>
+                                          <Select>
+                                            <Constraint Text="(($row % 2) == 0)"/>
+                                            <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="157"/>
+                                            <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="157"/>
+                                          </Select>
+                                          <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="158"/>
+                                          <Undef/>
+                                          <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="158"/>
+                                          <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="161"/>
+                                          <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="159"/>
+                                          <Undef/>
+                                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="160"/>
+                                          <Undef/>
+                                          <Literal Text="&lt;/td&gt; &lt;tr&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="161"/>
                                         </Concat>
-                                        <Concat> </Concat>
-                                      </Select>
+                                      </Concat>
                                     </Concat>
                                   </Repeat>
                                   <Literal 
@@ -3128,13 +2894,13 @@
                                             <Literal 
                                             Text="&lt;a href='JavaScript: document.users.deleteuser.value=0;document.users.page2.value=10;document.users.onpage.value=" Length="113" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179"/>
                                             <Literal 
                                             Text=";document.users.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179"/>
                                             <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179"/>
                                             <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="179"/>
                                           </Concat>
                                         </Concat>
@@ -3143,13 +2909,13 @@
                                             <Literal 
                                             Text="&lt;a href='JavaScript: document.users.deleteuser.value=0;document.users.page2.value=10;document.users.onpage.value=" Length="113" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183"/>
                                             <Literal 
                                             Text=";document.users.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="82" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183"/>
                                             <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183"/>
                                             <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="183"/>
                                           </Concat>
                                         </Concat>
@@ -3164,19 +2930,15 @@
   &lt;input type='hidden' name='selectuser'&gt;
   &lt;input type='hidden' name='onpage' value='" Length="139" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="191">
 </Literal>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="$_POST"/>
                                     <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="192"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="$_POST"/>
                                     <Literal 
                                     Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="194">
 </Literal>
-                                    <Select>
-                                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Undef/>
-                                    </Select>
+                                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="207"/>
                                     <Literal 
                                     Text="'&gt;
  &lt;/form&gt;
@@ -3200,7 +2962,7 @@
                                   <Concat>
                                     <Concat>
                                       <Literal Text="EditClass.php: Unable to retrieve the information about the class to edit - " Length="76" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="6"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Concat>
                                       <Literal 
@@ -3226,7 +2988,7 @@
                                     </Concat>
                                     <Concat>
                                       <Literal Text="EditClass.php: Unable to get list of teachers - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="30"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Select>
                                       <Constraint Text="($teacher[0] == $class[1])"/>
@@ -3254,7 +3016,7 @@
                                     <Literal Text="&lt;/select&gt; &lt;/td&gt; &lt;td&gt;&lt;select name='semester'&gt;" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="49"/>
                                     <Concat>
                                       <Literal Text="EditClass.php: Unable to get list of semesters - " Length="49" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="53"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Select>
                                       <Constraint Text="($semester[0] == $class[2])"/>
@@ -3295,34 +3057,30 @@
                                     </Concat>
                                     <Concat>
                                       <Literal Text="EditClass.php: Unable to get list of substitutes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="79"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="mysql_error()"/>
                                     </Concat>
                                     <Select>
-                                      <Constraint Text="($type == &quot;Substitute&quot;)"/>
-                                      <Select>
-                                        <Constraint Text="($teacher[0] == $class[7])"/>
-                                        <Concat>
-                                          <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
-                                          <Undef/>
-                                          <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
-                                          <Undef/>
-                                          <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
-                                          <Undef/>
-                                          <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
-                                          <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="81"/>
-                                        </Concat>
-                                        <Concat>
-                                          <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="81"/>
-                                          <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
-                                          <Undef/>
-                                          <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
-                                          <Undef/>
-                                          <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
-                                          <Undef/>
-                                          <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
-                                        </Concat>
-                                      </Select>
-                                      <Undef/>
+                                      <Constraint Text="($teacher[0] == $class[7])"/>
+                                      <Concat>
+                                        <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
+                                        <Undef/>
+                                        <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
+                                        <Undef/>
+                                        <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
+                                        <Undef/>
+                                        <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="90"/>
+                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="81"/>
+                                      </Concat>
+                                      <Concat>
+                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="81"/>
+                                        <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
+                                        <Undef/>
+                                        <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
+                                        <Undef/>
+                                        <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
+                                        <Undef/>
+                                        <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="94"/>
+                                      </Concat>
                                     </Select>
                                     <Literal 
                                     Text="	 &lt;/select&gt;
@@ -3339,45 +3097,25 @@
    &lt;br /&gt;
    &lt;input type='checkbox' value='M' name='Days[]'" Length="218" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="113">
 </Literal>
-                                    <Select>
-                                      <Constraint Text="preg_match()"/>
-                                      <Concat>
-                                        <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="116"/>
-                                      </Concat>
-                                      <Concat> </Concat>
-                                    </Select>
+                                    <Concat>
+                                      <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="116"/>
+                                    </Concat>
                                     <Literal Text=" /&gt; Monday&lt;br /&gt; &lt;input type='checkbox' value='T' name='Days[]'" Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="119"/>
-                                    <Select>
-                                      <Constraint Text="preg_match()"/>
-                                      <Concat>
-                                        <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="122"/>
-                                      </Concat>
-                                      <Concat> </Concat>
-                                    </Select>
+                                    <Concat>
+                                      <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="122"/>
+                                    </Concat>
                                     <Literal Text=" /&gt; Tuesday&lt;br /&gt; &lt;input type='checkbox' value='W' name='Days[]'" Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="125"/>
-                                    <Select>
-                                      <Constraint Text="preg_match()"/>
-                                      <Concat>
-                                        <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="128"/>
-                                      </Concat>
-                                      <Concat> </Concat>
-                                    </Select>
+                                    <Concat>
+                                      <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="128"/>
+                                    </Concat>
                                     <Literal Text=" /&gt; Wednesday&lt;br /&gt; &lt;input type='checkbox' value='H' name='Days[]'" Length="69" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="131"/>
-                                    <Select>
-                                      <Constraint Text="preg_match()"/>
-                                      <Concat>
-                                        <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="134"/>
-                                      </Concat>
-                                      <Concat> </Concat>
-                                    </Select>
+                                    <Concat>
+                                      <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="134"/>
+                                    </Concat>
                                     <Literal Text=" /&gt; Thursday&lt;br /&gt; &lt;input type='checkbox' value='F' name='Days[]'" Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="137"/>
-                                    <Select>
-                                      <Constraint Text="preg_match()"/>
-                                      <Concat>
-                                        <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="140"/>
-                                      </Concat>
-                                      <Concat> </Concat>
-                                    </Select>
+                                    <Concat>
+                                      <Literal Text="CHECKED" Length="7" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="140"/>
+                                    </Concat>
                                     <Concat>
                                       <Literal 
                                       Text=" /&gt; Friday
@@ -3393,17 +3131,13 @@
 </Literal>
                                       <Undef/>
                                       <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="152"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="$_POST"/>
                                       <Literal 
                                       Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="154">
 </Literal>
-                                      <Select>
-                                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                        <Literal Text="0" Length="1" Line="0"/>
-                                        <Undef/>
-                                      </Select>
+                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="165"/>
                                       <Literal 
                                       Text="'&gt;
 
@@ -3425,7 +3159,7 @@
                                     <Concat>
                                       <Concat>
                                         <Literal Text="EditTerm.php: Unable to retrieve the information about the term to edit - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="6"/>
-                                        <Symbolic Text="[Symbol]"/>
+                                        <Symbolic Text="mysql_error()"/>
                                       </Concat>
                                       <Concat>
                                         <Literal 
@@ -3444,9 +3178,9 @@
 </Literal>
                                         <Undef/>
                                         <Literal Text="' /&gt;&lt;/td&gt; &lt;td&gt;&lt;input type='text' name='startdate' value='" Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="22"/>
-                                        <Symbolic Text="[Symbol]"/>
+                                        <Symbolic Text="convertfromdb()"/>
                                         <Literal Text="' /&gt;&lt;/td&gt; &lt;td&gt;&lt;input type='text' name='enddate' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="23"/>
-                                        <Symbolic Text="[Symbol]"/>
+                                        <Symbolic Text="convertfromdb()"/>
                                         <Literal 
                                         Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -3468,17 +3202,13 @@
 </Literal>
                                         <Undef/>
                                         <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="40"/>
-                                        <Symbolic Text="[Symbol]"/>
+                                        <Symbolic Text="$_POST"/>
                                         <Literal 
                                         Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="42">
 </Literal>
-                                        <Select>
-                                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                          <Literal Text="0" Length="1" Line="0"/>
-                                          <Undef/>
-                                        </Select>
+                                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="53"/>
                                         <Literal 
                                         Text="'&gt;
 
@@ -3500,7 +3230,7 @@
                                       <Concat>
                                         <Concat>
                                           <Literal Text="EditSemester.php: Unable to retrieve the information about the semester to edit - " Length="82" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="6"/>
-                                          <Symbolic Text="[Symbol]"/>
+                                          <Symbolic Text="mysql_error()"/>
                                         </Concat>
                                         <Concat>
                                           <Literal 
@@ -3541,17 +3271,17 @@
 	&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' maxlength='10' name='startdate' size='8' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="37">
 </Literal>
-                                          <Symbolic Text="[Symbol]"/>
+                                          <Symbolic Text="convertfromdb()"/>
                                           <Literal 
                                           Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' maxlength='10' name='middate' size='8' value='" Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="38">
 </Literal>
-                                          <Symbolic Text="[Symbol]"/>
+                                          <Symbolic Text="convertfromdb()"/>
                                           <Literal 
                                           Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' maxlength='10' name='enddate' size='8' value='" Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="39">
 </Literal>
-                                          <Symbolic Text="[Symbol]"/>
+                                          <Symbolic Text="convertfromdb()"/>
                                           <Literal Text="' /&gt;&lt;/td&gt; &lt;td&gt; &lt;select name='half'&gt; &lt;option value='1' " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="42"/>
                                           <Select>
                                             <Constraint Text="($semester[4] == 1)"/>
@@ -3587,17 +3317,13 @@
 </Literal>
                                           <Undef/>
                                           <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="62"/>
-                                          <Symbolic Text="[Symbol]"/>
+                                          <Symbolic Text="$_POST"/>
                                           <Literal 
                                           Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="64">
 </Literal>
-                                          <Select>
-                                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                            <Literal Text="0" Length="1" Line="0"/>
-                                            <Undef/>
-                                          </Select>
+                                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="75"/>
                                           <Literal 
                                           Text="'&gt;
 
@@ -3676,17 +3402,13 @@
   &lt;input type='hidden' name='adduser' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="1688" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddUser.php" Line="58">
 </Literal>
-                                            <Symbolic Text="[Symbol]"/>
+                                            <Symbolic Text="$_POST"/>
                                             <Literal 
                                             Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddUser.php" Line="60">
 </Literal>
-                                            <Select>
-                                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                              <Literal Text="0" Length="1" Line="0"/>
-                                              <Undef/>
-                                            </Select>
+                                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddUser.php" Line="71"/>
                                             <Literal 
                                             Text="'&gt;
 
@@ -3708,7 +3430,7 @@
                                           <Concat>
                                             <Concat>
                                               <Literal Text="EditUser.php: Unable to retrieve the information about the user to edit - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditUser.php" Line="6"/>
-                                              <Symbolic Text="[Symbol]"/>
+                                              <Symbolic Text="mysql_error()"/>
                                             </Concat>
                                             <Concat>
                                               <Literal 
@@ -3800,17 +3522,13 @@
 </Literal>
                                               <Undef/>
                                               <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditUser.php" Line="86"/>
-                                              <Symbolic Text="[Symbol]"/>
+                                              <Symbolic Text="$_POST"/>
                                               <Literal 
                                               Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditUser.php" Line="88">
 </Literal>
-                                              <Select>
-                                                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                <Literal Text="0" Length="1" Line="0"/>
-                                                <Undef/>
-                                              </Select>
+                                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditUser.php" Line="99"/>
                                               <Literal 
                                               Text="'&gt;
 
@@ -3849,7 +3567,7 @@
 </Literal>
                                               <Concat>
                                                 <Literal Text="AddTeacher: Unable to retrieve the list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTeacher.php" Line="20"/>
-                                                <Symbolic Text="[Symbol]"/>
+                                                <Symbolic Text="mysql_error()"/>
                                               </Concat>
                                               <Repeat>
                                                 <Constraint Text="$page2 == 16"/>
@@ -3881,17 +3599,13 @@
   &lt;input type='hidden' name='addteacher' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="517" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTeacher.php" Line="40">
 </Literal>
-                                                <Symbolic Text="[Symbol]"/>
+                                                <Symbolic Text="$_POST"/>
                                                 <Literal 
                                                 Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTeacher.php" Line="42">
 </Literal>
-                                                <Select>
-                                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                  <Undef/>
-                                                </Select>
+                                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTeacher.php" Line="53"/>
                                                 <Literal 
                                                 Text="'&gt;
 
@@ -3913,7 +3627,7 @@
                                               <Concat>
                                                 <Concat>
                                                   <Literal Text="EditTeacher.php: Unable to retrieve the information about the teacher to edit - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="6"/>
-                                                  <Symbolic Text="[Symbol]"/>
+                                                  <Symbolic Text="mysql_error()"/>
                                                 </Concat>
                                                 <Concat>
                                                   <Literal 
@@ -3940,11 +3654,11 @@
                                                 </Concat>
                                                 <Concat>
                                                   <Literal Text="AddTeacher: Unable to get the current teacher's userid - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="28"/>
-                                                  <Symbolic Text="[Symbol]"/>
+                                                  <Symbolic Text="mysql_error()"/>
                                                 </Concat>
                                                 <Concat>
                                                   <Literal Text="EditTeacher: Unable to retrieve the list of users - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="32"/>
-                                                  <Symbolic Text="[Symbol]"/>
+                                                  <Symbolic Text="mysql_error()"/>
                                                 </Concat>
                                                 <Select>
                                                   <Constraint Text="($teacher[0] == $user[0])"/>
@@ -3988,17 +3702,13 @@
 </Literal>
                                                   <Undef/>
                                                   <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="67"/>
-                                                  <Symbolic Text="[Symbol]"/>
+                                                  <Symbolic Text="$_POST"/>
                                                   <Literal 
                                                   Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="69">
 </Literal>
-                                                  <Select>
-                                                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                    <Undef/>
-                                                  </Select>
+                                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="80"/>
                                                   <Literal 
                                                   Text="'&gt;
 
@@ -4047,18 +3757,14 @@
   &lt;input type='hidden' name='addannouncement' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="973" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAnnouncements.php" Line="28">
 </Literal>
-                                                    <Symbolic Text="[Symbol]"/>
+                                                    <Symbolic Text="$_POST"/>
                                                     <Literal 
                                                     Text="'&gt;
   &lt;input type='hidden' name='date'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="119" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAnnouncements.php" Line="31">
 </Literal>
-                                                    <Select>
-                                                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                      <Undef/>
-                                                    </Select>
+                                                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAnnouncements.php" Line="42"/>
                                                     <Literal 
                                                     Text="'&gt;
 
@@ -4082,7 +3788,7 @@
                                                       <Literal 
                                                       Text="EditAnnouncement.php: Unable to retrieve the information about the announcement to edit - " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="6">
 </Literal>
-                                                      <Symbolic Text="[Symbol]"/>
+                                                      <Symbolic Text="mysql_error()"/>
                                                     </Concat>
                                                     <Concat>
                                                       <Literal 
@@ -4106,7 +3812,7 @@
                                                       Text="&lt;/textarea&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='date' value='" Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="23">
 </Literal>
-                                                      <Symbolic Text="[Symbol]"/>
+                                                      <Symbolic Text="convertfromdb()"/>
                                                       <Literal 
                                                       Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -4128,17 +3834,13 @@
 </Literal>
                                                       <Undef/>
                                                       <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="40"/>
-                                                      <Symbolic Text="[Symbol]"/>
+                                                      <Symbolic Text="$_POST"/>
                                                       <Literal 
                                                       Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="42">
 </Literal>
-                                                      <Select>
-                                                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                        <Undef/>
-                                                      </Select>
+                                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="53"/>
                                                       <Literal 
                                                       Text="'&gt;
 
@@ -4179,7 +3881,7 @@
 </Literal>
                                                       <Concat>
                                                         <Literal Text="AddStudent: Unable to retrieve the list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddStudent.php" Line="22"/>
-                                                        <Symbolic Text="[Symbol]"/>
+                                                        <Symbolic Text="mysql_error()"/>
                                                       </Concat>
                                                       <Repeat>
                                                         <Constraint Text="$page2 == 20"/>
@@ -4211,17 +3913,13 @@
   &lt;input type='hidden' name='addstudent' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="517" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddStudent.php" Line="42">
 </Literal>
-                                                        <Symbolic Text="[Symbol]"/>
+                                                        <Symbolic Text="$_POST"/>
                                                         <Literal 
                                                         Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddStudent.php" Line="44">
 </Literal>
-                                                        <Select>
-                                                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                          <Undef/>
-                                                        </Select>
+                                                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddStudent.php" Line="55"/>
                                                         <Literal 
                                                         Text="'&gt;
 
@@ -4243,7 +3941,7 @@
                                                       <Concat>
                                                         <Concat>
                                                           <Literal Text="EditStudent.php: Unable to retrieve the information about the student to edit - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="6"/>
-                                                          <Symbolic Text="[Symbol]"/>
+                                                          <Symbolic Text="mysql_error()"/>
                                                         </Concat>
                                                         <Concat>
                                                           <Literal 
@@ -4276,11 +3974,11 @@
                                                         </Concat>
                                                         <Concat>
                                                           <Literal Text="EditStudent: Unable to get the current student's userid - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="30"/>
-                                                          <Symbolic Text="[Symbol]"/>
+                                                          <Symbolic Text="mysql_error()"/>
                                                         </Concat>
                                                         <Concat>
                                                           <Literal Text="EditStudent: Unable to retrieve the list of users - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="34"/>
-                                                          <Symbolic Text="[Symbol]"/>
+                                                          <Symbolic Text="mysql_error()"/>
                                                         </Concat>
                                                         <Select>
                                                           <Constraint Text="($student[0] == $user[0])"/>
@@ -4324,17 +4022,13 @@
 </Literal>
                                                           <Undef/>
                                                           <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="69"/>
-                                                          <Symbolic Text="[Symbol]"/>
+                                                          <Symbolic Text="$_POST"/>
                                                           <Literal 
                                                           Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="71">
 </Literal>
-                                                          <Select>
-                                                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                            <Undef/>
-                                                          </Select>
+                                                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="82"/>
                                                           <Literal 
                                                           Text="'&gt;
 
@@ -4354,89 +4048,65 @@
                                                       <Select>
                                                         <Constraint Text="$page2 == 22"/>
                                                         <Concat>
-                                                          <Select>
-                                                            <Constraint Text="($_POST[&quot;addparent&quot;] == 1)"/>
+                                                          <Concat>
                                                             <Concat>
-                                                              <Select>
+                                                              <Concat>
+                                                                <Literal Text="ManageParents.php: Uanable to get list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="9"/>
+                                                                <Symbolic Text="mysql_error()"/>
+                                                              </Concat>
+                                                              <Repeat>
                                                                 <Constraint 
                                                                 Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;student&quot;] != &quot;&quot;))">
 </Constraint>
                                                                 <Concat>
-                                                                  <Concat>
-                                                                    <Literal Text="ManageParents.php: Uanable to get list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="9"/>
-                                                                    <Symbolic Text="[Symbol]"/>
-                                                                  </Concat>
                                                                   <Repeat>
                                                                     <Constraint 
                                                                     Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;student&quot;] != &quot;&quot;))">
 </Constraint>
                                                                     <Concat>
-                                                                      <Repeat>
-                                                                        <Constraint 
-                                                                        Text="(((($_POST[&quot;username&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;student&quot;] != &quot;&quot;))">
-</Constraint>
+                                                                      <Concat>
                                                                         <Concat>
-                                                                          <Select>
-                                                                            <Constraint Text="(($_POST[&quot;username&quot;] == $userlist[0]) &amp;&amp; ($_POST[&quot;student&quot;] == $student[0]))"/>
-                                                                            <Concat>
-                                                                              <Concat>
-                                                                                <Literal 
-                                                                                Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;That user is already assigned to a parent!&lt;/font&gt;&lt;/h1&gt;
+                                                                          <Literal 
+                                                                          Text="&lt;br&gt;&lt;br&gt;&lt;h1 align='center'&gt;&lt;font color='red'&gt;That user is already assigned to a parent!&lt;/font&gt;&lt;/h1&gt;
 	  &lt;br&gt;
 	  &lt;form name='uhoh' action='./index.php' method='POST'&gt;
 	  &lt;center&gt;&lt;input type='button' value='&amp;nbsp;Back&amp;nbsp;' onClick='document.uhoh.page2.value=22;document.uhoh.submit();'&gt;&lt;/center&gt;
 	  &lt;input type='hidden' name='page2' value='" Length="339" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="23">
 </Literal>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                                <Literal 
-                                                                                Text="'&gt;
+                                                                          <Symbolic Text="$_POST"/>
+                                                                          <Literal 
+                                                                          Text="'&gt;
 	  &lt;input type='hidden' name='logout'&gt;
 	  &lt;input type='hidden' name='page' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="25">
 </Literal>
-                                                                                <Select>
-                                                                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="26"/>
-                                                                                  <Undef/>
-                                                                                </Select>
-                                                                                <Literal Text="'&gt; &lt;/form&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="26"/>
-                                                                              </Concat>
-                                                                            </Concat>
-                                                                            <Concat> </Concat>
-                                                                          </Select>
+                                                                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="26"/>
+                                                                          <Literal Text="'&gt; &lt;/form&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="26"/>
                                                                         </Concat>
-                                                                      </Repeat>
+                                                                      </Concat>
                                                                     </Concat>
                                                                   </Repeat>
-                                                                  <Concat>
-                                                                    <Literal Text="ManageParents.php: Unable to insert new parent - " Length="49" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="33"/>
-                                                                    <Symbolic Text="[Symbol]"/>
-                                                                  </Concat>
-                                                                  <Concat>
-                                                                    <Literal Text="Unable to get the newly entered parentid - " Length="43" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="37"/>
-                                                                    <Symbolic Text="[Symbol]"/>
-                                                                  </Concat>
-                                                                  <Concat>
-                                                                    <Literal Text="ManageParents.php: Unable to insert the parent to student match - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="43"/>
-                                                                    <Symbolic Text="[Symbol]"/>
-                                                                  </Concat>
                                                                 </Concat>
-                                                                <Concat> </Concat>
-                                                              </Select>
-                                                            </Concat>
-                                                            <Concat> </Concat>
-                                                          </Select>
-                                                          <Select>
-                                                            <Constraint 
-                                                            Text="((((($_POST[&quot;editparent&quot;] == 1) &amp;&amp; ($_POST[&quot;username&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;fname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;lname&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;student&quot;] != &quot;&quot;))">
-</Constraint>
-                                                            <Concat>
+                                                              </Repeat>
                                                               <Concat>
-                                                                <Literal Text="ManageParents.php: Unable to update the parent information - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="51"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Literal Text="ManageParents.php: Unable to insert new parent - " Length="49" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="33"/>
+                                                                <Symbolic Text="mysql_error()"/>
+                                                              </Concat>
+                                                              <Concat>
+                                                                <Literal Text="Unable to get the newly entered parentid - " Length="43" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="37"/>
+                                                                <Symbolic Text="mysql_error()"/>
+                                                              </Concat>
+                                                              <Concat>
+                                                                <Literal Text="ManageParents.php: Unable to insert the parent to student match - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="43"/>
+                                                                <Symbolic Text="mysql_error()"/>
                                                               </Concat>
                                                             </Concat>
-                                                            <Concat> </Concat>
-                                                          </Select>
+                                                          </Concat>
+                                                          <Concat>
+                                                            <Concat>
+                                                              <Literal Text="ManageParents.php: Unable to update the parent information - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="51"/>
+                                                              <Symbolic Text="mysql_error()"/>
+                                                            </Concat>
+                                                          </Concat>
                                                           <Literal 
                                                           Text="&lt;script language='JavaScript'&gt;
 
@@ -4517,57 +4187,53 @@
 </Literal>
                                                           <Concat>
                                                             <Literal Text="ManageParents.php: Unable to retrieve total number of parents - " Length="64" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="145"/>
-                                                            <Symbolic Text="[Symbol]"/>
+                                                            <Symbolic Text="mysql_error()"/>
                                                           </Concat>
                                                           <Concat>
                                                             <Literal Text="ManageParents.php: Unable to get a list of parents - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="158"/>
-                                                            <Symbolic Text="[Symbol]"/>
+                                                            <Symbolic Text="mysql_error()"/>
                                                           </Concat>
                                                           <Repeat>
                                                             <Constraint Text="$page2 == 22"/>
                                                             <Concat>
                                                               <Concat>
                                                                 <Literal Text="ManageParents.php: Unable to get a list of parents with the matching students - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="166"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Symbolic Text="mysql_error()"/>
                                                               </Concat>
-                                                              <Select>
-                                                                <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                                                              <Concat>
                                                                 <Concat>
-                                                                  <Concat>
-                                                                    <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="172"/>
-                                                                    <Select>
-                                                                      <Constraint Text="(($row % 2) == 0)"/>
-                                                                      <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="172"/>
-                                                                      <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="172"/>
-                                                                    </Select>
-                                                                    <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
-                                                                    <Undef/>
-                                                                    <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
-                                                                    <Literal Text=");document.parents.studentid.value=" Length="35" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
-                                                                    <Select>
-                                                                      <Constraint Text="($student[2] == null)"/>
-                                                                      <Literal Text="-1" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
-                                                                      <Concat>
-                                                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
-                                                                        <Undef/>
-                                                                      </Concat>
-                                                                    </Select>
-                                                                    <Literal Text=";' /&gt;&lt;/td&gt; &lt;td&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="174"/>
-                                                                    <Undef/>
-                                                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="175"/>
-                                                                    <Undef/>
-                                                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="176"/>
-                                                                    <Undef/>
-                                                                    <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="176"/>
-                                                                    <Undef/>
-                                                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="177"/>
-                                                                    <Undef/>
-                                                                    <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="178"/>
-                                                                  </Concat>
+                                                                  <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="172"/>
+                                                                  <Select>
+                                                                    <Constraint Text="(($row % 2) == 0)"/>
+                                                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="172"/>
+                                                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="172"/>
+                                                                  </Select>
+                                                                  <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
+                                                                  <Undef/>
+                                                                  <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
+                                                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="178"/>
+                                                                  <Literal Text=");document.parents.studentid.value=" Length="35" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
+                                                                  <Select>
+                                                                    <Constraint Text="($student[2] == null)"/>
+                                                                    <Literal Text="-1" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
+                                                                    <Concat>
+                                                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="173"/>
+                                                                      <Undef/>
+                                                                    </Concat>
+                                                                  </Select>
+                                                                  <Literal Text=";' /&gt;&lt;/td&gt; &lt;td&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="174"/>
+                                                                  <Undef/>
+                                                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="175"/>
+                                                                  <Undef/>
+                                                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="176"/>
+                                                                  <Undef/>
+                                                                  <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="176"/>
+                                                                  <Undef/>
+                                                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="177"/>
+                                                                  <Undef/>
+                                                                  <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="178"/>
                                                                 </Concat>
-                                                                <Concat> </Concat>
-                                                              </Select>
+                                                              </Concat>
                                                             </Concat>
                                                           </Repeat>
                                                           <Literal 
@@ -4590,13 +4256,13 @@
                                                                     <Literal 
                                                                     Text="&lt;a href='JavaScript: document.parents.deleteparent.value=0;document.parents.page2.value=3;document.parents.onpage.value=" Length="120" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195">
 </Literal>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
+                                                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195"/>
                                                                     <Literal 
                                                                     Text=";document.parents.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="92" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195">
 </Literal>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
+                                                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195"/>
                                                                     <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195"/>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
+                                                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195"/>
                                                                     <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="195"/>
                                                                   </Concat>
                                                                 </Concat>
@@ -4605,13 +4271,13 @@
                                                                     <Literal 
                                                                     Text="&lt;a href='JavaScript: document.parents.deleteparent.value=0;document.parents.page2.value=3;document.parents.onpage.value=" Length="120" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199">
 </Literal>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
+                                                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199"/>
                                                                     <Literal 
                                                                     Text=";document.parents.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="84" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199">
 </Literal>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
+                                                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199"/>
                                                                     <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199"/>
-                                                                    <Literal Text="1" Length="1" Line="0"/>
+                                                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199"/>
                                                                     <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="199"/>
                                                                   </Concat>
                                                                 </Concat>
@@ -4627,19 +4293,15 @@
   &lt;input type='hidden' name='studentid'&gt;
   &lt;input type='hidden' name='page2' value='" Length="183" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="207">
 </Literal>
-                                                            <Symbolic Text="[Symbol]"/>
+                                                            <Symbolic Text="$_POST"/>
                                                             <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="208"/>
-                                                            <Symbolic Text="[Symbol]"/>
+                                                            <Symbolic Text="$_POST"/>
                                                             <Literal 
                                                             Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="210">
 </Literal>
-                                                            <Select>
-                                                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                              <Undef/>
-                                                            </Select>
+                                                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="223"/>
                                                             <Literal 
                                                             Text="'&gt;
  &lt;/form&gt;
@@ -4681,7 +4343,7 @@
 </Literal>
                                                             <Concat>
                                                               <Literal Text="AddParent: Unable to retrieve the list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="21"/>
-                                                              <Symbolic Text="[Symbol]"/>
+                                                              <Symbolic Text="mysql_error()"/>
                                                             </Concat>
                                                             <Repeat>
                                                               <Constraint Text="$page2 == 23"/>
@@ -4700,7 +4362,7 @@
                                                             <Literal Text=" &lt;/select&gt; &lt;/td&gt; &lt;td&gt; &lt;select name='username'&gt;" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="30"/>
                                                             <Concat>
                                                               <Literal Text="AddParent: Unable to retrieve the list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="33"/>
-                                                              <Symbolic Text="[Symbol]"/>
+                                                              <Symbolic Text="mysql_error()"/>
                                                             </Concat>
                                                             <Repeat>
                                                               <Constraint Text="$page2 == 23"/>
@@ -4732,17 +4394,13 @@
   &lt;input type='hidden' name='addparent' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="511" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="53">
 </Literal>
-                                                              <Symbolic Text="[Symbol]"/>
+                                                              <Symbolic Text="$_POST"/>
                                                               <Literal 
                                                               Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="55">
 </Literal>
-                                                              <Select>
-                                                                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                <Undef/>
-                                                              </Select>
+                                                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="66"/>
                                                               <Literal 
                                                               Text="'&gt;
 
@@ -4764,7 +4422,7 @@
                                                             <Concat>
                                                               <Concat>
                                                                 <Literal Text="EditParent.php: Unable to retrieve the information about the parent to edit - " Length="78" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="6"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Symbolic Text="mysql_error()"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal 
@@ -4789,7 +4447,7 @@
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal Text="AddParent: Unable to retrieve the list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="28"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Symbolic Text="mysql_error()"/>
                                                               </Concat>
                                                               <Select>
                                                                 <Constraint Text="($students[0] == $_POST[&quot;studentid&quot;])"/>
@@ -4817,11 +4475,11 @@
                                                               <Literal Text=" &lt;/select&gt; &lt;/td&gt; &lt;td&gt; &lt;select name='username'&gt;" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="48"/>
                                                               <Concat>
                                                                 <Literal Text="Addparent: Unable to get the current parent's userid - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="52"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Symbolic Text="mysql_error()"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal Text="Editparent: Unable to retrieve the list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="56"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Symbolic Text="mysql_error()"/>
                                                               </Concat>
                                                               <Select>
                                                                 <Constraint Text="($parent[0] == $user[0])"/>
@@ -4865,17 +4523,13 @@
 </Literal>
                                                                 <Undef/>
                                                                 <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="91"/>
-                                                                <Symbolic Text="[Symbol]"/>
+                                                                <Symbolic Text="$_POST"/>
                                                                 <Literal 
                                                                 Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="93">
 </Literal>
-                                                                <Select>
-                                                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                  <Undef/>
-                                                                </Select>
+                                                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="104"/>
                                                                 <Literal 
                                                                 Text="'&gt;
 
@@ -4928,7 +4582,7 @@
                                                                 </Concat>
                                                                 <Concat>
                                                                   <Literal Text="VisualizeClasses.php: Unable to get number of periods - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="31"/>
-                                                                  <Symbolic Text="[Symbol]"/>
+                                                                  <Symbolic Text="mysql_error()"/>
                                                                 </Concat>
                                                                 <Repeat>
                                                                   <Constraint Text="$page2 == 25"/>
@@ -4941,12 +4595,12 @@
                                                                         <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="45"/>
                                                                       </Select>
                                                                       <Literal Text="' valign='top'&gt; &lt;td&gt;" Length="22" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="46"/>
-                                                                      <Literal Text="1" Length="1" Line="0"/>
+                                                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="46"/>
                                                                       <Literal Text="&lt;/td&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="46"/>
                                                                     </Concat>
                                                                     <Concat>
                                                                       <Literal Text="VisualizeClasses.php: Unable to get class information - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="50"/>
-                                                                      <Symbolic Text="[Symbol]"/>
+                                                                      <Symbolic Text="mysql_error()"/>
                                                                     </Concat>
                                                                     <Concat>
                                                                       <Select>
@@ -5243,17 +4897,13 @@
   &lt;input type='button' value=' Back ' onClick='document.classes.page2.value=0;document.classes.submit();'&gt;
   &lt;input type='hidden' name='page2' value='" Length="232" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="144">
 </Literal>
-                                                                  <Symbolic Text="[Symbol]"/>
+                                                                  <Symbolic Text="$_POST"/>
                                                                   <Literal 
                                                                   Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="146">
 </Literal>
-                                                                  <Select>
-                                                                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                    <Literal Text="0" Length="1" Line="0"/>
-                                                                    <Undef/>
-                                                                  </Select>
+                                                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="162"/>
                                                                   <Literal 
                                                                   Text="'&gt;
 &lt;/p&gt;
@@ -5278,36 +4928,32 @@
                                                               <Select>
                                                                 <Constraint Text="$page2 == 26"/>
                                                                 <Concat>
-                                                                  <Select>
-                                                                    <Constraint Text="($_POST[&quot;addreg&quot;] == 1)"/>
+                                                                  <Concat>
                                                                     <Concat>
+                                                                      <Literal 
+                                                                      Text="Registration.php: Unable to get the information about the new class to add for validation - " Length="92" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="11">
+</Literal>
+                                                                      <Symbolic Text="mysql_error()"/>
+                                                                    </Concat>
+                                                                    <Concat>
+                                                                      <Literal Text="Registration.php: Unable to get a list of registrations for validation - " Length="73" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="18"/>
+                                                                      <Symbolic Text="mysql_error()"/>
+                                                                    </Concat>
+                                                                    <Select>
+                                                                      <Constraint Text="$insert"/>
+                                                                      <Concat>
+                                                                        <Concat>
+                                                                          <Literal Text="Registration.php: Unable to add the new registration - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="51"/>
+                                                                          <Symbolic Text="mysql_error()"/>
+                                                                        </Concat>
+                                                                      </Concat>
                                                                       <Concat>
                                                                         <Literal 
-                                                                        Text="Registration.php: Unable to get the information about the new class to add for validation - " Length="92" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="11">
+                                                                        Text="&lt;font color='red'&gt;*That class interferes with another registration for this student&lt;/font&gt;" Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="63">
 </Literal>
-                                                                        <Symbolic Text="[Symbol]"/>
                                                                       </Concat>
-                                                                      <Concat>
-                                                                        <Literal Text="Registration.php: Unable to get a list of registrations for validation - " Length="73" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="18"/>
-                                                                        <Symbolic Text="[Symbol]"/>
-                                                                      </Concat>
-                                                                      <Select>
-                                                                        <Constraint Text="$insert"/>
-                                                                        <Concat>
-                                                                          <Concat>
-                                                                            <Literal Text="Registration.php: Unable to add the new registration - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="51"/>
-                                                                            <Symbolic Text="[Symbol]"/>
-                                                                          </Concat>
-                                                                        </Concat>
-                                                                        <Concat>
-                                                                          <Literal 
-                                                                          Text="&lt;font color='red'&gt;*That class interferes with another registration for this student&lt;/font&gt;" Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="63">
-</Literal>
-                                                                        </Concat>
-                                                                      </Select>
-                                                                    </Concat>
-                                                                    <Concat> </Concat>
-                                                                  </Select>
+                                                                    </Select>
+                                                                  </Concat>
                                                                   <Literal 
                                                                   Text="&lt;script language='JavaScript'&gt;
 
@@ -5376,7 +5022,7 @@
 </Literal>
                                                                   <Concat>
                                                                     <Literal Text="Registration.php: Unable to get a list of students - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="150"/>
-                                                                    <Symbolic Text="[Symbol]"/>
+                                                                    <Symbolic Text="mysql_error()"/>
                                                                   </Concat>
                                                                   <Repeat>
                                                                     <Constraint Text="$page2 == 26"/>
@@ -5405,7 +5051,7 @@
 </Literal>
                                                                   <Concat>
                                                                     <Literal Text="Registration.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="168"/>
-                                                                    <Symbolic Text="[Symbol]"/>
+                                                                    <Symbolic Text="mysql_error()"/>
                                                                   </Concat>
                                                                   <Repeat>
                                                                     <Constraint Text="$page2 == 26"/>
@@ -5439,28 +5085,24 @@
    &lt;td align='center' colspan='3'&gt;
 	&lt;select name='class'&gt;" Length="511" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="196">
 </Literal>
-                                                                  <Select>
-                                                                    <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                                                  <Concat>
                                                                     <Concat>
-                                                                      <Concat>
-                                                                        <Literal Text="&lt;/select&gt;Registration.php: Unable to get a list of courses - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="202"/>
-                                                                        <Symbolic Text="[Symbol]"/>
-                                                                      </Concat>
-                                                                      <Repeat>
-                                                                        <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
-                                                                        <Concat>
-                                                                          <Concat>
-                                                                            <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
-                                                                            <Undef/>
-                                                                            <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
-                                                                            <Undef/>
-                                                                            <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
-                                                                          </Concat>
-                                                                        </Concat>
-                                                                      </Repeat>
+                                                                      <Literal Text="&lt;/select&gt;Registration.php: Unable to get a list of courses - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="202"/>
+                                                                      <Symbolic Text="mysql_error()"/>
                                                                     </Concat>
-                                                                    <Concat> </Concat>
-                                                                  </Select>
+                                                                    <Repeat>
+                                                                      <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                                                      <Concat>
+                                                                        <Concat>
+                                                                          <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
+                                                                          <Undef/>
+                                                                          <Literal Text="'&gt;" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
+                                                                          <Undef/>
+                                                                          <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="206"/>
+                                                                        </Concat>
+                                                                      </Concat>
+                                                                    </Repeat>
+                                                                  </Concat>
                                                                   <Literal 
                                                                   Text="	&lt;/select&gt;
    &lt;input type='button' value='Add' onClick='document.registration.addreg.value=1;document.registration.submit();' /&gt;
@@ -5472,7 +5114,7 @@
 </Literal>
                                                                   <Concat>
                                                                     <Literal Text="Registration.php: Unable to get a list of registrations - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="219"/>
-                                                                    <Symbolic Text="[Symbol]"/>
+                                                                    <Symbolic Text="mysql_error()"/>
                                                                   </Concat>
                                                                   <Repeat>
                                                                     <Constraint Text="$page2 == 26"/>
@@ -5487,7 +5129,7 @@
                                                                         <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="232"/>
                                                                         <Undef/>
                                                                         <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="232"/>
-                                                                        <Literal Text="1" Length="1" Line="0"/>
+                                                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="236"/>
                                                                         <Literal Text=");' /&gt;&lt;/td&gt; &lt;td align='left'&gt;" Length="32" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="233"/>
                                                                         <Undef/>
                                                                         <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="234"/>
@@ -5506,17 +5148,13 @@
   &lt;input type='hidden' name='selectreg' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="290" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="246">
 </Literal>
-                                                                    <Symbolic Text="[Symbol]"/>
+                                                                    <Symbolic Text="$_POST"/>
                                                                     <Literal 
                                                                     Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="248">
 </Literal>
-                                                                    <Select>
-                                                                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                      <Literal Text="0" Length="1" Line="0"/>
-                                                                      <Undef/>
-                                                                    </Select>
+                                                                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="260"/>
                                                                     <Literal 
                                                                     Text="' /&gt;
  &lt;/form&gt;
@@ -5553,7 +5191,7 @@
 </Literal>
                                                                     <Concat>
                                                                       <Literal Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="16"/>
-                                                                      <Symbolic Text="[Symbol]"/>
+                                                                      <Symbolic Text="mysql_error()"/>
                                                                     </Concat>
                                                                     <Repeat>
                                                                       <Constraint Text="$page2 == 27"/>
@@ -5598,7 +5236,7 @@
                                                                     </Concat>
                                                                     <Concat>
                                                                       <Literal Text="DeficiencyReport: Unable to get a list of deficient students - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="47"/>
-                                                                      <Symbolic Text="[Symbol]"/>
+                                                                      <Symbolic Text="mysql_error()"/>
                                                                     </Concat>
                                                                     <Repeat>
                                                                       <Constraint Text="$page2 == 27"/>
@@ -5617,7 +5255,7 @@
                                                                           <Literal Text="&lt;/td&gt; &lt;td align='left'&gt;" Length="26" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="84"/>
                                                                           <Undef/>
                                                                           <Literal Text="&lt;/td&gt; &lt;td align='left'&gt;" Length="26" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="85"/>
-                                                                          <Symbolic Text="[Symbol]"/>
+                                                                          <Symbolic Text="($percentage * 100)"/>
                                                                           <Literal Text="&amp;#37;&lt;/td&gt; &lt;/tr&gt; " Length="21" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="87"/>
                                                                         </Concat>
                                                                       </Concat>
@@ -5629,17 +5267,13 @@
   &lt;input type='button' value=' Back ' onClick='document.classes.page2.value=2;document.classes.submit();'&gt;
   &lt;input type='hidden' name='page2' value='" Length="170" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="93">
 </Literal>
-                                                                      <Symbolic Text="[Symbol]"/>
+                                                                      <Symbolic Text="$_POST"/>
                                                                       <Literal 
                                                                       Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="95">
 </Literal>
-                                                                      <Select>
-                                                                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                        <Literal Text="0" Length="1" Line="0"/>
-                                                                        <Undef/>
-                                                                      </Select>
+                                                                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="107"/>
                                                                       <Literal 
                                                                       Text="'&gt;
  &lt;/form&gt;
@@ -5672,7 +5306,7 @@
 </Literal>
                                                                       <Concat>
                                                                         <Literal Text="PointsReport.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="12"/>
-                                                                        <Symbolic Text="[Symbol]"/>
+                                                                        <Symbolic Text="mysql_error()"/>
                                                                       </Concat>
                                                                       <Repeat>
                                                                         <Constraint Text="$page2 == 28"/>
@@ -5699,7 +5333,7 @@
 </Literal>
                                                                       <Concat>
                                                                         <Literal Text="GradeReport.php: Unable to get a list of students - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="32"/>
-                                                                        <Symbolic Text="[Symbol]"/>
+                                                                        <Symbolic Text="mysql_error()"/>
                                                                       </Concat>
                                                                       <Select>
                                                                         <Constraint Text="($student[0] == $_POST[&quot;student&quot;])"/>
@@ -5737,7 +5371,7 @@
 </Literal>
                                                                       <Concat>
                                                                         <Literal Text="GradeReport.php: Unable to get the list of classes this student is registered for - " Length="84" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="67"/>
-                                                                        <Symbolic Text="[Symbol]"/>
+                                                                        <Symbolic Text="mysql_error()"/>
                                                                       </Concat>
                                                                       <Repeat>
                                                                         <Constraint Text="$page2 == 28"/>
@@ -5828,17 +5462,13 @@
   &lt;input type='button' value=' Back ' onClick='document.classes.page2.value=2;document.classes.submit();'&gt;
   &lt;input type='hidden' name='page2' value='" Length="170" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="147">
 </Literal>
-                                                                        <Symbolic Text="[Symbol]"/>
+                                                                        <Symbolic Text="$_POST"/>
                                                                         <Literal 
                                                                         Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="149">
 </Literal>
-                                                                        <Select>
-                                                                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                          <Literal Text="0" Length="1" Line="0"/>
-                                                                          <Undef/>
-                                                                        </Select>
+                                                                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="161"/>
                                                                         <Literal 
                                                                         Text="'&gt;
  &lt;/form&gt;
@@ -5861,7 +5491,7 @@
                                                                       <Concat>
                                                                         <Concat>
                                                                           <Literal Text="VisualizeRegistration: Unable to get the student's name - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="4"/>
-                                                                          <Symbolic Text="[Symbol]"/>
+                                                                          <Symbolic Text="mysql_error()"/>
                                                                         </Concat>
                                                                         <Concat>
                                                                           <Literal Text=" &lt;h1&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="11"/>
@@ -5893,7 +5523,7 @@
                                                                         </Concat>
                                                                         <Concat>
                                                                           <Literal Text="VisualizeRegistration.php: Unable to get number of periods - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="29"/>
-                                                                          <Symbolic Text="[Symbol]"/>
+                                                                          <Symbolic Text="mysql_error()"/>
                                                                         </Concat>
                                                                         <Repeat>
                                                                           <Constraint Text="$page2 == 29"/>
@@ -5906,21 +5536,21 @@
                                                                                 <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="43"/>
                                                                               </Select>
                                                                               <Literal Text="' valign='top'&gt; &lt;td&gt;" Length="22" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="44"/>
-                                                                              <Literal Text="1" Length="1" Line="0"/>
+                                                                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="44"/>
                                                                               <Literal Text="&lt;/td&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="44"/>
                                                                             </Concat>
                                                                             <Concat>
                                                                               <Literal 
                                                                               Text="VisualizeRegistration.php: Unable to get a list of CourseIDs for the student's registration - " Length="94" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="48">
 </Literal>
-                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Symbolic Text="mysql_error()"/>
                                                                             </Concat>
                                                                             <Repeat>
                                                                               <Constraint Text="$page2 == 29"/>
                                                                               <Concat>
                                                                                 <Concat>
                                                                                   <Literal Text="VisualizeRegistration.php: Unable to get class information - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="54"/>
-                                                                                  <Symbolic Text="[Symbol]"/>
+                                                                                  <Symbolic Text="mysql_error()"/>
                                                                                 </Concat>
                                                                               </Concat>
                                                                             </Repeat>
@@ -6219,17 +5849,13 @@
   &lt;input type='button' value=' Back ' onClick='document.classes.page2.value=26;document.classes.submit();'&gt;
   &lt;input type='hidden' name='page2' value='" Length="235" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="148">
 </Literal>
-                                                                          <Symbolic Text="[Symbol]"/>
+                                                                          <Symbolic Text="$_POST"/>
                                                                           <Literal 
                                                                           Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="150">
 </Literal>
-                                                                          <Select>
-                                                                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                            <Literal Text="0" Length="1" Line="0"/>
-                                                                            <Undef/>
-                                                                          </Select>
+                                                                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="166"/>
                                                                           <Literal 
                                                                           Text="'&gt;
 &lt;/p&gt;
@@ -6254,16 +5880,12 @@
                                                                       <Select>
                                                                         <Constraint Text="$page2 == 30"/>
                                                                         <Concat>
-                                                                          <Select>
-                                                                            <Constraint Text="($_POST[&quot;addattendance&quot;] == 1)"/>
+                                                                          <Concat>
                                                                             <Concat>
-                                                                              <Concat>
-                                                                                <Literal Text="ManageAttendance.php: Unable to insert new attendance record - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="13"/>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                              </Concat>
+                                                                              <Literal Text="ManageAttendance.php: Unable to insert new attendance record - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="13"/>
+                                                                              <Symbolic Text="mysql_error()"/>
                                                                             </Concat>
-                                                                            <Concat> </Concat>
-                                                                          </Select>
+                                                                          </Concat>
                                                                           <Literal 
                                                                           Text="&lt;script language='JavaScript'&gt;
 
@@ -6333,7 +5955,7 @@
 </Literal>
                                                                           <Concat>
                                                                             <Literal Text="Registration.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="95"/>
-                                                                            <Symbolic Text="[Symbol]"/>
+                                                                            <Symbolic Text="mysql_error()"/>
                                                                           </Concat>
                                                                           <Repeat>
                                                                             <Constraint Text="$page2 == 30"/>
@@ -6361,7 +5983,7 @@
 </Literal>
                                                                           <Concat>
                                                                             <Literal Text="ManageAttendance.php: Unable to get a list of students - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="120"/>
-                                                                            <Symbolic Text="[Symbol]"/>
+                                                                            <Symbolic Text="mysql_error()"/>
                                                                           </Concat>
                                                                           <Repeat>
                                                                             <Constraint Text="$page2 == 30"/>
@@ -6391,71 +6013,55 @@
    &lt;th&gt;&amp;nbsp;&lt;/th&gt;&lt;th&gt;Tardy&lt;/th&gt;&lt;th&gt;Absent&lt;/th&gt;
   &lt;/tr&gt;" Length="194" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="140">
 </Literal>
-                                                                          <Select>
-                                                                            <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                                                          <Concat>
                                                                             <Concat>
-                                                                              <Concat>
-                                                                                <Literal Text="ManageAttendance.php: Unable to get a list of registrations - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="150"/>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                              </Concat>
-                                                                              <Repeat>
-                                                                                <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
-                                                                                <Concat>
-                                                                                  <Concat>
-                                                                                    <Literal Text="&lt;tr style='color: red; font-weight: bold;' align='center' class='" Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="(($row % 2) == 0)"/>
-                                                                                      <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
-                                                                                      <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
-                                                                                    </Select>
-                                                                                    <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="162"/>
-                                                                                    <Undef/>
-                                                                                    <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="162"/>
-                                                                                    <Literal Text="1" Length="1" Line="0"/>
-                                                                                    <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="($class[0] != &quot;&quot;)"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                                                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                                                                        <Undef/>
-                                                                                      </Select>
-                                                                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
-                                                                                    </Select>
-                                                                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="($class[1] != &quot;&quot;)"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                                                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                                                                        <Undef/>
-                                                                                      </Select>
-                                                                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
-                                                                                    </Select>
-                                                                                    <Literal Text="&lt;/td&gt; &lt;/tr&gt; " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="166"/>
-                                                                                  </Concat>
-                                                                                </Concat>
-                                                                              </Repeat>
-                                                                              <Select>
-                                                                                <Constraint Text="($row == 0)"/>
-                                                                                <Concat>
-                                                                                  <Literal 
-                                                                                  Text="&lt;tr class='even'&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;N/A&lt;/td&gt;&lt;td&gt;N/A&lt;/td&gt;&lt;/tr&gt;" Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="172">
-</Literal>
-                                                                                </Concat>
-                                                                                <Concat> </Concat>
-                                                                              </Select>
-                                                                              <Concat>
-                                                                                <Literal Text="ManageAttendance.php: Unable to get the total number of tardies - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="174"/>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                              </Concat>
-                                                                              <Concat>
-                                                                                <Literal Text="ManageAttendance.php: Unable to get the total number of absences - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="177"/>
-                                                                                <Symbolic Text="[Symbol]"/>
-                                                                              </Concat>
+                                                                              <Literal Text="ManageAttendance.php: Unable to get a list of registrations - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="150"/>
+                                                                              <Symbolic Text="mysql_error()"/>
                                                                             </Concat>
-                                                                            <Concat> </Concat>
-                                                                          </Select>
+                                                                            <Repeat>
+                                                                              <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                                                              <Concat>
+                                                                                <Concat>
+                                                                                  <Literal Text="&lt;tr style='color: red; font-weight: bold;' align='center' class='" Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="(($row % 2) == 0)"/>
+                                                                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
+                                                                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="161"/>
+                                                                                  </Select>
+                                                                                  <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="162"/>
+                                                                                  <Undef/>
+                                                                                  <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="162"/>
+                                                                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="166"/>
+                                                                                  <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="($class[0] != &quot;&quot;)"/>
+                                                                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                                                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
+                                                                                  </Select>
+                                                                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
+                                                                                  <Select>
+                                                                                    <Constraint Text="($class[1] != &quot;&quot;)"/>
+                                                                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                                                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
+                                                                                  </Select>
+                                                                                  <Literal Text="&lt;/td&gt; &lt;/tr&gt; " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="166"/>
+                                                                                </Concat>
+                                                                              </Concat>
+                                                                            </Repeat>
+                                                                            <Concat>
+                                                                              <Literal 
+                                                                              Text="&lt;tr class='even'&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;N/A&lt;/td&gt;&lt;td&gt;N/A&lt;/td&gt;&lt;/tr&gt;" Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="172">
+</Literal>
+                                                                            </Concat>
+                                                                            <Concat>
+                                                                              <Literal Text="ManageAttendance.php: Unable to get the total number of tardies - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="174"/>
+                                                                              <Symbolic Text="mysql_error()"/>
+                                                                            </Concat>
+                                                                            <Concat>
+                                                                              <Literal Text="ManageAttendance.php: Unable to get the total number of absences - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="177"/>
+                                                                              <Symbolic Text="mysql_error()"/>
+                                                                            </Concat>
+                                                                          </Concat>
                                                                           <Concat>
                                                                             <Literal 
                                                                             Text="
@@ -6477,17 +6083,13 @@
   &lt;input type='hidden' name='selectreg' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="462" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="192">
 </Literal>
-                                                                            <Symbolic Text="[Symbol]"/>
+                                                                            <Symbolic Text="$_POST"/>
                                                                             <Literal 
                                                                             Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="194">
 </Literal>
-                                                                            <Select>
-                                                                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                              <Literal Text="0" Length="1" Line="0"/>
-                                                                              <Undef/>
-                                                                            </Select>
+                                                                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="206"/>
                                                                             <Literal 
                                                                             Text="' /&gt;
  &lt;/form&gt;
@@ -6541,22 +6143,18 @@
   &lt;input type='hidden' name='addattendance' value='' /&gt;
   &lt;input type='hidden' name='semester' value='" Length="1032" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAttendance.php" Line="32">
 </Literal>
-                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Symbolic Text="$_POST"/>
                                                                               <Literal Text="' /&gt; &lt;input type='hidden' name='student' value='" Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAttendance.php" Line="33"/>
-                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Symbolic Text="$_POST"/>
                                                                               <Literal Text="' /&gt; &lt;input type='hidden' name='page2' value='" Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAttendance.php" Line="34"/>
-                                                                              <Symbolic Text="[Symbol]"/>
+                                                                              <Symbolic Text="$_POST"/>
                                                                               <Literal 
                                                                               Text="'&gt;
   &lt;input type='hidden' name='date'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="119" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAttendance.php" Line="37">
 </Literal>
-                                                                              <Select>
-                                                                                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                                <Literal Text="0" Length="1" Line="0"/>
-                                                                                <Undef/>
-                                                                              </Select>
+                                                                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAttendance.php" Line="48"/>
                                                                               <Literal 
                                                                               Text="'&gt;
 
@@ -6588,7 +6186,7 @@
 </Literal>
                                                                               <Concat>
                                                                                 <Literal Text="PointsReport.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="13"/>
-                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Symbolic Text="mysql_error()"/>
                                                                               </Concat>
                                                                               <Repeat>
                                                                                 <Constraint Text="$page2 == 32"/>
@@ -6614,34 +6212,30 @@
  &amp;nbsp;&amp;nbsp;&lt;b&gt;Classes:&lt;/b&gt;
  &lt;select name='selectclass' onChange='document.classes.submit();'&gt;" Length="108" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="30">
 </Literal>
-                                                                              <Select>
-                                                                                <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                                                              <Concat>
                                                                                 <Concat>
-                                                                                  <Concat>
-                                                                                    <Literal Text="&lt;/select&gt;PointsReport.php: Unable to get a list of courses - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="52"/>
-                                                                                    <Symbolic Text="[Symbol]"/>
-                                                                                  </Concat>
-                                                                                  <Repeat>
-                                                                                    <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
-                                                                                    <Concat>
-                                                                                      <Concat>
-                                                                                        <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
-                                                                                        <Undef/>
-                                                                                        <Literal Text="' " Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
-                                                                                        <Select>
-                                                                                          <Constraint Text="($_POST[&quot;selectclass&quot;] == $classes[0])"/>
-                                                                                          <Literal Text="SELECTED" Length="8" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
-                                                                                          <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
-                                                                                        </Select>
-                                                                                        <Literal Text="&gt;" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
-                                                                                        <Undef/>
-                                                                                        <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
-                                                                                      </Concat>
-                                                                                    </Concat>
-                                                                                  </Repeat>
+                                                                                  <Literal Text="&lt;/select&gt;PointsReport.php: Unable to get a list of courses - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="52"/>
+                                                                                  <Symbolic Text="mysql_error()"/>
                                                                                 </Concat>
-                                                                                <Concat> </Concat>
-                                                                              </Select>
+                                                                                <Repeat>
+                                                                                  <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                                                                  <Concat>
+                                                                                    <Concat>
+                                                                                      <Literal Text="&lt;option value='" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
+                                                                                      <Undef/>
+                                                                                      <Literal Text="' " Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
+                                                                                      <Select>
+                                                                                        <Constraint Text="($_POST[&quot;selectclass&quot;] == $classes[0])"/>
+                                                                                        <Literal Text="SELECTED" Length="8" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
+                                                                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
+                                                                                      </Select>
+                                                                                      <Literal Text="&gt;" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
+                                                                                      <Undef/>
+                                                                                      <Literal Text="&lt;/option&gt; " Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="56"/>
+                                                                                    </Concat>
+                                                                                  </Concat>
+                                                                                </Repeat>
+                                                                              </Concat>
                                                                               <Literal 
                                                                               Text="  &lt;/select&gt;
   &lt;br&gt;&lt;br&gt;
@@ -6678,7 +6272,7 @@
                                                                                         <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="112"/>
                                                                                         <Select>
                                                                                           <Constraint Text="($total != 0)"/>
-                                                                                          <Symbolic Text="[Symbol]"/>
+                                                                                          <Symbolic Text="number_format()"/>
                                                                                           <Literal Text="0.00" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="95"/>
                                                                                         </Select>
                                                                                         <Literal Text="&amp;#37;&lt;/td&gt; &lt;td&gt;" Length="16" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="113"/>
@@ -6717,17 +6311,13 @@
   &lt;input type='button' value=' Back ' onClick='document.classes.page2.value=2;document.classes.submit();'&gt;
   &lt;input type='hidden' name='page2' value='" Length="170" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="124">
 </Literal>
-                                                                                <Symbolic Text="[Symbol]"/>
+                                                                                <Symbolic Text="$_POST"/>
                                                                                 <Literal 
                                                                                 Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="126">
 </Literal>
-                                                                                <Select>
-                                                                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                                                                  <Literal Text="0" Length="1" Line="0"/>
-                                                                                  <Undef/>
-                                                                                </Select>
+                                                                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="138"/>
                                                                                 <Literal 
                                                                                 Text="' /&gt;
  &lt;/form&gt;
@@ -6786,13 +6376,9 @@
         <Select>
           <Constraint Text="$page == 2"/>
           <Concat>
-            <Select>
-              <Constraint Text="(($_SESSION[&quot;userid&quot;] == &quot;&quot;) || ($_SESSION[&quot;usertype&quot;] != &quot;Teacher&quot;))"/>
-              <Concat>
-                <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="5"/>
-              </Concat>
-              <Concat> </Concat>
-            </Select>
+            <Concat>
+              <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="5"/>
+            </Concat>
             <Literal 
             Text="&lt;script language='JavaScript'&gt;
 
@@ -6854,11 +6440,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-              <Select>
-                <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                <Symbolic Text="[Symbol]"/>
-                <Undef/>
-              </Select>
+              <Symbolic Text="htmlspecialchars()"/>
               <Literal 
               Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -6889,11 +6471,9 @@
    &lt;a class='menu' href='javascript: classes();' onMouseover=&quot;window.status='View Classes'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Classes&lt;/a&gt;
    &lt;br&gt;&lt;br&gt;" Length="289" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="66">
 </Literal>
-            <Select>
-              <Constraint Text="(($_POST[&quot;selectclass&quot;] != &quot;&quot;) &amp;&amp; ($page2 != 0))"/>
-              <Concat>
-                <Literal 
-                Text="
+            <Concat>
+              <Literal 
+              Text="
 	 &lt;a class='menu' href='javascript: settings();' onMouseover=&quot;window.status='Manage Class Settings'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Settings&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;
 	 &lt;a class='menu' href='javascript: assignments();' onMouseover=&quot;window.status='Manage Assignments'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Assignments&lt;/a&gt;
@@ -6905,28 +6485,22 @@
 	 &lt;a class='menu' href='javascript: announcements();' onMouseover=&quot;window.status='View Announcements'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Announcements&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;" Length="916" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="80">
 </Literal>
-              </Concat>
-              <Concat> </Concat>
-            </Select>
+            </Concat>
             <Concat>
               <Literal 
               Text="   &lt;a class='menu' href='javascript: logoutteacher();' onMouseover=&quot;window.status='Log Out';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;Log Out&lt;/a&gt;
 
    &lt;input type='hidden' name='page2' value='" Length="206" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="85">
 </Literal>
-              <Symbolic Text="[Symbol]"/>
+              <Symbolic Text="$_POST"/>
               <Literal 
               Text="'&gt;
    &lt;input type='hidden' name='logout'&gt;
    &lt;input type='hidden' name='page' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="87">
 </Literal>
-              <Select>
-                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                <Literal Text="0" Length="1" Line="0"/>
-                <Undef/>
-              </Select>
+              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="95"/>
               <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/TeacherMain.php" Line="88"/>
-              <Symbolic Text="[Symbol]"/>
+              <Symbolic Text="$_POST"/>
               <Literal 
               Text="' /&gt;
  &lt;/form&gt;
@@ -6943,7 +6517,7 @@
               <Concat>
                 <Concat>
                   <Literal Text="ViewCourses.php: Unable to get the teacherid - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="2"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Concat>
                   <Literal Text=" &lt;h1&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="5"/>
@@ -6963,7 +6537,7 @@
                 </Concat>
                 <Concat>
                   <Literal Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="15"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="mysql_error()"/>
                 </Concat>
                 <Repeat>
                   <Constraint Text="$page2 == 0"/>
@@ -6997,54 +6571,46 @@
    &lt;/tr&gt;
    " Length="196" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="43">
 </Literal>
-                <Select>
-                  <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                <Concat>
                   <Concat>
+                    <Literal Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="47"/>
+                    <Symbolic Text="mysql_error()"/>
+                  </Concat>
+                  <Repeat>
+                    <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                     <Concat>
-                      <Literal Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="47"/>
-                      <Symbolic Text="[Symbol]"/>
-                    </Concat>
-                    <Repeat>
-                      <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                       <Concat>
-                        <Concat>
-                          <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
-                          <Select>
-                            <Constraint Text="(($row % 2) == 0)"/>
-                            <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
-                            <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
-                          </Select>
-                          <Literal 
-                          Text="'&gt;
+                        <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
+                        <Select>
+                          <Constraint Text="(($row % 2) == 0)"/>
+                          <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
+                          <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="53"/>
+                        </Select>
+                        <Literal 
+                        Text="'&gt;
    &lt;td&gt;&lt;a class='items' href=&quot;JavaScript:document.classes.selectclass.value=" Length="79" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="54">
 </Literal>
-                          <Undef/>
-                          <Literal 
-                          Text=";document.classes.page2.value=1;document.classes.submit();&quot; onMouseover=&quot;window.status='View Information For " Length="109" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="54">
+                        <Undef/>
+                        <Literal 
+                        Text=";document.classes.page2.value=1;document.classes.submit();&quot; onMouseover=&quot;window.status='View Information For " Length="109" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="54">
 </Literal>
-                          <Undef/>
-                          <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="54"/>
-                          <Undef/>
-                          <Literal Text="&lt;/a&gt;&lt;/td&gt; &lt;/tr&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="55"/>
-                        </Concat>
+                        <Undef/>
+                        <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="54"/>
+                        <Undef/>
+                        <Literal Text="&lt;/a&gt;&lt;/td&gt; &lt;/tr&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="55"/>
                       </Concat>
-                    </Repeat>
-                  </Concat>
-                  <Concat> </Concat>
-                </Select>
+                    </Concat>
+                  </Repeat>
+                </Concat>
                 <Concat>
                   <Literal Text="&lt;/table&gt; &lt;input type='hidden' name='page2' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="59"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="$_POST"/>
                   <Literal 
                   Text="' /&gt;
    &lt;input type='hidden' name='logout' /&gt;
    &lt;input type='hidden' name='page' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="61">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                    <Literal Text="0" Length="1" Line="0"/>
-                    <Undef/>
-                  </Select>
+                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="75"/>
                   <Literal 
                   Text="' /&gt;
    &lt;input type='hidden' name='selectclass' /&gt;
@@ -7071,19 +6637,15 @@
               <Select>
                 <Constraint Text="$page2 == 1"/>
                 <Concat>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;update&quot;] == 1)"/>
+                  <Concat>
                     <Concat>
-                      <Concat>
-                        <Literal Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="6"/>
-                        <Symbolic Text="[Symbol]"/>
-                      </Concat>
+                      <Literal Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="6"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
-                    <Concat> </Concat>
-                  </Select>
+                  </Concat>
                   <Concat>
                     <Literal Text="ClassInfo.php: Unable to get the class information - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="9"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="mysql_error()"/>
                   </Concat>
                   <Concat>
                     <Literal 
@@ -7126,19 +6688,15 @@
   &lt;input type='button' value='Update' onClick='document.classes.update.value=1;document.classes.submit();'&gt;
    &lt;input type='hidden' name='page2' value='" Length="168" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="39">
 </Literal>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal 
                     Text="' /&gt;
    &lt;input type='hidden' name='logout' /&gt;
    &lt;input type='hidden' name='page' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="41">
 </Literal>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                      <Literal Text="0" Length="1" Line="0"/>
-                      <Undef/>
-                    </Select>
+                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="48"/>
                     <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="42"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal 
                     Text="' /&gt;
    &lt;input type='hidden' name='update' /&gt;
@@ -7155,36 +6713,22 @@
                   <Concat>
                     <Concat>
                       <Literal Text="ManageAssignments.php: Unable to get the course name - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="6"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;addassignment&quot;] == 1)"/>
-                      <Concat>
-                        <Select>
-                          <Constraint 
-                          Text="(((($_POST[&quot;title&quot;] != &quot;&quot;) &amp;&amp; ($_POST[&quot;total&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;assigneddate&quot;] != &quot;&quot;)) &amp;&amp; ($_POST[&quot;duedate&quot;] != &quot;&quot;))">
-</Constraint>
-                          <Concat>
-                            <Concat>
-                              <Literal Text="ManageAssignments.php: Unable to insert new assignment - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="28"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Concat>
-                          </Concat>
-                          <Concat> </Concat>
-                        </Select>
-                      </Concat>
-                      <Concat> </Concat>
-                    </Select>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;editassignment&quot;] == 1)"/>
+                    <Concat>
                       <Concat>
                         <Concat>
-                          <Literal Text="ManageAssignments.php: Unable to update the assignment information - " Length="69" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="52"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Literal Text="ManageAssignments.php: Unable to insert new assignment - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="28"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                       </Concat>
-                      <Concat> </Concat>
-                    </Select>
+                    </Concat>
+                    <Concat>
+                      <Concat>
+                        <Literal Text="ManageAssignments.php: Unable to update the assignment information - " Length="69" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="52"/>
+                        <Symbolic Text="mysql_error()"/>
+                      </Concat>
+                    </Concat>
                     <Concat>
                       <Literal 
                       Text="&lt;script language='JavaScript'&gt;
@@ -7258,7 +6802,7 @@
    &lt;tr class='header'&gt;
 	&lt;th colspan='6'&gt;&lt;h2&gt;" Length="1881" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="184">
 </Literal>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_result()"/>
                       <Literal 
                       Text="&lt;/th&gt;
    &lt;/tr&gt;
@@ -7274,44 +6818,40 @@
                     </Concat>
                     <Concat>
                       <Literal Text="ManageAssignments.php: Unable to retrieve total number of assignments - " Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="197"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
                     <Concat>
                       <Literal Text="ManageAssignments.php: Unable to get a list of assignments - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="210"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
                     <Repeat>
                       <Constraint Text="$page2 == 2"/>
                       <Concat>
-                        <Select>
-                          <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                        <Concat>
                           <Concat>
-                            <Concat>
-                              <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="225"/>
-                              <Select>
-                                <Constraint Text="(($row % 2) == 0)"/>
-                                <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="225"/>
-                                <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="225"/>
-                              </Select>
-                              <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="226"/>
-                              <Undef/>
-                              <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="226"/>
-                              <Literal Text="1" Length="1" Line="0"/>
-                              <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="227"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;td style='text-align: left;'&gt;" Length="39" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="228"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="229"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="230"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="231"/>
-                              <Undef/>
-                              <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="232"/>
-                            </Concat>
+                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="225"/>
+                            <Select>
+                              <Constraint Text="(($row % 2) == 0)"/>
+                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="225"/>
+                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="225"/>
+                            </Select>
+                            <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="226"/>
+                            <Undef/>
+                            <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="226"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="232"/>
+                            <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="227"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;td style='text-align: left;'&gt;" Length="39" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="228"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="229"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="230"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="231"/>
+                            <Undef/>
+                            <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="232"/>
                           </Concat>
-                          <Concat> </Concat>
-                        </Select>
+                        </Concat>
                       </Concat>
                     </Repeat>
                     <Literal 
@@ -7334,13 +6874,13 @@
                               <Literal 
                               Text="&lt;a href='JavaScript: document.assignments.deleteassignment.value=0;document.assignments.page2.value=2;document.assignments.onpage.value=" Length="136" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249"/>
                               <Literal 
                               Text=";document.assignments.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="96" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249"/>
                               <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249"/>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249"/>
                               <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="249"/>
                             </Concat>
                           </Concat>
@@ -7349,13 +6889,13 @@
                               <Literal 
                               Text="&lt;a href='JavaScript: document.assignments.deleteassignment.value=0;document.assignments.page2.value=2;document.assignments.onpage.value=" Length="136" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253"/>
                               <Literal 
                               Text=";document.assignments.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="88" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253">
 </Literal>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253"/>
                               <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253"/>
-                              <Literal Text="1" Length="1" Line="0"/>
+                              <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253"/>
                               <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="253"/>
                             </Concat>
                           </Concat>
@@ -7370,21 +6910,17 @@
   &lt;input type='hidden' name='selectassignment'&gt;
   &lt;input type='hidden' name='page2' value='" Length="150" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="260">
 </Literal>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="$_POST"/>
                       <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="261"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="$_POST"/>
                       <Literal 
                       Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="263">
 </Literal>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="$_POST"/>
                       <Literal Text="' /&gt; &lt;input type='hidden' name='page' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="264"/>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Undef/>
-                      </Select>
+                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="277"/>
                       <Literal 
                       Text="'&gt;
  &lt;/form&gt;
@@ -7406,27 +6942,23 @@
                   <Select>
                     <Constraint Text="$page2 == 3"/>
                     <Concat>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;editgrade&quot;] == 1)"/>
-                        <Concat>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;gradeid&quot;] != &quot;&quot;)"/>
+                      <Concat>
+                        <Select>
+                          <Constraint Text="($_POST[&quot;gradeid&quot;] != &quot;&quot;)"/>
+                          <Concat>
                             <Concat>
-                              <Concat>
-                                <Literal Text="ManageGrades.php: Unable to update the grade - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="12"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Concat>
+                              <Literal Text="ManageGrades.php: Unable to update the grade - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="12"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
+                          </Concat>
+                          <Concat>
                             <Concat>
-                              <Concat>
-                                <Literal Text="ManageGrades.php: Unable to insert the new grade - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="21"/>
-                                <Symbolic Text="[Symbol]"/>
-                              </Concat>
+                              <Literal Text="ManageGrades.php: Unable to insert the new grade - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="21"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
-                          </Select>
-                        </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                          </Concat>
+                        </Select>
+                      </Concat>
                       <Literal 
                       Text="&lt;script language='JavaScript'&gt;
 
@@ -7493,11 +7025,9 @@
  &lt;b&gt;Assignment:&lt;/b&gt;
  &lt;select name='assignment' onChange='document.grades.addgrade.value=0;document.grades.deletegrade.value=0;document.grades.submit();'&gt;" Length="1451" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="144">
 </Literal>
-                      <Select>
-                        <Constraint Text="(mysql_fetch_row() == null)"/>
-                        <Concat>
-                          <Literal 
-                          Text="&lt;/select&gt;
+                      <Concat>
+                        <Literal 
+                        Text="&lt;/select&gt;
 	 &lt;br /&gt;&lt;br /&gt;
   &lt;table width='595' class='dynamiclist' cellpadding='5' cellspacing='0'&gt;
   &lt;tr class='header'&gt;
@@ -7514,12 +7044,10 @@
   &lt;/tr&gt;
   &lt;/table&gt;" Length="416" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="166">
 </Literal>
-                        </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                      </Concat>
                       <Concat>
                         <Literal Text="ManageGrades.php: Unable to get a list of assignments - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="171"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 3"/>
@@ -7555,14 +7083,14 @@
 </Literal>
                       <Concat>
                         <Literal Text="ManageGrades.php: Unable to get the list of students for this class - " Length="70" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="201"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 3"/>
                         <Concat>
                           <Concat>
                             <Literal Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="209"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Concat>
                             <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="217"/>
@@ -7574,7 +7102,7 @@
                             <Literal Text="'&gt; &lt;td&gt;&lt;input type='checkbox' name='delete[]' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="218"/>
                             <Undef/>
                             <Literal Text="' onClick='updateboxes(" Length="23" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="218"/>
-                            <Literal Text="1" Length="1" Line="0"/>
+                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="223"/>
                             <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="219"/>
                             <Undef/>
                             <Literal Text=" " Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="219"/>
@@ -7582,11 +7110,7 @@
                             <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="220"/>
                             <Select>
                               <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                              <Select>
-                                <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                <Undef/>
-                              </Select>
+                              <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                               <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="220"/>
                             </Select>
                             <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="221"/>
@@ -7597,55 +7121,51 @@
                           </Concat>
                           <Concat>
                             <Literal Text="ManageGrades.php: Unable to get the grade percentages - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="226"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
-                          <Select>
-                            <Constraint Text="($grade[4] != null)"/>
-                            <Concat>
-                              <Select>
-                                <Constraint Text="($letter == -1)"/>
-                                <Concat>
-                                  <Literal Text="Total Not Found" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="239"/>
-                                </Concat>
-                                <Concat>
-                                  <Select>
-                                    <Constraint Text="($letter &gt;= $percs[0])"/>
-                                    <Concat>
-                                      <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="241"/>
-                                    </Concat>
-                                    <Concat>
-                                      <Select>
-                                        <Constraint Text="($letter &gt;= $percs[1])"/>
-                                        <Concat>
-                                          <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="243"/>
-                                        </Concat>
-                                        <Concat>
-                                          <Select>
-                                            <Constraint Text="($letter &gt;= $percs[2])"/>
-                                            <Concat>
-                                              <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="245"/>
-                                            </Concat>
-                                            <Concat>
-                                              <Select>
-                                                <Constraint Text="($letter &gt;= $percs[3])"/>
-                                                <Concat>
-                                                  <Literal Text="D" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="247"/>
-                                                </Concat>
-                                                <Concat>
-                                                  <Literal Text="F" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="249"/>
-                                                </Concat>
-                                              </Select>
-                                            </Concat>
-                                          </Select>
-                                        </Concat>
-                                      </Select>
-                                    </Concat>
-                                  </Select>
-                                </Concat>
-                              </Select>
-                            </Concat>
-                            <Concat> </Concat>
-                          </Select>
+                          <Concat>
+                            <Select>
+                              <Constraint Text="($letter == -1)"/>
+                              <Concat>
+                                <Literal Text="Total Not Found" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="239"/>
+                              </Concat>
+                              <Concat>
+                                <Select>
+                                  <Constraint Text="($letter &gt;= $percs[0])"/>
+                                  <Concat>
+                                    <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="241"/>
+                                  </Concat>
+                                  <Concat>
+                                    <Select>
+                                      <Constraint Text="($letter &gt;= $percs[1])"/>
+                                      <Concat>
+                                        <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="243"/>
+                                      </Concat>
+                                      <Concat>
+                                        <Select>
+                                          <Constraint Text="($letter &gt;= $percs[2])"/>
+                                          <Concat>
+                                            <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="245"/>
+                                          </Concat>
+                                          <Concat>
+                                            <Select>
+                                              <Constraint Text="($letter &gt;= $percs[3])"/>
+                                              <Concat>
+                                                <Literal Text="D" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="247"/>
+                                              </Concat>
+                                              <Concat>
+                                                <Literal Text="F" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="249"/>
+                                              </Concat>
+                                            </Select>
+                                          </Concat>
+                                        </Select>
+                                      </Concat>
+                                    </Select>
+                                  </Concat>
+                                </Select>
+                              </Concat>
+                            </Select>
+                          </Concat>
                           <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="253"/>
                           <Select>
                             <Constraint Text="($grade[4] == 1)"/>
@@ -7653,27 +7173,19 @@
                               <Literal Text="Yes" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="256"/>
                             </Concat>
                             <Concat>
-                              <Select>
-                                <Constraint Text="($grade[4] != null)"/>
-                                <Concat>
-                                  <Literal Text="No" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="258"/>
-                                </Concat>
-                                <Concat> </Concat>
-                              </Select>
+                              <Concat>
+                                <Literal Text="No" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="258"/>
+                              </Concat>
                             </Concat>
                           </Select>
                           <Literal Text=" &lt;/td&gt; &lt;/tr&gt; " Length="20" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="263"/>
                         </Concat>
                       </Repeat>
-                      <Select>
-                        <Constraint Text="($row == 0)"/>
-                        <Concat>
-                          <Literal 
-                          Text="&lt;tr class='even'&gt;&lt;td colspan='9'&gt;&lt;center&gt;There are currently no students registered for this class.&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;" Length="118" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="267">
+                      <Concat>
+                        <Literal 
+                        Text="&lt;tr class='even'&gt;&lt;td colspan='9'&gt;&lt;center&gt;There are currently no students registered for this class.&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;" Length="118" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="267">
 </Literal>
-                        </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                      </Concat>
                       <Concat>
                         <Literal 
                         Text="  &lt;/table&gt;
@@ -7685,23 +7197,19 @@
   &lt;input type='hidden' name='deletegrade' /&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="345" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="277">
 </Literal>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal 
                         Text="' /&gt;
   &lt;input type='hidden' name='selectgrade' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="279">
 </Literal>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal 
                         Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="281">
 </Literal>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Undef/>
-                        </Select>
+                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="293"/>
                         <Literal 
                         Text="' /&gt;
  &lt;/form&gt;
@@ -7756,19 +7264,15 @@
   &lt;input type='hidden' name='addassignment' value=''&gt;
   &lt;input type='hidden' name='page2' value='" Length="1224" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAssignment.php" Line="33">
 </Literal>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal 
                           Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAssignment.php" Line="35">
 </Literal>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal Text="' /&gt; &lt;input type='hidden' name='page' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAssignment.php" Line="36"/>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Undef/>
-                          </Select>
+                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddAssignment.php" Line="47"/>
                           <Literal 
                           Text="'&gt;
 
@@ -7792,7 +7296,7 @@
                             <Literal 
                             Text="EditAssignment.php: Unable to retrieve the information about the assignment to edit - " Length="86" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="6">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Concat>
                             <Literal 
@@ -7818,25 +7322,17 @@
                             Text="&lt;/textarea&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='total' maxlength='6' size='15' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="25">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="number_format()"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='assigneddate' maxlength='10' size='15' value='" Length="86" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="26">
 </Literal>
-                            <Select>
-                              <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                              <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                              <Undef/>
-                            </Select>
+                            <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='duedate' maxlength='10' size='15' value='" Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="27">
 </Literal>
-                            <Select>
-                              <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                              <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                              <Undef/>
-                            </Select>
+                            <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -7858,9 +7354,9 @@
 </Literal>
                             <Undef/>
                             <Literal Text="'&gt; &lt;input type='hidden' name='page2' value='" Length="46" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="44"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="45"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal 
                             Text="' /&gt;
   &lt;input type='hidden' name='logout'&gt;
@@ -7870,11 +7366,7 @@
                             <Literal Text="'&gt; &lt;input type='hidden' name='wasdate' value='" Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="48"/>
                             <Undef/>
                             <Literal Text="'&gt; &lt;input type='hidden' name='page' value='" Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="49"/>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Undef/>
-                            </Select>
+                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="60"/>
                             <Literal 
                             Text="'&gt;
 
@@ -7899,7 +7391,7 @@
                             <Concat>
                               <Concat>
                                 <Literal Text="EditGrade.php: Unable to retrieve the information about the grade - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="5"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="mysql_error()"/>
                               </Concat>
                               <Literal 
                               Text="&lt;h1&gt;Edit Grade&lt;/h1&gt;
@@ -7919,7 +7411,7 @@
 </Literal>
                               <Concat>
                                 <Literal Text="EditGrade.php: Unable to get the student's name - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="25"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="mysql_error()"/>
                               </Concat>
                               <Concat>
                                 <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="29"/>
@@ -7934,18 +7426,14 @@
 </Literal>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Select>
-                                    <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                    <Undef/>
-                                  </Select>
+                                  <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="32"/>
                                 </Select>
                                 <Literal 
                                 Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='points' maxlength='5' size='5' value='" Length="78" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="33">
 </Literal>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="number_format()"/>
                                 <Literal Text="' /&gt;&lt;/td&gt; &lt;td&gt;&lt;textarea cols='20' rows='3' name='comment'&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="34"/>
                                 <Undef/>
                                 <Literal Text="&lt;/textarea&gt;&lt;/td&gt; &lt;td&gt;&lt;input type='checkbox' name='late' value='1'" Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="35"/>
@@ -7972,36 +7460,28 @@
 </Literal>
                                 <Undef/>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='wasgrade' value='" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="49"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="number_format()"/>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='wasdate' value='" Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50"/>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Select>
-                                    <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                    <Undef/>
-                                  </Select>
+                                  <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50"/>
                                 </Select>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='student' value='" Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="51"/>
                                 <Undef/>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='assignment' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="52"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="$_POST"/>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="53"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="$_POST"/>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='page2' value='" Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="54"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="$_POST"/>
                                 <Literal 
                                 Text="'&gt;
   &lt;input type='hidden' name='date'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="119" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="57">
 </Literal>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Undef/>
-                                </Select>
+                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="68"/>
                                 <Literal 
                                 Text="'&gt;
 
@@ -8032,7 +7512,7 @@
 </Literal>
                                 <Concat>
                                   <Literal Text="ViewStudents.php: Unable to get a list of students - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="12"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="mysql_error()"/>
                                 </Concat>
                                 <Literal 
                                 Text="
@@ -8049,7 +7529,7 @@
                                 <Concat>
                                   <Literal Text="ViewStudents.php: Unable to get the list of classes this student is registered for - " Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="37">
                                   </Literal>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="mysql_error()"/>
                                 </Concat>
                                 <Repeat>
                                   <Constraint Text="$page2 == 8"/>
@@ -8070,7 +7550,7 @@
                                       <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="77"/>
                                       <Undef/>
                                       <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="78"/>
-                                      <Symbolic Text="[Symbol]"/>
+                                      <Symbolic Text="number_format()"/>
                                       <Literal Text="&amp;#37;&lt;/td&gt; &lt;td&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="79"/>
                                       <Select>
                                         <Constraint Text="($currperc &gt;= ($classes[1] / 100))"/>
@@ -8100,19 +7580,15 @@
   &lt;input type='button' value=' Back ' onClick='document.classes.page2.value=2;document.classes.submit();'&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="176" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="86">
 </Literal>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="$_POST"/>
                                   <Literal Text="' /&gt; &lt;input type='hidden' name='page2' value='" Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="87"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="$_POST"/>
                                   <Literal 
                                   Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="89">
 </Literal>
-                                  <Select>
-                                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Undef/>
-                                  </Select>
+                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="101"/>
                                   <Literal 
                                   Text="' /&gt;
  &lt;/form&gt;
@@ -8149,40 +7625,32 @@
 </Literal>
                                   <Concat>
                                     <Literal Text="ViewAnnouncements.php: Unable to retrieve total number of announcements - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="19"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="mysql_error()"/>
                                   </Concat>
                                   <Concat>
                                     <Literal Text="ViewAnnouncements.php: Unable to retrieve the announcements - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="32"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="mysql_error()"/>
                                   </Concat>
                                   <Repeat>
                                     <Constraint Text="$page2 == 9"/>
                                     <Concat>
-                                      <Select>
-                                        <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                                      <Concat>
                                         <Concat>
-                                          <Concat>
-                                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                            <Select>
-                                              <Constraint Text="(($row % 2) == 0)"/>
-                                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                            </Select>
-                                            <Literal Text="'&gt; &lt;td&gt;&lt;b&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="43"/>
-                                            <Undef/>
-                                            <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
-                                            <Undef/>
-                                            <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                            <Select>
-                                              <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                              <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                              <Undef/>
-                                            </Select>
-                                            <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
-                                          </Concat>
+                                          <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                          <Select>
+                                            <Constraint Text="(($row % 2) == 0)"/>
+                                            <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                            <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                          </Select>
+                                          <Literal Text="'&gt; &lt;td&gt;&lt;b&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="43"/>
+                                          <Undef/>
+                                          <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
+                                          <Undef/>
+                                          <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
+                                          <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                          <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                         </Concat>
-                                        <Concat> </Concat>
-                                      </Select>
+                                      </Concat>
                                     </Concat>
                                   </Repeat>
                                   <Literal Text=" &lt;/table&gt; &lt;br&gt;&lt;br&gt; &lt;center&gt;Page: " Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="53"/>
@@ -8196,13 +7664,13 @@
                                             <Literal 
                                             Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                             <Literal 
                                             Text=";document.announcements.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="98" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                             <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                             <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                           </Concat>
                                         </Concat>
@@ -8211,13 +7679,13 @@
                                             <Literal 
                                             Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                             <Literal 
                                             Text=";document.announcements.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63">
 </Literal>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                             <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
-                                            <Literal Text="1" Length="1" Line="0"/>
+                                            <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                             <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                           </Concat>
                                         </Concat>
@@ -8226,19 +7694,15 @@
                                   </Repeat>
                                   <Concat>
                                     <Literal Text=" &lt;/center&gt; &lt;input type='hidden' name='page2' value='" Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="68"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="$_POST"/>
                                     <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="69"/>
-                                    <Symbolic Text="[Symbol]"/>
+                                    <Symbolic Text="$_POST"/>
                                     <Literal 
                                     Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="71">
 </Literal>
-                                    <Select>
-                                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                      <Literal Text="0" Length="1" Line="0"/>
-                                      <Undef/>
-                                    </Select>
+                                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="84"/>
                                     <Literal 
                                     Text="'&gt;
  &lt;/form&gt;
@@ -8278,13 +7742,9 @@
             <Select>
               <Constraint Text="$page == 4"/>
               <Concat>
-                <Select>
-                  <Constraint Text="($_SESSION[&quot;userid&quot;] == &quot;&quot;)"/>
-                  <Concat>
-                    <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="5"/>
-                  </Concat>
-                  <Concat> </Concat>
-                </Select>
+                <Concat>
+                  <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="5"/>
+                </Concat>
                 <Literal 
                 Text="&lt;script language='JavaScript'&gt;
 
@@ -8340,11 +7800,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                    <Symbolic Text="[Symbol]"/>
-                    <Undef/>
-                  </Select>
+                  <Symbolic Text="htmlspecialchars()"/>
                   <Literal 
                   Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -8375,11 +7831,9 @@
    &lt;a class='menu' href='javascript: classes();' onMouseover=&quot;window.status='View Classes'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Classes&lt;/a&gt;
    &lt;br&gt;&lt;br&gt;" Length="289" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="60">
 </Literal>
-                <Select>
-                  <Constraint Text="(($_POST[&quot;selectclass&quot;] != &quot;&quot;) &amp;&amp; ($page2 != 0))"/>
-                  <Concat>
-                    <Literal 
-                    Text="
+                <Concat>
+                  <Literal 
+                  Text="
 	 &lt;a class='menu' href='javascript: settings();' onMouseover=&quot;window.status='View Class Settings'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Settings&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;
 	 &lt;a class='menu' href='javascript: assignments();' onMouseover=&quot;window.status='View Assignments'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Assignments&lt;/a&gt;
@@ -8389,28 +7843,22 @@
 	 &lt;a class='menu' href='javascript: announcements();' onMouseover=&quot;window.status='View Announcements'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Announcements&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;" Length="724" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="72">
 </Literal>
-                  </Concat>
-                  <Concat> </Concat>
-                </Select>
+                </Concat>
                 <Concat>
                   <Literal 
                   Text="   &lt;a class='menu' href='javascript: logoutstudent();' onMouseover=&quot;window.status='Log Out';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;Log Out&lt;/a&gt;
 
    &lt;input type='hidden' name='page2' value='" Length="206" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="77">
 </Literal>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="$_POST"/>
                   <Literal 
                   Text="'&gt;
    &lt;input type='hidden' name='logout'&gt;
    &lt;input type='hidden' name='page' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="79">
 </Literal>
-                  <Select>
-                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                    <Literal Text="0" Length="1" Line="0"/>
-                    <Undef/>
-                  </Select>
+                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="87"/>
                   <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentMain.php" Line="80"/>
-                  <Symbolic Text="[Symbol]"/>
+                  <Symbolic Text="$_POST"/>
                   <Literal 
                   Text="' /&gt;
  &lt;/form&gt;
@@ -8427,7 +7875,7 @@
                   <Concat>
                     <Concat>
                       <Literal Text="ViewCourses.php: Unable to get the studentid - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="2"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
                     <Concat>
                       <Literal Text=" &lt;h1&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="5"/>
@@ -8447,7 +7895,7 @@
                     </Concat>
                     <Concat>
                       <Literal Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="15"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="mysql_error()"/>
                     </Concat>
                     <Repeat>
                       <Constraint Text="$page2 == 0"/>
@@ -8481,59 +7929,51 @@
    &lt;/tr&gt;
    " Length="196" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="43">
 </Literal>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                    <Concat>
                       <Concat>
+                        <Literal Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="48"/>
+                        <Symbolic Text="mysql_error()"/>
+                      </Concat>
+                      <Repeat>
+                        <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                         <Concat>
-                          <Literal Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="48"/>
-                          <Symbolic Text="[Symbol]"/>
-                        </Concat>
-                        <Repeat>
-                          <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
-                          <Concat>
-                            <Repeat>
-                              <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                          <Repeat>
+                            <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                            <Concat>
                               <Concat>
-                                <Concat>
-                                  <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
-                                  <Select>
-                                    <Constraint Text="(($row % 2) == 0)"/>
-                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
-                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
-                                  </Select>
-                                  <Literal 
-                                  Text="'&gt;
+                                <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
+                                <Select>
+                                  <Constraint Text="(($row % 2) == 0)"/>
+                                  <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
+                                  <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="57"/>
+                                </Select>
+                                <Literal 
+                                Text="'&gt;
    &lt;td&gt;&lt;a class='items' href=&quot;JavaScript:document.classes.selectclass.value=" Length="79" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="58">
 </Literal>
-                                  <Undef/>
-                                  <Literal 
-                                  Text=";document.classes.page2.value=1;document.classes.submit();&quot; onMouseover=&quot;window.status='View Information For " Length="109" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="58">
+                                <Undef/>
+                                <Literal 
+                                Text=";document.classes.page2.value=1;document.classes.submit();&quot; onMouseover=&quot;window.status='View Information For " Length="109" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="58">
 </Literal>
-                                  <Undef/>
-                                  <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="58"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/a&gt;&lt;/td&gt; &lt;/tr&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="59"/>
-                                </Concat>
+                                <Undef/>
+                                <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="58"/>
+                                <Undef/>
+                                <Literal Text="&lt;/a&gt;&lt;/td&gt; &lt;/tr&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="59"/>
                               </Concat>
-                            </Repeat>
-                          </Concat>
-                        </Repeat>
-                      </Concat>
-                      <Concat> </Concat>
-                    </Select>
+                            </Concat>
+                          </Repeat>
+                        </Concat>
+                      </Repeat>
+                    </Concat>
                     <Concat>
                       <Literal Text="&lt;/table&gt; &lt;input type='hidden' name='page2' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="64"/>
-                      <Symbolic Text="[Symbol]"/>
+                      <Symbolic Text="$_POST"/>
                       <Literal 
                       Text="' /&gt;
    &lt;input type='hidden' name='logout' /&gt;
    &lt;input type='hidden' name='page' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="66">
 </Literal>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                        <Literal Text="0" Length="1" Line="0"/>
-                        <Undef/>
-                      </Select>
+                      <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="80"/>
                       <Literal 
                       Text="' /&gt;
    &lt;input type='hidden' name='selectclass' /&gt;
@@ -8560,19 +8000,15 @@
                   <Select>
                     <Constraint Text="$page2 == 1"/>
                     <Concat>
-                      <Select>
-                        <Constraint Text="($_POST[&quot;update&quot;] == 1)"/>
+                      <Concat>
                         <Concat>
-                          <Concat>
-                            <Literal Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="6"/>
-                            <Symbolic Text="[Symbol]"/>
-                          </Concat>
+                          <Literal Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="6"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
-                        <Concat> </Concat>
-                      </Select>
+                      </Concat>
                       <Concat>
                         <Literal Text="ClassInfo.php: Unable to get the class information - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="9"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                       <Concat>
                         <Literal 
@@ -8610,19 +8046,15 @@
                       </Concat>
                       <Concat>
                         <Literal Text="&lt;/table&gt; &lt;input type='hidden' name='page2' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="37"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal 
                         Text="' /&gt;
    &lt;input type='hidden' name='logout' /&gt;
    &lt;input type='hidden' name='page' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="39">
 </Literal>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Undef/>
-                        </Select>
+                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="46"/>
                         <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="40"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal 
                         Text="' /&gt;
    &lt;input type='hidden' name='update' /&gt;
@@ -8639,7 +8071,7 @@
                       <Concat>
                         <Concat>
                           <Literal Text="ManageAssignments.php: Unable to get the course name - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="6"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                         <Concat>
                           <Literal 
@@ -8655,7 +8087,7 @@
    &lt;tr class='header'&gt;
 	&lt;th colspan='6'&gt;&lt;h2&gt;" Length="320" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="19">
 </Literal>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="mysql_result()"/>
                           <Literal 
                           Text="&lt;/th&gt;
    &lt;/tr&gt;
@@ -8670,40 +8102,36 @@
                         </Concat>
                         <Concat>
                           <Literal Text="ManageAssignments.php: Unable to retrieve total number of assignments - " Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="31"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                         <Concat>
                           <Literal Text="ManageAssignments.php: Unable to get a list of assignments - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="44"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                         <Repeat>
                           <Constraint Text="$page2 == 2"/>
                           <Concat>
-                            <Select>
-                              <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                            <Concat>
                               <Concat>
-                                <Concat>
-                                  <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
-                                  <Select>
-                                    <Constraint Text="(($row % 2) == 0)"/>
-                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
-                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
-                                  </Select>
-                                  <Literal Text="'&gt; &lt;td align='left' style='padding-left: 20px;'&gt;" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="60"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/td&gt; &lt;td style='text-align: left;'&gt;" Length="39" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="61"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="62"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="63"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="64"/>
-                                  <Undef/>
-                                  <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="65"/>
-                                </Concat>
+                                <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
+                                <Select>
+                                  <Constraint Text="(($row % 2) == 0)"/>
+                                  <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
+                                  <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
+                                </Select>
+                                <Literal Text="'&gt; &lt;td align='left' style='padding-left: 20px;'&gt;" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="60"/>
+                                <Undef/>
+                                <Literal Text="&lt;/td&gt; &lt;td style='text-align: left;'&gt;" Length="39" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="61"/>
+                                <Undef/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="62"/>
+                                <Undef/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="63"/>
+                                <Undef/>
+                                <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="64"/>
+                                <Undef/>
+                                <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="65"/>
                               </Concat>
-                              <Concat> </Concat>
-                            </Select>
+                            </Concat>
                           </Concat>
                         </Repeat>
                         <Literal Text=" &lt;/table&gt; &lt;br&gt; &lt;center&gt;Page: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="71"/>
@@ -8717,13 +8145,13 @@
                                   <Literal 
                                   Text="&lt;a href='JavaScript: document.assignments.deleteassignment.value=0;document.assignments.page2.value=2;document.assignments.onpage.value=" Length="136" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                   <Literal 
                                   Text=";document.assignments.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="96" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                   <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                   <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                 </Concat>
                               </Concat>
@@ -8732,13 +8160,13 @@
                                   <Literal 
                                   Text="&lt;a href='JavaScript: document.assignments.deleteassignment.value=0;document.assignments.page2.value=2;document.assignments.onpage.value=" Length="136" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                   <Literal 
                                   Text=";document.assignments.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="88" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81">
 </Literal>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                   <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
-                                  <Literal Text="1" Length="1" Line="0"/>
+                                  <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                   <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                 </Concat>
                               </Concat>
@@ -8753,21 +8181,17 @@
   &lt;input type='hidden' name='selectassignment'&gt;
   &lt;input type='hidden' name='page2' value='" Length="150" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="88">
 </Literal>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="89"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal 
                           Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="91">
 </Literal>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal Text="' /&gt; &lt;input type='hidden' name='page' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="92"/>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Undef/>
-                          </Select>
+                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="105"/>
                           <Literal 
                           Text="'&gt;
  &lt;/form&gt;
@@ -8811,14 +8235,14 @@
 </Literal>
                           <Concat>
                             <Literal Text="ViewGrades.php: Unable to get the list of assignments for this class - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="33"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Repeat>
                             <Constraint Text="$page2 == 3"/>
                             <Concat>
                               <Concat>
                                 <Literal Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="41"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="mysql_error()"/>
                               </Concat>
                               <Concat>
                                 <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="49"/>
@@ -8832,11 +8256,7 @@
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Select>
-                                    <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                    <Undef/>
-                                  </Select>
+                                  <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                 </Select>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="52"/>
@@ -8847,55 +8267,51 @@
                               </Concat>
                               <Concat>
                                 <Literal Text="ManageGrades.php: Unable to get the grade percentages - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="57"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="mysql_error()"/>
                               </Concat>
-                              <Select>
-                                <Constraint Text="($grade[3] != null)"/>
-                                <Concat>
-                                  <Select>
-                                    <Constraint Text="($letter == -1)"/>
-                                    <Concat>
-                                      <Literal Text="Total Not Found" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="70"/>
-                                    </Concat>
-                                    <Concat>
-                                      <Select>
-                                        <Constraint Text="($letter &gt;= $percs[0])"/>
-                                        <Concat>
-                                          <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="72"/>
-                                        </Concat>
-                                        <Concat>
-                                          <Select>
-                                            <Constraint Text="($letter &gt;= $percs[1])"/>
-                                            <Concat>
-                                              <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="74"/>
-                                            </Concat>
-                                            <Concat>
-                                              <Select>
-                                                <Constraint Text="($letter &gt;= $percs[2])"/>
-                                                <Concat>
-                                                  <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="76"/>
-                                                </Concat>
-                                                <Concat>
-                                                  <Select>
-                                                    <Constraint Text="($letter &gt;= $percs[3])"/>
-                                                    <Concat>
-                                                      <Literal Text="D" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="78"/>
-                                                    </Concat>
-                                                    <Concat>
-                                                      <Literal Text="F" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="80"/>
-                                                    </Concat>
-                                                  </Select>
-                                                </Concat>
-                                              </Select>
-                                            </Concat>
-                                          </Select>
-                                        </Concat>
-                                      </Select>
-                                    </Concat>
-                                  </Select>
-                                </Concat>
-                                <Concat> </Concat>
-                              </Select>
+                              <Concat>
+                                <Select>
+                                  <Constraint Text="($letter == -1)"/>
+                                  <Concat>
+                                    <Literal Text="Total Not Found" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="70"/>
+                                  </Concat>
+                                  <Concat>
+                                    <Select>
+                                      <Constraint Text="($letter &gt;= $percs[0])"/>
+                                      <Concat>
+                                        <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="72"/>
+                                      </Concat>
+                                      <Concat>
+                                        <Select>
+                                          <Constraint Text="($letter &gt;= $percs[1])"/>
+                                          <Concat>
+                                            <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="74"/>
+                                          </Concat>
+                                          <Concat>
+                                            <Select>
+                                              <Constraint Text="($letter &gt;= $percs[2])"/>
+                                              <Concat>
+                                                <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="76"/>
+                                              </Concat>
+                                              <Concat>
+                                                <Select>
+                                                  <Constraint Text="($letter &gt;= $percs[3])"/>
+                                                  <Concat>
+                                                    <Literal Text="D" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="78"/>
+                                                  </Concat>
+                                                  <Concat>
+                                                    <Literal Text="F" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="80"/>
+                                                  </Concat>
+                                                </Select>
+                                              </Concat>
+                                            </Select>
+                                          </Concat>
+                                        </Select>
+                                      </Concat>
+                                    </Select>
+                                  </Concat>
+                                </Select>
+                              </Concat>
                               <Concat>
                                 <Literal Text="&lt;/td&gt; &lt;td align='left'&gt;" Length="24" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="84"/>
                                 <Undef/>
@@ -8907,27 +8323,19 @@
                                   <Literal Text="Yes" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="88"/>
                                 </Concat>
                                 <Concat>
-                                  <Select>
-                                    <Constraint Text="($grade[3] != null)"/>
-                                    <Concat>
-                                      <Literal Text="No" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="90"/>
-                                    </Concat>
-                                    <Concat> </Concat>
-                                  </Select>
+                                  <Concat>
+                                    <Literal Text="No" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="90"/>
+                                  </Concat>
                                 </Concat>
                               </Select>
                               <Literal Text=" &lt;/td&gt; &lt;/tr&gt; " Length="20" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="95"/>
                             </Concat>
                           </Repeat>
-                          <Select>
-                            <Constraint Text="($row == 0)"/>
-                            <Concat>
-                              <Literal 
-                              Text="&lt;tr class='even'&gt;&lt;td colspan='9'&gt;&lt;center&gt;There are currently no students registered for this class.&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;" Length="118" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="99">
+                          <Concat>
+                            <Literal 
+                            Text="&lt;tr class='even'&gt;&lt;td colspan='9'&gt;&lt;center&gt;There are currently no students registered for this class.&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;" Length="118" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="99">
 </Literal>
-                            </Concat>
-                            <Concat> </Concat>
-                          </Select>
+                          </Concat>
                           <Concat>
                             <Literal 
                             Text="  &lt;/table&gt;
@@ -8937,23 +8345,19 @@
   &lt;input type='hidden' name='deletegrade' /&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="157" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="107">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal 
                             Text="' /&gt;
   &lt;input type='hidden' name='selectgrade' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="109">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal 
                             Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="111">
 </Literal>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Undef/>
-                            </Select>
+                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="123"/>
                             <Literal 
                             Text="' /&gt;
  &lt;/form&gt;
@@ -8990,40 +8394,32 @@
 </Literal>
                             <Concat>
                               <Literal Text="ViewAnnouncements.php: Unable to retrieve total number of announcements - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="19"/>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
                             <Concat>
                               <Literal Text="ViewAnnouncements.php: Unable to retrieve the announcements - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="32"/>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
                             <Repeat>
                               <Constraint Text="$page2 == 4"/>
                               <Concat>
-                                <Select>
-                                  <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                                <Concat>
                                   <Concat>
-                                    <Concat>
-                                      <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                      <Select>
-                                        <Constraint Text="(($row % 2) == 0)"/>
-                                        <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                        <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                      </Select>
-                                      <Literal Text="'&gt; &lt;td&gt;&lt;b&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="43"/>
-                                      <Undef/>
-                                      <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
-                                      <Undef/>
-                                      <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                      <Select>
-                                        <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                        <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                        <Undef/>
-                                      </Select>
-                                      <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
-                                    </Concat>
+                                    <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                    <Select>
+                                      <Constraint Text="(($row % 2) == 0)"/>
+                                      <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                      <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                    </Select>
+                                    <Literal Text="'&gt; &lt;td&gt;&lt;b&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="43"/>
+                                    <Undef/>
+                                    <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
+                                    <Undef/>
+                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
+                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                    <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                   </Concat>
-                                  <Concat> </Concat>
-                                </Select>
+                                </Concat>
                               </Concat>
                             </Repeat>
                             <Literal Text=" &lt;/table&gt; &lt;br&gt;&lt;br&gt; &lt;center&gt;Page: " Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="53"/>
@@ -9037,13 +8433,13 @@
                                       <Literal 
                                       Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59">
 </Literal>
-                                      <Literal Text="1" Length="1" Line="0"/>
+                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                       <Literal 
                                       Text=";document.announcements.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="98" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59">
 </Literal>
-                                      <Literal Text="1" Length="1" Line="0"/>
+                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                       <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
-                                      <Literal Text="1" Length="1" Line="0"/>
+                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                       <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                     </Concat>
                                   </Concat>
@@ -9052,13 +8448,13 @@
                                       <Literal 
                                       Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63">
 </Literal>
-                                      <Literal Text="1" Length="1" Line="0"/>
+                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                       <Literal 
                                       Text=";document.announcements.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63">
 </Literal>
-                                      <Literal Text="1" Length="1" Line="0"/>
+                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                       <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
-                                      <Literal Text="1" Length="1" Line="0"/>
+                                      <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                       <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                     </Concat>
                                   </Concat>
@@ -9067,19 +8463,15 @@
                             </Repeat>
                             <Concat>
                               <Literal Text=" &lt;/center&gt; &lt;input type='hidden' name='page2' value='" Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="68"/>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="$_POST"/>
                               <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="69"/>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="$_POST"/>
                               <Literal 
                               Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="71">
 </Literal>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Undef/>
-                              </Select>
+                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="84"/>
                               <Literal 
                               Text="'&gt;
  &lt;/form&gt;
@@ -9111,13 +8503,9 @@
               <Select>
                 <Constraint Text="$page == 5"/>
                 <Concat>
-                  <Select>
-                    <Constraint Text="($_SESSION[&quot;userid&quot;] == &quot;&quot;)"/>
-                    <Concat>
-                      <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="5"/>
-                    </Concat>
-                    <Concat> </Concat>
-                  </Select>
+                  <Concat>
+                    <Literal Text="Invalid User!" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="5"/>
+                  </Concat>
                   <Literal 
                   Text="&lt;script language='JavaScript'&gt;
 
@@ -9179,11 +8567,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;infoupdate&quot;] == 1)"/>
-                      <Symbolic Text="[Symbol]"/>
-                      <Undef/>
-                    </Select>
+                    <Symbolic Text="htmlspecialchars()"/>
                     <Literal 
                     Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -9214,14 +8598,12 @@
    &lt;a class='menu' href='javascript: students();' onMouseover=&quot;window.status='View Students'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Students&lt;/a&gt;
    &lt;br&gt;&lt;br&gt;" Length="292" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="66">
 </Literal>
-                  <Select>
-                    <Constraint Text="(($_POST[&quot;student&quot;] != &quot;&quot;) &amp;&amp; ($page2 != 0))"/>
-                    <Concat>
-                      <Select>
-                        <Constraint Text="(($_POST[&quot;selectclass&quot;] != &quot;&quot;) &amp;&amp; ($page2 != 5))"/>
-                        <Concat>
-                          <Literal 
-                          Text="
+                  <Concat>
+                    <Select>
+                      <Constraint Text="(($_POST[&quot;selectclass&quot;] != &quot;&quot;) &amp;&amp; ($page2 != 5))"/>
+                      <Concat>
+                        <Literal 
+                        Text="
 	 &lt;a class='menu' href='javascript: classes();' onMouseover=&quot;window.status='View Classes'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Classes&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;
 	 &lt;a class='menu' href='javascript: settings();' onMouseover=&quot;window.status='View Class Settings'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Settings&lt;/a&gt;
@@ -9233,40 +8615,34 @@
 	 &lt;a class='menu' href='javascript: announcements();' onMouseover=&quot;window.status='View Announcements'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Announcements&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;" Length="896" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="82">
 </Literal>
-                        </Concat>
-                        <Concat>
-                          <Literal 
-                          Text="
+                      </Concat>
+                      <Concat>
+                        <Literal 
+                        Text="
 	 &lt;a class='menu' href='javascript: classes();' onMouseover=&quot;window.status='View Classes'; return true;&quot; onMouseout=&quot;window.status=''; return true;&quot;&gt;Classes&lt;/a&gt;
 	 &lt;br&gt;&lt;br&gt;
 	 " Length="175" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="89">
 </Literal>
-                        </Concat>
-                      </Select>
-                    </Concat>
-                    <Concat> </Concat>
-                  </Select>
+                      </Concat>
+                    </Select>
+                  </Concat>
                   <Concat>
                     <Literal 
                     Text="   &lt;a class='menu' href='javascript: logoutstudent();' onMouseover=&quot;window.status='Log Out';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;Log Out&lt;/a&gt;
 
    &lt;input type='hidden' name='page2' value='" Length="206" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="95">
 </Literal>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal 
                     Text="'&gt;
    &lt;input type='hidden' name='logout'&gt;
    &lt;input type='hidden' name='page' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="97">
 </Literal>
-                    <Select>
-                      <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                      <Literal Text="0" Length="1" Line="0"/>
-                      <Undef/>
-                    </Select>
+                    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="106"/>
                     <Literal Text="'&gt; &lt;input type='hidden' name='selectclass' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="98"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal Text="' /&gt; &lt;input type='hidden' name='student' value='" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentMain.php" Line="99"/>
-                    <Symbolic Text="[Symbol]"/>
+                    <Symbolic Text="$_POST"/>
                     <Literal 
                     Text="' /&gt;
  &lt;/form&gt;
@@ -9305,7 +8681,7 @@
 </Literal>
                       <Concat>
                         <Literal Text="ViewStudents.php: Unable to get a list of students - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewStudents.php" Line="22"/>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="mysql_error()"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 0"/>
@@ -9337,17 +8713,13 @@
   &lt;input type='hidden' name='student' value='' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="113" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewStudents.php" Line="40">
 </Literal>
-                        <Symbolic Text="[Symbol]"/>
+                        <Symbolic Text="$_POST"/>
                         <Literal 
                         Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewStudents.php" Line="42">
 </Literal>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                          <Literal Text="0" Length="1" Line="0"/>
-                          <Undef/>
-                        </Select>
+                        <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewStudents.php" Line="54"/>
                         <Literal 
                         Text="' /&gt;
  &lt;/form&gt;
@@ -9368,19 +8740,15 @@
                     <Select>
                       <Constraint Text="$page2 == 1"/>
                       <Concat>
-                        <Select>
-                          <Constraint Text="($_POST[&quot;update&quot;] == 1)"/>
+                        <Concat>
                           <Concat>
-                            <Concat>
-                              <Literal Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="6"/>
-                              <Symbolic Text="[Symbol]"/>
-                            </Concat>
+                            <Literal Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="6"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
-                          <Concat> </Concat>
-                        </Select>
+                        </Concat>
                         <Concat>
                           <Literal Text="ClassInfo.php: Unable to get the class information - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="9"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="mysql_error()"/>
                         </Concat>
                         <Concat>
                           <Literal 
@@ -9418,19 +8786,15 @@
                         </Concat>
                         <Concat>
                           <Literal Text="&lt;/table&gt; &lt;input type='hidden' name='page2' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="37"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal 
                           Text="' /&gt;
    &lt;input type='hidden' name='logout' /&gt;
    &lt;input type='hidden' name='page' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="39">
 </Literal>
-                          <Select>
-                            <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                            <Literal Text="0" Length="1" Line="0"/>
-                            <Undef/>
-                          </Select>
+                          <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="46"/>
                           <Literal Text="' /&gt; &lt;input type='hidden' name='selectclass' value='" Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="40"/>
-                          <Symbolic Text="[Symbol]"/>
+                          <Symbolic Text="$_POST"/>
                           <Literal 
                           Text="' /&gt;
    &lt;input type='hidden' name='update' /&gt;
@@ -9447,7 +8811,7 @@
                         <Concat>
                           <Concat>
                             <Literal Text="ManageAssignments.php: Unable to get the course name - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="6"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Concat>
                             <Literal 
@@ -9463,7 +8827,7 @@
    &lt;tr class='header'&gt;
 	&lt;th colspan='6'&gt;&lt;h2&gt;" Length="320" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="19">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_result()"/>
                             <Literal 
                             Text="&lt;/th&gt;
    &lt;/tr&gt;
@@ -9478,40 +8842,36 @@
                           </Concat>
                           <Concat>
                             <Literal Text="ManageAssignments.php: Unable to retrieve total number of assignments - " Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="31"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Concat>
                             <Literal Text="ManageAssignments.php: Unable to get a list of assignments - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="44"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="mysql_error()"/>
                           </Concat>
                           <Repeat>
                             <Constraint Text="$page2 == 2"/>
                             <Concat>
-                              <Select>
-                                <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                              <Concat>
                                 <Concat>
-                                  <Concat>
-                                    <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
-                                    <Select>
-                                      <Constraint Text="(($row % 2) == 0)"/>
-                                      <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
-                                      <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
-                                    </Select>
-                                    <Literal Text="'&gt; &lt;td align='left' style='padding-left: 20px;'&gt;" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="60"/>
-                                    <Undef/>
-                                    <Literal Text="&lt;/td&gt; &lt;td style='text-align: left;'&gt;" Length="39" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="61"/>
-                                    <Undef/>
-                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="62"/>
-                                    <Undef/>
-                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="63"/>
-                                    <Undef/>
-                                    <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="64"/>
-                                    <Undef/>
-                                    <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="65"/>
-                                  </Concat>
+                                  <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
+                                  <Select>
+                                    <Constraint Text="(($row % 2) == 0)"/>
+                                    <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
+                                    <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="59"/>
+                                  </Select>
+                                  <Literal Text="'&gt; &lt;td align='left' style='padding-left: 20px;'&gt;" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="60"/>
+                                  <Undef/>
+                                  <Literal Text="&lt;/td&gt; &lt;td style='text-align: left;'&gt;" Length="39" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="61"/>
+                                  <Undef/>
+                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="62"/>
+                                  <Undef/>
+                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="63"/>
+                                  <Undef/>
+                                  <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="64"/>
+                                  <Undef/>
+                                  <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="65"/>
                                 </Concat>
-                                <Concat> </Concat>
-                              </Select>
+                              </Concat>
                             </Concat>
                           </Repeat>
                           <Literal Text=" &lt;/table&gt; &lt;br&gt; &lt;center&gt;Page: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="71"/>
@@ -9525,13 +8885,13 @@
                                     <Literal 
                                     Text="&lt;a href='JavaScript: document.assignments.deleteassignment.value=0;document.assignments.page2.value=2;document.assignments.onpage.value=" Length="136" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                     <Literal 
                                     Text=";document.assignments.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="96" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                     <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                     <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="77"/>
                                   </Concat>
                                 </Concat>
@@ -9540,13 +8900,13 @@
                                     <Literal 
                                     Text="&lt;a href='JavaScript: document.assignments.deleteassignment.value=0;document.assignments.page2.value=2;document.assignments.onpage.value=" Length="136" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                     <Literal 
                                     Text=";document.assignments.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="88" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81">
 </Literal>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                     <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
-                                    <Literal Text="1" Length="1" Line="0"/>
+                                    <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                     <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="81"/>
                                   </Concat>
                                 </Concat>
@@ -9561,21 +8921,17 @@
   &lt;input type='hidden' name='selectassignment'&gt;
   &lt;input type='hidden' name='page2' value='" Length="150" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="88">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="89"/>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal 
                             Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="91">
 </Literal>
-                            <Symbolic Text="[Symbol]"/>
+                            <Symbolic Text="$_POST"/>
                             <Literal Text="' /&gt; &lt;input type='hidden' name='page' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="92"/>
-                            <Select>
-                              <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                              <Literal Text="0" Length="1" Line="0"/>
-                              <Undef/>
-                            </Select>
+                            <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="105"/>
                             <Literal 
                             Text="'&gt;
  &lt;/form&gt;
@@ -9619,14 +8975,14 @@
 </Literal>
                             <Concat>
                               <Literal Text="ViewGrades.php: Unable to get the list of assignments for this class - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="33"/>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="mysql_error()"/>
                             </Concat>
                             <Repeat>
                               <Constraint Text="$page2 == 3"/>
                               <Concat>
                                 <Concat>
                                   <Literal Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="41"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="mysql_error()"/>
                                 </Concat>
                                 <Concat>
                                   <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="49"/>
@@ -9640,11 +8996,7 @@
                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                   <Select>
                                     <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                    <Select>
-                                      <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                      <Undef/>
-                                    </Select>
+                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                   </Select>
                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="52"/>
@@ -9655,55 +9007,51 @@
                                 </Concat>
                                 <Concat>
                                   <Literal Text="ManageGrades.php: Unable to get the grade percentages - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="57"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="mysql_error()"/>
                                 </Concat>
-                                <Select>
-                                  <Constraint Text="($grade[3] != null)"/>
-                                  <Concat>
-                                    <Select>
-                                      <Constraint Text="($letter == -1)"/>
-                                      <Concat>
-                                        <Literal Text="Total Not Found" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="70"/>
-                                      </Concat>
-                                      <Concat>
-                                        <Select>
-                                          <Constraint Text="($letter &gt;= $percs[0])"/>
-                                          <Concat>
-                                            <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="72"/>
-                                          </Concat>
-                                          <Concat>
-                                            <Select>
-                                              <Constraint Text="($letter &gt;= $percs[1])"/>
-                                              <Concat>
-                                                <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="74"/>
-                                              </Concat>
-                                              <Concat>
-                                                <Select>
-                                                  <Constraint Text="($letter &gt;= $percs[2])"/>
-                                                  <Concat>
-                                                    <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="76"/>
-                                                  </Concat>
-                                                  <Concat>
-                                                    <Select>
-                                                      <Constraint Text="($letter &gt;= $percs[3])"/>
-                                                      <Concat>
-                                                        <Literal Text="D" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="78"/>
-                                                      </Concat>
-                                                      <Concat>
-                                                        <Literal Text="F" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="80"/>
-                                                      </Concat>
-                                                    </Select>
-                                                  </Concat>
-                                                </Select>
-                                              </Concat>
-                                            </Select>
-                                          </Concat>
-                                        </Select>
-                                      </Concat>
-                                    </Select>
-                                  </Concat>
-                                  <Concat> </Concat>
-                                </Select>
+                                <Concat>
+                                  <Select>
+                                    <Constraint Text="($letter == -1)"/>
+                                    <Concat>
+                                      <Literal Text="Total Not Found" Length="15" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="70"/>
+                                    </Concat>
+                                    <Concat>
+                                      <Select>
+                                        <Constraint Text="($letter &gt;= $percs[0])"/>
+                                        <Concat>
+                                          <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="72"/>
+                                        </Concat>
+                                        <Concat>
+                                          <Select>
+                                            <Constraint Text="($letter &gt;= $percs[1])"/>
+                                            <Concat>
+                                              <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="74"/>
+                                            </Concat>
+                                            <Concat>
+                                              <Select>
+                                                <Constraint Text="($letter &gt;= $percs[2])"/>
+                                                <Concat>
+                                                  <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="76"/>
+                                                </Concat>
+                                                <Concat>
+                                                  <Select>
+                                                    <Constraint Text="($letter &gt;= $percs[3])"/>
+                                                    <Concat>
+                                                      <Literal Text="D" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="78"/>
+                                                    </Concat>
+                                                    <Concat>
+                                                      <Literal Text="F" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="80"/>
+                                                    </Concat>
+                                                  </Select>
+                                                </Concat>
+                                              </Select>
+                                            </Concat>
+                                          </Select>
+                                        </Concat>
+                                      </Select>
+                                    </Concat>
+                                  </Select>
+                                </Concat>
                                 <Concat>
                                   <Literal Text="&lt;/td&gt; &lt;td align='left'&gt;" Length="24" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="84"/>
                                   <Undef/>
@@ -9715,27 +9063,19 @@
                                     <Literal Text="Yes" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="88"/>
                                   </Concat>
                                   <Concat>
-                                    <Select>
-                                      <Constraint Text="($grade[3] != null)"/>
-                                      <Concat>
-                                        <Literal Text="No" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="90"/>
-                                      </Concat>
-                                      <Concat> </Concat>
-                                    </Select>
+                                    <Concat>
+                                      <Literal Text="No" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="90"/>
+                                    </Concat>
                                   </Concat>
                                 </Select>
                                 <Literal Text=" &lt;/td&gt; &lt;/tr&gt; " Length="20" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="95"/>
                               </Concat>
                             </Repeat>
-                            <Select>
-                              <Constraint Text="($row == 0)"/>
-                              <Concat>
-                                <Literal 
-                                Text="&lt;tr class='even'&gt;&lt;td colspan='9'&gt;&lt;center&gt;There are currently no students registered for this class.&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;" Length="118" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="99">
+                            <Concat>
+                              <Literal 
+                              Text="&lt;tr class='even'&gt;&lt;td colspan='9'&gt;&lt;center&gt;There are currently no students registered for this class.&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;" Length="118" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="99">
 </Literal>
-                              </Concat>
-                              <Concat> </Concat>
-                            </Select>
+                            </Concat>
                             <Concat>
                               <Literal 
                               Text="  &lt;/table&gt;
@@ -9745,23 +9085,19 @@
   &lt;input type='hidden' name='deletegrade' /&gt;
   &lt;input type='hidden' name='selectclass' value='" Length="157" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="107">
 </Literal>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="$_POST"/>
                               <Literal 
                               Text="' /&gt;
   &lt;input type='hidden' name='selectgrade' /&gt;
   &lt;input type='hidden' name='page2' value='" Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="109">
 </Literal>
-                              <Symbolic Text="[Symbol]"/>
+                              <Symbolic Text="$_POST"/>
                               <Literal 
                               Text="' /&gt;
   &lt;input type='hidden' name='logout' /&gt;
   &lt;input type='hidden' name='page' value='" Length="87" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="111">
 </Literal>
-                              <Select>
-                                <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                <Literal Text="0" Length="1" Line="0"/>
-                                <Undef/>
-                              </Select>
+                              <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="123"/>
                               <Literal 
                               Text="' /&gt;
  &lt;/form&gt;
@@ -9798,40 +9134,32 @@
 </Literal>
                               <Concat>
                                 <Literal Text="ViewAnnouncements.php: Unable to retrieve total number of announcements - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="19"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="mysql_error()"/>
                               </Concat>
                               <Concat>
                                 <Literal Text="ViewAnnouncements.php: Unable to retrieve the announcements - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="32"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="mysql_error()"/>
                               </Concat>
                               <Repeat>
                                 <Constraint Text="$page2 == 4"/>
                                 <Concat>
-                                  <Select>
-                                    <Constraint Text="(($row &gt; (($_POST[&quot;onpage&quot;] * 25) + 25)) &amp;&amp; ($row &lt;= ($_POST[&quot;onpage&quot;] * 25)))"/>
+                                  <Concat>
                                     <Concat>
-                                      <Concat>
-                                        <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                        <Select>
-                                          <Constraint Text="(($row % 2) == 0)"/>
-                                          <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                          <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
-                                        </Select>
-                                        <Literal Text="'&gt; &lt;td&gt;&lt;b&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="43"/>
-                                        <Undef/>
-                                        <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
-                                        <Undef/>
-                                        <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                        <Select>
-                                          <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
-                                          <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
-                                          <Undef/>
-                                        </Select>
-                                        <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
-                                      </Concat>
+                                      <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                      <Select>
+                                        <Constraint Text="(($row % 2) == 0)"/>
+                                        <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                        <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="42"/>
+                                      </Select>
+                                      <Literal Text="'&gt; &lt;td&gt;&lt;b&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="43"/>
+                                      <Undef/>
+                                      <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
+                                      <Undef/>
+                                      <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
+                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                      <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                     </Concat>
-                                    <Concat> </Concat>
-                                  </Select>
+                                  </Concat>
                                 </Concat>
                               </Repeat>
                               <Literal Text=" &lt;/table&gt; &lt;br&gt;&lt;br&gt; &lt;center&gt;Page: " Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="53"/>
@@ -9845,13 +9173,13 @@
                                         <Literal 
                                         Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59">
 </Literal>
-                                        <Literal Text="1" Length="1" Line="0"/>
+                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                         <Literal 
                                         Text=";document.announcements.submit();' class='selectedpagenum' onMouseover=&quot;window.status='Go to page " Length="98" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59">
 </Literal>
-                                        <Literal Text="1" Length="1" Line="0"/>
+                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                         <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
-                                        <Literal Text="1" Length="1" Line="0"/>
+                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                         <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="59"/>
                                       </Concat>
                                     </Concat>
@@ -9860,13 +9188,13 @@
                                         <Literal 
                                         Text="&lt;a href='JavaScript: document.announcements.deleteannouncement.value=0;document.announcements.page2.value=4;document.announcements.onpage.value=" Length="144" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63">
 </Literal>
-                                        <Literal Text="1" Length="1" Line="0"/>
+                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                         <Literal 
                                         Text=";document.announcements.submit();' class='pagenum' onMouseover=&quot;window.status='Go to page " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63">
 </Literal>
-                                        <Literal Text="1" Length="1" Line="0"/>
+                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                         <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
-                                        <Literal Text="1" Length="1" Line="0"/>
+                                        <Literal Text="1" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                         <Literal Text="&lt;/a&gt;&amp;nbsp; " Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="63"/>
                                       </Concat>
                                     </Concat>
@@ -9875,19 +9203,15 @@
                               </Repeat>
                               <Concat>
                                 <Literal Text=" &lt;/center&gt; &lt;input type='hidden' name='page2' value='" Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="68"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="$_POST"/>
                                 <Literal Text="'&gt; &lt;input type='hidden' name='onpage' value='" Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="69"/>
-                                <Symbolic Text="[Symbol]"/>
+                                <Symbolic Text="$_POST"/>
                                 <Literal 
                                 Text="'&gt;
   &lt;input type='hidden' name='logout'&gt;
   &lt;input type='hidden' name='page' value='" Length="83" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="71">
 </Literal>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                  <Literal Text="0" Length="1" Line="0"/>
-                                  <Undef/>
-                                </Select>
+                                <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="84"/>
                                 <Literal 
                                 Text="'&gt;
  &lt;/form&gt;
@@ -9911,9 +9235,9 @@
                               <Concat>
                                 <Concat>
                                   <Literal Text="ParentViewCourses.php: Unable to get the studentid " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="3"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="$_POST"/>
                                   <Literal Text=" - " Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="3"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="mysql_error()"/>
                                 </Concat>
                                 <Concat>
                                   <Literal Text=" &lt;h1&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="6"/>
@@ -9933,7 +9257,7 @@
                                 </Concat>
                                 <Concat>
                                   <Literal Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="16"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="mysql_error()"/>
                                 </Concat>
                                 <Repeat>
                                   <Constraint Text="$page2 == 5"/>
@@ -9967,65 +9291,57 @@
    &lt;/tr&gt;
    " Length="196" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="44">
 </Literal>
-                                <Select>
-                                  <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                <Concat>
                                   <Concat>
+                                    <Literal Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="49"/>
+                                    <Symbolic Text="mysql_error()"/>
+                                  </Concat>
+                                  <Repeat>
+                                    <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
                                     <Concat>
-                                      <Literal Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="49"/>
-                                      <Symbolic Text="[Symbol]"/>
-                                    </Concat>
-                                    <Repeat>
-                                      <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
-                                      <Concat>
-                                        <Repeat>
-                                          <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                      <Repeat>
+                                        <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
+                                        <Concat>
                                           <Concat>
-                                            <Concat>
-                                              <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
-                                              <Select>
-                                                <Constraint Text="(($row % 2) == 0)"/>
-                                                <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
-                                                <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
-                                              </Select>
-                                              <Literal 
-                                              Text="'&gt;
+                                            <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
+                                            <Select>
+                                              <Constraint Text="(($row % 2) == 0)"/>
+                                              <Literal Text="even" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
+                                              <Literal Text="odd" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="58"/>
+                                            </Select>
+                                            <Literal 
+                                            Text="'&gt;
    &lt;td&gt;&lt;a class='items' href=&quot;JavaScript:document.classes.selectclass.value=" Length="79" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="59">
 </Literal>
-                                              <Undef/>
-                                              <Literal 
-                                              Text=";document.classes.page2.value=1;document.classes.submit();&quot; onMouseover=&quot;window.status='View Information For " Length="109" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="59">
+                                            <Undef/>
+                                            <Literal 
+                                            Text=";document.classes.page2.value=1;document.classes.submit();&quot; onMouseover=&quot;window.status='View Information For " Length="109" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="59">
 </Literal>
-                                              <Undef/>
-                                              <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="59"/>
-                                              <Undef/>
-                                              <Literal Text="&lt;/a&gt;&lt;/td&gt; &lt;/tr&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="60"/>
-                                            </Concat>
+                                            <Undef/>
+                                            <Literal Text="';return true;&quot; onMouseout=&quot;window.status='';return true;&quot;&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="59"/>
+                                            <Undef/>
+                                            <Literal Text="&lt;/a&gt;&lt;/td&gt; &lt;/tr&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="60"/>
                                           </Concat>
-                                        </Repeat>
-                                      </Concat>
-                                    </Repeat>
-                                  </Concat>
-                                  <Concat> </Concat>
-                                </Select>
+                                        </Concat>
+                                      </Repeat>
+                                    </Concat>
+                                  </Repeat>
+                                </Concat>
                                 <Concat>
                                   <Literal Text="&lt;/table&gt; &lt;input type='hidden' name='page2' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="65"/>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="$_POST"/>
                                   <Literal 
                                   Text="' /&gt;
    &lt;input type='hidden' name='logout' /&gt;
    &lt;input type='hidden' name='page' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="67">
 </Literal>
-                                  <Select>
-                                    <Constraint Text="($_POST[&quot;logout&quot;] == 1)"/>
-                                    <Literal Text="0" Length="1" Line="0"/>
-                                    <Undef/>
-                                  </Select>
+                                  <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="82"/>
                                   <Literal 
                                   Text="' /&gt;
    &lt;input type='hidden' name='selectclass' /&gt;
    &lt;input type='hidden' name='student' value='" Length="97" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="69">
 </Literal>
-                                  <Symbolic Text="[Symbol]"/>
+                                  <Symbolic Text="$_POST"/>
                                   <Literal Text="' /&gt; &lt;input type='hidden' name='studentid' value='" Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="70"/>
                                   <Undef/>
                                   <Literal 

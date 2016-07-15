@@ -59,8 +59,8 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  //val env = loadAndExecute(url("testScripts/constants.php"))
   val env = loadAndExecute(url("schoolmate/index.php"))
+//  val env = loadAndExecute(url("mini/wp_callback_test.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }
