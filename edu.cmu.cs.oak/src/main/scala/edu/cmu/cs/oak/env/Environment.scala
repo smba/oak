@@ -56,6 +56,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    */
   val staticClassFields = collection.mutable.Map[String, collection.mutable.Map[String, OakValue]]()
   
+  
+  /**
+   * Map of references
+   */
   val references = AnyRefMap[OakVariable, OakValue]()
 
   /**
@@ -86,6 +90,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    */
   var classDefs = AnyRefMap[String, ClassDef]()
   
+  /**
+   * Environment flag to be set to TRUE, once a return statement has 
+   * been executed. This flag will be checked when a statement/block 
+   * is executed.
+   */
+  private var terminated = false
+  
   val logger = LoggerFactory.getLogger(classOf[Environment])
 
   /**
@@ -95,6 +106,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
+    
+    if (name equals "$return") {
+      println("Return value " + value)      
+    }
     
     changed = true
     if (variables.contains(name)) {
@@ -497,6 +512,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
   
   def containsFunction(name: String) = !funcs.get(name).isEmpty
+  
+  def hasTerminated(): Boolean = this.terminated
+  
+  def terminate() {
+    this.terminated = true
+  }
 }
 
 /**

@@ -77,18 +77,18 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    try {
-      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.addToGlobal("$_SERVER")
-      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-    } catch {
-      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    }
+    //    try {
+    //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //      env.addToGlobal("$_SERVER")
+    //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+    //    } catch {
+    //      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
+    //    }
 
     // Execute the parsed program
     execute(program, env)
@@ -110,7 +110,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
    * <Statement>; <Statement>; ...
    */
   private def executeBlockStatement(stmt: BlockStatement, env: Environment): ControlCode.Value = {
-    stmt.getStatements.takeWhile(!_.isInstanceOf[BreakStatement]).foreach(s => execute(s, env))
+    stmt.getStatements.takeWhile(!_.isInstanceOf[BreakStatement] && !env.hasTerminated()).foreach(s => execute(s, env))
     ControlCode.OK
   }
 
@@ -414,9 +414,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     val v = try {
       evaluate(expr, env)
     } catch {
-      case vnfe: VariableNotFoundException => null
+      case vnfe: VariableNotFoundException => {
+        println("Could not evaluate return value " + s._expr + ".")
+        NullValue("Could not evaluate return value " + s._expr + ".")
+      }
     }
     env.update("$return", v)
+    env.terminate()
     return ControlCode.OK
   }
 
@@ -545,6 +549,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       }
     }
     env.update("$returnref", returnRef)
+    env.terminate()
     return ControlCode.OK
   }
 
@@ -719,71 +724,75 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   def execute(stmt: Statement, env: Environment): ControlCode.Value = {
-    stmt match {
-      case s: ClassDefStatement => {
-        executeClassDefStatement(s, env)
+    if (!env.hasTerminated()) {
+      stmt match {
+        case s: ClassDefStatement => {
+          executeClassDefStatement(s, env)
+        }
+        case s: BlockStatement => {
+          executeBlockStatement(s, env)
+        }
+        case s: EchoStatement => {
+          executeEchoStatement(s, env)
+        }
+        case s: ExprStatement => {
+          executeExprStatement(s, env)
+        }
+        case s: IfStatement => {
+          executeIfStatement(s, env)
+        }
+        case s: WhileStatement => {
+          executeWhileStatement(s, env)
+        }
+        case s: ReturnStatement => {
+          executeReturnStatement(s, env)
+        }
+        case s: ReturnRefStatement => {
+          executeReturnRefStatement(s, env)
+        }
+        case s: SwitchStatement => {
+          executeSwitchStatement(s, env)
+        }
+        case s: BreakStatement => {
+          executeBreakStatement(s, env)
+        }
+        case s: ForStatement => {
+          executeForStatement(s, env)
+        }
+        case s: ContinueStatement => {
+          executeContinueStatement(s, env)
+        }
+        case s: TextStatement => {
+          executeTextStatement(s, env)
+        }
+        case s: GlobalStatement => {
+          executeGlobalStatement(s, env)
+        }
+        case s: StaticStatement => {
+          executeStaticStatement(s, env)
+        }
+        case s: ForeachStatement => {
+          executeForeachStatement(s, env)
+        }
+        case s: DoStatement => {
+          executeDoStatement(s, env)
+        }
+        case s: FunctionDefStatement => {
+          executeFunctionDefStatement(s, env)
+        }
+        case s: TryStatement => {
+          executeTryStatement(s, env)
+        }
+        case s: ThrowStatement => {
+          executeThrowStatement(s, env)
+        }
+        case s: ClassStaticStatement => {
+          executeClassStaticStatement(s, env)
+        }
+        case _ => throw new RuntimeException(stmt + " unimplemented.")
       }
-      case s: BlockStatement => {
-        executeBlockStatement(s, env)
-      }
-      case s: EchoStatement => {
-        executeEchoStatement(s, env)
-      }
-      case s: ExprStatement => {
-        executeExprStatement(s, env)
-      }
-      case s: IfStatement => {
-        executeIfStatement(s, env)
-      }
-      case s: WhileStatement => {
-        executeWhileStatement(s, env)
-      }
-      case s: ReturnStatement => {
-        executeReturnStatement(s, env)
-      }
-      case s: ReturnRefStatement => {
-        executeReturnRefStatement(s, env)
-      }
-      case s: SwitchStatement => {
-        executeSwitchStatement(s, env)
-      }
-      case s: BreakStatement => {
-        executeBreakStatement(s, env)
-      }
-      case s: ForStatement => {
-        executeForStatement(s, env)
-      }
-      case s: ContinueStatement => {
-        executeContinueStatement(s, env)
-      }
-      case s: TextStatement => {
-        executeTextStatement(s, env)
-      }
-      case s: GlobalStatement => {
-        executeGlobalStatement(s, env)
-      }
-      case s: StaticStatement => {
-        executeStaticStatement(s, env)
-      }
-      case s: ForeachStatement => {
-        executeForeachStatement(s, env)
-      }
-      case s: DoStatement => {
-        executeDoStatement(s, env)
-      }
-      case s: FunctionDefStatement => {
-        executeFunctionDefStatement(s, env)
-      }
-      case s: TryStatement => {
-        executeTryStatement(s, env)
-      }
-      case s: ThrowStatement => {
-        executeThrowStatement(s, env)
-      }
-      case s: ClassStaticStatement => {
-        executeClassStaticStatement(s, env)
-      }
-      case _ => throw new RuntimeException(stmt + " unimplemented.")
+    } else {
+      return ControlCode.OK
     }
   }
 
