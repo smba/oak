@@ -1214,8 +1214,21 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           }
         }
 
+        /*
+         * This is the reference pointing to the (prospective) array value to assign
+         * the element to. If this value does not exist yet, i.e. the pointer refers to
+         * an undefined value, declare a new ArrayValue and 
+         */
         val array_reference_last = recursive_array_lookup(array_reference_first, array_indices)
-        val av = env.extract(array_reference_last)
+        val av = try {
+          env.extract(array_reference_last)
+        } catch {
+          case vnfe: VariableNotFoundException => {
+            val new_array_value = new ArrayValue()
+            env.insert(array_reference_last, new_array_value)
+            new_array_value
+          }
+        }
 
         av match {
           case av: ArrayValue => {
