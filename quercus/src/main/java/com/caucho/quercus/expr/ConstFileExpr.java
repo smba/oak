@@ -38,7 +38,7 @@ import com.caucho.quercus.env.Value;
  * For portability of compiled code.
  */
 public class ConstFileExpr extends Expr {
-  protected final String _fileName;
+	public final String _fileName;
 
   public ConstFileExpr(Location location, String fileName)
   {

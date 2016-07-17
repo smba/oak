@@ -76,6 +76,16 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    */
   val output = ConcatNode(List())
 
+  /**
+   * Map of fuńction names and function definitions
+   */
+  var funcs = AnyRefMap[String, FunctionDef]()
+  /**
+   * Map of class definitions. All classes defined during the program execution
+   * are stored here.
+   */
+  var classDefs = AnyRefMap[String, ClassDef]()
+  
   val logger = LoggerFactory.getLogger(classOf[Environment])
 
   /**
@@ -296,11 +306,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     
     val f = fu.asInstanceOf[Function]
     val s = f._name
-    
-    if (s.equals("wptexturize")) {
-      println("hier")
-    }
-    
+
     val hasReturn = f._hasReturn //Interpreter.accessField(f, "_hasReturn").asInstanceOf[Boolean]
     val returnsRef = f._isReturnsReference //Interpreter.accessField(f, "_isReturnsReference").asInstanceOf[Boolean]
     val args = ListBuffer[String]()
@@ -361,6 +367,16 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     joinResult.joinedConstants.foreach {
       case (n, c) => this.defineConstant(n, c)
     }
+    
+    // 7) Functions
+    joinResult.joinedFunctionDefs.foreach {
+      case (name, f) => this.defineFunction(f)
+    }
+    
+    // 8) Classes
+    joinResult.joinedClassDefs.foreach {
+      case (name, c) => this.addClass(c)
+    }
   }
 
   def getDelta(): Delta = {
@@ -381,7 +397,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.staticClassFields.foreach {
       case (m1, m2) => t.put(m1, m2.toMap)
     }
-    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap)
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)
   }
 
   //  def weaveReferences(that: Environment) {
@@ -405,7 +421,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else if (this.parent != null) {
       this.parent.getStaticClassField(className, fieldName)
     } else {
-      Environment.getClassDef(className).getStaticFields().get(fieldName).get
+      getClassDef(className).getStaticFields().get(fieldName).get
     }
   }
   
@@ -442,6 +458,45 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       StringValue("", "", 0)//NullValue("not found")//
     }
   }
+  
+  def defineFunction(f: FunctionDef): Unit = {
+    funcs.put(f.getName, f)
+  }
+
+  def getFunction(name: String): FunctionDef = {
+    if (!funcs.get(name).isEmpty) {
+      funcs.get(name).get
+    } else if (parent != null) {
+      parent.getFunction(name)
+    } else {
+      throw new RuntimeException("Function " + name + " not defined!")
+    }
+  }
+
+  /**
+   * Adds a class definition to the environment.
+   * @param value ClassDef to add
+   */
+  def addClass(value: ClassDef) {
+    this.classDefs += (value.getName -> value)
+  }
+
+  /**
+   * Looks up a class definition in the environment.
+   * @param name Name of the class
+   * @return corresponding class definition
+   */
+  def getClassDef(name: String): ClassDef = {
+    if (!classDefs.get(name).isEmpty) {
+      classDefs.get(name).get
+    } else if (parent != null) {
+      parent.getClassDef(name)
+    } else {
+      throw new RuntimeException("ClassDef " + name + " not defined!")
+    }
+  }
+  
+  def containsFunction(name: String) = !funcs.get(name).isEmpty
 }
 
 /**
@@ -451,16 +506,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 object Environment {
 
   var forks = 0
-
-  /**
-   * Map of fuńction names and function definitions
-   */
-  var funcs = Map[String, FunctionDef]()
-  /**
-   * Map of class definitions. All classes defined during the program execution
-   * are stored here.
-   */
-  var classDefs = Map[String, ClassDef]()
 
   /**
    * Splits an environment into two branch environments that
@@ -557,45 +602,5 @@ object Environment {
     env.age = dis.age+1
     env
   }
-
-  def defineFunction(f: FunctionDef): Unit = {
-    funcs += (f.getName -> f)
-  }
-
-  def getFunction(name: String): FunctionDef = {
-    val opt = funcs.get(name)
-    if (!opt.isEmpty) {
-      return opt.get
-    } else {
-      throw new RuntimeException("Function " + name + " is undefined.")
-    }
-  }
-
-  /**
-   * Adds a class definition to the environment.
-   * @param value ClassDef to add
-   */
-  def addClass(value: ClassDef) {
-    this.classDefs += (value.getName -> value)
-  }
-
-  /**
-   * Looks up a class definition in the environment.
-   * @param name Name of the class
-   * @return corresponding class definition
-   */
-  def getClassDef(name: String): ClassDef = {
-
-    if (name equals "Exception") {
-      // TODO implement built-in class(es)?
-    }
-    try {
-      classDefs.get(name).get
-    } catch {
-      case nsee: NoSuchElementException => throw nsee
-    }
-  }
-  
-  def containsFunction(name: String) = !funcs.get(name).isEmpty
 
 }

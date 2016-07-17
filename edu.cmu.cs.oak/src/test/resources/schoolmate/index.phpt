@@ -7327,12 +7327,12 @@
                             Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='assigneddate' maxlength='10' size='15' value='" Length="86" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="26">
 </Literal>
-                            <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                            <Symbolic Text="convertfromdb()"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='duedate' maxlength='10' size='15' value='" Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="27">
 </Literal>
-                            <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                            <Symbolic Text="convertfromdb()"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -7426,7 +7426,7 @@
 </Literal>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                  <Symbolic Text="convertfromdb()"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="32"/>
                                 </Select>
                                 <Literal 
@@ -7464,7 +7464,7 @@
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='wasdate' value='" Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50"/>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                  <Symbolic Text="convertfromdb()"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50"/>
                                 </Select>
                                 <Literal Text="' /&gt; &lt;input type='hidden' name='student' value='" Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="51"/>
@@ -7647,7 +7647,7 @@
                                           <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
                                           <Undef/>
                                           <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                          <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                          <Symbolic Text="convertfromdb()"/>
                                           <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                         </Concat>
                                       </Concat>
@@ -8416,7 +8416,7 @@
                                     <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
                                     <Undef/>
                                     <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                    <Symbolic Text="convertfromdb()"/>
                                     <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                   </Concat>
                                 </Concat>
@@ -9156,7 +9156,7 @@
                                       <Literal Text="&lt;/b&gt;&lt;/td&gt; &lt;td class='announcement'&gt;" Length="38" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="44"/>
                                       <Undef/>
                                       <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                      <Symbolic Text="convertfromdb()"/>
                                       <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                     </Concat>
                                   </Concat>

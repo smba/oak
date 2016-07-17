@@ -77,18 +77,18 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    //    try {
-    //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      env.addToGlobal("$_SERVER")
-    //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-    //    } catch {
-    //      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    //    }
+    try {
+      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_SERVER")
+      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+    } catch {
+      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
+    }
 
     // Execute the parsed program
     execute(program, env)
@@ -430,7 +430,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
     val name = interpreted.getName
 
-    if (Environment.classDefs.keySet contains name) {
+    if (env.classDefs.keySet contains name) {
       return ControlCode.OK
     }
 
@@ -466,14 +466,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     /* Retrieve all parent classes */
     if ((classDefCasted._parentName != null) && (!(classDefCasted._parentName equals "WP_HTTP_Streams"))) {
       val parentClassDef = try {
-        Environment.getClassDef(classDefCasted._parentName)
+        val cd = env.getClassDef(classDefCasted._parentName)
+        classFieldNames ++= cd.getFields()
+        cd.methods.foreach {
+          case (name, fdef) => classMethodDefMap += (name -> fdef)
+        }
+        cd
       } catch {
         case nsee: NoSuchElementException => null
-      }
-
-      classFieldNames ++= parentClassDef.getFields()
-      parentClassDef.methods.foreach {
-        case (name, fdef) => classMethodDefMap += (name -> fdef)
       }
     }
 
@@ -502,16 +502,22 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     }
 
     if (!(parent equals "")) {
-      val parentClassDef = Environment.getClassDef(parent)
-      parentClassDef.fields.foreach {
-        case (k, v) => classFieldMap.put(k, v)
-      }
-      parentClassDef.methods.foreach {
-        case (k, v) => classMethodDefMap += (k -> v)
+      try {
+        val parentClassDef = env.getClassDef(parent)
+        parentClassDef.fields.foreach {
+          case (k, v) => classFieldMap.put(k, v)
+        }
+        parentClassDef.methods.foreach {
+          case (k, v) => classMethodDefMap += (k -> v)
+        }
+      } catch {
+        case e: Exception => {
+          logger.error("Class " + parent + " could not be found.")
+        }
       }
     }
-    Environment.addClass(classDef)
-    Environment.getClassDef(name).initFields(classFieldMap.toMap)
+    env.addClass(classDef)
+    env.getClassDef(name).initFields(classFieldMap.toMap)
     return ControlCode.OK
   }
 
@@ -687,8 +693,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   private def executeFunctionDefStatement(s: FunctionDefStatement, env: Environment): ControlCode.Value = {
     val function = s._fun
-    if (!(Environment.funcs.keySet contains function._name)) {
-      Environment.defineFunction(env.defineFunction(function))
+    if (!(env.containsFunction(function._name))) {
+      env.defineFunction(env.defineFunction(function))
     }
     ControlCode.OK
   }
@@ -902,7 +908,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
        * loading the function, we return with a symbol value, i.e., the called function
        * is either undefined or unimplemented. */
       val function = try {
-        Environment.getFunction(name)
+        env.getFunction(name)
       } catch {
         case ex: Exception => {
 
@@ -1012,10 +1018,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
     val objectValue = try {
 
-      val constructor = Environment.getClassDef(name).getConstructor(args.size) // match by number of args
+      val constructor = env.getClassDef(name).getConstructor(args.size) // match by number of args
 
       /** Create a new object Value */
-      val obj = ObjectValue("Object Doe", Environment.getClassDef(name))
+      val obj = ObjectValue("Object Doe", env.getClassDef(name))
       val objEnv = Environment.createObjectEnvironment(env, obj)
 
       /* Execute constructor in the object environment and keep its variable $this:
@@ -1047,7 +1053,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     } catch {
       case nsee: NoSuchElementException => {
         try {
-          Environment.getClassDef(name).getDefaultObject(env)
+          env.getClassDef(name).getDefaultObject(env)
         } catch {
           case nsee2: NoSuchElementException => SymbolValue("", OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
         }
@@ -1190,7 +1196,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
                 }
                 recursive_array_lookup(av.getRef(indices.head), indices.tail)
               }
-              case n: AnyRef => {
+              case n: OakValue => {
                 null
               }
             }
@@ -1405,7 +1411,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   private def evaluateClassMethodExpr(cme: ClassMethodExpr, env: Environment): OakValue = {
     try {
-      val classDef = Environment.getClassDef(cme._className)
+      val classDef = env.getClassDef(cme._className)
 
       if (cme._className equals cme._methodName.toString()) {
         val constructor = classDef.getConstructor(cme._args.size)
@@ -1585,7 +1591,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     val className = e._className
     val name = e._name
     try {
-      val constants = Environment.getClassDef(className).getConstants()
+      val constants = env.getClassDef(className).getConstants()
       if (constants.keySet contains name) {
         return constants.get(name)
       } else {
@@ -1675,7 +1681,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               this.includes = this.includes.pop
               this.path = oldURL
             } else {
-              // logger.error(includePaf + " is not a file!")
+              logger.error(includePaf + " is not a file!")
             }
           }
       }
@@ -1693,6 +1699,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   def evaluateUnaryBitNotExpr(e: UnaryBitNotExpr, env: Environment): OakValue = {
     SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
+  }
+
+  // __FILE__
+  def evaluateConstFileExpr(e: ConstFileExpr, env: Environment): OakValue = {
+    StringValue(this.path.toString, "", 0)
   }
 
   def evaluate(e: Expr, env: Environment): OakValue = {
@@ -1839,6 +1850,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       case e: UnaryBitNotExpr => {
         evaluateUnaryBitNotExpr(e, env)
       }
+      case e: ConstFileExpr => {
+        evaluateConstFileExpr(e, env)
+      }
       case null => null
       case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
@@ -1855,33 +1869,38 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
     var paf = evaluate(expr, env) //
 
-    val pathsRaw = paf match {
-      case s: OakValueSequence => {
-        // Flatten all choices
-        val sequenceFlattened = s.getSequence.map {
-          v =>
-            v match {
-              case c: Choice => new OakValueSequence(c.getElements.toList)
-              case v: OakValue => v
-            }
-        }
+    val z = paf
+    if (!(new File(paf.toString())).exists()) {
+      val pathsRaw = paf match {
+        case s: OakValueSequence => {
+          // Flatten all choices
+          val sequenceFlattened = s.getSequence.map {
+            v =>
+              v match {
+                case c: Choice => new OakValueSequence(c.getElements.toList)
+                case v: OakValue => v
+              }
+          }
 
-        val tree = Tree.construct(sequenceFlattened)
-        val paths = new ListBuffer[OakValueSequence]()
-        tree.plainTraverse(paths)
-        paths.toList
+          val tree = Tree.construct(sequenceFlattened)
+          val paths = new ListBuffer[OakValueSequence]()
+          tree.plainTraverse(paths)
+          paths.toList
+        }
+        case v: OakValue => List(v)
       }
-      case v: OakValue => List(v)
-    }
 
-    val paths = pathsRaw.map {
-      paf =>
-        {
-          var path = paf.toString.replace("\"", "")
-          Paths.get(path)
-        }
+      val paths = pathsRaw.map {
+        paf =>
+          {
+            var path = paf.toString.replace("\"", "")
+            Paths.get(path)
+          }
+      }
+      paths // TODO remove duplicates
+    } else {
+      List(Paths.get(paf.toString))
     }
-    paths // TODO remove duplicates
 
   }
 
@@ -1890,7 +1909,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     val funcIterator = program.getFunctionList.iterator
     while (funcIterator.hasNext) {
       val func = env.defineFunction(funcIterator.next())
-      Environment.defineFunction(func)
+      env.defineFunction(func)
     }
   }
 

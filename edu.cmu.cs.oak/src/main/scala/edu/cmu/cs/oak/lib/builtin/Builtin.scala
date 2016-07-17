@@ -197,7 +197,7 @@ class FunctionExists extends InterpreterPlugin {
     val fname = args.head
     fname match {
       case sv: StringValue => {
-        BooleanValue(Environment.containsFunction(sv.value))
+        BooleanValue(env.containsFunction(sv.value))
       }
       case _ => NullValue("function_exists()")
     }

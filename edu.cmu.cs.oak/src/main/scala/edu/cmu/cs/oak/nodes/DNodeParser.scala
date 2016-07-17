@@ -64,7 +64,4 @@ object DNodeParser extends App {
     LiteralNode(text, file, line)
   }
   
-  val xml = XML.loadFile("/home/stefan/Desktop/output2.xml")
-  println(DNode.extractStringLiterals(DNodeParser.parseNode(xml)).size)
-  
 }

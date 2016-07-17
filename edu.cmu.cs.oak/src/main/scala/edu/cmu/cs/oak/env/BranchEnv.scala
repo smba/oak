@@ -11,6 +11,7 @@ import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakVariable
+import org.slf4j.LoggerFactory
 
 /**
  * This class encapsulates all merging functionality used for branching
@@ -19,12 +20,6 @@ import edu.cmu.cs.oak.value.OakVariable
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  */
 class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint) extends Environment(parent: Environment, calls: Stack[Call], constraint: Constraint) {
-
-  /**
-   * Set of changed ("dirty") variables. These variables are considered
-   * when merging different environments.
-   */
-  //var updates = Set[String]()
 
   /**
    * "New" (conditional) class definitions
@@ -52,6 +47,8 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
  */
 object BranchEnv {
 
+  val logger = LoggerFactory.getLogger(classOf[BranchEnv])
+  
   /**
    * Merges the output of two or more environments by constructing a
    * SelectNode that represents the variational output.
@@ -157,6 +154,40 @@ object BranchEnv {
     }
   }
 
+  private def joinFunctionDefs(envs: List[BranchEnv]): AnyRefMap[String, FunctionDef] = {
+    val functions = AnyRefMap[String, FunctionDef]()
+    envs.map(env => env.funcs).foreach {
+      funcs => funcs.foreach {
+        case (fname, fdef) => {
+          if (!functions.get(fname).isEmpty) {
+            logger.warn("Duplicate function name " + fname + "().")
+          } else {
+            functions.put(fname, fdef)
+          }
+          
+        }
+      }
+    }
+    functions
+  }
+  
+  private def joinClassDefs(envs: List[BranchEnv]): AnyRefMap[String, ClassDef] = {
+    val functions = AnyRefMap[String, ClassDef]()
+    envs.map(env => env.classDefs).foreach {
+      funcs => funcs.foreach {
+        case (cname, cdef) => {
+          if (!functions.get(cname).isEmpty) {
+            logger.warn("Duplicate class definition name " + cname + ".")
+          } else {
+            functions.put(cname, cdef)
+          }
+          
+        }
+      }
+    }
+    functions
+  }
+  
   def join(envs: List[BranchEnv], constraints: List[Constraint]): Delta = {
 
     /* 1) JOIN UPDATED VARIABLES
@@ -215,6 +246,13 @@ object BranchEnv {
     val updated = envs.map { e => e.constants.keySet }.fold(Set[String]())(_ union _).toSet
     val constants = updated.map { cname => (cname -> joinConstants(envs, constraints, cname)) }.toMap
 
-    new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals, constants)
+    
+    // 7) Function definitions
+    val functions = joinFunctionDefs(envs)
+    
+    // 8) Class definition
+    val classes = joinClassDefs(envs)
+    
+    new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals, constants, functions, classes)
   }
 }

@@ -40,7 +40,7 @@ class CallUserFuncArray extends InterpreterPlugin {
 
       // Case 1: Callback function
       case sv: StringValue => {
-        val function = Environment.getFunction(sv.value)
+        val function = env.getFunction(sv.value)
         val argsE = param_arr
         argsE match {
 

@@ -53,7 +53,4 @@ object DModelParser extends App {
     val line = 0
     LiteralNode(text, file, line)
   }
-
-  val xml = XML.loadFile("/home/stefan/Desktop/php/out.xml")
-  println(DNode.extractStringLiterals(DModelParser.parseNode(xml)).size)
 }
