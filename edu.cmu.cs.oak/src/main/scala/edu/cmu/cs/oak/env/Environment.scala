@@ -412,6 +412,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.staticClassFields.foreach {
       case (m1, m2) => t.put(m1, m2.toMap)
     }
+    println(getOutput)
     new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)
   }
 
@@ -516,7 +517,14 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   def hasTerminated(): Boolean = this.terminated
   
   def terminate() {
+    this.terminate(calls.size)
+  }
+  
+  private def terminate(call_stack_size: Int) {
     this.terminated = true
+    if (parent != null && parent.getCalls().size == call_stack_size) {
+      parent.terminate(call_stack_size)
+    }
   }
 }
 
