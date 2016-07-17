@@ -107,10 +107,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    */
   def update(name: String, value: OakValue) {
     
-    if (name equals "$return") {
-      println("Return value " + value)      
-    }
-    
     changed = true
     if (variables.contains(name)) {
       val ref = variables.get(name).get.asInstanceOf[OakVariable]
@@ -412,7 +408,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.staticClassFields.foreach {
       case (m1, m2) => t.put(m1, m2.toMap)
     }
-    println(getOutput)
     new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)
   }
 

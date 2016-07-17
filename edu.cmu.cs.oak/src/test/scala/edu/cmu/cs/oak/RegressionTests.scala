@@ -58,6 +58,9 @@ class RegressionTests extends FunSuite {
   
   test("callbacks") {
     RegressionTest.test("testScripts/callbacks.php")
+    
+    // Callback tests for WordPress
+    RegressionTest.test("callbackAPI/wp_callback_test.php")
   }
   
   test("Schoolmate") {

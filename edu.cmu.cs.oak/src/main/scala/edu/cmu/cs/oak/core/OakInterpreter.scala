@@ -77,18 +77,18 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    //    try {
-    //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      env.addToGlobal("$_SERVER")
-    //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-    //    } catch {
-    //      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    //    }
+        try {
+          env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+          env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+          env.addToGlobal("$_SERVER")
+          env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+          execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+          execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+          execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+          execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+        } catch {
+          case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
+        }
 
     // Execute the parsed program
     execute(program, env)
@@ -415,7 +415,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       evaluate(expr, env)
     } catch {
       case vnfe: VariableNotFoundException => {
-        println("Could not evaluate return value " + s._expr + ".")
         NullValue("Could not evaluate return value " + s._expr + ".")
       }
     }
