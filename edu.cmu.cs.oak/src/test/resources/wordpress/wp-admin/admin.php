@@ -11,27 +11,33 @@
  *
  * @since 2.3.2
  */
+echo "XXX-18";
 if ( ! defined( 'WP_ADMIN' ) ) {
 	define( 'WP_ADMIN', true );
 }
-
+echo "XXX-17";
 if ( ! defined('WP_NETWORK_ADMIN') )
 	define('WP_NETWORK_ADMIN', false);
 
+echo "XXX-16";
 if ( ! defined('WP_USER_ADMIN') )
 	define('WP_USER_ADMIN', false);
 
+echo "XXX-15";
 if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
 	define('WP_BLOG_ADMIN', true);
 }
-
+echo "XXX-14";
 if ( isset($_GET['import']) && !defined('WP_LOAD_IMPORTERS') )
+	echo "XXX-14-a";
 	define('WP_LOAD_IMPORTERS', true);
-
+	echo "XXX-14-b";
+	
+echo "XXX-14-c";
 require_once(dirname(dirname(__FILE__)) . '/wp-load.php');
-
+echo "XXX-14-d";
 nocache_headers();
-
+echo "XXX-13";
 if ( get_option('db_upgraded') ) {
 	flush_rewrite_rules();
 	update_option( 'db_upgraded',  false );
@@ -84,6 +90,7 @@ require_once(ABSPATH . 'wp-admin/includes/admin.php');
 auth_redirect();
 
 // Schedule trash collection
+echo "XXX-12";
 if ( ! wp_next_scheduled( 'wp_scheduled_delete' ) && ! wp_installing() )
 	wp_schedule_event(time(), 'daily', 'wp_scheduled_delete');
 
@@ -115,21 +122,25 @@ $page_hook = null;
 
 $editing = false;
 
+echo "XXX-11";
 if ( isset($_GET['page']) ) {
 	$plugin_page = wp_unslash( $_GET['page'] );
 	$plugin_page = plugin_basename($plugin_page);
 }
 
+echo "XXX-10";
 if ( isset( $_REQUEST['post_type'] ) && post_type_exists( $_REQUEST['post_type'] ) )
 	$typenow = $_REQUEST['post_type'];
 else
 	$typenow = '';
 
+echo "XXX-09";
 if ( isset( $_REQUEST['taxonomy'] ) && taxonomy_exists( $_REQUEST['taxonomy'] ) )
 	$taxnow = $_REQUEST['taxonomy'];
 else
 	$taxnow = '';
 
+echo "XXX-08";
 if ( WP_NETWORK_ADMIN )
 	require(ABSPATH . 'wp-admin/network/menu.php');
 elseif ( WP_USER_ADMIN )
@@ -137,6 +148,7 @@ elseif ( WP_USER_ADMIN )
 else
 	require(ABSPATH . 'wp-admin/menu.php');
 
+echo "XXX-07";
 if ( current_user_can( 'manage_options' ) ) {
 	/**
 	 * Filters the maximum memory limit available for administration screens.
@@ -165,8 +177,9 @@ if ( current_user_can( 'manage_options' ) ) {
  *
  * @since 2.5.0
  */
+echo "XXX-06";
 do_action( 'admin_init' );
-
+echo "XXX-05";
 if ( isset($plugin_page) ) {
 	if ( !empty($typenow) )
 		$the_parent = $pagenow . '?post_type=' . $typenow;
@@ -189,6 +202,8 @@ if ( isset($plugin_page) ) {
 	unset($the_parent);
 }
 
+echo "XXX-04";
+
 $hook_suffix = '';
 if ( isset( $page_hook ) ) {
 	$hook_suffix = $page_hook;
@@ -199,6 +214,8 @@ if ( isset( $page_hook ) ) {
 }
 
 set_current_screen();
+
+echo "XXX-03";
 
 // Handle plugin admin pages.
 if ( isset($plugin_page) ) {
@@ -359,7 +376,7 @@ if ( isset($plugin_page) ) {
 		do_action( 'load-edit-tags.php' );
 	}
 }
-
+echo "XXX-02";
 if ( ! empty( $_REQUEST['action'] ) ) {
 	/**
 	 * Fires when an 'action' request variable is sent.
@@ -371,3 +388,5 @@ if ( ! empty( $_REQUEST['action'] ) ) {
 	 */
 	do_action( 'admin_action_' . $_REQUEST['action'] );
 }
+
+echo "XXX-01";

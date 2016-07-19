@@ -22,9 +22,9 @@
 // Initialize the filter globals.
 global $wp_filter, $wp_actions, $merged_filters, $wp_current_filter;
 
-if ( ! isset( $wp_filter ) )
+if ( ! isset( $wp_filter ) ) {
 	$wp_filter = array();
-
+}
 if ( ! isset( $wp_actions ) )
 	$wp_actions = array();
 
@@ -106,6 +106,7 @@ function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 
 	$idx = _wp_filter_build_unique_id($tag, $function_to_add, $priority);
 	$wp_filter[$tag][$priority][$idx] = array('function' => $function_to_add, 'accepted_args' => $accepted_args);
 	unset( $merged_filters[ $tag ] );
+	
 	return true;
 }
 
@@ -203,31 +204,39 @@ function apply_filters( $tag, $value ) {
 
 	// Do 'all' actions first.
 	if ( isset($wp_filter['all']) ) {
+		echo "A";
 		$wp_current_filter[] = $tag;
 		$args = func_get_args();
 		_wp_call_all_hook($args);
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
-		if ( isset($wp_filter['all']) )
+		if ( isset($wp_filter['all']) ) {
+			echo "B-2";
 			array_pop($wp_current_filter);
+		}
 		return $value;
 	}
 
-	if ( !isset($wp_filter['all']) )
+	if ( !isset($wp_filter['all']) ) {
+		echo "C";
 		$wp_current_filter[] = $tag;
-
+	}
+	
 	// Sort.
 	if ( !isset( $merged_filters[ $tag ] ) ) {
+		echo "D";
 		ksort($wp_filter[$tag]);
 		$merged_filters[ $tag ] = true;
 	}
 
 	reset( $wp_filter[ $tag ] );
 
-	if ( empty($args) )
+	if ( empty($args) ) {
+		echo "E";
 		$args = func_get_args();
-
+	}
+	
 	do {
 		foreach ( (array) current($wp_filter[$tag]) as $the_ )
 			if ( !is_null($the_['function']) ){

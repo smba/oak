@@ -103,7 +103,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <div class="wrap">
 	<h1><?php echo esc_html( $title ); ?></h1>
 
-<?php if ( has_action( 'welcome_panel' ) && current_user_can( 'edit_theme_options' ) ) :
+// <?php if ( has_action( 'welcome_panel' ) && current_user_can( 'edit_theme_options' ) ) :
 	$classes = 'welcome-panel';
 
 	$option = get_user_meta( get_current_user_id(), 'show_welcome_panel', true );
@@ -128,7 +128,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		do_action( 'welcome_panel' );
 		?>
 	</div>
-<?php endif; ?>
+// <?php endif; ?>
 
 	<div id="dashboard-widgets-wrap">
 	<?php wp_dashboard(); ?>
@@ -136,5 +136,5 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 
 </div><!-- wrap -->
 
-<?php
+// <?php
 require( ABSPATH . 'wp-admin/admin-footer.php' );

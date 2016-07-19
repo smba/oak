@@ -18,6 +18,7 @@ import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.ArrayValue
 import com.caucho.quercus.Location
+import java.io.File
 
 class IsNull extends InterpreterPlugin {
   override def getName(): String = "is_null"
@@ -220,6 +221,23 @@ class FuncGetArg extends InterpreterPlugin {
       }
       case _ => NullValue("func_get_arg()")
     }
+  }
+}
+
+class FileExists extends InterpreterPlugin {
+  override def getName(): String = "file_exists"
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
+    val interpreter = provider.asInstanceOf[OakInterpreter]
+    assert(args.size == 1)
+    
+    val file_exists = (new File(args.head.toString)).exists()
+    
+    if (!file_exists) {
+      System.err.println(args.head)
+    }
+    
+    return BooleanValue(file_exists)
+    
   }
 }
 //

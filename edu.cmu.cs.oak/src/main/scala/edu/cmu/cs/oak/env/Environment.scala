@@ -185,7 +185,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       </DataModel>
     }
 
-    var out = (new PrettyPrinter(200, 2)).format(wrapXML)
+    var out = (new PrettyPrinter(160, 2)).format(wrapXML)
     out = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" + out
     out
   }
@@ -211,6 +211,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
 
   def insert(reference: OakVariable, value: OakValue) {
+    
     changed = true
     references.put(reference, value)
   }
@@ -397,10 +398,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     
     globalVariables.foreach { 
       gv => {
-        if (!(variables.keySet contains gv)) {
-          update(gv, NullValue(gv))
+//        if (!(variables.keySet contains gv)) {
+//          update(gv, NullValue(gv))
+//        }
+        if ( ! this.extract(this.getRef(gv, false)).isInstanceOf[ArrayValue]) {
+          returnMap += (gv -> this.getRef(gv, false)) 
         }
-        returnMap += (gv -> this.getRef(gv, false)) 
+        
       }
     }
     

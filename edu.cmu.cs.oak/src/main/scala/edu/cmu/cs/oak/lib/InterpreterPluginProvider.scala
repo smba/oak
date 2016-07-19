@@ -31,6 +31,18 @@ import edu.cmu.cs.oak.lib.builtin.Sprintf
 import edu.cmu.cs.oak.lib.builtin.StrReplace
 import edu.cmu.cs.oak.lib.builtin.Substr
 import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.lib.builtin.Localizate
+import edu.cmu.cs.oak.lib.builtin.Trim
+import edu.cmu.cs.oak.lib.builtin.FunctionExists
+import edu.cmu.cs.oak.lib.builtin.Chr
+import edu.cmu.cs.oak.lib.builtin.Explode
+import edu.cmu.cs.oak.lib.builtin.Ltrim
+import edu.cmu.cs.oak.lib.builtin.PregReplaceCallback
+import edu.cmu.cs.oak.lib.builtin.Ord
+import edu.cmu.cs.oak.lib.builtin.InArray
+import edu.cmu.cs.oak.lib.builtin.FuncGetArg
+import edu.cmu.cs.oak.lib.builtin.Rtrim
+import edu.cmu.cs.oak.lib.builtin.FileExists
 
 /**
  * Via this plugin loader the interpreter can 
@@ -99,6 +111,21 @@ trait InterpreterPluginProvider {
     loadPlugin(new IsNull)
     loadPlugin(new IsString)
     loadPlugin(new IsObject)
+    
+    // Import from builtin
+    loadPlugin(new Chr)
+    loadPlugin(new Explode)
+    loadPlugin(new FuncGetArg)
+    loadPlugin(new FunctionExists)
+    loadPlugin(new InArray)
+    loadPlugin(new Ltrim)
+    loadPlugin(new Rtrim)
+    loadPlugin(new Trim)
+    loadPlugin(new PregReplaceCallback)
+    loadPlugin(new Ord)
+    loadPlugin(new FileExists)
+    
+    loadPlugin(new Localizate)
   }
 
 }

@@ -77,18 +77,19 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    try {
-      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.addToGlobal("$_SERVER")
-      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-    } catch {
-      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    }
+//    try {
+//      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.addToGlobal("$_SERVER")
+//      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
+//    } catch {
+//      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
+//    }
 
     // Execute the parsed program
     execute(program, env)
@@ -124,7 +125,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     val valueX = value match {
       case sv: StringValue => sv
       case ov: OakVariable => env.extract(ov)
-      case a: ArrayValue => throw new RuntimeException("Can't echo an entire array (" + expr + ").")
+      case a: ArrayValue => StringValue("[..]["+a.array.size+"]", "", 0)//throw new RuntimeException("Can't echo an entire array (" + expr + ").")
       case _ => value
     }
     env.addOutput(DNode.createDNode(valueX, stmt._location))
@@ -608,6 +609,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
    * These statements
    */
   private def executeTextStatement(s: TextStatement, env: Environment): ControlCode.Value = {
+    
     val value = s._value
     val file = s._location.getFileName
     val line = s._location.getLineNumber
@@ -616,9 +618,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   private def executeGlobalStatement(s: GlobalStatement, env: Environment): ControlCode.Value = {
-    val value = s._var
+    val value = s._var.toString
     try {
-      env.addToGlobal(value.toString)
+      env.addToGlobal(value)
     } catch {
       case vnfe: VariableNotFoundException => {
         throw new RuntimeException(vnfe)
@@ -791,6 +793,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         case _ => throw new RuntimeException(stmt + " unimplemented.")
       }
     } else {
+      //logger.error("Execution suspendedd " + stmt.getClass + " at " + stmt.getLocation.getFileName + ":" + stmt.getLocation.getLineNumber)
       return ControlCode.OK
     }
   }
@@ -1230,7 +1233,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
          */
         val array_reference_last = recursive_array_lookup(array_reference_first, array_indices)
         val av = try {
-          env.extract(array_reference_last)
+          env.extract(array_reference_last)//.set(array_indices.last, value, env)
         } catch {
           case vnfe: VariableNotFoundException => {
             val new_array_value = new ArrayValue()
@@ -1698,8 +1701,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               val program = this.engine.loadFromFile(includePaf)
               this.includes = this.includes.push(includePaf)
               this.path = includePath
+              
+              logger.info( ".." + oldURL.toString().takeRight(30) + " includes .." + includePaf.toString.takeRight(30))
               execute(program, env)
-              logger.info("Included " + includePaf)
+              
               this.includes = this.includes.pop
               this.path = oldURL
             } else {

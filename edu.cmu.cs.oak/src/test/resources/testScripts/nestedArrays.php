@@ -24,7 +24,7 @@ $array_g[$a][$b][0] = 'K';
 $array_h = array(3 => 'L', 5 => 'M');
 
 
-/* ------------------------------- */
+// /* ------------------------------- */
 echo $array_a[0] . $array_a[2];
 echo $array_b[0] . $array_b[2];
 echo $array_c[0][1] . $array_c[0][2];
@@ -33,4 +33,8 @@ echo $array_e[0];
 echo $array_f[0][1][2];
 echo $array_g['a']['b'][0];
 echo $array_h[0] . $array_h[5];
+
+// /* ------------------------------- */
+
+
 ?>

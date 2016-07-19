@@ -42,7 +42,9 @@ global $blog_id;
 wp_initial_constants();
 
 // Check for the required PHP version and for the MySQL extension or a database drop-in.
+echo "GHI";
 wp_check_php_mysql_versions();
+echo "JKL";
 
 // Disable magic quotes at runtime. Magic quotes are added using wpdb later in wp-settings.php.
 @ini_set( 'magic_quotes_runtime', 0 );

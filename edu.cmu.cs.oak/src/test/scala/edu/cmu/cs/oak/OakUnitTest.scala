@@ -59,8 +59,7 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("mini/wp_callback_test.php"))
-//  val env = loadAndExecute(url("mini/wp_callback_test.php"))
+  val env = loadAndExecute(url("testScripts/globalscope.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }
@@ -69,5 +68,6 @@ object OakUnitTest extends App {
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output2.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close
+
 
 }

@@ -1,11 +1,10 @@
 package edu.cmu.cs.oak.value
 
-import scala.collection.mutable.HashMap
-import edu.cmu.cs.oak.env.OakHeap
-import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-import edu.cmu.cs.oak.core.SymbolFlag
 import scala.collection.mutable.LinkedHashMap
+
+import edu.cmu.cs.oak.env.Environment
+import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 
 /**
  * 
@@ -92,12 +91,17 @@ class ArrayValue extends OakValue {
   }
   
   def getRef(index: OakValue): OakVariable = {
-    array.get(index).get
+    val ref = array.get(index)
+    if (ref.isEmpty) {
+      throw new VariableNotFoundException(index.toString())
+    } else {
+      ref.get
+    }
   }
   
   def getKeys(): List[OakValue] = array.keySet.toList
 
-  override def toString(): String = "[" + array.mkString(", ") + "]"
+  override def toString(): String = "Array[" + array.mkString(", ") + "]"
 
   def cloneArrayValue(): ArrayValue = {
     val av = new ArrayValue()

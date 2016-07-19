@@ -63,6 +63,7 @@ if ( file_exists( ABSPATH . 'wp-config.php') ) {
 	 * we're traveling in circles, our last-ditch effort is "Need more help?"
 	 */
 	if ( false === strpos( $_SERVER['REQUEST_URI'], 'setup-config' ) ) {
+		echo "i am here";
 		header( 'Location: ' . $path );
 		exit;
 	}
@@ -70,7 +71,9 @@ if ( file_exists( ABSPATH . 'wp-config.php') ) {
 	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 	require_once( ABSPATH . WPINC . '/version.php' );
 
+	echo "ABC";
 	wp_check_php_mysql_versions();
+	echo "DEF";
 	wp_load_translations_early();
 
 	// Die with an error message
