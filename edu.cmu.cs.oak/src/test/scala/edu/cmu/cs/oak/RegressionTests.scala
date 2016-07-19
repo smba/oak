@@ -45,7 +45,7 @@ class RegressionTests extends FunSuite {
   test("Global function scoping") {
     RegressionTest.test("testScripts/scoping/global_function_scope01.php")
     RegressionTest.test("testScripts/scoping/global_function_scope02.php")
-//    RegressionTest.test("testScripts/scoping/global_function_scope02.php")
+    RegressionTest.test("testScripts/scoping/global_function_scope_branching01.php")
 //    RegressionTest.test("testScripts/scoping/global_function_scope02.php")
   }
   

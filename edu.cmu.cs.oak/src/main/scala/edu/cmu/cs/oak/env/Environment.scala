@@ -365,7 +365,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
     // 3) Update the variables that have changed during the execution of the branches
     joinResult.joinedVariables.foreach {
-      case (name, value) => this.update(name, value)
+      case (name, value) => {
+        if (!value.isInstanceOf[OakVariable]) {
+          this.update(name, value)
+        } else {
+          this.setRef(name, value.asInstanceOf[OakVariable])
+        }
+      }
     }
 
     // 4 Globals
@@ -555,6 +561,10 @@ object Environment {
     Environment.forks += 1
     val b1 = new BranchEnv(parent, parent.getCalls(), newConstraint)
     val b2 = new BranchEnv(parent, parent.getCalls(), newConstraint.NOT())
+    
+    copyGlobalVariables(parent, b1)
+    copyGlobalVariables(parent, b2)
+    
     return (b1, b2)
   }
 
