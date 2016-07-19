@@ -202,6 +202,7 @@ function apply_filters( $tag, $value ) {
 
 	$args = array();
 
+	
 	// Do 'all' actions first.
 	if ( isset($wp_filter['all']) ) {
 		echo "A";
@@ -211,6 +212,7 @@ function apply_filters( $tag, $value ) {
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
+		echo "FICK DIE POLIZWEI";
 		if ( isset($wp_filter['all']) ) {
 			echo "B-2";
 			array_pop($wp_current_filter);
@@ -231,7 +233,7 @@ function apply_filters( $tag, $value ) {
 	}
 
 	reset( $wp_filter[ $tag ] );
-
+	
 	if ( empty($args) ) {
 		echo "E";
 		$args = func_get_args();

@@ -623,7 +623,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       env.addToGlobal(value)
     } catch {
       case vnfe: VariableNotFoundException => {
-        throw new RuntimeException(vnfe)
+
       }
     }
     ControlCode.OK

@@ -42,6 +42,13 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/globalscope.php")
   }
   
+  test("Global function scoping") {
+    RegressionTest.test("testScripts/scoping/global_function_scope01.php")
+    RegressionTest.test("testScripts/scoping/global_function_scope02.php")
+//    RegressionTest.test("testScripts/scoping/global_function_scope02.php")
+//    RegressionTest.test("testScripts/scoping/global_function_scope02.php")
+  }
+  
   test("Inner to outer scope") {
     RegressionTest.test("testScripts/inner_to_outer_scope/join01.php")
   }
@@ -61,7 +68,7 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/callbacks.php")
     
     // Callback tests for WordPress
-    RegressionTest.test("callbackAPI/wp_callback_test.php")
+    //RegressionTest.test("callbackAPI/wp_callback_test.php")
   }
   
   test("Schoolmate") {

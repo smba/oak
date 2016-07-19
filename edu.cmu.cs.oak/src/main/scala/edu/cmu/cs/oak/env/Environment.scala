@@ -302,7 +302,16 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   def addToGlobal(name: String) {
     changed = true
+    
+    // Add name to the list of global variables
     this.globalVariables += name
+    
+    // get a local copy
+    try {
+      this.update(name, this.extract(this.getRef(name, false)))
+    } catch {
+      case vnfe: VariableNotFoundException => {}
+    }
   }
 
   /**
@@ -401,9 +410,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 //        if (!(variables.keySet contains gv)) {
 //          update(gv, NullValue(gv))
 //        }
-        if ( ! this.extract(this.getRef(gv, false)).isInstanceOf[ArrayValue]) {
-          returnMap += (gv -> this.getRef(gv, false)) 
-        }
+//        if ( ! this.extract(this.getRef(gv, false)).isInstanceOf[ArrayValue]) {
+          returnMap += (gv -> this.getRef(gv, true)) 
+//        }
         
       }
     }
@@ -546,15 +555,6 @@ object Environment {
     Environment.forks += 1
     val b1 = new BranchEnv(parent, parent.getCalls(), newConstraint)
     val b2 = new BranchEnv(parent, parent.getCalls(), newConstraint.NOT())
-
-    /* Add variables of parent environment to the branch environments. */
-    //    parent.variables.foreach {
-    //      case (name, reference) =>
-    //        {
-    //          b1.setRef(name, reference)
-    //          b2.setRef(name, reference)
-    //        }
-    //    }
     return (b1, b2)
   }
 
@@ -566,6 +566,16 @@ object Environment {
       List(forked._1, forked._2)
     } else {
       forked._1 :: fork(forked._2, conditions.tail)
+    }
+  }
+  
+  private def copyGlobalVariables(parent: Environment, env: Environment) {
+    parent.globalVariables.foreach {
+      gvn => try {
+        env.addToGlobal(gvn)
+      } catch {
+        case vnfe: VariableNotFoundException => {}
+      }
     }
   }
 
@@ -585,7 +595,10 @@ object Environment {
    */
   def createFunctionEnvironment(dis: Environment, fc: Call): Environment = {
     val env = new Environment(dis, dis.getCalls push fc, dis.getConstraint)
-    env.age = dis.age+1
+    env.age = dis.age + 1
+    
+    copyGlobalVariables(dis, env)
+    
     env
   }
 
@@ -601,6 +614,9 @@ object Environment {
     val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
     env.update("$this", obj)
     env.age = dis.age+1
+    
+    copyGlobalVariables(dis, env)
+    
     env
   }
 
@@ -622,12 +638,18 @@ object Environment {
     val env = createFunctionEnvironment(dis, mc)
     env.update("$this", obj)
     env.age = dis.age+1
+    
+    copyGlobalVariables(dis, env)
+    
     env
   }
 
   def createLoopEnvironment(dis: Environment): LoopEnv = {
     val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
     env.age = dis.age+1
+    
+    copyGlobalVariables(dis, env)
+    
     env
   }
 

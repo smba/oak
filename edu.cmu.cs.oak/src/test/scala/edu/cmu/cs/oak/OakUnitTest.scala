@@ -59,7 +59,7 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("testScripts/globalscope.php"))
+  val env = loadAndExecute(url("testScripts/scoping/global_function_scope01.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }

@@ -12,6 +12,6 @@ add_filter( 'example_filter', 'example_callback', 10, 3 );
  * - 'example_filter' is the filter hook $tag
  * - 'filter me' is the value being filtered
  * - $arg1 and $arg2 are the additional arguments passed to the callback.*/
-$value = apply_filters( 'example_filter', 'filter me', $arg1, $arg2 );
+$value = apply_filters( 'example_filter', 'filter me');
 echo $value;
 ?>
