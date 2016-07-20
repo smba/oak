@@ -308,7 +308,15 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     
     // get a local copy
     try {
-      this.update(name, this.extract(this.getRef(name, false)))
+      val v = this.extract(this.getRef(name, false))
+      v match {
+        case av: ArrayValue => {
+          this.update(name, av.deepCopy(this))
+        }
+        case ov: OakValue => {
+          this.update(name, ov)
+        }
+      }
     } catch {
       case vnfe: VariableNotFoundException => {}
     }

@@ -111,6 +111,26 @@ class ArrayValue extends OakValue {
     av
   }
   
+  /**
+   * Create a deep copy of the array using new references
+   */
+  def deepCopy(env: Environment): ArrayValue = {
+    val av = new ArrayValue()
+    this.array.foreach {
+      case (key, ref) => {
+        env.extract(ref) match {
+          case array: ArrayValue => {
+            av.set(key, array.deepCopy(env), env)
+          }
+          case ov: OakValue => {
+            av.set(key, ov, env)
+          }
+        }
+      }
+    }
+    av
+  }
+  
   def hasKey(kc: OakValue) = this.array.contains(kc)
   
   override def isEmpty() = (array.size == 0)

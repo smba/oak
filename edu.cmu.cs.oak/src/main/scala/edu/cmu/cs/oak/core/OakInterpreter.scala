@@ -417,7 +417,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           case e: Throwable => branches.last // ?
         }
       }
-    } else {
+    } else { // u.a. symbol(ic) values
       execute(trueBlock, branches.head)
       try {
         execute(falseBlock, branches.last)

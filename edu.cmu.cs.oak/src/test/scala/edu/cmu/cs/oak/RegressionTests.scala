@@ -46,7 +46,7 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/scoping/global_function_scope01.php")
     RegressionTest.test("testScripts/scoping/global_function_scope02.php")
     RegressionTest.test("testScripts/scoping/global_function_scope_branching01.php")
-//    RegressionTest.test("testScripts/scoping/global_function_scope02.php")
+    RegressionTest.test("testScripts/scoping/global_function_scope_branching02.php")
   }
   
   test("Inner to outer scope") {

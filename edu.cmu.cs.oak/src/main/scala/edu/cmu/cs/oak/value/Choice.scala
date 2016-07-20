@@ -7,7 +7,6 @@ import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.env.Environment
 
-
 case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
 
   assert(!((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue])))
@@ -38,7 +37,7 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
       case _ => {}
     }
   }
-  
+
   override def isEmpty() = (v1.isEmpty() && v2.isEmpty())
 
 }
@@ -116,21 +115,27 @@ object Choice {
       case _ => value
     }
   }
-  
-    def arrayLookup(c: OakValue, indices: List[OakValue], env: Environment): OakValue = {
-      c match {
-        case c: Choice => {
-          Choice(c.p, arrayLookup(c.v1, indices, env), arrayLookup(c.v2, indices, env))
+
+  def arrayLookup(c: OakValue, indices: List[OakValue], env: Environment): OakValue = {
+    c match {
+      case c: Choice => {
+        val al1 = arrayLookup(c.v1, indices, env)
+        val al2 = arrayLookup(c.v2, indices, env)
+        if (al1 equals al2) {
+          al1
+        } else {
+          Choice(c.p, al1, al2)
         }
-        case av: ArrayValue => {
-          if (indices.size == 1) {
-            av.get(indices.head, env)
-          } else {
-            arrayLookup(av.get(indices.head, env), indices.tail, env)
-          }
-        }
-        case v: OakValue => v
       }
+      case av: ArrayValue => {
+        if (indices.size == 1) {
+          av.get(indices.head, env)
+        } else {
+          arrayLookup(av.get(indices.head, env), indices.tail, env)
+        }
+      }
+      case v: OakValue => v
     }
+  }
 
 }
