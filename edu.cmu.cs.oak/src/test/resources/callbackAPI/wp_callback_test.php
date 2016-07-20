@@ -1,17 +1,23 @@
 <?php
-// // Load the WordPress callback API
+// Load the WordPress callback API
 require_once 'plugin.php';
-function example_callback( $string, $arg1, $arg2 ) {
-	// (maybe) modify $string
-	return $string;
+
+
+function example_callback( $example ) {
+	// Maybe modify $example in some way.
+	return '....::::' . $example . '::::....';
 }
-add_filter( 'example_filter', 'example_callback', 10, 3 );
-/*
- * Apply the filters by calling the 'example_callback' function we
- * "hooked" to 'example_filter' using the add_filter() function above.
- * - 'example_filter' is the filter hook $tag
- * - 'filter me' is the value being filtered
- * - $arg1 and $arg2 are the additional arguments passed to the callback.*/
-$value = apply_filters( 'example_filter', 'filter me');
-echo $value;
+
+function example_callback2( $example2 ) {
+	// Maybe modify $example in some way.
+	return '_' . $example2 . '_';
+}
+
+//add_filter( 'example_filter', 'example_callback' );
+add_filter( 'example_filter', 'example_callback2' );
+
+echo apply_filters('example_filter', 'Wubba-lubba-dub-dub!')
+
+
+
 ?>

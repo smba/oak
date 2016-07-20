@@ -36,6 +36,8 @@ class CallUserFuncArray extends InterpreterPlugin {
     val callback = args.head
     val param_arr = args.last
 
+    println(callback)
+    
     val rv = callback match {
 
       // Case 1: Callback function
@@ -48,6 +50,9 @@ class CallUserFuncArray extends InterpreterPlugin {
             val args = a.array.map { case (k, v) => env.extract(v) }.toList
             val functionCall = Call(sv.value, (Paths.get(sv.file), sv.lineNr), args)
             val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
+            
+            assert(args.size > 0)
+            
             interpreter.prepareFunctionOrMethod(function, env, functionEnv, args)
             interpreter.execute(function.statement, functionEnv)
             env.weaveDelta(functionEnv.getDelta())

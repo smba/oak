@@ -1470,12 +1470,21 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   private def evaluateToArrayExpr(e: ToArrayExpr, env: Environment): OakValue = {
     val ev = evaluate(e._expr, env)
+
+    val ev2 = ev match {
+      case ref: OakVariable => env.extract(ref)
+      case _ => ev
+    }
     
-    ev match {
+    ev2 match {
       case obj: ObjectValue => {
         return obj.getFields()
-      } case _ => {
-        val av =new ArrayValue()
+      } 
+      case av: ArrayValue => {
+        av
+      }
+      case _ => {
+        val av = new ArrayValue()
         av.set(IntValue(0), ev, env)
         return av
       }
@@ -1602,7 +1611,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
   private def evaluateToLongExpr(e: ToLongExpr, env: Environment): OakValue = {
     val expr = e._expr
-    SymbolValue(expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
+    try {
+      IntValue(evaluate(expr, env).toString().toInt)
+    } catch {
+      case e: Exception => SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
+    }
   }
 
   private def evaluateObjectFieldExpr(e: ObjectFieldExpr, env: Environment): OakValue = {
@@ -1781,6 +1794,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     StringValue(this.path.toString, "", 0)
   }
 
+  def evaluateParamRequiredExpr(e: ParamRequiredExpr, env: Environment): OakValue = {
+    throw new RuntimeException()
+    null
+  }
+  
   def evaluate(e: Expr, env: Environment): OakValue = {
 
     e match {
@@ -1928,6 +1946,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       case e: ConstFileExpr => {
         evaluateConstFileExpr(e, env)
       }
+      case e: ParamRequiredExpr => {
+        evaluateParamRequiredExpr(e, env)
+      }
       case null => null
       case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
@@ -2039,9 +2060,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         }
     }
     if (function.getArgs.length > args.length) {
+      
+      
       function.getArgs.slice(args.length, function.getArgs.length).foreach {
         a =>
           {
+            logger.info("wert fuer $"+ a+" suchen")
             val defaultValue = try {
               evaluate(function.defaults.get(a).get, env)
             } catch {

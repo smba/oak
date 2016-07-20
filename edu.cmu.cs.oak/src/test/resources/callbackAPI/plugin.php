@@ -205,29 +205,24 @@ function apply_filters( $tag, $value ) {
 	
 	// Do 'all' actions first.
 	if ( isset($wp_filter['all']) ) {
-		echo "A";
 		$wp_current_filter[] = $tag;
 		$args = func_get_args();
 		_wp_call_all_hook($args);
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
-		echo "FICK DIE POLIZWEI";
 		if ( isset($wp_filter['all']) ) {
-			echo "B-2";
 			array_pop($wp_current_filter);
 		}
 		return $value;
 	}
 
 	if ( !isset($wp_filter['all']) ) {
-		echo "C";
 		$wp_current_filter[] = $tag;
 	}
 	
 	// Sort.
 	if ( !isset( $merged_filters[ $tag ] ) ) {
-		echo "D";
 		ksort($wp_filter[$tag]);
 		$merged_filters[ $tag ] = true;
 	}
@@ -235,16 +230,16 @@ function apply_filters( $tag, $value ) {
 	reset( $wp_filter[ $tag ] );
 	
 	if ( empty($args) ) {
-		echo "E";
 		$args = func_get_args();
 	}
 	
 	do {
 		foreach ( (array) current($wp_filter[$tag]) as $the_ )
+			
 			if ( !is_null($the_['function']) ){
 				$args[1] = $value;
 				$value = call_user_func_array($the_['function'], array_slice($args, 1, (int) $the_['accepted_args']));
-			}
+		} 
 
 	} while ( next($wp_filter[$tag]) !== false );
 

@@ -33,18 +33,28 @@ class ArraySlice extends InterpreterPlugin {
           val offset = args(1).asInstanceOf[IntValue].value
           val length = if (args.size > 2) args(2).asInstanceOf[IntValue].value else av.array.size
           
-          val start = if (offset < 0) av.array.size - offset else offset
-          val end = if (length > 0) if (start + length > av.array.size) av.array.size else length else av.array.size + length
+          val start = if (offset >= 0) offset else av.array.size + offset
+    
+          val end = if (length >= 0) math.min(start + length, av.array.size) else math.max(av.array.size + length, 0)
+          
+          
           val arraySliced = new ArrayValue()
+          println(start, end)
           av.array.slice(start.toInt, end.toInt).foreach {
-            case (k, ref) => arraySliced.setRef(k, ref)
+            
+            case (k, ref) =>{
+              println(1)
+              arraySliced.setRef(k, ref)
+            }
           }
+          
+          
           return arraySliced
         } catch {
-          case _ =>  SymbolValue("array_slice()", OakHeap.getIndex, SymbolFlag.DUMMY)
+          case e: Exception =>  SymbolValue("array_slice("+e+")", OakHeap.getIndex, SymbolFlag.DUMMY)
         }
       }
-      case _ => SymbolValue("array_slice()", OakHeap.getIndex, SymbolFlag.DUMMY)
+      case _ => SymbolValue("array_slice()b", OakHeap.getIndex, SymbolFlag.DUMMY)
     }
     
   }
