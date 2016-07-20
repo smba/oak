@@ -4,7 +4,7 @@ import com.caucho.quercus.Location
 
 case class StringValue(value: String, var file: String, var lineNr: Int) extends OakValue {
 
-  override def toString() = value
+  override def toString() = value// + "@"+file+":"+lineNr
 override def isEmpty() = false
   def this(value: String, location: Location) {
     this(value, "", 0)

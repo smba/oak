@@ -17,6 +17,10 @@ class ArrayValue extends OakValue {
 
   def set(index: OakValue, value: OakValue, env: Environment) {
     
+    if (index.isInstanceOf[StringValue]) {
+      index.asInstanceOf[StringValue].setLocation(null)
+    }
+    
     // initialize internal pointer (key)
     if (current == null) current = 1
     
@@ -81,12 +85,17 @@ class ArrayValue extends OakValue {
           case e: Exception => throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.");
         }
       } else {
-        null
+        NullValue("something went wrong")
       }
     }
   }
   
   def setRef(index: OakValue, ref: OakVariable): Unit = {
+    
+    if (index.isInstanceOf[StringValue]) {
+      index.asInstanceOf[StringValue].setLocation(null)
+    }
+    
     array.put(index, ref)
   }
   

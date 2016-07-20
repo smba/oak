@@ -164,7 +164,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         val valueX = value match {
           case sv: StringValue => sv
           case ov: OakVariable => env.extract(ov)
-          case a: ArrayValue => StringValue("[..][" + a.array.size + "]", "", 0) //throw new RuntimeException("Can't echo an entire array (" + expr + ").")
+          case a: ArrayValue => StringValue(a.toString(), "", 0) //throw new RuntimeException("Can't echo an entire array (" + expr + ").")
           case _ => value
         }
         env.addOutput(DNode.createDNode(valueX, stmt._location))
@@ -1446,12 +1446,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   private def evaluateFunIssetExpr(e: FunIssetExpr, env: Environment): OakValue = {
-    return try {
-      env.lookup(e._expr.toString)
-      BooleanValue(true)
-    } catch {
-      case e: VariableNotFoundException => BooleanValue(false)
-    }
+    return BooleanValue((evaluate(e._expr, env) != null))
   }
 
   private def evaluateConstExpr(e: ConstExpr, env: Environment): OakValue = {
@@ -1474,8 +1469,17 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   private def evaluateToArrayExpr(e: ToArrayExpr, env: Environment): OakValue = {
-    val expr = e._expr
-    new ArrayValue()
+    val ev = evaluate(e._expr, env)
+    
+    ev match {
+      case obj: ObjectValue => {
+        return obj.getFields()
+      } case _ => {
+        val av =new ArrayValue()
+        av.set(IntValue(0), ev, env)
+        return av
+      }
+    }
   }
 
   private def evaluateClassMethodExpr(cme: ClassMethodExpr, env: Environment): OakValue = {

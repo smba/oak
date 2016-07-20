@@ -425,8 +425,14 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 //          update(gv, NullValue(gv))
 //        }
 //        if ( ! this.extract(this.getRef(gv, false)).isInstanceOf[ArrayValue]) {
+        try {
           returnMap += (gv -> this.getRef(gv, true)) 
 //        }
+        } catch {
+          case e: VariableNotFoundException => {
+            //logger.info("Variable not found: " + gv)
+          }
+        }
         
       }
     }
