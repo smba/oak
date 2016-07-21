@@ -1,5 +1,5 @@
 package edu.cmu.cs.oak.core
-
+import util.control.Breaks._
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -30,6 +30,14 @@ import edu.cmu.cs.oak.value._
 import java.io.PrintWriter
 import java.io.File
 import edu.cmu.cs.oak.lib.InterpreterPluginProvider
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.DoubleValue
+import edu.cmu.cs.oak.value.NullValue
+
+/**
+ * Antenna feature definitions for configuration
+ */
 
 class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
@@ -77,19 +85,26 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * Initialize the environment by adding context variables and loading some
      * required libraries.
      */
-    //    try {
-    //      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      env.addToGlobal("$_SERVER")
-    //      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-    //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
-    //    } catch {
-    //      case _: Throwable => throw new RuntimeException("Error initializing PHP environment.")
-    //    }
+    try {
+      println(env)
+      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_SERVER")
+      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
+      
+      //#ifdef WORDPRESS_DEPENDENCIES
+//@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      //#endif
+    } catch {
+      case null => {}
+      //case t: Throwable => throw new RuntimeException("Error initializing PHP environment: " + t)
+    }
+    
 
     // Execute the parsed program
     execute(program, env)
@@ -126,10 +141,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       case aget: ArrayGetExpr => {
         val get_array_name = (e: String) => ("\\](\\s|\\d|[^(\\[|\\])])*\\[".r replaceAllIn (e.toString.reverse, "")).reverse
         val aget_name = get_array_name(aget.toString)
-        
+
         val get_array_indices = (e: String) => e.split("\\[").tail.map(s => s.slice(0, s.size - 1).replaceAll("\"", "")).toList
-        
-        
+
         // FIXME re-use! this is a copy
         val array_indices = get_array_indices(aget.toString).map {
           i =>
@@ -154,10 +168,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               }
             }
         }
-        
+
         val array_get_with_possible_choice = Choice.arrayLookup(env.lookup(aget_name), array_indices, env)
         env.addOutput(DNode.createDNode(array_get_with_possible_choice, stmt._location))
-        
+
       }
       case _ => {
         val value = evaluate(expr, env)
@@ -519,6 +533,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         }
         cd
       } catch {
+        case vnfe: VariableNotFoundException => null
         case nsee: NoSuchElementException => null
       }
     }
@@ -694,41 +709,52 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   /**
-   * There are two syntaxes for foreach statements,
-   * A)
+   * There are two diffeeren syntaxe cases for foreach statements,
+   * Case A:
    * foreach (<array_expression> as $value)
    * <statement>
    *
-   * or B)
+   * Case B:
    * foreach (<array_expression> as $key => $value)
    * <statement>
    */
   private def executeForeachStatement(s: ForeachStatement, env: Environment): ControlCode.Value = {
-    val objExpr = s._objExpr
 
-    val key = s._key
-    val value = s._value
+    val key_name = if (s._key != null) s._key.toString else null
+    val value_name = s._value.toString
+
     val block = s._block
-    val loopEnv = Environment.createLoopEnvironment(env)
 
-    evaluate(objExpr, env) match {
+    evaluate(s._objExpr, env) match {
       case av: ArrayValue => {
-        if (av.array.size > 0) {
-          loopEnv.update(value.toString(), try {
-            av.get(IntValue(0), env)
-          } catch {
-            case _ => SymbolValue(s.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
-          })
+
+        /**
+         * Case A: $key is not used/parsed, thus null.
+         */
+        breakable {
+          (av.array zipWithIndex).foreach {
+            case ((key, value), i) => {
+
+              // loop environment for the current loop iteration
+              val loop_env = Environment.createLoopEnvironment(env)
+
+              // initialize / update key and value 
+              if (key != null) loop_env.update(key_name, key)
+              loop_env.update(value_name, value)
+
+              execute(block, loop_env)
+              env.weaveDelta(loop_env.getDelta())
+
+              //#ifndef CONCRETE_FOREACH_LOOP
+//@                                          break
+              //#endif
+            }
+          }
         }
+
       }
-      case _ => {
-        loopEnv.update(value.toString(), SymbolValue(s.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE))
-      }
+      case _ => {}
     }
-
-    execute(block, loopEnv)
-    env.weaveDelta(loopEnv.getDelta())
-
     ControlCode.OK
   }
 
@@ -1017,6 +1043,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   private def evaluateArrayGetExpr(arrayGet: ArrayGetExpr, env: Environment): OakValue = {
 
+    //#ifdef ARRAY_GET_CONCRETE
     val exx = arrayGet._expr
     if (exx.toString.equals("$_POST") || exx.toString.equals("$_GET") || exx.toString.equals("$_SESSION") || exx.toString.equals("$_SERVER")) {
       return SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE)
@@ -1041,6 +1068,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         NullValue("evaluateArrayGetExpr02 " + v.getClass)
       }
     }
+    //#else
+//@            return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+    //#endif
   }
 
   private def evaluateBinaryAppendExpr(b: BinaryAppendExpr, env: Environment): OakValue = {
@@ -1209,15 +1239,20 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           i =>
             {
               if (i.startsWith("$")) {
-                env.lookup(i) match {
-                  case sv: StringValue => {
+                try {
+                  env.lookup(i) match {
 
-                    /* Since this StringValue is used by the ArrayValue internally, 
+                    case sv: StringValue => {
+
+                      /* Since this StringValue is used by the ArrayValue internally, 
                       * we omit the location information. */
-                    sv.setLocation(null)
-                    sv
+                      sv.setLocation(null)
+                      sv
+                    }
+                    case ov: OakValue => ov
                   }
-                  case ov: OakValue => ov
+                } catch {
+                  case vnfe: VariableNotFoundException => NullValue("")
                 }
               } else {
                 try {
@@ -1356,7 +1391,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           case t: Throwable => new ArrayValue()
         }
 
-        // $name[] = <expr>
+        //name[] = <expr>
         expr match {
           case a: ArrayGetExpr => {
             val value = evaluate(expr, env)
@@ -1366,7 +1401,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
             env.update(name, array)
           }
           case _ => {
-            // $abc[] = xyyz;
+            //abc[] = xyyz;
             val av = new ArrayValue()
             av.set(IntValue(0), evaluate(expr, env), env)
             env.update(name, av)
@@ -1475,11 +1510,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       case ref: OakVariable => env.extract(ref)
       case _ => ev
     }
-    
+
     ev2 match {
       case obj: ObjectValue => {
         return obj.getFields()
-      } 
+      }
       case av: ArrayValue => {
         av
       }
@@ -1578,12 +1613,32 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         }
 
         case choice: Choice => {
+
+          //#ifdef FIRST_CONCRETE_METHOD_APPLICATION
+//@          val objects = choice.getElements().filter { x => x.isInstanceOf[ObjectValue] }
+//@          println(objects)
+//@          if (objects.size > 0) {
+//@            val object_value = objects.head
+//@            logger.warn("Omitting constraint")
+//@            applyMethod(object_value, methodName, args, env)
+//@          } else {
+//@            NullValue("")
+//@          }
+          //#else
+          
+          //#ifdef CHOICE_METHOD_APPLICATION
           val branches = Environment.fork(env, List(choice.p))
+          
           val r1 = applyMethod(choice.v1, methodName, args, branches.head)
           val r2 = applyMethod(choice.v2, methodName, args, branches(1))
           env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
           Choice.optimized(choice.p, r1, r2)
-          //                    NullValue("")
+
+          //#else 
+//@                    NullValue("")
+          //#endif
+          //#endif
+
         }
         case _ => {
           NullValue("applyMethod02") //SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
@@ -1619,7 +1674,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   }
 
   private def evaluateObjectFieldExpr(e: ObjectFieldExpr, env: Environment): OakValue = {
-    // $this->
+    // this->
     val obj = evaluate(e._objExpr, env)
 
     val value = if (obj.isInstanceOf[ObjectValue]) {
@@ -1756,7 +1811,18 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           {
             var includePaf = includePath
             if (!includePaf.toString.startsWith("/")) {
-              includePaf = Paths.get(this.rootPath + "/" + includePaf.toString())
+
+              var e = expr.toString()
+              if (e.startsWith("./")) {
+                e = e.slice(2, e.size)
+              }
+              val prefix = if (!e.startsWith("../")) {
+                this.rootPath.toString
+              } else {
+                this.rootPath.toFile.getParentFile.getAbsolutePath
+              }
+
+              includePaf = Paths.get(prefix + "/" + includePaf.toString())
             }
             if (includePaf.toFile.exists()) {
               val program = this.engine.loadFromFile(includePaf)
@@ -1769,7 +1835,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               this.includes = this.includes.pop
               this.path = oldURL
             } else {
-              logger.error(includePaf + " is not a file!")
+              logger.error(includePaf + " is not a file! " + oldURL.toString().takeRight(30))
             }
           }
       }
@@ -1798,7 +1864,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     throw new RuntimeException()
     null
   }
-  
+
   def evaluate(e: Expr, env: Environment): OakValue = {
 
     e match {
@@ -1989,7 +2055,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       val paths = pathsRaw.map {
         paf =>
           {
-            var path = paf.toString.replace("\"", "")
+            var path = paf.toString.replaceAll("\"", "").replace("./", "")
             Paths.get(path)
           }
       }
@@ -2060,12 +2126,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
         }
     }
     if (function.getArgs.length > args.length) {
-      
-      
+
       function.getArgs.slice(args.length, function.getArgs.length).foreach {
         a =>
           {
-            logger.info("wert fuer $"+ a+" suchen")
+            //            logger.info("wert fuer $" + a + " suchen")
             val defaultValue = try {
               evaluate(function.defaults.get(a).get, env)
             } catch {

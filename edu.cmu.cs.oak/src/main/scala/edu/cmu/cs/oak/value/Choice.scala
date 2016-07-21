@@ -6,6 +6,7 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.env.Environment
+import scala.collection.mutable.AnyRefMap
 
 case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
 

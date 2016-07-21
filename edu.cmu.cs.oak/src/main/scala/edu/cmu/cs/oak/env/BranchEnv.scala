@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
  * @author Stefan Muehlbauer <s.muehlbauer@andrew.cmu.edu>
  */
 class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint) extends Environment(parent: Environment, calls: Stack[Call], constraint: Constraint) {
-
+  
   /**
    * "New" (conditional) class definitions
    */

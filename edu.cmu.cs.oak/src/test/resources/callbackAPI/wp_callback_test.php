@@ -3,20 +3,25 @@
 require_once 'plugin.php';
 
 
-function example_callback( $example ) {
+function paragraph( $example ) {
 	// Maybe modify $example in some way.
-	return '....::::' . $example . '::::....';
+	return '<p>' . $example . '</p>';
 }
 
-function example_callback2( $example2 ) {
-	// Maybe modify $example in some way.
-	return '_' . $example2 . '_';
+function greeting( $text ) {
+	return 'Ciao! Como estai? ' . $text;
 }
 
-//add_filter( 'example_filter', 'example_callback' );
-add_filter( 'example_filter', 'example_callback2' );
+function bold( $example2 ) {
+	// Maybe modify $example in some way.
+	return '<b>' . $example2 . '</b>';
+}
 
-echo apply_filters('example_filter', 'Wubba-lubba-dub-dub!')
+add_filter( 'html', 'greeting' );
+add_filter( 'html', 'paragraph' );
+add_filter( 'html', 'bold' );
+
+echo apply_filters('html', 'Mi chiamo Stefano.')
 
 
 

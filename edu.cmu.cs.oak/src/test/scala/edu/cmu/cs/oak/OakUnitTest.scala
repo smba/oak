@@ -35,7 +35,7 @@ import edu.cmu.cs.oak.nodes.DNodeParser
  * for basic code coverage.
  */
 
-//@RunWith(classOf[JUnitRunner]) //optional
+@RunWith(classOf[JUnitRunner]) //optional
 object OakUnitTest extends App {
 
   // engine and interpreter instance for testing
@@ -44,6 +44,7 @@ object OakUnitTest extends App {
 
   //val pp = new PrettyPrinter(200, 0)
 
+  
   /**
    * Read a PHP source code from file, parses & executes it.
    *
@@ -59,7 +60,7 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("testScripts/scoping/global_function_scope_branching02.php"))
+  val env = loadAndExecute(url("schoolmate/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
   val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }

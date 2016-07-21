@@ -39,6 +39,15 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
     return fields.getRef(StringValue(fieldKey, "", 0))
   }
   
+  def compare(that: ObjectValue, env: Environment): Boolean = {
+    if (!(objectClass equals that.objectClass)) { 
+      return false
+    }
+   val x = fields.array.map{case (k, v) => env.extract(v) equals env.extract(that.fields.array.get(k).get)}.toList.fold(true)(_ && _)
+    return x
+    
+  }
+  
   def cloneObjectValue(): ObjectValue = {
     val obj = ObjectValue(name, objectClass)
     obj.fields = fields.cloneArrayValue()

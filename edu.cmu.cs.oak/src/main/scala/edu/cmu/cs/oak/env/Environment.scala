@@ -316,6 +316,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
         case ov: OakValue => {
           this.update(name, ov)
         }
+        case null => {}
       }
     } catch {
       case vnfe: VariableNotFoundException => {}
@@ -536,7 +537,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else if (parent != null) {
       parent.getClassDef(name)
     } else {
-      throw new RuntimeException("ClassDef " + name + " not defined!")
+      throw new VariableNotFoundException("ClassDef " + name + " not defined!")
     }
   }
   

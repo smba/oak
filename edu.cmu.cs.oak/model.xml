@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<featureModel>
+		<properties/>
+		<struct>
+			<and abstract="true" mandatory="true" name="oak">
+				<description>
+					
+				</description>
+				<alt abstract="true" name="Performance">
+					<description>
+						
+					</description>
+					<feature mandatory="true" name="CHOICE_METHOD_APPLICATION">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="FIRST_CONCRETE_METHOD_APPLICATION">
+						<description>
+							
+						</description>
+					</feature>
+				</alt>
+				<or abstract="true" name="WordpressSetup">
+					<description>
+						
+					</description>
+					<feature mandatory="true" name="WORDPRESS_DEPENDENCIES">
+						<description>
+							
+						</description>
+					</feature>
+				</or>
+				<and name="Base">
+					<description>
+						
+					</description>
+					<feature name="CONCRETE_FOREACH_LOOP">
+						<description>
+							
+						</description>
+					</feature>
+					<feature name="ARRAY_GET_CONCRETE">
+						<description>
+							
+						</description>
+					</feature>
+				</and>
+			</and>
+		</struct>
+		<constraints/>
+		<calculations Auto="true" Constraints="true" Features="true" Redundant="true" Tautology="true"/>
+		<comments/>
+		<featureOrder userDefined="false"/>
+	</featureModel>
