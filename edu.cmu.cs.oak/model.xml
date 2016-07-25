@@ -6,21 +6,31 @@
 				<description>
 					
 				</description>
-				<alt abstract="true" name="Performance">
+				<and abstract="true" name="Performance">
 					<description>
 						
 					</description>
-					<feature mandatory="true" name="CHOICE_METHOD_APPLICATION">
+					<feature name="SYMBOLIC_METHOD_CALLS">
 						<description>
 							
 						</description>
 					</feature>
-					<feature mandatory="true" name="FIRST_CONCRETE_METHOD_APPLICATION">
+					<alt name="ObjectSelection">
 						<description>
 							
 						</description>
-					</feature>
-				</alt>
+						<feature mandatory="true" name="CHOICE_METHOD_APPLICATION">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="FIRST_CONCRETE_METHOD_APPLICATION">
+							<description>
+								
+							</description>
+						</feature>
+					</alt>
+				</and>
 				<or abstract="true" name="WordpressSetup">
 					<description>
 						
