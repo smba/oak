@@ -15,7 +15,7 @@
       </Select>
       <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="18"/>
     </Concat>
-    <Symbolic Text="[Symbol]"/>
+    <Symbolic Text="(&quot;a&quot; &lt; 9)"/>
     <Concat>
       <Literal Text="b" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="23"/>
       <Concat>

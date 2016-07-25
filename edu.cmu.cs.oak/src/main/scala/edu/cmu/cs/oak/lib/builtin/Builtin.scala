@@ -19,6 +19,8 @@ import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.ArrayValue
 import com.caucho.quercus.Location
 import java.io.File
+import edu.cmu.cs.oak.env.Call
+import java.nio.file.Paths
 
 class IsNull extends InterpreterPlugin {
   override def getName(): String = "is_null"
@@ -114,11 +116,11 @@ class Chr extends InterpreterPlugin {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size == 1)
     return args.head match {
-      case s: IntValue =>  {
+      case s: IntValue => {
         StringValue(s.value.toChar.toString, "", 0)
       }
       case _ => SymbolValue("chr(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
-    } 
+    }
   }
 }
 
@@ -126,9 +128,9 @@ class Ord extends InterpreterPlugin {
   override def getName(): String = "ord"
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     val interpreter = provider.asInstanceOf[OakInterpreter]
-    assert(args.size == 1 )
+    assert(args.size == 1)
     return args.head match {
-      case s: StringValue =>  {
+      case s: StringValue => {
         IntValue(s.value.head.toInt)
       }
       case _ => SymbolValue("ord(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
@@ -142,21 +144,22 @@ class Explode extends InterpreterPlugin {
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size < 4 && args.size > 1)
-    
+
     val delimiter = args.head
     val subject = args(1)
-    
+
     return subject match {
       case s: StringValue => {
         delimiter match {
           case d: StringValue => {
             try {
-            val array = s.value.split(d.value)
-            val av = new ArrayValue()
-            array.zipWithIndex.foreach {
-              case (st, i) => av.set(IntValue(i), StringValue(st, "", 0), env)
-            }
-            av} catch {
+              val array = s.value.split(d.value)
+              val av = new ArrayValue()
+              array.zipWithIndex.foreach {
+                case (st, i) => av.set(IntValue(i), StringValue(st, "", 0), env)
+              }
+              av
+            } catch {
               case e: Exception => SymbolValue("explode(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
             }
           }
@@ -178,10 +181,10 @@ class InArray extends InterpreterPlugin {
     assert(args.size < 4 && args.size > 1)
     val needle = args.head
     val haystack = args(1)
-    
+
     haystack match {
       case av: ArrayValue => {
-        BooleanValue(av.array.map{ case (k, ref) => env.extract(ref) }.toSet.contains(needle))
+        BooleanValue(av.array.map { case (k, ref) => env.extract(ref) }.toSet.contains(needle))
       }
       case n: NullValue => NullValue("in_array()")
       case _ => SymbolValue("in_array(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
@@ -194,7 +197,7 @@ class FunctionExists extends InterpreterPlugin {
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size < 2 && args.size > 0)
-    
+
     val fname = args.head
     fname match {
       case sv: StringValue => {
@@ -210,7 +213,7 @@ class FuncGetArg extends InterpreterPlugin {
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size == 1)
-    val i =args.head
+    val i = args.head
     i match {
       case i: IntValue => {
         val av = new ArrayValue()
@@ -229,36 +232,37 @@ class FileExists extends InterpreterPlugin {
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size == 1)
-    
+
     val file_exists = (new File(args.head.toString)).exists()
-    
+
     if (!file_exists) {
       System.err.println(args.head)
     }
-    
+
     return BooleanValue(file_exists)
-    
+
   }
 }
+
+//class ArrayWalk extends InterpreterPlugin {
 //
-//// TODO replace stub for ltrim() with implementation
-//class ArrayMap extends InterpreterPlugin {
-//  override def getName(): String = "array_map"
-//  override def visit(provider: InterpreterPluginProvider, args: List[Expr], loc: Path, env: Environment): OakValue = {
-//    val interpreter = provider.asInstanceOf[OakInterpreter]
-//    assert(args.size < 4 && args.size > 0)
-//    
-//    val callback = interpreter.evaluate(args.head, env)
-//    val arguments = interpreter.evaluate(args(1), env)
-//    
-//    callback match {
-//      case sv: StringValue => {
-//        arguments match {
-//          case av: ArrayValue => {
-//            
-//          }
-//        }
-//      }
-//    }
+//  override def getName(): String = "array_walk"
+//  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
+//
+//     val av_walked = new ArrayValue()
+//
+//     args.head match {
+//       case av: ArrayValue => {
+//         av.array.foreach {
+//           case (k, v) => 
+//         }
+//       }
+//       case esle: OakValue => {
+//         // 
+//       }
+//     }
+//     
+//    return BooleanValue(null)
+//
 //  }
 //}

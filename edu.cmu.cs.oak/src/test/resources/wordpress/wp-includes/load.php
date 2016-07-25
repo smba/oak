@@ -7,6 +7,8 @@
  * @package WordPress
  */
 
+echo "HERE2";
+
 /**
  * Return the HTTP protocol sent by the server.
  *

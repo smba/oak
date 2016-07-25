@@ -28,11 +28,7 @@
       <Select>
         <Constraint Text="$o == 2"/>
         <Literal Text="6" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/switch.php" Line="19"/>
-        <Select>
-          <Constraint Text="$o == 3"/>
-          <Literal Text="4" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/switch.php" Line="19"/>
-          <Literal Text="4" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/switch.php" Line="19"/>
-        </Select>
+        <Literal Text="4" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/switch.php" Line="19"/>
       </Select>
     </Select>
   </Concat>

@@ -10,7 +10,7 @@ import scala.collection.mutable.AnyRefMap
 
 case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
 
-  assert(!((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue])))
+  assert(!(v1 eq this) && !(v2 eq this))
 
   def getConstraint(): Constraint = p
 
@@ -41,14 +41,26 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 
   override def isEmpty() = (v1.isEmpty() && v2.isEmpty())
 
+  def getSize(): Int = {
+    (v1 match {
+      case c: Choice => c.getSize()
+      case _ => 1
+    }) + (v2 match {
+      case c: Choice => c.getSize()
+      case _ => 1
+    })
+  }
+
 }
 
 object Choice {
 
   def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
-
-    if ((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue])) {
-      NullValue("optimized choice")
+    println(v1, v2, v1 equals v2)
+    if (((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue]))) {
+      NullValue("")
+    } else if (v1 equals v2) {
+      v1//NullValue("optimized choice")
     } else {
       Choice(p, v1, v2)
     }

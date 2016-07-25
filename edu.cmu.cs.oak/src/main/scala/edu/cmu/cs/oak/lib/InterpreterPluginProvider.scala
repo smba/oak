@@ -43,6 +43,8 @@ import edu.cmu.cs.oak.lib.builtin.InArray
 import edu.cmu.cs.oak.lib.builtin.FuncGetArg
 import edu.cmu.cs.oak.lib.builtin.Rtrim
 import edu.cmu.cs.oak.lib.builtin.FileExists
+import edu.cmu.cs.oak.lib.builtin.CallUserFunc
+import edu.cmu.cs.oak.lib.builtin.VersionCompare
 
 /**
  * Via this plugin loader the interpreter can 
@@ -126,6 +128,9 @@ trait InterpreterPluginProvider {
     loadPlugin(new FileExists)
     
     loadPlugin(new Localizate)
+    loadPlugin(new CallUserFunc)
+    loadPlugin(new VersionCompare)
+    
   }
 
 }

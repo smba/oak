@@ -1,20 +1,98 @@
 package edu.cmu.cs.oak.core
-import util.control.Breaks._
+
+import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import scala.annotation.elidable
+import scala.annotation.elidable.ASSERTION
 import scala.collection.JavaConversions.mapAsJavaMap
 import scala.collection.JavaConversions.mapAsScalaMap
 import scala.collection.JavaConversions.setAsJavaSet
 import scala.collection.immutable.Stack
-import scala.collection.mutable.AnyRefMap
 import scala.collection.mutable.ListBuffer
+import scala.util.control.Breaks.breakable
 
 import org.slf4j.LoggerFactory
 
-import com.caucho.quercus.expr._
+import com.caucho.quercus.expr.AbstractBinaryExpr
+import com.caucho.quercus.expr.ArrayGetExpr
+import com.caucho.quercus.expr.ArrayTailExpr
+import com.caucho.quercus.expr.BinaryAppendExpr
+import com.caucho.quercus.expr.BinaryAssignExpr
+import com.caucho.quercus.expr.BinaryAssignListExpr
+import com.caucho.quercus.expr.BinaryAssignRefExpr
+import com.caucho.quercus.expr.BinaryInstanceOfExpr
+import com.caucho.quercus.expr.BinaryOrExpr
+import com.caucho.quercus.expr.CallExpr
+import com.caucho.quercus.expr.CallVarExpr
+import com.caucho.quercus.expr.ClassConstExpr
+import com.caucho.quercus.expr.ClassFieldExpr
+import com.caucho.quercus.expr.ClassMethodExpr
+import com.caucho.quercus.expr.ConditionalExpr
+import com.caucho.quercus.expr.ConstExpr
+import com.caucho.quercus.expr.ConstFileExpr
+import com.caucho.quercus.expr.Expr
+import com.caucho.quercus.expr.FunArrayExpr
+import com.caucho.quercus.expr.FunCloneExpr
+import com.caucho.quercus.expr.FunDieExpr
+import com.caucho.quercus.expr.FunEmptyExpr
+import com.caucho.quercus.expr.FunExitExpr
+import com.caucho.quercus.expr.FunIncludeExpr
+import com.caucho.quercus.expr.FunIncludeOnceExpr
+import com.caucho.quercus.expr.FunIssetExpr
+import com.caucho.quercus.expr.LiteralExpr
+import com.caucho.quercus.expr.LiteralLongExpr
+import com.caucho.quercus.expr.LiteralNullExpr
+import com.caucho.quercus.expr.LiteralUnicodeExpr
+import com.caucho.quercus.expr.ObjectFieldExpr
+import com.caucho.quercus.expr.ObjectFieldVarExpr
+import com.caucho.quercus.expr.ObjectMethodExpr
+import com.caucho.quercus.expr.ObjectNewExpr
+import com.caucho.quercus.expr.ObjectNewVarExpr
+import com.caucho.quercus.expr.ParamRequiredExpr
+import com.caucho.quercus.expr.ThisExpr
+import com.caucho.quercus.expr.ThisFieldExpr
+import com.caucho.quercus.expr.ThisFieldVarExpr
+import com.caucho.quercus.expr.ThisMethodExpr
+import com.caucho.quercus.expr.ToArrayExpr
+import com.caucho.quercus.expr.ToBooleanExpr
+import com.caucho.quercus.expr.ToDoubleExpr
+import com.caucho.quercus.expr.ToLongExpr
+import com.caucho.quercus.expr.ToObjectExpr
+import com.caucho.quercus.expr.ToStringExpr
+import com.caucho.quercus.expr.UnaryBitNotExpr
+import com.caucho.quercus.expr.UnaryMinusExpr
+import com.caucho.quercus.expr.UnaryNotExpr
+import com.caucho.quercus.expr.UnaryPostIncrementExpr
+import com.caucho.quercus.expr.UnaryPreIncrementExpr
+import com.caucho.quercus.expr.UnaryRefExpr
+import com.caucho.quercus.expr.UnarySuppressErrorExpr
+import com.caucho.quercus.expr.VarExpr
+import com.caucho.quercus.expr.VarUnsetExpr
 import com.caucho.quercus.program.QuercusProgram
-import com.caucho.quercus.statement._
+import com.caucho.quercus.statement.BlockStatement
+import com.caucho.quercus.statement.BreakStatement
+import com.caucho.quercus.statement.ClassDefStatement
+import com.caucho.quercus.statement.ClassStaticStatement
+import com.caucho.quercus.statement.ContinueStatement
+import com.caucho.quercus.statement.DoStatement
+import com.caucho.quercus.statement.EchoStatement
+import com.caucho.quercus.statement.ExprStatement
+import com.caucho.quercus.statement.ForStatement
+import com.caucho.quercus.statement.ForeachStatement
+import com.caucho.quercus.statement.FunctionDefStatement
+import com.caucho.quercus.statement.GlobalStatement
+import com.caucho.quercus.statement.IfStatement
+import com.caucho.quercus.statement.ReturnRefStatement
+import com.caucho.quercus.statement.ReturnStatement
+import com.caucho.quercus.statement.Statement
+import com.caucho.quercus.statement.StaticStatement
+import com.caucho.quercus.statement.SwitchStatement
+import com.caucho.quercus.statement.TextStatement
+import com.caucho.quercus.statement.ThrowStatement
+import com.caucho.quercus.statement.TryStatement
+import com.caucho.quercus.statement.WhileStatement
 
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Call
@@ -24,16 +102,23 @@ import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.env.FunctionDef
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-
-import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.value._
-import java.io.PrintWriter
-import java.io.File
 import edu.cmu.cs.oak.lib.InterpreterPluginProvider
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.nodes.DNode
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.value.BooleanValue
+import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.DoubleValue
+import edu.cmu.cs.oak.value.IntValue
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.NumericValue
+import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.OakValueSequence
+import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.value.StringValue
+import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.SymbolicValue
+import com.caucho.quercus.Location
 
 /**
  * Antenna feature definitions for configuration
@@ -86,25 +171,31 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * required libraries.
      */
     try {
-      println(env)
-      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      env.addToGlobal("$_SERVER")
-      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-      
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
-      
+//      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.addToGlobal("$_SERVER")
+//      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.addToGlobal("$_ENV")
+//      env.update("$_ENV", SymbolValue("$_ENV", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.addToGlobal("$_SESSION")
+//      env.update("$_SESSION", SymbolValue("$_SESSION", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.addToGlobal("$_COOKIE")
+//      env.update("$_COOKIE", SymbolValue("$_COOKIE", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//      env.addToGlobal("$_REQUEST")
+//      env.update("$_REQUEST", SymbolValue("$_REQUEST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+//
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
+
       //#ifdef WORDPRESS_DEPENDENCIES
-//@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
       //#endif
     } catch {
       case null => {}
       //case t: Throwable => throw new RuntimeException("Error initializing PHP environment: " + t)
     }
-    
 
     // Execute the parsed program
     execute(program, env)
@@ -136,7 +227,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
    */
   private def executeEchoStatement(stmt: EchoStatement, env: Environment): ControlCode.Value = {
     val expr = stmt._expr
-
     expr match {
       case aget: ArrayGetExpr => {
         val get_array_name = (e: String) => ("\\](\\s|\\d|[^(\\[|\\])])*\\[".r replaceAllIn (e.toString.reverse, "")).reverse
@@ -956,7 +1046,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
   private def evaluateCallExpr(e: CallExpr, env: Environment): OakValue = {
 
-    val name = e._name.toString()
+    val name = e._name.toString().toLowerCase
 
     /* Retrieve the function call arguments. */
     var args = ListBuffer[Expr]()
@@ -1071,6 +1161,29 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     //#else
 //@            return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     //#endif
+  }
+
+  def call(function_name: String, args: List[OakValue], loc: Location, env: Environment): OakValue = {
+    val function_call = new Call(function_name, (Paths.get(loc.getFileName), loc.getLineNumber), args)
+    val function_env = Environment.createFunctionEnvironment(env, function_call)
+    val function_def = env.getFunction(function_name)
+
+    prepareFunctionOrMethod(function_def, env, function_env, args)
+    execute(function_def.statement, env)
+
+    env.weaveDelta(function_env.getDelta())
+
+    return try {
+      function_env.lookup("$return")
+    } catch {
+      case e: Exception => {
+        try {
+          function_env.lookup("$return_ref")
+        } catch {
+          case e: Exception => NullValue("$return")
+        }
+      }
+    }
   }
 
   private def evaluateBinaryAppendExpr(b: BinaryAppendExpr, env: Environment): OakValue = {
@@ -1585,10 +1698,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      */
     def applyMethod(value: OakValue, methodName: String, args: List[Expr], env: Environment): OakValue = {
 
-      if (methodName equals "apply_filters") throw new RuntimeException
-
       value match {
         case objectValue: ObjectValue => {
+
+          //#ifdef SYMBOLIC_METHOD_CALLS
+          //@                    return SymbolValue("", OakHeap.getIndex(), SymbolFlag.DUMMY)
+          //#endif
+
           val methodCall = Call(objectValue.objectClass.name + "." + methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
           if (!(env.getCalls().map { c => c.name } contains methodCall.name)) {
             val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
@@ -1614,28 +1730,30 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
         case choice: Choice => {
 
+          val elements = choice.getElements()
+          println(choice.getSize, methodName)
+
           //#ifdef FIRST_CONCRETE_METHOD_APPLICATION
-//@          val objects = choice.getElements().filter { x => x.isInstanceOf[ObjectValue] }
-//@          println(objects)
-//@          if (objects.size > 0) {
-//@            val object_value = objects.head
-//@            logger.warn("Omitting constraint")
-//@            applyMethod(object_value, methodName, args, env)
-//@          } else {
-//@            NullValue("")
-//@          }
+          //@          val objects = elements.filter { x => x.isInstanceOf[ObjectValue] }
+          //@          if (objects.size > 0) {
+          //@            val object_value = objects.head.asInstanceOf[ObjectValue]
+          //@            logger.warn(object_value.objectClass.name + "::" + methodName + "()")
+          //@            applyMethod(object_value, methodName, args, env)
+          //@          } else {
+          //@            NullValue("")
+          //@          }
           //#else
-          
+
           //#ifdef CHOICE_METHOD_APPLICATION
           val branches = Environment.fork(env, List(choice.p))
-          
+
           val r1 = applyMethod(choice.v1, methodName, args, branches.head)
           val r2 = applyMethod(choice.v2, methodName, args, branches(1))
           env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
           Choice.optimized(choice.p, r1, r2)
 
           //#else 
-//@                    NullValue("")
+//@                              NullValue("")
           //#endif
           //#endif
 
@@ -1865,6 +1983,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     null
   }
 
+  def evaluateUnaryPostIncrementExpr(e: UnaryPostIncrementExpr, env: Environment): OakValue = {
+    SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
+  }
+
   def evaluate(e: Expr, env: Environment): OakValue = {
 
     e match {
@@ -2015,8 +2137,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       case e: ParamRequiredExpr => {
         evaluateParamRequiredExpr(e, env)
       }
+      case e: UnaryPostIncrementExpr => {
+        evaluateUnaryPostIncrementExpr(e, env)
+      }
       case null => null
-      case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      case _ => null //throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
   }
 
@@ -2041,6 +2166,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               v match {
                 case c: Choice => new OakValueSequence(c.getElements.toList)
                 case v: OakValue => v
+                case null => null
               }
           }
 

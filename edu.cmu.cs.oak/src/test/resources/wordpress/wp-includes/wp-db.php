@@ -1298,7 +1298,7 @@ class wpdb {
 	 *                or real_escape next.
 	 */
 	public function esc_like( $text ) {
-		return addcslashes( $text, '_%\\' );
+		return addcslashes( $text, '_%\'' );
 	}
 
 	/**

@@ -120,6 +120,22 @@ class ArrayValue extends OakValue {
     av
   }
   
+  override def equals(that: Any): Boolean = {
+    that match {
+      case av: ArrayValue => {
+        if (av.getSize() != array.size) {
+          false
+        }
+        (array zip av.array).map {
+          case ((k1, ref1), (k2, ref2)) => {
+            (k1 equals k2) && (ref1 equals ref2)
+          }
+        }.fold(true)(_ && _)
+      }
+      case _ => false
+    }
+  }
+  
   /**
    * Create a deep copy of the array using new references
    */

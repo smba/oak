@@ -49,6 +49,7 @@ object Tree {
         x match {
           case l: OakValueSequence => root.addTrees(l.getSequence)
           case i: OakValue => root.addLeave(i)
+          case null => null
         }
     }
     root

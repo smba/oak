@@ -505,7 +505,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
   
   def defineFunction(f: FunctionDef): Unit = {
-    funcs.put(f.getName, f)
+    funcs.put(f.getName.toLowerCase, f)
   }
 
   def getFunction(name: String): FunctionDef = {

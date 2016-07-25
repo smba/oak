@@ -14,7 +14,7 @@ case class SymbolValue(e: String, id: Long, flag: SymbolFlag.Value) extends Symb
   
   //OakInterpreter.symbolSet += this
   
-  override def toString() = "[Symbol]"
+  override def toString() = "[Symbol:" + e +"]"
   
   override def isEmpty() = false
 }
