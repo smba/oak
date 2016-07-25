@@ -36,8 +36,6 @@ class CallUserFuncArray extends InterpreterPlugin {
     val callback = args.head
     val param_arr = args.last
 
-    println(callback)
-    
     val rv = callback match {
 
       // Case 1: Callback function

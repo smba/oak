@@ -171,30 +171,30 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
      * required libraries.
      */
     try {
-//      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//      env.addToGlobal("$_SERVER")
-//      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//      env.addToGlobal("$_ENV")
-//      env.update("$_ENV", SymbolValue("$_ENV", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//      env.addToGlobal("$_SESSION")
-//      env.update("$_SESSION", SymbolValue("$_SESSION", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//      env.addToGlobal("$_COOKIE")
-//      env.update("$_COOKIE", SymbolValue("$_COOKIE", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//      env.addToGlobal("$_REQUEST")
-//      env.update("$_REQUEST", SymbolValue("$_REQUEST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
-//
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
+      env.update("$_POST", SymbolValue("$_POST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.update("$_GET", SymbolValue("$_GET", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_SERVER")
+      env.update("$_SERVER", SymbolValue("$_SERVER", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_ENV")
+      env.update("$_ENV", SymbolValue("$_ENV", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_SESSION")
+      env.update("$_SESSION", SymbolValue("$_SESSION", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_COOKIE")
+      env.update("$_COOKIE", SymbolValue("$_COOKIE", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_REQUEST")
+      env.update("$_REQUEST", SymbolValue("$_REQUEST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
 
       //#ifdef WORDPRESS_DEPENDENCIES
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
       //#endif
     } catch {
       case null => {}
-      //case t: Throwable => throw new RuntimeException("Error initializing PHP environment: " + t)
+      case t: Throwable => throw new RuntimeException("Error initializing PHP environment: " + t)
     }
 
     // Execute the parsed program
@@ -495,6 +495,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
    * }
    */
   private def executeIfStatement(s: IfStatement, env: Environment): ControlCode.Value = {
+
     /* Retrieve the condition and both statements 
      * from the IfStatement AST node via reflection. */
     val condition = Constraint(s._test.toString())
@@ -508,20 +509,23 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
 
     /* Execute both branches with the corresponding branch environments. */
 
-    if (test.isInstanceOf[BooleanValue]) {
-      val testB = test.asInstanceOf[BooleanValue]
-      if (testB.v) {
-        execute(trueBlock, branches.head)
-        env.weaveDelta(branches.head.getDelta)
-      } else {
-        try {
-          execute(falseBlock, branches.last)
-          env.weaveDelta(branches.last.getDelta)
-        } catch {
-          case e: Throwable => branches.last // ?
-        }
-      }
-    } else { // u.a. symbol(ic) values
+    //#ifndef ALL_BRANCHES
+//@    if (test.isInstanceOf[BooleanValue]) {
+//@      val testB = test.asInstanceOf[BooleanValue]
+//@      if (testB.v) {
+//@        execute(trueBlock, branches.head)
+//@        env.weaveDelta(branches.head.getDelta)
+//@      } else {
+//@        try {
+//@          execute(falseBlock, branches.last)
+//@          env.weaveDelta(branches.last.getDelta)
+//@        } catch {
+//@          case e: Throwable => branches.last // ?
+//@        }
+//@      }
+//@    } else { 
+      //#endif
+
       execute(trueBlock, branches.head)
       try {
         execute(falseBlock, branches.last)
@@ -531,8 +535,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           return ControlCode.OK
         }
       }
+
       env.weaveDelta(BranchEnv.join(List(branches.head, branches.last), List(condition)))
-    }
+      
+      //#ifndef ALL_BRANCHES
+//@    }
+  //#endif
     return ControlCode.OK
   }
 
@@ -836,7 +844,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               env.weaveDelta(loop_env.getDelta())
 
               //#ifndef CONCRETE_FOREACH_LOOP
-//@                                          break
+//@                                                        break
               //#endif
             }
           }
@@ -1159,7 +1167,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
       }
     }
     //#else
-//@            return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+//@                return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     //#endif
   }
 
@@ -1208,6 +1216,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
   private def evaluateObjectMethodExpr(e: ObjectMethodExpr, env: Environment): OakValue = {
     val methodName = e._methodName.toString()
     val args = e._args.toList
+    
+    if (evaluate(e._objExpr, env).isInstanceOf[SymbolValue]) {
+      logger.error("SYMBOLISCH")
+    }
+    
     evaluateMethodCall(e, methodName, args, env)
   }
 
@@ -1727,11 +1740,16 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
             NullValue("applyMethod01")
           }
         }
+        
+        case null => NullValue("applyMethod01")
+        case s: SymbolValue => {
+          logger.error("SYMBOLISCH 2")
+           NullValue("applyMethod01")
+        }
 
         case choice: Choice => {
 
           val elements = choice.getElements()
-          println(choice.getSize, methodName)
 
           //#ifdef FIRST_CONCRETE_METHOD_APPLICATION
           //@          val objects = elements.filter { x => x.isInstanceOf[ObjectValue] }
@@ -1753,12 +1771,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
           Choice.optimized(choice.p, r1, r2)
 
           //#else 
-//@                              NullValue("")
+//@                                        NullValue("")
           //#endif
           //#endif
 
         }
-        case _ => {
+        case ov: OakValue => {
+          logger.info("BENER " + ov)
           NullValue("applyMethod02") //SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
         }
       }
@@ -1947,13 +1966,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
               this.includes = this.includes.push(includePaf)
               this.path = includePath
 
-              logger.info(".." + oldURL.toString().takeRight(30) + " includes .." + includePaf.toString.takeRight(30))
+//              logger.info(".." + oldURL.toString().takeRight(30) + " includes .." + includePaf.toString.takeRight(30))
               execute(program, env)
 
               this.includes = this.includes.pop
               this.path = oldURL
             } else {
-              logger.error(includePaf + " is not a file! " + oldURL.toString().takeRight(30))
+//              logger.error(includePaf + " is not a file! " + oldURL.toString().takeRight(30))
             }
           }
       }
@@ -1965,25 +1984,25 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder {
     null
   }
 
-  def evaluateToDoubleExpr(e: ToDoubleExpr, env: Environment): OakValue = {
+  private def evaluateToDoubleExpr(e: ToDoubleExpr, env: Environment): OakValue = {
     SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
-  def evaluateUnaryBitNotExpr(e: UnaryBitNotExpr, env: Environment): OakValue = {
+  private def evaluateUnaryBitNotExpr(e: UnaryBitNotExpr, env: Environment): OakValue = {
     SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
   // __FILE__
-  def evaluateConstFileExpr(e: ConstFileExpr, env: Environment): OakValue = {
+  private def evaluateConstFileExpr(e: ConstFileExpr, env: Environment): OakValue = {
     StringValue(this.path.toString, "", 0)
   }
 
-  def evaluateParamRequiredExpr(e: ParamRequiredExpr, env: Environment): OakValue = {
+  private def evaluateParamRequiredExpr(e: ParamRequiredExpr, env: Environment): OakValue = {
     throw new RuntimeException()
     null
   }
 
-  def evaluateUnaryPostIncrementExpr(e: UnaryPostIncrementExpr, env: Environment): OakValue = {
+  private def evaluateUnaryPostIncrementExpr(e: UnaryPostIncrementExpr, env: Environment): OakValue = {
     SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNIMPLEMENTED)
   }
 

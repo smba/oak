@@ -30,6 +30,11 @@
 							</description>
 						</feature>
 					</alt>
+					<feature name="ALL_BRANCHES">
+						<description>
+							
+						</description>
+					</feature>
 				</and>
 				<or abstract="true" name="WordpressSetup">
 					<description>

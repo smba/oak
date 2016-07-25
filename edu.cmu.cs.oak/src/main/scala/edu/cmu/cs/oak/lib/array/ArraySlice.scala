@@ -39,11 +39,9 @@ class ArraySlice extends InterpreterPlugin {
           
           
           val arraySliced = new ArrayValue()
-          println(start, end)
           av.array.slice(start.toInt, end.toInt).foreach {
             
             case (k, ref) =>{
-              println(1)
               arraySliced.setRef(k, ref)
             }
           }

@@ -235,10 +235,6 @@ class FileExists extends InterpreterPlugin {
 
     val file_exists = (new File(args.head.toString)).exists()
 
-    if (!file_exists) {
-      System.err.println(args.head)
-    }
-
     return BooleanValue(file_exists)
 
   }
