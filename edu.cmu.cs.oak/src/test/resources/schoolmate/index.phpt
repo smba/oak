@@ -1229,6 +1229,21 @@
                       <Symbolic Text="mysql_error()"/>
                     </Concat>
                   </Concat>
+                  <Concat>
+                    <Repeat>
+                      <Constraint Text="($_POST[&quot;deletestudent&quot;] == 1)"/>
+                      <Concat>
+                        <Concat>
+                          <Concat>
+                            <Literal 
+                            Text="DeleteFunctions.php: Unable to delete selected Student(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="62">
+</Literal>
+                            <Symbolic Text="mysql_error()"/>
+                          </Concat>
+                        </Concat>
+                      </Concat>
+                    </Repeat>
+                  </Concat>
                   <Literal 
                   Text="&lt;script language='JavaScript'&gt;
 
@@ -1524,6 +1539,21 @@
                         <Symbolic Text="mysql_error()"/>
                       </Concat>
                     </Concat>
+                    <Concat>
+                      <Repeat>
+                        <Constraint Text="($_POST[&quot;deleteteacher&quot;] == 1)"/>
+                        <Concat>
+                          <Concat>
+                            <Concat>
+                              <Literal 
+                              Text="DeleteFunctions.php: Unable to delete selected Teacher(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="52">
+</Literal>
+                              <Symbolic Text="mysql_error()"/>
+                            </Concat>
+                          </Concat>
+                        </Concat>
+                      </Repeat>
+                    </Concat>
                     <Literal 
                     Text="&lt;script language='JavaScript'&gt;
 
@@ -1743,6 +1773,21 @@
 </Literal>
                           <Symbolic Text="mysql_error()"/>
                         </Concat>
+                      </Concat>
+                      <Concat>
+                        <Repeat>
+                          <Constraint Text="($_POST[&quot;deleteannouncement&quot;] == 1)"/>
+                          <Concat>
+                            <Concat>
+                              <Concat>
+                                <Literal 
+                                Text="DeleteFunctions.php: Unable to delete selected Announcement(s) - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="42">
+</Literal>
+                                <Symbolic Text="mysql_error()"/>
+                              </Concat>
+                            </Concat>
+                          </Concat>
+                        </Repeat>
                       </Concat>
                       <Literal 
                       Text="&lt;script language='JavaScript'&gt;
@@ -2931,6 +2976,124 @@
                                         </Concat>
                                       </Concat>
                                     </Select>
+                                  </Concat>
+                                  <Concat>
+                                    <Repeat>
+                                      <Constraint Text="($_POST[&quot;deleteuser&quot;] == 1)"/>
+                                      <Concat>
+                                        <Concat>
+                                          <Concat>
+                                            <Literal 
+                                            Text="DeleteFunction.php: Unable to delete selected User(s) - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="95">
+</Literal>
+                                            <Symbolic Text="mysql_error()"/>
+                                          </Concat>
+                                          <Select>
+                                            <Constraint Text="$type == &quot;Teacher&quot;"/>
+                                            <Concat>
+                                              <Concat>
+                                                <Literal 
+                                                Text="DeleteFunctions.php: Unable to get list of teachers to delete for deleteUser() - " Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="102">
+</Literal>
+                                                <Symbolic Text="mysql_error()"/>
+                                              </Concat>
+                                              <Repeat>
+                                                <Constraint Text="$type == &quot;Teacher&quot;"/>
+                                                <Concat>
+                                                  <Concat>
+                                                    <Concat>
+                                                      <Literal 
+                                                      Text="DeleteFunctions.php: Unable to delete selected Teacher(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="52">
+</Literal>
+                                                      <Symbolic Text="mysql_error()"/>
+                                                    </Concat>
+                                                  </Concat>
+                                                </Concat>
+                                              </Repeat>
+                                            </Concat>
+                                            <Select>
+                                              <Constraint Text="$type == &quot;Student&quot;"/>
+                                              <Concat>
+                                                <Concat>
+                                                  <Literal 
+                                                  Text="DeleteFunctions.php: Unable to get list of students to delete for deleteUser() - " Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="113">
+</Literal>
+                                                  <Symbolic Text="mysql_error()"/>
+                                                </Concat>
+                                                <Repeat>
+                                                  <Constraint Text="$type == &quot;Student&quot;"/>
+                                                  <Concat>
+                                                    <Concat>
+                                                      <Concat>
+                                                        <Literal 
+                                                        Text="DeleteFunctions.php: Unable to delete selected Student(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="62">
+</Literal>
+                                                        <Symbolic Text="mysql_error()"/>
+                                                      </Concat>
+                                                    </Concat>
+                                                  </Concat>
+                                                </Repeat>
+                                              </Concat>
+                                              <Select>
+                                                <Constraint Text="$type == &quot;Parent&quot;"/>
+                                                <Concat>
+                                                  <Concat>
+                                                    <Literal 
+                                                    Text="DeleteFunctions.php: Unable to get list of parents to delete for deleteUser() - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="124">
+</Literal>
+                                                    <Symbolic Text="mysql_error()"/>
+                                                  </Concat>
+                                                  <Repeat>
+                                                    <Constraint Text="$type == &quot;Parent&quot;"/>
+                                                    <Concat>
+                                                      <Concat>
+                                                        <Concat>
+                                                          <Literal 
+                                                          Text="DeleteFunctions.php: Unable to delete selected Parent(s) - " Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="29">
+</Literal>
+                                                          <Symbolic Text="mysql_error()"/>
+                                                        </Concat>
+                                                        <Concat>
+                                                          <Literal 
+                                                          Text="DeleteFunctions.php: Unable to delete the parents in the student/parent match - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="32">
+</Literal>
+                                                          <Symbolic Text="mysql_error()"/>
+                                                        </Concat>
+                                                      </Concat>
+                                                    </Concat>
+                                                  </Repeat>
+                                                </Concat>
+                                                <Select>
+                                                  <Constraint Text="$type == &quot;Admin&quot;"/>
+                                                  <Concat>
+                                                    <Concat>
+                                                      <Literal 
+                                                      Text="DeleteFunctions.php: Unable to get list of admins to delete for deleteUser() - " Length="79" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="135">
+</Literal>
+                                                      <Symbolic Text="mysql_error()"/>
+                                                    </Concat>
+                                                    <Repeat>
+                                                      <Constraint Text="$type == &quot;Admin&quot;"/>
+                                                      <Concat>
+                                                        <Concat>
+                                                          <Concat>
+                                                            <Literal 
+                                                            Text="DeleteFunctions.php: Unable to delete selected Admin(s) - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="81">
+</Literal>
+                                                            <Symbolic Text="mysql_error()"/>
+                                                          </Concat>
+                                                        </Concat>
+                                                      </Concat>
+                                                    </Repeat>
+                                                  </Concat>
+                                                  <Concat> </Concat>
+                                                </Select>
+                                              </Select>
+                                            </Select>
+                                          </Select>
+                                        </Concat>
+                                      </Concat>
+                                    </Repeat>
                                   </Concat>
                                   <Literal 
                                   Text="&lt;script language='JavaScript'&gt;
@@ -4396,6 +4559,27 @@
                                                               <Symbolic Text="mysql_error()"/>
                                                             </Concat>
                                                           </Concat>
+                                                          <Concat>
+                                                            <Repeat>
+                                                              <Constraint Text="($_POST[&quot;deleteparent&quot;] == 1)"/>
+                                                              <Concat>
+                                                                <Concat>
+                                                                  <Concat>
+                                                                    <Literal 
+                                                                    Text="DeleteFunctions.php: Unable to delete selected Parent(s) - " Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="29">
+</Literal>
+                                                                    <Symbolic Text="mysql_error()"/>
+                                                                  </Concat>
+                                                                  <Concat>
+                                                                    <Literal 
+                                                                    Text="DeleteFunctions.php: Unable to delete the parents in the student/parent match - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="32">
+</Literal>
+                                                                    <Symbolic Text="mysql_error()"/>
+                                                                  </Concat>
+                                                                </Concat>
+                                                              </Concat>
+                                                            </Repeat>
+                                                          </Concat>
                                                           <Literal 
                                                           Text="&lt;script language='JavaScript'&gt;
 
@@ -4993,7 +5177,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -5049,7 +5233,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -5105,7 +5289,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -5161,7 +5345,7 @@
                                                                               <Select>
                                                                                 <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                 <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -5217,7 +5401,7 @@
                                                                                     <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="125"/>
                                                                                   </Concat>
                                                                                 </Select>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
+                                                                                <Undef/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -5298,6 +5482,21 @@
 </Literal>
                                                                       </Concat>
                                                                     </Select>
+                                                                  </Concat>
+                                                                  <Concat>
+                                                                    <Repeat>
+                                                                      <Constraint Text="($_POST[&quot;deletereg&quot;] == 1)"/>
+                                                                      <Concat>
+                                                                        <Concat>
+                                                                          <Concat>
+                                                                            <Literal 
+                                                                            Text="DeleteFunctions.php: Unable to delete selected Registration(s) - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="162">
+</Literal>
+                                                                            <Symbolic Text="mysql_error()"/>
+                                                                          </Concat>
+                                                                        </Concat>
+                                                                      </Concat>
+                                                                    </Repeat>
                                                                   </Concat>
                                                                   <Literal 
                                                                   Text="&lt;script language='JavaScript'&gt;
@@ -5985,7 +6184,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -6041,7 +6240,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -6097,7 +6296,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -6153,7 +6352,7 @@
                                                                                       <Select>
                                                                                         <Constraint Text="$days[$j] == &quot;F&quot;"/>
                                                                                         <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -6209,7 +6408,7 @@
                                                                                             <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="129"/>
                                                                                           </Concat>
                                                                                         </Select>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
+                                                                                        <Undef/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>
@@ -6268,6 +6467,21 @@
 </Literal>
                                                                               <Symbolic Text="mysql_error()"/>
                                                                             </Concat>
+                                                                          </Concat>
+                                                                          <Concat>
+                                                                            <Repeat>
+                                                                              <Constraint Text="($_POST[&quot;deletereg&quot;] == 1)"/>
+                                                                              <Concat>
+                                                                                <Concat>
+                                                                                  <Concat>
+                                                                                    <Literal 
+                                                                                    Text="DeleteFunctions.php: Unable to delete selected Attendanc(es) - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="19">
+</Literal>
+                                                                                    <Symbolic Text="mysql_error()"/>
+                                                                                  </Concat>
+                                                                                </Concat>
+                                                                              </Concat>
+                                                                            </Repeat>
                                                                           </Concat>
                                                                           <Literal 
                                                                           Text="&lt;script language='JavaScript'&gt;
@@ -7182,6 +7396,21 @@
                       </Concat>
                     </Concat>
                     <Concat>
+                      <Repeat>
+                        <Constraint Text="($_POST[&quot;deleteassignment&quot;] == 1)"/>
+                        <Concat>
+                          <Concat>
+                            <Concat>
+                              <Literal 
+                              Text="DeleteFunctions.php: Unable to delete selected CourseBulletin(s) - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="183">
+</Literal>
+                              <Symbolic Text="mysql_error()"/>
+                            </Concat>
+                          </Concat>
+                        </Concat>
+                      </Repeat>
+                    </Concat>
+                    <Concat>
                       <Literal 
                       Text="&lt;script language='JavaScript'&gt;
 
@@ -7434,6 +7663,21 @@
                             </Concat>
                           </Concat>
                         </Select>
+                      </Concat>
+                      <Concat>
+                        <Repeat>
+                          <Constraint Text="($_POST[&quot;deletegrade&quot;] == 1)"/>
+                          <Concat>
+                            <Concat>
+                              <Concat>
+                                <Literal 
+                                Text="DeleteFunctions.php: Unable to delete selected grade(s) - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="9">
+</Literal>
+                                <Symbolic Text="mysql_error()"/>
+                              </Concat>
+                            </Concat>
+                          </Concat>
+                        </Repeat>
                       </Concat>
                       <Literal 
                       Text="&lt;script language='JavaScript'&gt;

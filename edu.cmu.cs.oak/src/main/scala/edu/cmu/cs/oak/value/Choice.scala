@@ -56,7 +56,6 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 object Choice {
 
   def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
-    println(v1, v2, v1 equals v2)
     if (((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue]))) {
       NullValue("")
     } else if (v1 equals v2) {
