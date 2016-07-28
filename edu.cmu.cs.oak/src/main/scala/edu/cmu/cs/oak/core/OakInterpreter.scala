@@ -144,9 +144,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   val engine = new OakEngine()
 
-  val includeNode: IncludeNode = new IncludeNode(Paths.get("ROOT"), "", 0)
-  var current_includeNode: IncludeNode = includeNode
-  
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
     // the entry point i
@@ -219,15 +216,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     val before = Instant.now()
     
-    val old = current_includeNode
-    current_includeNode = current_includeNode.include(path, "", 0)
-    
     env.resurrect()
     
     logger.info(s"<Program> ${env.hasTerminated()}")
     execute(program, env)
     logger.info("</Program>")
-    current_includeNode = old
     val after = Instant.now()
     println(s"Execution time: ${Duration.between(before, after)}")
 
@@ -1988,9 +1981,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           //this.includes = this.includes.push(includePaf)
           
           this.setCurrentPath(resolved_path.get)
-          val old = current_includeNode.include(resolved_path.get, expr._location.getFileName, expr._location.getLineNumber)
           execute(program, env)
-          current_includeNode = old
           this.resumePreviousCurrent()
           logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
           
