@@ -58,7 +58,7 @@ object Choice {
   def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
     if (((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue]))) {
       NullValue("")
-    } else if (v1 equals v2) {
+    } else if ((v1 != null) && (v1 equals v2)){
       v1//NullValue("optimized choice")
     } else {
       Choice(p, v1, v2)

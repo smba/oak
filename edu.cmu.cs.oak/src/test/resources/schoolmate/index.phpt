@@ -5165,23 +5165,7 @@
                                                                             <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="72"/>
                                                                           </Concat>
                                                                         </Select>
-                                                                        <Select>
-                                                                          <Constraint Text="$days[$j] == &quot;T&quot;"/>
-                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
-                                                                          <Select>
-                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
-                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
-                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
-                                                                                <Undef/>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
-                                                                        </Select>
+                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="39"/>
                                                                       </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
                                                                       <Select>
@@ -5224,19 +5208,7 @@
                                                                               <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="85"/>
                                                                             </Concat>
                                                                           </Select>
-                                                                          <Select>
-                                                                            <Constraint Text="$days[$j] == &quot;W&quot;"/>
-                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
-                                                                            <Select>
-                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
-                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
-                                                                                <Undef/>
-                                                                              </Select>
-                                                                            </Select>
-                                                                          </Select>
+                                                                          <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="40"/>
                                                                         </Select>
                                                                       </Select>
                                                                       <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="131"/>
@@ -5283,15 +5255,7 @@
                                                                                 <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="99"/>
                                                                               </Concat>
                                                                             </Select>
-                                                                            <Select>
-                                                                              <Constraint Text="$days[$j] == &quot;H&quot;"/>
-                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
-                                                                              <Select>
-                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
-                                                                                <Undef/>
-                                                                              </Select>
-                                                                            </Select>
+                                                                            <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="41"/>
                                                                           </Select>
                                                                         </Select>
                                                                       </Select>
@@ -5342,11 +5306,7 @@
                                                                                   <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="112"/>
                                                                                 </Concat>
                                                                               </Select>
-                                                                              <Select>
-                                                                                <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
-                                                                                <Undef/>
-                                                                              </Select>
+                                                                              <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="42"/>
                                                                             </Select>
                                                                           </Select>
                                                                         </Select>
@@ -5401,7 +5361,7 @@
                                                                                     <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="125"/>
                                                                                   </Concat>
                                                                                 </Select>
-                                                                                <Undef/>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="43"/>
                                                                               </Select>
                                                                             </Select>
                                                                           </Select>
@@ -6172,23 +6132,7 @@
                                                                                     <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="76"/>
                                                                                   </Concat>
                                                                                 </Select>
-                                                                                <Select>
-                                                                                  <Constraint Text="$days[$j] == &quot;T&quot;"/>
-                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
-                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
-                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
-                                                                                        <Undef/>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
-                                                                                </Select>
+                                                                                <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="37"/>
                                                                               </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
                                                                               <Select>
@@ -6231,19 +6175,7 @@
                                                                                       <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="89"/>
                                                                                     </Concat>
                                                                                   </Select>
-                                                                                  <Select>
-                                                                                    <Constraint Text="$days[$j] == &quot;W&quot;"/>
-                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
-                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
-                                                                                        <Undef/>
-                                                                                      </Select>
-                                                                                    </Select>
-                                                                                  </Select>
+                                                                                  <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="38"/>
                                                                                 </Select>
                                                                               </Select>
                                                                               <Literal Text="&amp;nbsp;&lt;/td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="135"/>
@@ -6290,15 +6222,7 @@
                                                                                         <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="103"/>
                                                                                       </Concat>
                                                                                     </Select>
-                                                                                    <Select>
-                                                                                      <Constraint Text="$days[$j] == &quot;H&quot;"/>
-                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
-                                                                                        <Undef/>
-                                                                                      </Select>
-                                                                                    </Select>
+                                                                                    <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="39"/>
                                                                                   </Select>
                                                                                 </Select>
                                                                               </Select>
@@ -6349,11 +6273,7 @@
                                                                                           <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="116"/>
                                                                                         </Concat>
                                                                                       </Select>
-                                                                                      <Select>
-                                                                                        <Constraint Text="$days[$j] == &quot;F&quot;"/>
-                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
-                                                                                        <Undef/>
-                                                                                      </Select>
+                                                                                      <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="40"/>
                                                                                     </Select>
                                                                                   </Select>
                                                                                 </Select>
@@ -6408,7 +6328,7 @@
                                                                                             <Literal Text="&lt;br /&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="129"/>
                                                                                           </Concat>
                                                                                         </Select>
-                                                                                        <Undef/>
+                                                                                        <Literal Text="&lt;td align='left'&gt;" Length="17" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="41"/>
                                                                                       </Select>
                                                                                     </Select>
                                                                                   </Select>

@@ -43,10 +43,10 @@ import com.caucho.quercus.program.Function;
  * Represents a PHP closure expression.
  */
 public class ClosureExpr extends Expr {
-  protected final Function _fun;
-  protected final boolean _isInClassScope;
+	public final Function _fun;
+	public final boolean _isInClassScope;
 
-  protected final ArrayList<VarExpr> _useArgs;
+	public final ArrayList<VarExpr> _useArgs;
 
   public ClosureExpr(Location location, Function fun,
                      ArrayList<VarExpr> useArgs, boolean isInClassScope)

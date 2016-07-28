@@ -61,7 +61,8 @@ trait CallRecorder {
     pw.write((new scala.xml.PrettyPrinter(80, 2)).format(xml))
     pw.close
     
-    println(undefinedCalls.size + " function(s) were undefined.")
+    val called = undefinedCalls.map{case (k, v) => v.size}.fold(0)(_ + _)
+    println(s"${undefinedCalls.size} function(s) were undefined ($called call(s)).")
   }
 
   def serializeSymbolicCalls() {

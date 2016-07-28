@@ -10,7 +10,7 @@ import scala.collection.mutable.ListBuffer
 
 class Tree(value: OakValue) {
 
-  var children = List[Tree]()
+  private var children = List[Tree]()
 
   override def toString = value.toString
   

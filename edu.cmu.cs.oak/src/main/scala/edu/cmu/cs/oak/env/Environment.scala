@@ -545,6 +545,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   
   def hasTerminated(): Boolean = this.terminated
   
+  def resurrect() {
+    this.terminated = false
+  }
+  
   def terminate() {
     this.terminate(calls.size)
   }

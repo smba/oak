@@ -17,14 +17,14 @@ case class SelectNode(constraint: Constraint, v1: DNode, v2: DNode) extends DNod
   
   override def ifdefy(): List[String] = {
     var sequence = List[String]()
-    sequence ++= List("#ifdef")
-//    sequence ++= List("<!-- #ifdef -->")
+//    sequence ++= List("#ifdef")
+    sequence ++= List("<!-- #ifdef -->")
     sequence ++= v1.ifdefy()
-    sequence ++= List("#else")
-//    sequence ++= List("<!-- #else -->")
+//    sequence ++= List("#else")
+    sequence ++= List("<!-- #else -->")
     sequence ++= v2.ifdefy()
-    sequence ++= List("#endif")
-//    sequence ++= List("<!-- #endif -->")
+//    sequence ++= List("#endif")
+    sequence ++= List("<!-- #endif -->")
     sequence
   }
   

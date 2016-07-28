@@ -44,7 +44,6 @@ object OakUnitTest extends App {
 
   //val pp = new PrettyPrinter(200, 0)
 
-  
   /**
    * Read a PHP source code from file, parses & executes it.
    *
@@ -60,15 +59,12 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("wordpress/index.php"))
+  
+  val env = loadAndExecute(url("schoolmate/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
-  val groups = OakInterpreter.symbolSet.groupBy { s => s.flag }
-  groups.map{case (k, v) => (k -> v.size)}.foreach {case (k, v) => println(k + ", " + v)}
-  
+
   val pw = new PrintWriter(new File("/home/stefan/Desktop/output2.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close
-
-
 }

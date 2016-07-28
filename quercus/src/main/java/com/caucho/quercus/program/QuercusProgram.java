@@ -62,7 +62,7 @@ public class QuercusProgram {
   private QuercusPage _compiledPage;
   private QuercusPage _profilePage;
 
-  private Path _sourceFile;
+  public Path _sourceFile;
 
   private final AtomicBoolean _isCompiling
     = new AtomicBoolean();

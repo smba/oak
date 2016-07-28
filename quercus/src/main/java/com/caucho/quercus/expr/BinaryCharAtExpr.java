@@ -41,8 +41,8 @@ import com.caucho.util.L10N;
 public class BinaryCharAtExpr extends AbstractVarExpr {
   private static final L10N L = new L10N(BinaryCharAtExpr.class);
 
-  protected final Expr _objExpr;
-  protected final Expr _indexExpr;
+  public final Expr _objExpr;
+  public final Expr _indexExpr;
 
   public BinaryCharAtExpr(Location location, Expr objExpr, Expr indexExpr)
   {
