@@ -214,15 +214,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     // Execute the parsed program
 
-    val before = Instant.now()
-    
     env.resurrect()
     
     logger.info(s"<Program> ${env.hasTerminated()}")
     execute(program, env)
     logger.info("</Program>")
-    val after = Instant.now()
-    println(s"Execution time: ${Duration.between(before, after)}")
 
     serializeSymbolicCalls()
     serializeUndefinedCalls()
