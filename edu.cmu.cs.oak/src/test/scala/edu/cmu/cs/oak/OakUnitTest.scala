@@ -60,7 +60,7 @@ object OakUnitTest extends App {
   }
 
   
-  val env = loadAndExecute(url("schoolmate/index.php"))
+  val env = loadAndExecute(url("wordpress/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
 

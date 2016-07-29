@@ -1,11 +1,11 @@
 package edu.cmu.cs.oak.core
 
 import java.io.File
+import java.io.FileNotFoundException
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import scala.annotation.elidable
-import scala.annotation.elidable.ASSERTION
 import scala.collection.JavaConversions.mapAsJavaMap
 import scala.collection.JavaConversions.mapAsScalaMap
 import scala.collection.JavaConversions.setAsJavaSet
@@ -15,6 +15,7 @@ import scala.util.control.Breaks.breakable
 
 import org.slf4j.LoggerFactory
 
+import com.caucho.quercus.Location
 import com.caucho.quercus.expr.AbstractBinaryExpr
 import com.caucho.quercus.expr.ArrayGetExpr
 import com.caucho.quercus.expr.ArrayTailExpr
@@ -22,6 +23,7 @@ import com.caucho.quercus.expr.BinaryAppendExpr
 import com.caucho.quercus.expr.BinaryAssignExpr
 import com.caucho.quercus.expr.BinaryAssignListExpr
 import com.caucho.quercus.expr.BinaryAssignRefExpr
+import com.caucho.quercus.expr.BinaryCharAtExpr
 import com.caucho.quercus.expr.BinaryInstanceOfExpr
 import com.caucho.quercus.expr.BinaryOrExpr
 import com.caucho.quercus.expr.CallExpr
@@ -30,6 +32,7 @@ import com.caucho.quercus.expr.ClassConstExpr
 import com.caucho.quercus.expr.ClassFieldExpr
 import com.caucho.quercus.expr.ClassMethodExpr
 import com.caucho.quercus.expr.ConditionalExpr
+import com.caucho.quercus.expr.ConstDirExpr
 import com.caucho.quercus.expr.ConstExpr
 import com.caucho.quercus.expr.ConstFileExpr
 import com.caucho.quercus.expr.Expr
@@ -94,10 +97,6 @@ import com.caucho.quercus.statement.ThrowStatement
 import com.caucho.quercus.statement.TryStatement
 import com.caucho.quercus.statement.WhileStatement
 
-//#ifndef CONCRETE_FOREACH_LOOP
-//@import util.control.Breaks._
-//#endif
-
 import edu.cmu.cs.oak.env.BranchEnv
 import edu.cmu.cs.oak.env.Call
 import edu.cmu.cs.oak.env.ClassDef
@@ -122,14 +121,6 @@ import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
-import com.caucho.quercus.Location
-import java.io.FileNotFoundException
-import java.nio.file.Files
-import com.caucho.quercus.expr.ConstDirExpr
-import com.caucho.quercus.expr.ClosureExpr
-import java.time.Instant
-import java.time.Duration
-import com.caucho.quercus.expr.BinaryCharAtExpr
 
 /**
  * Antenna feature definitions for configuration
@@ -188,22 +179,16 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 //@       
 //@      val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
 //@      this.setCurrentPath(confpath)
-//@      var old = current_includeNode
-//@      current_includeNode = current_includeNode.include(confpath, "", 0)
 //@      logger.info("<Config>")
 //@      execute(engine.loadFromFile(confpath), env)
 //@      logger.info("</Config>")
-//@      current_includeNode = old
 //@      this.resumePreviousCurrent()
 //@      
 //@      val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
 //@      this.setCurrentPath(pluginpath)
-//@      old = current_includeNode
-//@      current_includeNode = current_includeNode.include(pluginpath, "", 0)
 //@      logger.info("<Config>")
 //@      execute(engine.loadFromFile(pluginpath), env)
 //@      logger.info("</Config>")
-//@      current_includeNode = old
 //@      this.resumePreviousCurrent()
 //@
       //#endif
@@ -1984,7 +1969,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           
         } catch {
           case e: FileNotFoundException => {
-            logger.error(e + s" $expr")
+            logger.info(env.getCalls()+"")
+            logger.error(e + s" $expr" + x+"")
           }
         }
       }
