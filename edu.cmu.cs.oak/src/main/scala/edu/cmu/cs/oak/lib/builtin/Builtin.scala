@@ -240,6 +240,23 @@ class FileExists extends InterpreterPlugin {
   }
 }
 
+class UcFirst extends InterpreterPlugin {
+  override def getName(): String = "ucfirst"
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
+    val interpreter = provider.asInstanceOf[OakInterpreter]
+    assert(args.size == 1)
+    args.head match {
+      case sv: StringValue => {
+        val ucfirst = sv.value.charAt(0).toUpper + sv.value.slice(1, sv.value.size)
+        return StringValue(ucfirst, sv.file, sv.lineNr)
+      }
+      case _ => {
+        SymbolValue("ucfirst(" + args.head + ")", OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
+      }
+    }
+  }
+}
+
 //class ArrayWalk extends InterpreterPlugin {
 //
 //  override def getName(): String = "array_walk"

@@ -45,6 +45,7 @@ import edu.cmu.cs.oak.lib.builtin.Rtrim
 import edu.cmu.cs.oak.lib.builtin.FileExists
 import edu.cmu.cs.oak.lib.builtin.CallUserFunc
 import edu.cmu.cs.oak.lib.builtin.VersionCompare
+import edu.cmu.cs.oak.lib.builtin.UcFirst
 
 /**
  * Via this plugin loader the interpreter can 
@@ -130,6 +131,7 @@ trait InterpreterPluginProvider {
     loadPlugin(new Localizate)
     loadPlugin(new CallUserFunc)
     loadPlugin(new VersionCompare)
+    loadPlugin(new UcFirst)
     
   }
 

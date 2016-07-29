@@ -194,7 +194,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       //#endif
     } catch {
       case null => {}
-      case t: Throwable => throw new RuntimeException("Error initializing PHP environment: " + t)
+      //case t: Throwable => throw new RuntimeException("Error initializing PHP environment: " + t)
     }
 
     // Execute the parsed program
@@ -1970,6 +1970,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         } catch {
           case e: FileNotFoundException => {
             logger.info(env.getCalls()+"")
+            logger.info(this.getCurrentPath()+"")
             logger.error(e + s" $expr" + x+"")
           }
         }
