@@ -3,7 +3,7 @@
   <Concat>
     <Concat>
       <Literal Text="Unable to retrieve school name: " Length="32" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="4"/>
-      <Symbolic Text="mysql_error()"/>
+      <Symbolic Text="mysql_error"/>
     </Concat>
     <Concat>
       <Literal 
@@ -11,7 +11,7 @@
  &lt;head&gt;
  &lt;title&gt;SchoolMate - " Length="36" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/header.php" Line="17">
 </Literal>
-      <Symbolic Text="htmlspecialchars()"/>
+      <Symbolic Text="htmlspecialchars"/>
       <Literal 
       Text="&lt;/title&gt;
  &lt;style type=&quot;text/css&quot;&gt;
@@ -258,7 +258,7 @@
         <Literal 
         Text="Unable to validate login and password with the database: " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="4">
 </Literal>
-        <Symbolic Text="mysql_error()"/>
+        <Symbolic Text="mysql_error"/>
       </Concat>
       <Select>
         <Constraint Text="(md5() != $result)"/>
@@ -266,11 +266,11 @@
         <Concat>
           <Concat>
             <Literal Text="Unable to get user type: " Length="25" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="20"/>
-            <Symbolic Text="mysql_error()"/>
+            <Symbolic Text="mysql_error"/>
           </Concat>
           <Concat>
             <Literal Text="Unable to get userid from users: " Length="33" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ValidateLogin.php" Line="27"/>
-            <Symbolic Text="mysql_error()"/>
+            <Symbolic Text="mysql_error"/>
           </Concat>
           <Select>
             <Constraint Text="$_SESSION[&quot;usertype&quot;] == &quot;Admin&quot;"/>
@@ -321,7 +321,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-          <Symbolic Text="htmlspecialchars()"/>
+          <Symbolic Text="htmlspecialchars"/>
           <Literal 
           Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -362,7 +362,7 @@
 		&lt;div class='messagebox'&gt;
 		  " Length="435" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="31">
 </Literal>
-          <Symbolic Text="mysql_result()"/>
+          <Symbolic Text="mysql_result"/>
           <Literal 
           Text="
 		&lt;/div&gt;
@@ -427,7 +427,7 @@
 	  &lt;h2 class='message'&gt;Today's Message&lt;/h2&gt; &lt;br&gt;
 	   " Length="592" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Login.php" Line="85">
 </Literal>
-          <Symbolic Text="mysql_result()"/>
+          <Symbolic Text="mysql_result"/>
           <Literal 
           Text="
 	 &lt;/div&gt;
@@ -539,7 +539,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-            <Symbolic Text="htmlspecialchars()"/>
+            <Symbolic Text="htmlspecialchars"/>
             <Literal 
             Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -623,7 +623,7 @@
                       <Literal 
                       Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="24">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                   </Concat>
                   <Concat>
@@ -632,13 +632,13 @@
                         <Literal 
                         Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="40">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Concat>
                         <Literal 
                         Text="ManageClasses.php: Unable to insert new class - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="47">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                     </Concat>
                   </Concat>
@@ -649,7 +649,7 @@
                   <Literal 
                   Text="ManageClasses.php: Unable to update the class information - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="74">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
               </Concat>
               <Literal 
@@ -722,7 +722,7 @@
                 <Literal 
                 Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="163">
 </Literal>
-                <Symbolic Text="mysql_error()"/>
+                <Symbolic Text="mysql_error"/>
               </Concat>
               <Repeat>
                 <Constraint Text="$page2 == 0"/>
@@ -785,9 +785,9 @@
                     <Literal 
                     Text=" - ManageClasses.php: Unable to retrieve total number of classes - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="221">
 </Literal>
-                    <Symbolic Text="mysql_error()"/>
+                    <Symbolic Text="mysql_error"/>
                   </Concat>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                   <Repeat>
                     <Constraint Text="($_POST[&quot;semester&quot;] != &quot;&quot;)"/>
                     <Concat>
@@ -796,19 +796,19 @@
                           <Literal 
                           Text="ManageClasses.php: Unable to get the semester title for the current course being displayed - " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="247">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Concat>
                           <Literal 
                           Text="ManageClasses.php: Unable to get the teacher name for the current course being displayed - " Length="91" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="251">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Concat>
                           <Literal 
                           Text="ManageClasses.php: Unable to get the substitute name for the current corse being displayed - " Length="93" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="255">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Concat>
                           <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageClasses.php" Line="258"/>
@@ -953,37 +953,37 @@
                   <Literal 
                   Text="ManageSchoolInfo.php: Unable to retrieve School Address " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="5">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal 
                   Text="ManageSchoolInfo.php: Unable to retrieve PhoneNumber " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="10">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal 
                   Text="ManageSchoolInfo.php: Unable to retrieve NumSemesters " Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="15">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal 
                   Text="ManageSchoolInfo.php: Unable to retrieve NumPeriods " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="20">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal 
                   Text="ManageSchoolInfo.php: Unable to retrieve Point System " Length="54" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="25">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal 
                   Text="ManageSchoolInfo.php: Unable to retrieve sitetext " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="30">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal 
@@ -1004,7 +1004,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="389" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="52">
 </Literal>
-                  <Symbolic Text="htmlspecialchars()"/>
+                  <Symbolic Text="htmlspecialchars"/>
                   <Literal 
                   Text="' maxlength='50' name='schoolname' size=40&gt;
   &lt;/td&gt;
@@ -1016,7 +1016,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="168" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="60">
 </Literal>
-                  <Symbolic Text="mysql_result()"/>
+                  <Symbolic Text="mysql_result"/>
                   <Literal 
                   Text="' name='schooladdress' maxlength='50' size=40&gt;
   &lt;/td&gt;
@@ -1028,7 +1028,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="171" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="68">
 </Literal>
-                  <Symbolic Text="mysql_result()"/>
+                  <Symbolic Text="mysql_result"/>
                   <Literal 
                   Text="' name='schoolphone' maxlength='14'&gt;
   &lt;/td&gt;
@@ -1040,7 +1040,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="172" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="76">
 </Literal>
-                  <Symbolic Text="mysql_result()"/>
+                  <Symbolic Text="mysql_result"/>
                   <Literal 
                   Text="' name='numsemesters' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1052,7 +1052,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="176" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="84">
 </Literal>
-                  <Symbolic Text="mysql_result()"/>
+                  <Symbolic Text="mysql_result"/>
                   <Literal 
                   Text="' name='numperiods' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1064,7 +1064,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="171" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="92">
 </Literal>
-                  <Symbolic Text="number_format()"/>
+                  <Symbolic Text="number_format"/>
                   <Literal 
                   Text="' name='apoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1076,7 +1076,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="100">
 </Literal>
-                  <Symbolic Text="number_format()"/>
+                  <Symbolic Text="number_format"/>
                   <Literal 
                   Text="' name='bpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1088,7 +1088,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="108">
 </Literal>
-                  <Symbolic Text="number_format()"/>
+                  <Symbolic Text="number_format"/>
                   <Literal 
                   Text="' name='cpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1100,7 +1100,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="116">
 </Literal>
-                  <Symbolic Text="number_format()"/>
+                  <Symbolic Text="number_format"/>
                   <Literal 
                   Text="' name='dpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1112,7 +1112,7 @@
   &lt;td align='left'&gt;
    &lt;input type='text' value='" Length="167" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSchoolInfo.php" Line="124">
 </Literal>
-                  <Symbolic Text="number_format()"/>
+                  <Symbolic Text="number_format"/>
                   <Literal 
                   Text="' name='fpoint' maxlength='3' size=3&gt;
   &lt;/td&gt;
@@ -1185,7 +1185,7 @@
                         <Literal 
                         Text="ManageStudents.php: Uanable to get list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="9">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Repeat>
                         <Constraint 
@@ -1217,7 +1217,7 @@
                         <Literal 
                         Text="ManageStudents.php: Unable to insert new student - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="29">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                     </Concat>
                   </Concat>
@@ -1226,7 +1226,7 @@
                       <Literal 
                       Text="ManageStudents.php: Unable to update the student information - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="37">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                   </Concat>
                   <Concat>
@@ -1238,7 +1238,7 @@
                             <Literal 
                             Text="DeleteFunctions.php: Unable to delete selected Student(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="62">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                         </Concat>
                       </Concat>
@@ -1325,7 +1325,7 @@
                     <Literal 
                     Text="Managestudents.php: Unable to retrieve total number of students - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="130">
 </Literal>
-                    <Symbolic Text="mysql_error()"/>
+                    <Symbolic Text="mysql_error"/>
                   </Concat>
                   <Repeat>
                     <Constraint Text="$page2 == 2"/>
@@ -1375,7 +1375,7 @@
                     <Literal 
                     Text="ManageStudents.php: Unable to get a list of terms for drop-down - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageStudents.php" Line="175">
 </Literal>
-                    <Symbolic Text="mysql_error()"/>
+                    <Symbolic Text="mysql_error"/>
                   </Concat>
                   <Repeat>
                     <Constraint Text="$page2 == 2"/>
@@ -1495,7 +1495,7 @@
                           <Literal 
                           Text="ManageTeachers.php: Uanable to get list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="9">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Repeat>
                           <Constraint 
@@ -1527,7 +1527,7 @@
                           <Literal 
                           Text="ManageTeachers.php: Unable to insert new teacher - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="29">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                       </Concat>
                     </Concat>
@@ -1536,7 +1536,7 @@
                         <Literal 
                         Text="Manageteachers.php: Unable to update the teacher information - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="37">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                     </Concat>
                     <Concat>
@@ -1548,7 +1548,7 @@
                               <Literal 
                               Text="DeleteFunctions.php: Unable to delete selected Teacher(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="52">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                           </Concat>
                         </Concat>
@@ -1634,7 +1634,7 @@
                       <Literal 
                       Text="ManageTeachers.php: Unable to retrieve total number of teachers - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTeachers.php" Line="129">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                     <Repeat>
                       <Constraint Text="$page2 == 3"/>
@@ -1763,7 +1763,7 @@
                           <Literal 
                           Text="ManageAnnouncements.php: Unable to insert new announcement - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="9">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                       </Concat>
                       <Concat>
@@ -1771,7 +1771,7 @@
                           <Literal 
                           Text="ManageAnnouncements.php: Unable to update the announcement information - " Length="73" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="16">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                       </Concat>
                       <Concat>
@@ -1783,7 +1783,7 @@
                                 <Literal 
                                 Text="DeleteFunctions.php: Unable to delete selected Announcement(s) - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="42">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                             </Concat>
                           </Concat>
@@ -1869,13 +1869,13 @@
                         <Literal 
                         Text="ManageAnnouncements.php: Unable to retrieve total number of announcements - " Length="76" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="108">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Concat>
                         <Literal 
                         Text="ManageAnnouncements.php: Unable to retrieve the announcements - " Length="64" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="121">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 4"/>
@@ -1903,7 +1903,7 @@
 </Literal>
                               <Undef/>
                               <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="135"/>
-                              <Symbolic Text="convertfromdb()"/>
+                              <Symbolic Text="convertfromdb"/>
                               <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAnnouncements.php" Line="136"/>
                             </Concat>
                           </Concat>
@@ -2007,7 +2007,7 @@
                             <Literal 
                             Text="ManageSemesters.php: Unable to insert new semester - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="10">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                         </Concat>
                         <Concat>
@@ -2015,7 +2015,7 @@
                             <Literal 
                             Text="ManageSemesters.php: Unable to update the semester information - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="20">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                         </Concat>
                         <Literal 
@@ -2101,7 +2101,7 @@
                           <Literal 
                           Text="ManageSemesters.php: Unable to retrieve total number of semesters - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="115">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Repeat>
                           <Constraint Text="$page2 == 5"/>
@@ -2124,13 +2124,13 @@
                                 <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="141"/>
                                 <Undef/>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="142"/>
-                                <Symbolic Text="mysql_result()"/>
+                                <Symbolic Text="mysql_result"/>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="143"/>
-                                <Symbolic Text="convertfromdb()"/>
+                                <Symbolic Text="convertfromdb"/>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="144"/>
-                                <Symbolic Text="convertfromdb()"/>
+                                <Symbolic Text="convertfromdb"/>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="145"/>
-                                <Symbolic Text="convertfromdb()"/>
+                                <Symbolic Text="convertfromdb"/>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageSemesters.php" Line="146"/>
                                 <Select>
                                   <Constraint Text="($smstr[6] == 1)"/>
@@ -2240,7 +2240,7 @@
                           <Concat>
                             <Concat>
                               <Literal Text="ManageTerms.php: Unable to insert new term - " Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="9"/>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                           </Concat>
                           <Concat>
@@ -2248,7 +2248,7 @@
                               <Literal 
                               Text="ManageTerms.php: Unable to update the term information - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="18">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                           </Concat>
                           <Literal 
@@ -2330,7 +2330,7 @@
                             <Literal 
                             Text="ManageTerms.php: Unable to retrieve total number of terms - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="109">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Repeat>
                             <Constraint Text="$page2 == 6"/>
@@ -2353,9 +2353,9 @@
                                   <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="132"/>
                                   <Undef/>
                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="133"/>
-                                  <Symbolic Text="convertfromdb()"/>
+                                  <Symbolic Text="convertfromdb"/>
                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="134"/>
-                                  <Symbolic Text="convertfromdb()"/>
+                                  <Symbolic Text="convertfromdb"/>
                                   <Literal Text="&lt;/td&gt; &lt;tr&gt;" Length="12" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageTerms.php" Line="135"/>
                                 </Concat>
                               </Concat>
@@ -2620,7 +2620,7 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of teachers - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="24"/>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
@@ -2645,7 +2645,7 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of semesters - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="39"/>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
@@ -2671,7 +2671,7 @@
                                       <Literal 
                                       Text="AddClass.php: Unable to get list of substitutes - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="54">
 </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="($_POST[&quot;fullyear&quot;] != 1)"/>
@@ -2765,7 +2765,7 @@
 </Literal>
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of teachers - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="127"/>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
@@ -2791,7 +2791,7 @@
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of semesters - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="142">
                                       </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
@@ -2812,7 +2812,7 @@
                                     <Concat>
                                       <Literal Text="AddClass.php: Unable to get list of semesters - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="153">
                                       </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
@@ -2838,7 +2838,7 @@
                                       <Literal 
                                       Text="AddClass.php: Unable to get list of substitutes - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddClass.php" Line="168">
 </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint Text="!(($_POST[&quot;fullyear&quot;] != 1))"/>
@@ -2923,7 +2923,7 @@
                                       <Literal 
                                       Text="ManageUsers.php: Uanable to get list of users - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="7">
 </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Repeat>
                                       <Constraint 
@@ -2953,7 +2953,7 @@
                                     </Repeat>
                                     <Concat>
                                       <Literal Text="ManageUsers.php: Unable to insert new user - " Length="45" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="27"/>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                   </Concat>
                                   <Concat>
@@ -2964,7 +2964,7 @@
                                           <Literal 
                                           Text="ManageUsers.php: Unable to update the user information (password) - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="36">
 </Literal>
-                                          <Symbolic Text="mysql_error()"/>
+                                          <Symbolic Text="mysql_error"/>
                                         </Concat>
                                       </Concat>
                                       <Concat>
@@ -2972,7 +2972,7 @@
                                           <Literal 
                                           Text="ManageUsers.php: Unable to update the user information (no password) - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="41">
 </Literal>
-                                          <Symbolic Text="mysql_error()"/>
+                                          <Symbolic Text="mysql_error"/>
                                         </Concat>
                                       </Concat>
                                     </Select>
@@ -2986,7 +2986,7 @@
                                             <Literal 
                                             Text="DeleteFunction.php: Unable to delete selected User(s) - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="95">
 </Literal>
-                                            <Symbolic Text="mysql_error()"/>
+                                            <Symbolic Text="mysql_error"/>
                                           </Concat>
                                           <Select>
                                             <Constraint Text="$type == &quot;Teacher&quot;"/>
@@ -2995,7 +2995,7 @@
                                                 <Literal 
                                                 Text="DeleteFunctions.php: Unable to get list of teachers to delete for deleteUser() - " Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="102">
 </Literal>
-                                                <Symbolic Text="mysql_error()"/>
+                                                <Symbolic Text="mysql_error"/>
                                               </Concat>
                                               <Repeat>
                                                 <Constraint Text="$type == &quot;Teacher&quot;"/>
@@ -3005,7 +3005,7 @@
                                                       <Literal 
                                                       Text="DeleteFunctions.php: Unable to delete selected Teacher(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="52">
 </Literal>
-                                                      <Symbolic Text="mysql_error()"/>
+                                                      <Symbolic Text="mysql_error"/>
                                                     </Concat>
                                                   </Concat>
                                                 </Concat>
@@ -3018,7 +3018,7 @@
                                                   <Literal 
                                                   Text="DeleteFunctions.php: Unable to get list of students to delete for deleteUser() - " Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="113">
 </Literal>
-                                                  <Symbolic Text="mysql_error()"/>
+                                                  <Symbolic Text="mysql_error"/>
                                                 </Concat>
                                                 <Repeat>
                                                   <Constraint Text="$type == &quot;Student&quot;"/>
@@ -3028,7 +3028,7 @@
                                                         <Literal 
                                                         Text="DeleteFunctions.php: Unable to delete selected Student(s) - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="62">
 </Literal>
-                                                        <Symbolic Text="mysql_error()"/>
+                                                        <Symbolic Text="mysql_error"/>
                                                       </Concat>
                                                     </Concat>
                                                   </Concat>
@@ -3041,7 +3041,7 @@
                                                     <Literal 
                                                     Text="DeleteFunctions.php: Unable to get list of parents to delete for deleteUser() - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="124">
 </Literal>
-                                                    <Symbolic Text="mysql_error()"/>
+                                                    <Symbolic Text="mysql_error"/>
                                                   </Concat>
                                                   <Repeat>
                                                     <Constraint Text="$type == &quot;Parent&quot;"/>
@@ -3051,13 +3051,13 @@
                                                           <Literal 
                                                           Text="DeleteFunctions.php: Unable to delete selected Parent(s) - " Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="29">
 </Literal>
-                                                          <Symbolic Text="mysql_error()"/>
+                                                          <Symbolic Text="mysql_error"/>
                                                         </Concat>
                                                         <Concat>
                                                           <Literal 
                                                           Text="DeleteFunctions.php: Unable to delete the parents in the student/parent match - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="32">
 </Literal>
-                                                          <Symbolic Text="mysql_error()"/>
+                                                          <Symbolic Text="mysql_error"/>
                                                         </Concat>
                                                       </Concat>
                                                     </Concat>
@@ -3070,7 +3070,7 @@
                                                       <Literal 
                                                       Text="DeleteFunctions.php: Unable to get list of admins to delete for deleteUser() - " Length="79" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="135">
 </Literal>
-                                                      <Symbolic Text="mysql_error()"/>
+                                                      <Symbolic Text="mysql_error"/>
                                                     </Concat>
                                                     <Repeat>
                                                       <Constraint Text="$type == &quot;Admin&quot;"/>
@@ -3080,7 +3080,7 @@
                                                             <Literal 
                                                             Text="DeleteFunctions.php: Unable to delete selected Admin(s) - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="81">
 </Literal>
-                                                            <Symbolic Text="mysql_error()"/>
+                                                            <Symbolic Text="mysql_error"/>
                                                           </Concat>
                                                         </Concat>
                                                       </Concat>
@@ -3174,13 +3174,13 @@
                                     <Literal 
                                     Text="ManageUsers.php: Unable to retrieve total number of users - " Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="133">
 </Literal>
-                                    <Symbolic Text="mysql_error()"/>
+                                    <Symbolic Text="mysql_error"/>
                                   </Concat>
                                   <Concat>
                                     <Literal 
                                     Text="ManageUsers.php: Unable to retrieve user information - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageUsers.php" Line="146">
 </Literal>
-                                    <Symbolic Text="mysql_error()"/>
+                                    <Symbolic Text="mysql_error"/>
                                   </Concat>
                                   <Repeat>
                                     <Constraint Text="$page2 == 10"/>
@@ -3307,7 +3307,7 @@
                                       <Literal 
                                       Text="EditClass.php: Unable to retrieve the information about the class to edit - " Length="76" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="6">
 </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Concat>
                                       <Literal 
@@ -3337,7 +3337,7 @@
                                     <Concat>
                                       <Literal Text="EditClass.php: Unable to get list of teachers - " Length="48" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="30">
                                       </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Select>
                                       <Constraint Text="($teacher[0] == $class[1])"/>
@@ -3371,7 +3371,7 @@
                                       <Literal 
                                       Text="EditClass.php: Unable to get list of semesters - " Length="49" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="53">
 </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Select>
                                       <Constraint Text="($semester[0] == $class[2])"/>
@@ -3418,7 +3418,7 @@
                                       <Literal 
                                       Text="EditClass.php: Unable to get list of substitutes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditClass.php" Line="79">
 </Literal>
-                                      <Symbolic Text="mysql_error()"/>
+                                      <Symbolic Text="mysql_error"/>
                                     </Concat>
                                     <Select>
                                       <Constraint Text="($teacher[0] == $class[7])"/>
@@ -3537,7 +3537,7 @@
                                         <Literal 
                                         Text="EditTerm.php: Unable to retrieve the information about the term to edit - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="6">
 </Literal>
-                                        <Symbolic Text="mysql_error()"/>
+                                        <Symbolic Text="mysql_error"/>
                                       </Concat>
                                       <Concat>
                                         <Literal 
@@ -3559,12 +3559,12 @@
                                         Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='startdate' value='" Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="22">
 </Literal>
-                                        <Symbolic Text="convertfromdb()"/>
+                                        <Symbolic Text="convertfromdb"/>
                                         <Literal 
                                         Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='enddate' value='" Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTerm.php" Line="23">
 </Literal>
-                                        <Symbolic Text="convertfromdb()"/>
+                                        <Symbolic Text="convertfromdb"/>
                                         <Literal 
                                         Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -3619,7 +3619,7 @@
                                           <Literal 
                                           Text="EditSemester.php: Unable to retrieve the information about the semester to edit - " Length="82" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="6">
 </Literal>
-                                          <Symbolic Text="mysql_error()"/>
+                                          <Symbolic Text="mysql_error"/>
                                         </Concat>
                                         <Concat>
                                           <Literal 
@@ -3663,17 +3663,17 @@
 	&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' maxlength='10' name='startdate' size='8' value='" Length="89" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="37">
 </Literal>
-                                          <Symbolic Text="convertfromdb()"/>
+                                          <Symbolic Text="convertfromdb"/>
                                           <Literal 
                                           Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' maxlength='10' name='middate' size='8' value='" Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="38">
 </Literal>
-                                          <Symbolic Text="convertfromdb()"/>
+                                          <Symbolic Text="convertfromdb"/>
                                           <Literal 
                                           Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' maxlength='10' name='enddate' size='8' value='" Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditSemester.php" Line="39">
 </Literal>
-                                          <Symbolic Text="convertfromdb()"/>
+                                          <Symbolic Text="convertfromdb"/>
                                           <Literal 
                                           Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;
@@ -3835,7 +3835,7 @@
                                               <Literal 
                                               Text="EditUser.php: Unable to retrieve the information about the user to edit - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditUser.php" Line="6">
 </Literal>
-                                              <Symbolic Text="mysql_error()"/>
+                                              <Symbolic Text="mysql_error"/>
                                             </Concat>
                                             <Concat>
                                               <Literal 
@@ -3977,7 +3977,7 @@
                                                 <Literal 
                                                 Text="AddTeacher: Unable to retrieve the list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddTeacher.php" Line="20">
 </Literal>
-                                                <Symbolic Text="mysql_error()"/>
+                                                <Symbolic Text="mysql_error"/>
                                               </Concat>
                                               <Repeat>
                                                 <Constraint Text="$page2 == 16"/>
@@ -4039,7 +4039,7 @@
                                                   <Literal 
                                                   Text="EditTeacher.php: Unable to retrieve the information about the teacher to edit - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="6">
 </Literal>
-                                                  <Symbolic Text="mysql_error()"/>
+                                                  <Symbolic Text="mysql_error"/>
                                                 </Concat>
                                                 <Concat>
                                                   <Literal 
@@ -4072,13 +4072,13 @@
                                                   <Literal 
                                                   Text="AddTeacher: Unable to get the current teacher's userid - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="28">
 </Literal>
-                                                  <Symbolic Text="mysql_error()"/>
+                                                  <Symbolic Text="mysql_error"/>
                                                 </Concat>
                                                 <Concat>
                                                   <Literal 
                                                   Text="EditTeacher: Unable to retrieve the list of users - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditTeacher.php" Line="32">
 </Literal>
-                                                  <Symbolic Text="mysql_error()"/>
+                                                  <Symbolic Text="mysql_error"/>
                                                 </Concat>
                                                 <Select>
                                                   <Constraint Text="($teacher[0] == $user[0])"/>
@@ -4211,7 +4211,7 @@
                                                       <Literal 
                                                       Text="EditAnnouncement.php: Unable to retrieve the information about the announcement to edit - " Length="90" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="6">
 </Literal>
-                                                      <Symbolic Text="mysql_error()"/>
+                                                      <Symbolic Text="mysql_error"/>
                                                     </Concat>
                                                     <Concat>
                                                       <Literal 
@@ -4238,7 +4238,7 @@
                                                       Text="&lt;/textarea&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='date' value='" Length="60" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAnnouncements.php" Line="23">
 </Literal>
-                                                      <Symbolic Text="convertfromdb()"/>
+                                                      <Symbolic Text="convertfromdb"/>
                                                       <Literal 
                                                       Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -4312,7 +4312,7 @@
                                                         <Literal 
                                                         Text="AddStudent: Unable to retrieve the list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddStudent.php" Line="22">
 </Literal>
-                                                        <Symbolic Text="mysql_error()"/>
+                                                        <Symbolic Text="mysql_error"/>
                                                       </Concat>
                                                       <Repeat>
                                                         <Constraint Text="$page2 == 20"/>
@@ -4374,7 +4374,7 @@
                                                           <Literal 
                                                           Text="EditStudent.php: Unable to retrieve the information about the student to edit - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="6">
 </Literal>
-                                                          <Symbolic Text="mysql_error()"/>
+                                                          <Symbolic Text="mysql_error"/>
                                                         </Concat>
                                                         <Concat>
                                                           <Literal 
@@ -4413,13 +4413,13 @@
                                                           <Literal 
                                                           Text="EditStudent: Unable to get the current student's userid - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="30">
 </Literal>
-                                                          <Symbolic Text="mysql_error()"/>
+                                                          <Symbolic Text="mysql_error"/>
                                                         </Concat>
                                                         <Concat>
                                                           <Literal 
                                                           Text="EditStudent: Unable to retrieve the list of users - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditStudent.php" Line="34">
 </Literal>
-                                                          <Symbolic Text="mysql_error()"/>
+                                                          <Symbolic Text="mysql_error"/>
                                                         </Concat>
                                                         <Select>
                                                           <Constraint Text="($student[0] == $user[0])"/>
@@ -4498,7 +4498,7 @@
                                                                 <Literal 
                                                                 Text="ManageParents.php: Uanable to get list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="9">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Repeat>
                                                                 <Constraint 
@@ -4537,17 +4537,17 @@
                                                                 <Literal 
                                                                 Text="ManageParents.php: Unable to insert new parent - " Length="49" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="33">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal Text="Unable to get the newly entered parentid - " Length="43" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="37"/>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal 
                                                                 Text="ManageParents.php: Unable to insert the parent to student match - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="43">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                             </Concat>
                                                           </Concat>
@@ -4556,7 +4556,7 @@
                                                               <Literal 
                                                               Text="ManageParents.php: Unable to update the parent information - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="51">
 </Literal>
-                                                              <Symbolic Text="mysql_error()"/>
+                                                              <Symbolic Text="mysql_error"/>
                                                             </Concat>
                                                           </Concat>
                                                           <Concat>
@@ -4568,13 +4568,13 @@
                                                                     <Literal 
                                                                     Text="DeleteFunctions.php: Unable to delete selected Parent(s) - " Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="29">
 </Literal>
-                                                                    <Symbolic Text="mysql_error()"/>
+                                                                    <Symbolic Text="mysql_error"/>
                                                                   </Concat>
                                                                   <Concat>
                                                                     <Literal 
                                                                     Text="DeleteFunctions.php: Unable to delete the parents in the student/parent match - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="32">
 </Literal>
-                                                                    <Symbolic Text="mysql_error()"/>
+                                                                    <Symbolic Text="mysql_error"/>
                                                                   </Concat>
                                                                 </Concat>
                                                               </Concat>
@@ -4662,13 +4662,13 @@
                                                             <Literal 
                                                             Text="ManageParents.php: Unable to retrieve total number of parents - " Length="64" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="145">
 </Literal>
-                                                            <Symbolic Text="mysql_error()"/>
+                                                            <Symbolic Text="mysql_error"/>
                                                           </Concat>
                                                           <Concat>
                                                             <Literal 
                                                             Text="ManageParents.php: Unable to get a list of parents - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="158">
 </Literal>
-                                                            <Symbolic Text="mysql_error()"/>
+                                                            <Symbolic Text="mysql_error"/>
                                                           </Concat>
                                                           <Repeat>
                                                             <Constraint Text="$page2 == 22"/>
@@ -4677,7 +4677,7 @@
                                                                 <Literal 
                                                                 Text="ManageParents.php: Unable to get a list of parents with the matching students - " Length="80" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageParents.php" Line="166">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Concat>
@@ -4834,7 +4834,7 @@
                                                               <Literal 
                                                               Text="AddParent: Unable to retrieve the list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="21">
 </Literal>
-                                                              <Symbolic Text="mysql_error()"/>
+                                                              <Symbolic Text="mysql_error"/>
                                                             </Concat>
                                                             <Repeat>
                                                               <Constraint Text="$page2 == 23"/>
@@ -4860,7 +4860,7 @@
                                                               <Literal 
                                                               Text="AddParent: Unable to retrieve the list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/AddParent.php" Line="33">
 </Literal>
-                                                              <Symbolic Text="mysql_error()"/>
+                                                              <Symbolic Text="mysql_error"/>
                                                             </Concat>
                                                             <Repeat>
                                                               <Constraint Text="$page2 == 23"/>
@@ -4922,7 +4922,7 @@
                                                                 <Literal 
                                                                 Text="EditParent.php: Unable to retrieve the information about the parent to edit - " Length="78" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="6">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal 
@@ -4956,7 +4956,7 @@
                                                                 <Literal 
                                                                 Text="AddParent: Unable to retrieve the list of users - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="28">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Select>
                                                                 <Constraint Text="($students[0] == $_POST[&quot;studentid&quot;])"/>
@@ -4991,13 +4991,13 @@
                                                                 <Literal 
                                                                 Text="Addparent: Unable to get the current parent's userid - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="52">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Concat>
                                                                 <Literal 
                                                                 Text="Editparent: Unable to retrieve the list of users - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditParent.php" Line="56">
 </Literal>
-                                                                <Symbolic Text="mysql_error()"/>
+                                                                <Symbolic Text="mysql_error"/>
                                                               </Concat>
                                                               <Select>
                                                                 <Constraint Text="($parent[0] == $user[0])"/>
@@ -5105,7 +5105,7 @@
                                                                   <Literal 
                                                                   Text="VisualizeClasses.php: Unable to get number of periods - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="31">
 </Literal>
-                                                                  <Symbolic Text="mysql_error()"/>
+                                                                  <Symbolic Text="mysql_error"/>
                                                                 </Concat>
                                                                 <Repeat>
                                                                   <Constraint Text="$page2 == 25"/>
@@ -5125,7 +5125,7 @@
                                                                       <Literal 
                                                                       Text="VisualizeClasses.php: Unable to get class information - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeClasses.php" Line="50">
 </Literal>
-                                                                      <Symbolic Text="mysql_error()"/>
+                                                                      <Symbolic Text="mysql_error"/>
                                                                     </Concat>
                                                                     <Concat>
                                                                       <Select>
@@ -5418,13 +5418,13 @@
                                                                       <Literal 
                                                                       Text="Registration.php: Unable to get the information about the new class to add for validation - " Length="92" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="11">
 </Literal>
-                                                                      <Symbolic Text="mysql_error()"/>
+                                                                      <Symbolic Text="mysql_error"/>
                                                                     </Concat>
                                                                     <Concat>
                                                                       <Literal 
                                                                       Text="Registration.php: Unable to get a list of registrations for validation - " Length="73" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="18">
 </Literal>
-                                                                      <Symbolic Text="mysql_error()"/>
+                                                                      <Symbolic Text="mysql_error"/>
                                                                     </Concat>
                                                                     <Select>
                                                                       <Constraint Text="$insert"/>
@@ -5433,7 +5433,7 @@
                                                                           <Literal 
                                                                           Text="Registration.php: Unable to add the new registration - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="51">
 </Literal>
-                                                                          <Symbolic Text="mysql_error()"/>
+                                                                          <Symbolic Text="mysql_error"/>
                                                                         </Concat>
                                                                       </Concat>
                                                                       <Concat>
@@ -5452,7 +5452,7 @@
                                                                             <Literal 
                                                                             Text="DeleteFunctions.php: Unable to delete selected Registration(s) - " Length="65" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="162">
 </Literal>
-                                                                            <Symbolic Text="mysql_error()"/>
+                                                                            <Symbolic Text="mysql_error"/>
                                                                           </Concat>
                                                                         </Concat>
                                                                       </Concat>
@@ -5528,7 +5528,7 @@
                                                                     <Literal 
                                                                     Text="Registration.php: Unable to get a list of students - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="150">
 </Literal>
-                                                                    <Symbolic Text="mysql_error()"/>
+                                                                    <Symbolic Text="mysql_error"/>
                                                                   </Concat>
                                                                   <Repeat>
                                                                     <Constraint Text="$page2 == 26"/>
@@ -5559,7 +5559,7 @@
                                                                     <Literal 
                                                                     Text="Registration.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="168">
 </Literal>
-                                                                    <Symbolic Text="mysql_error()"/>
+                                                                    <Symbolic Text="mysql_error"/>
                                                                   </Concat>
                                                                   <Repeat>
                                                                     <Constraint Text="$page2 == 26"/>
@@ -5598,7 +5598,7 @@
                                                                       <Literal 
                                                                       Text="&lt;/select&gt;Registration.php: Unable to get a list of courses - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="202">
 </Literal>
-                                                                      <Symbolic Text="mysql_error()"/>
+                                                                      <Symbolic Text="mysql_error"/>
                                                                     </Concat>
                                                                     <Repeat>
                                                                       <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
@@ -5626,7 +5626,7 @@
                                                                     <Literal 
                                                                     Text="Registration.php: Unable to get a list of registrations - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/Registration.php" Line="219">
 </Literal>
-                                                                    <Symbolic Text="mysql_error()"/>
+                                                                    <Symbolic Text="mysql_error"/>
                                                                   </Concat>
                                                                   <Repeat>
                                                                     <Constraint Text="$page2 == 26"/>
@@ -5711,7 +5711,7 @@
                                                                       <Literal 
                                                                       Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="16">
 </Literal>
-                                                                      <Symbolic Text="mysql_error()"/>
+                                                                      <Symbolic Text="mysql_error"/>
                                                                     </Concat>
                                                                     <Repeat>
                                                                       <Constraint Text="$page2 == 27"/>
@@ -5758,7 +5758,7 @@
                                                                       <Literal 
                                                                       Text="DeficiencyReport: Unable to get a list of deficient students - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeficiencyReport.php" Line="47">
 </Literal>
-                                                                      <Symbolic Text="mysql_error()"/>
+                                                                      <Symbolic Text="mysql_error"/>
                                                                     </Concat>
                                                                     <Repeat>
                                                                       <Constraint Text="$page2 == 27"/>
@@ -5833,7 +5833,7 @@
                                                                         <Literal 
                                                                         Text="PointsReport.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="12">
 </Literal>
-                                                                        <Symbolic Text="mysql_error()"/>
+                                                                        <Symbolic Text="mysql_error"/>
                                                                       </Concat>
                                                                       <Repeat>
                                                                         <Constraint Text="$page2 == 28"/>
@@ -5862,7 +5862,7 @@
                                                                         <Literal 
                                                                         Text="GradeReport.php: Unable to get a list of students - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="32">
 </Literal>
-                                                                        <Symbolic Text="mysql_error()"/>
+                                                                        <Symbolic Text="mysql_error"/>
                                                                       </Concat>
                                                                       <Select>
                                                                         <Constraint Text="($student[0] == $_POST[&quot;student&quot;])"/>
@@ -5902,7 +5902,7 @@
                                                                         <Literal 
                                                                         Text="GradeReport.php: Unable to get the list of classes this student is registered for - " Length="84" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/GradeReport.php" Line="67">
 </Literal>
-                                                                        <Symbolic Text="mysql_error()"/>
+                                                                        <Symbolic Text="mysql_error"/>
                                                                       </Concat>
                                                                       <Repeat>
                                                                         <Constraint Text="$page2 == 28"/>
@@ -6027,7 +6027,7 @@
                                                                           <Literal 
                                                                           Text="VisualizeRegistration: Unable to get the student's name - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="4">
 </Literal>
-                                                                          <Symbolic Text="mysql_error()"/>
+                                                                          <Symbolic Text="mysql_error"/>
                                                                         </Concat>
                                                                         <Concat>
                                                                           <Literal Text=" &lt;h1&gt;" Length="6" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="11"/>
@@ -6061,7 +6061,7 @@
                                                                           <Literal 
                                                                           Text="VisualizeRegistration.php: Unable to get number of periods - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="29">
 </Literal>
-                                                                          <Symbolic Text="mysql_error()"/>
+                                                                          <Symbolic Text="mysql_error"/>
                                                                         </Concat>
                                                                         <Repeat>
                                                                           <Constraint Text="$page2 == 29"/>
@@ -6081,7 +6081,7 @@
                                                                               <Literal 
                                                                               Text="VisualizeRegistration.php: Unable to get a list of CourseIDs for the student's registration - " Length="94" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="48">
 </Literal>
-                                                                              <Symbolic Text="mysql_error()"/>
+                                                                              <Symbolic Text="mysql_error"/>
                                                                             </Concat>
                                                                             <Repeat>
                                                                               <Constraint Text="$page2 == 29"/>
@@ -6090,7 +6090,7 @@
                                                                                   <Literal 
                                                                                   Text="VisualizeRegistration.php: Unable to get class information - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/VisualizeRegistration.php" Line="54">
 </Literal>
-                                                                                  <Symbolic Text="mysql_error()"/>
+                                                                                  <Symbolic Text="mysql_error"/>
                                                                                 </Concat>
                                                                               </Concat>
                                                                             </Repeat>
@@ -6385,7 +6385,7 @@
                                                                               <Literal 
                                                                               Text="ManageAttendance.php: Unable to insert new attendance record - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="13">
 </Literal>
-                                                                              <Symbolic Text="mysql_error()"/>
+                                                                              <Symbolic Text="mysql_error"/>
                                                                             </Concat>
                                                                           </Concat>
                                                                           <Concat>
@@ -6397,7 +6397,7 @@
                                                                                     <Literal 
                                                                                     Text="DeleteFunctions.php: Unable to delete selected Attendanc(es) - " Length="63" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="19">
 </Literal>
-                                                                                    <Symbolic Text="mysql_error()"/>
+                                                                                    <Symbolic Text="mysql_error"/>
                                                                                   </Concat>
                                                                                 </Concat>
                                                                               </Concat>
@@ -6474,7 +6474,7 @@
                                                                             <Literal 
                                                                             Text="Registration.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="95">
 </Literal>
-                                                                            <Symbolic Text="mysql_error()"/>
+                                                                            <Symbolic Text="mysql_error"/>
                                                                           </Concat>
                                                                           <Repeat>
                                                                             <Constraint Text="$page2 == 30"/>
@@ -6504,7 +6504,7 @@
                                                                             <Literal 
                                                                             Text="ManageAttendance.php: Unable to get a list of students - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="120">
 </Literal>
-                                                                            <Symbolic Text="mysql_error()"/>
+                                                                            <Symbolic Text="mysql_error"/>
                                                                           </Concat>
                                                                           <Repeat>
                                                                             <Constraint Text="$page2 == 30"/>
@@ -6539,7 +6539,7 @@
                                                                               <Literal 
                                                                               Text="ManageAttendance.php: Unable to get a list of registrations - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="150">
 </Literal>
-                                                                              <Symbolic Text="mysql_error()"/>
+                                                                              <Symbolic Text="mysql_error"/>
                                                                             </Concat>
                                                                             <Repeat>
                                                                               <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
@@ -6585,13 +6585,13 @@
                                                                               <Literal 
                                                                               Text="ManageAttendance.php: Unable to get the total number of tardies - " Length="66" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="174">
 </Literal>
-                                                                              <Symbolic Text="mysql_error()"/>
+                                                                              <Symbolic Text="mysql_error"/>
                                                                             </Concat>
                                                                             <Concat>
                                                                               <Literal 
                                                                               Text="ManageAttendance.php: Unable to get the total number of absences - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="177">
 </Literal>
-                                                                              <Symbolic Text="mysql_error()"/>
+                                                                              <Symbolic Text="mysql_error"/>
                                                                             </Concat>
                                                                           </Concat>
                                                                           <Concat>
@@ -6726,7 +6726,7 @@
                                                                                 <Literal 
                                                                                 Text="PointsReport.php: Unable to get a list of semesters for drop-down - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="13">
 </Literal>
-                                                                                <Symbolic Text="mysql_error()"/>
+                                                                                <Symbolic Text="mysql_error"/>
                                                                               </Concat>
                                                                               <Repeat>
                                                                                 <Constraint Text="$page2 == 32"/>
@@ -6757,7 +6757,7 @@
                                                                                   <Literal 
                                                                                   Text="&lt;/select&gt;PointsReport.php: Unable to get a list of courses - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="52">
 </Literal>
-                                                                                  <Symbolic Text="mysql_error()"/>
+                                                                                  <Symbolic Text="mysql_error"/>
                                                                                 </Concat>
                                                                                 <Repeat>
                                                                                   <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
@@ -6817,7 +6817,7 @@
                                                                                         <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="112"/>
                                                                                         <Select>
                                                                                           <Constraint Text="($total != 0)"/>
-                                                                                          <Symbolic Text="number_format()"/>
+                                                                                          <Symbolic Text="number_format"/>
                                                                                           <Literal Text="0.00" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="95"/>
                                                                                         </Select>
                                                                                         <Literal Text="&amp;#37;&lt;/td&gt; &lt;td&gt;" Length="16" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/PointsReport.php" Line="113"/>
@@ -6991,7 +6991,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-              <Symbolic Text="htmlspecialchars()"/>
+              <Symbolic Text="htmlspecialchars"/>
               <Literal 
               Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -7072,7 +7072,7 @@
                 <Concat>
                   <Literal Text="ViewCourses.php: Unable to get the teacherid - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="2">
                   </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Concat>
                   <Literal Text=" &lt;h1&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="5"/>
@@ -7094,7 +7094,7 @@
                   <Literal 
                   Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="15">
 </Literal>
-                  <Symbolic Text="mysql_error()"/>
+                  <Symbolic Text="mysql_error"/>
                 </Concat>
                 <Repeat>
                   <Constraint Text="$page2 == 0"/>
@@ -7133,7 +7133,7 @@
                     <Literal 
                     Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewCourses.php" Line="47">
 </Literal>
-                    <Symbolic Text="mysql_error()"/>
+                    <Symbolic Text="mysql_error"/>
                   </Concat>
                   <Repeat>
                     <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
@@ -7206,14 +7206,14 @@
                       <Literal 
                       Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="6">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                   </Concat>
                   <Concat>
                     <Literal 
                     Text="ClassInfo.php: Unable to get the class information - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ClassSettings.php" Line="9">
 </Literal>
-                    <Symbolic Text="mysql_error()"/>
+                    <Symbolic Text="mysql_error"/>
                   </Concat>
                   <Concat>
                     <Literal 
@@ -7295,7 +7295,7 @@
                       <Literal 
                       Text="ManageAssignments.php: Unable to get the course name - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="6">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                     <Concat>
                       <Concat>
@@ -7303,7 +7303,7 @@
                           <Literal 
                           Text="ManageAssignments.php: Unable to insert new assignment - " Length="57" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="28">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                       </Concat>
                     </Concat>
@@ -7312,7 +7312,7 @@
                         <Literal 
                         Text="ManageAssignments.php: Unable to update the assignment information - " Length="69" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="52">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                     </Concat>
                     <Concat>
@@ -7324,7 +7324,7 @@
                               <Literal 
                               Text="DeleteFunctions.php: Unable to delete selected CourseBulletin(s) - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="183">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                           </Concat>
                         </Concat>
@@ -7403,7 +7403,7 @@
    &lt;tr class='header'&gt;
 	&lt;th colspan='6'&gt;&lt;h2&gt;" Length="1881" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="184">
 </Literal>
-                      <Symbolic Text="mysql_result()"/>
+                      <Symbolic Text="mysql_result"/>
                       <Literal 
                       Text="&lt;/th&gt;
    &lt;/tr&gt;
@@ -7421,13 +7421,13 @@
                       <Literal 
                       Text="ManageAssignments.php: Unable to retrieve total number of assignments - " Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="197">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                     <Concat>
                       <Literal 
                       Text="ManageAssignments.php: Unable to get a list of assignments - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAssignments.php" Line="210">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                     <Repeat>
                       <Constraint Text="$page2 == 2"/>
@@ -7571,7 +7571,7 @@
                               <Literal 
                               Text="ManageGrades.php: Unable to update the grade - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="12">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                           </Concat>
                           <Concat>
@@ -7579,7 +7579,7 @@
                               <Literal 
                               Text="ManageGrades.php: Unable to insert the new grade - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="21">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                           </Concat>
                         </Select>
@@ -7593,7 +7593,7 @@
                                 <Literal 
                                 Text="DeleteFunctions.php: Unable to delete selected grade(s) - " Length="58" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DeleteFunctions.php" Line="9">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                             </Concat>
                           </Concat>
@@ -7689,7 +7689,7 @@
                         <Literal 
                         Text="ManageGrades.php: Unable to get a list of assignments - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="171">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 3"/>
@@ -7727,7 +7727,7 @@
                         <Literal 
                         Text="ManageGrades.php: Unable to get the list of students for this class - " Length="70" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="201">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 3"/>
@@ -7736,7 +7736,7 @@
                             <Literal 
                             Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="209">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Concat>
                             <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="217"/>
@@ -7772,7 +7772,7 @@
                             <Literal 
                             Text="ManageGrades.php: Unable to get the grade percentages - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="226">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Concat>
                             <Select>
@@ -7950,7 +7950,7 @@
                             <Literal 
                             Text="EditAssignment.php: Unable to retrieve the information about the assignment to edit - " Length="86" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="6">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Concat>
                             <Literal 
@@ -7979,17 +7979,17 @@
                             Text="&lt;/textarea&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='total' maxlength='6' size='15' value='" Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="25">
 </Literal>
-                            <Symbolic Text="number_format()"/>
+                            <Symbolic Text="number_format"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='assigneddate' maxlength='10' size='15' value='" Length="86" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="26">
 </Literal>
-                            <Symbolic Text="convertfromdb()"/>
+                            <Symbolic Text="convertfromdb"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='duedate' maxlength='10' size='15' value='" Length="81" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditAssignment.php" Line="27">
 </Literal>
-                            <Symbolic Text="convertfromdb()"/>
+                            <Symbolic Text="convertfromdb"/>
                             <Literal 
                             Text="' /&gt;&lt;/td&gt;
    &lt;/tr&gt;
@@ -8062,7 +8062,7 @@
                                 <Literal 
                                 Text="EditGrade.php: Unable to retrieve the information about the grade - " Length="68" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="5">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                               <Literal 
                               Text="&lt;h1&gt;Edit Grade&lt;/h1&gt;
@@ -8084,7 +8084,7 @@
                                 <Literal 
                                 Text="EditGrade.php: Unable to get the student's name - " Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="25">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                               <Concat>
                                 <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="29"/>
@@ -8099,14 +8099,14 @@
 </Literal>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Symbolic Text="convertfromdb()"/>
+                                  <Symbolic Text="convertfromdb"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="32"/>
                                 </Select>
                                 <Literal 
                                 Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;input type='text' name='points' maxlength='5' size='5' value='" Length="78" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="33">
 </Literal>
-                                <Symbolic Text="number_format()"/>
+                                <Symbolic Text="number_format"/>
                                 <Literal 
                                 Text="' /&gt;&lt;/td&gt;
 	&lt;td&gt;&lt;textarea cols='20' rows='3' name='comment'&gt;" Length="59" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="34">
@@ -8142,14 +8142,14 @@
                                 Text="' /&gt;
   &lt;input type='hidden' name='wasgrade' value='" Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="49">
 </Literal>
-                                <Symbolic Text="number_format()"/>
+                                <Symbolic Text="number_format"/>
                                 <Literal 
                                 Text="' /&gt;
   &lt;input type='hidden' name='wasdate' value='" Length="50" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50">
 </Literal>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Symbolic Text="convertfromdb()"/>
+                                  <Symbolic Text="convertfromdb"/>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/EditGrade.php" Line="50"/>
                                 </Select>
                                 <Literal 
@@ -8211,7 +8211,7 @@
                                   <Literal 
                                   Text="ViewStudents.php: Unable to get a list of students - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="12">
 </Literal>
-                                  <Symbolic Text="mysql_error()"/>
+                                  <Symbolic Text="mysql_error"/>
                                 </Concat>
                                 <Literal 
                                 Text="
@@ -8229,7 +8229,7 @@
                                   <Literal 
                                   Text="ViewStudents.php: Unable to get the list of classes this student is registered for - " Length="85" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="37">
 </Literal>
-                                  <Symbolic Text="mysql_error()"/>
+                                  <Symbolic Text="mysql_error"/>
                                 </Concat>
                                 <Repeat>
                                   <Constraint Text="$page2 == 8"/>
@@ -8250,7 +8250,7 @@
                                       <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="77"/>
                                       <Undef/>
                                       <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="78"/>
-                                      <Symbolic Text="number_format()"/>
+                                      <Symbolic Text="number_format"/>
                                       <Literal Text="&amp;#37;&lt;/td&gt; &lt;td&gt;" Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewStudents.php" Line="79"/>
                                       <Select>
                                         <Constraint Text="($currperc &gt;= ($classes[1] / 100))"/>
@@ -8330,13 +8330,13 @@
                                     <Literal 
                                     Text="ViewAnnouncements.php: Unable to retrieve total number of announcements - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="19">
 </Literal>
-                                    <Symbolic Text="mysql_error()"/>
+                                    <Symbolic Text="mysql_error"/>
                                   </Concat>
                                   <Concat>
                                     <Literal 
                                     Text="ViewAnnouncements.php: Unable to retrieve the announcements - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="32">
 </Literal>
-                                    <Symbolic Text="mysql_error()"/>
+                                    <Symbolic Text="mysql_error"/>
                                   </Concat>
                                   <Repeat>
                                     <Constraint Text="$page2 == 9"/>
@@ -8357,7 +8357,7 @@
 </Literal>
                                           <Undef/>
                                           <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                          <Symbolic Text="convertfromdb()"/>
+                                          <Symbolic Text="convertfromdb"/>
                                           <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                         </Concat>
                                       </Concat>
@@ -8532,7 +8532,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                  <Symbolic Text="htmlspecialchars()"/>
+                  <Symbolic Text="htmlspecialchars"/>
                   <Literal 
                   Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -8612,7 +8612,7 @@
                       <Literal 
                       Text="ViewCourses.php: Unable to get the studentid - " Length="47" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="2">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                     <Concat>
                       <Literal Text=" &lt;h1&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="5"/>
@@ -8634,7 +8634,7 @@
                       <Literal 
                       Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="15">
 </Literal>
-                      <Symbolic Text="mysql_error()"/>
+                      <Symbolic Text="mysql_error"/>
                     </Concat>
                     <Repeat>
                       <Constraint Text="$page2 == 0"/>
@@ -8673,7 +8673,7 @@
                         <Literal 
                         Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/StudentViewCourses.php" Line="48">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
@@ -8751,14 +8751,14 @@
                           <Literal 
                           Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="6">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                       </Concat>
                       <Concat>
                         <Literal 
                         Text="ClassInfo.php: Unable to get the class information - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="9">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Concat>
                         <Literal 
@@ -8829,7 +8829,7 @@
                           <Literal 
                           Text="ManageAssignments.php: Unable to get the course name - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="6">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Concat>
                           <Literal 
@@ -8845,7 +8845,7 @@
    &lt;tr class='header'&gt;
 	&lt;th colspan='6'&gt;&lt;h2&gt;" Length="320" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="19">
 </Literal>
-                          <Symbolic Text="mysql_result()"/>
+                          <Symbolic Text="mysql_result"/>
                           <Literal 
                           Text="&lt;/th&gt;
    &lt;/tr&gt;
@@ -8862,13 +8862,13 @@
                           <Literal 
                           Text="ManageAssignments.php: Unable to retrieve total number of assignments - " Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="31">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Concat>
                           <Literal 
                           Text="ManageAssignments.php: Unable to get a list of assignments - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="44">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Repeat>
                           <Constraint Text="$page2 == 2"/>
@@ -9019,7 +9019,7 @@
                             <Literal 
                             Text="ViewGrades.php: Unable to get the list of assignments for this class - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="33">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Repeat>
                             <Constraint Text="$page2 == 3"/>
@@ -9028,7 +9028,7 @@
                                 <Literal 
                                 Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="41">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                               <Concat>
                                 <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="49"/>
@@ -9055,7 +9055,7 @@
                                 <Literal 
                                 Text="ManageGrades.php: Unable to get the grade percentages - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="57">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                               <Concat>
                                 <Select>
@@ -9184,13 +9184,13 @@
                               <Literal 
                               Text="ViewAnnouncements.php: Unable to retrieve total number of announcements - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="19">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                             <Concat>
                               <Literal 
                               Text="ViewAnnouncements.php: Unable to retrieve the announcements - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="32">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                             <Repeat>
                               <Constraint Text="$page2 == 4"/>
@@ -9211,7 +9211,7 @@
 </Literal>
                                     <Undef/>
                                     <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                    <Symbolic Text="convertfromdb()"/>
+                                    <Symbolic Text="convertfromdb"/>
                                     <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                   </Concat>
                                 </Concat>
@@ -9384,7 +9384,7 @@
   &lt;td class='b'&gt;
    &lt;div class='yellowtext' align='center'&gt;" Length="311" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/maketop.php" Line="11">
 </Literal>
-                    <Symbolic Text="htmlspecialchars()"/>
+                    <Symbolic Text="htmlspecialchars"/>
                     <Literal 
                     Text="&lt;/div&gt;
   &lt;/td&gt;
@@ -9506,7 +9506,7 @@
                         <Literal 
                         Text="ViewStudents.php: Unable to get a list of students - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewStudents.php" Line="22">
 </Literal>
-                        <Symbolic Text="mysql_error()"/>
+                        <Symbolic Text="mysql_error"/>
                       </Concat>
                       <Repeat>
                         <Constraint Text="$page2 == 0"/>
@@ -9572,14 +9572,14 @@
                             <Literal 
                             Text="ClassSettings.php: Unable to update the grading scale - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="6">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                         </Concat>
                         <Concat>
                           <Literal 
                           Text="ClassInfo.php: Unable to get the class information - " Length="53" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewClassSettings.php" Line="9">
 </Literal>
-                          <Symbolic Text="mysql_error()"/>
+                          <Symbolic Text="mysql_error"/>
                         </Concat>
                         <Concat>
                           <Literal 
@@ -9650,7 +9650,7 @@
                             <Literal 
                             Text="ManageAssignments.php: Unable to get the course name - " Length="55" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="6">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Concat>
                             <Literal 
@@ -9666,7 +9666,7 @@
    &lt;tr class='header'&gt;
 	&lt;th colspan='6'&gt;&lt;h2&gt;" Length="320" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="19">
 </Literal>
-                            <Symbolic Text="mysql_result()"/>
+                            <Symbolic Text="mysql_result"/>
                             <Literal 
                             Text="&lt;/th&gt;
    &lt;/tr&gt;
@@ -9683,13 +9683,13 @@
                             <Literal 
                             Text="ManageAssignments.php: Unable to retrieve total number of assignments - " Length="72" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="31">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Concat>
                             <Literal 
                             Text="ManageAssignments.php: Unable to get a list of assignments - " Length="61" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAssignments.php" Line="44">
 </Literal>
-                            <Symbolic Text="mysql_error()"/>
+                            <Symbolic Text="mysql_error"/>
                           </Concat>
                           <Repeat>
                             <Constraint Text="$page2 == 2"/>
@@ -9840,7 +9840,7 @@
                               <Literal 
                               Text="ViewGrades.php: Unable to get the list of assignments for this class - " Length="71" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="33">
 </Literal>
-                              <Symbolic Text="mysql_error()"/>
+                              <Symbolic Text="mysql_error"/>
                             </Concat>
                             <Repeat>
                               <Constraint Text="$page2 == 3"/>
@@ -9849,7 +9849,7 @@
                                   <Literal 
                                   Text="ManageGrades.php: Unable to get a list of gradess - " Length="52" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="41">
 </Literal>
-                                  <Symbolic Text="mysql_error()"/>
+                                  <Symbolic Text="mysql_error"/>
                                 </Concat>
                                 <Concat>
                                   <Literal Text="&lt;tr class='" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="49"/>
@@ -9876,7 +9876,7 @@
                                   <Literal 
                                   Text="ManageGrades.php: Unable to get the grade percentages - " Length="56" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="57">
 </Literal>
-                                  <Symbolic Text="mysql_error()"/>
+                                  <Symbolic Text="mysql_error"/>
                                 </Concat>
                                 <Concat>
                                   <Select>
@@ -10005,13 +10005,13 @@
                                 <Literal 
                                 Text="ViewAnnouncements.php: Unable to retrieve total number of announcements - " Length="74" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="19">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                               <Concat>
                                 <Literal 
                                 Text="ViewAnnouncements.php: Unable to retrieve the announcements - " Length="62" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="32">
 </Literal>
-                                <Symbolic Text="mysql_error()"/>
+                                <Symbolic Text="mysql_error"/>
                               </Concat>
                               <Repeat>
                                 <Constraint Text="$page2 == 4"/>
@@ -10032,7 +10032,7 @@
 </Literal>
                                       <Undef/>
                                       <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="45"/>
-                                      <Symbolic Text="convertfromdb()"/>
+                                      <Symbolic Text="convertfromdb"/>
                                       <Literal Text="&lt;/td&gt; &lt;/tr&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewAnnouncements.php" Line="46"/>
                                     </Concat>
                                   </Concat>
@@ -10131,7 +10131,7 @@
 </Literal>
                                   <Symbolic Text="$_POST"/>
                                   <Literal Text=" - " Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="3"/>
-                                  <Symbolic Text="mysql_error()"/>
+                                  <Symbolic Text="mysql_error"/>
                                 </Concat>
                                 <Concat>
                                   <Literal Text=" &lt;h1&gt;" Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="6"/>
@@ -10153,7 +10153,7 @@
                                   <Literal 
                                   Text="ViewCourses.php: Unable to get a list of semesters for drop-down - " Length="67" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="16">
 </Literal>
-                                  <Symbolic Text="mysql_error()"/>
+                                  <Symbolic Text="mysql_error"/>
                                 </Concat>
                                 <Repeat>
                                   <Constraint Text="$page2 == 5"/>
@@ -10192,7 +10192,7 @@
                                     <Literal 
                                     Text="ViewCourses.php: Unable to get a list of classes - " Length="51" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ParentViewCourses.php" Line="49">
 </Literal>
-                                    <Symbolic Text="mysql_error()"/>
+                                    <Symbolic Text="mysql_error"/>
                                   </Concat>
                                   <Repeat>
                                     <Constraint Text="($_POST[&quot;semester&quot;] != null)"/>
