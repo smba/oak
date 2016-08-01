@@ -7,6 +7,8 @@ import com.caucho.quercus.Location
 import edu.cmu.cs.oak.env.Environment
 import edu.cmu.cs.oak.lib.array.ArrayPop
 import edu.cmu.cs.oak.lib.array.ArraySlice
+import edu.cmu.cs.oak.lib.array.ArrayWalk
+import edu.cmu.cs.oak.lib.array.ArrayMap
 import edu.cmu.cs.oak.lib.array.Count
 import edu.cmu.cs.oak.lib.array.Current
 import edu.cmu.cs.oak.lib.array.Implode
@@ -16,36 +18,36 @@ import edu.cmu.cs.oak.lib.array.KSort
 import edu.cmu.cs.oak.lib.array.Next
 import edu.cmu.cs.oak.lib.array.Reset
 import edu.cmu.cs.oak.lib.builtin.Addslashes
+import edu.cmu.cs.oak.lib.builtin.CallUserFunc
 import edu.cmu.cs.oak.lib.builtin.CallUserFuncArray
+import edu.cmu.cs.oak.lib.builtin.Chr
 import edu.cmu.cs.oak.lib.builtin.Define
 import edu.cmu.cs.oak.lib.builtin.Defined
 import edu.cmu.cs.oak.lib.builtin.DirName
+import edu.cmu.cs.oak.lib.builtin.Explode
+import edu.cmu.cs.oak.lib.builtin.FileExists
+import edu.cmu.cs.oak.lib.builtin.FuncGetArg
 import edu.cmu.cs.oak.lib.builtin.FuncGetArgs
+import edu.cmu.cs.oak.lib.builtin.FunctionExists
+import edu.cmu.cs.oak.lib.builtin.InArray
 import edu.cmu.cs.oak.lib.builtin.IsNull
 import edu.cmu.cs.oak.lib.builtin.IsObject
 import edu.cmu.cs.oak.lib.builtin.IsString
+import edu.cmu.cs.oak.lib.builtin.Localizate
+import edu.cmu.cs.oak.lib.builtin.Ltrim
+import edu.cmu.cs.oak.lib.builtin.Ord
 import edu.cmu.cs.oak.lib.builtin.PregReplace
+import edu.cmu.cs.oak.lib.builtin.PregReplaceCallback
 import edu.cmu.cs.oak.lib.builtin.PregSplit
 import edu.cmu.cs.oak.lib.builtin.Print
+import edu.cmu.cs.oak.lib.builtin.Rtrim
 import edu.cmu.cs.oak.lib.builtin.Sprintf
 import edu.cmu.cs.oak.lib.builtin.StrReplace
 import edu.cmu.cs.oak.lib.builtin.Substr
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.lib.builtin.Localizate
 import edu.cmu.cs.oak.lib.builtin.Trim
-import edu.cmu.cs.oak.lib.builtin.FunctionExists
-import edu.cmu.cs.oak.lib.builtin.Chr
-import edu.cmu.cs.oak.lib.builtin.Explode
-import edu.cmu.cs.oak.lib.builtin.Ltrim
-import edu.cmu.cs.oak.lib.builtin.PregReplaceCallback
-import edu.cmu.cs.oak.lib.builtin.Ord
-import edu.cmu.cs.oak.lib.builtin.InArray
-import edu.cmu.cs.oak.lib.builtin.FuncGetArg
-import edu.cmu.cs.oak.lib.builtin.Rtrim
-import edu.cmu.cs.oak.lib.builtin.FileExists
-import edu.cmu.cs.oak.lib.builtin.CallUserFunc
-import edu.cmu.cs.oak.lib.builtin.VersionCompare
 import edu.cmu.cs.oak.lib.builtin.UcFirst
+import edu.cmu.cs.oak.lib.builtin.VersionCompare
+import edu.cmu.cs.oak.value.OakValue
 
 /**
  * Via this plugin loader the interpreter can 
@@ -132,7 +134,8 @@ trait InterpreterPluginProvider {
     loadPlugin(new CallUserFunc)
     loadPlugin(new VersionCompare)
     loadPlugin(new UcFirst)
-    
+    loadPlugin(new ArrayWalk)
+    loadPlugin(new ArrayMap)
   }
 
 }

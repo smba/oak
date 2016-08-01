@@ -173,24 +173,24 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
 
       //#ifdef WORDPRESS_DEPENDENCIES
-//@      logger.info("<Pear>")
-//@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-//@       logger.info("</Pear>")
-//@       
-//@      val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-//@      this.setCurrentPath(confpath)
-//@      logger.info("<Config>")
-//@      execute(engine.loadFromFile(confpath), env)
-//@      logger.info("</Config>")
-//@      this.resumePreviousCurrent()
-//@      
-//@      val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-//@      this.setCurrentPath(pluginpath)
-//@      logger.info("<Config>")
-//@      execute(engine.loadFromFile(pluginpath), env)
-//@      logger.info("</Config>")
-//@      this.resumePreviousCurrent()
-//@
+      //@      logger.info("<Pear>")
+      //@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      //@       logger.info("</Pear>")
+      //@       
+      //@      val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+      //@      this.setCurrentPath(confpath)
+      //@      logger.info("<Config>")
+      //@      execute(engine.loadFromFile(confpath), env)
+      //@      logger.info("</Config>")
+      //@      this.resumePreviousCurrent()
+      //@      
+      //@      val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+      //@      this.setCurrentPath(pluginpath)
+      //@      logger.info("<Config>")
+      //@      execute(engine.loadFromFile(pluginpath), env)
+      //@      logger.info("</Config>")
+      //@      this.resumePreviousCurrent()
+      //@
       //#endif
     } catch {
       case null => {}
@@ -200,7 +200,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     // Execute the parsed program
 
     env.resurrect()
-    
+
     logger.info(s"<Program> ${env.hasTerminated()}")
     execute(program, env)
     logger.info("</Program>")
@@ -516,37 +516,37 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     /* Execute both branches with the corresponding branch environments. */
 
     //#ifndef ALL_BRANCHES
-        if (test.isInstanceOf[BooleanValue]) {
-          val testB = test.asInstanceOf[BooleanValue]
-          if (testB.v) {
-            execute(trueBlock, branches.head)
-            env.weaveDelta(branches.head.getDelta)
-          } else {
-            try {
-              execute(falseBlock, branches.last)
-              env.weaveDelta(branches.last.getDelta)
-            } catch {
-              case e: Throwable => branches.last // ?
-            }
-          }
-        } else { 
-    //#endif
-
-    execute(trueBlock, branches.head)
-
-    try {
-      execute(falseBlock, branches.last)
-    } catch {
-      case e: Throwable => {
+    if (test.isInstanceOf[BooleanValue]) {
+      val testB = test.asInstanceOf[BooleanValue]
+      if (testB.v) {
+        execute(trueBlock, branches.head)
         env.weaveDelta(branches.head.getDelta)
-        return ControlCode.OK
-      }
-    }
-
-    env.weaveDelta(BranchEnv.join(List(branches.head, branches.last), List(condition)))
-
-    //#ifndef ALL_BRANCHES
+      } else {
+        try {
+          execute(falseBlock, branches.last)
+          env.weaveDelta(branches.last.getDelta)
+        } catch {
+          case e: Throwable => branches.last // ?
         }
+      }
+    } else {
+      //#endif
+
+      execute(trueBlock, branches.head)
+
+      try {
+        execute(falseBlock, branches.last)
+      } catch {
+        case e: Throwable => {
+          env.weaveDelta(branches.head.getDelta)
+          return ControlCode.OK
+        }
+      }
+
+      env.weaveDelta(BranchEnv.join(List(branches.head, branches.last), List(condition)))
+
+      //#ifndef ALL_BRANCHES
+    }
     //#endif
     return ControlCode.OK
   }
@@ -851,7 +851,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               env.weaveDelta(loop_env.getDelta())
 
               //#ifndef CONCRETE_FOREACH_LOOP
-//@                                                                      break
+              //@                                                                      break
               //#endif
             }
           }
@@ -1064,73 +1064,24 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     val name = e._name.toString().toLowerCase
 
     /* Retrieve the function call arguments. */
-    var args = ListBuffer[Expr]()
-    e._args.foreach {
-      o => args += o
-    }
-
-    /* If the function has already been called, i.e., its name
-       * is contained in the call stack, we just return a symbol value
-       * in order to avoid recursive function calls. */
-    if (!(env.getCalls().map(c => c.name) contains name)) {
-
-      /* If the function called refers to one implemented library function, such as
-       * count($x) for arrays or concat/. for string literals, that implementation
-       * will be used (instead). 
-       * Each plugin implements its own library method, this.plugins is a map from 
-       * the library function names to the actual plugin.
-       * */
-      if (getPlugins.contains(name)) {
-
-        /* The library function plugin visits and evaluates the expression. */
-        val plugin = getPlugin(name)
-        return this.accept(getPlugin(name), args.map(e => evaluate(e, env)).toList, e._location, env)
-      }
-
-      val functionCall = Call(name, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
-
-      /* Retrieve the function definition from the environment. If we fail
-       * loading the function, we return with a symbol value, i.e., the called function
-       * is either undefined or unimplemented. */
-      val function = try {
-        env.getFunction(name)
-      } catch {
-        case ex: Exception => {
-
-          // Record function call
-          recordUndefinedCall(functionCall)
-
-          return SymbolValue(e.toString, OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
+    var args = try {
+      (env.getFunction(name).getArgs.toList zip e._args.toList).map {
+        case (arg, expr) => {
+          if (arg.startsWith("&")) {
+            env.getRef(expr.toString, true)
+          } else {
+            evaluate(expr, env)
+          }
         }
       }
-      // Assert that the number of arguments in the function call and declaration match
-      //assert(function.getArgs.length == args.length)
-
-      /* CALL-BY-VALUE only */
-
-      /**
-       * Create a new (function) environment with pre-assigned arguments
-       */
-      val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
-      prepareFunctionOrMethod(function, env, functionEnv, args.toList)
-      execute(function.getStatement, functionEnv)
-
-      val returnValue = try {
-        functionEnv.lookup("$return")
-      } catch {
-        case e: Exception => NullValue("$return")
-      }
-
-      //      returnValue match {
-      //        case s: SymbolicValue => recordDefinedSymbolicCall(functionCall, s)
-      //        case _ => {}
-      //      }
-
-      env.weaveDelta(functionEnv.getDelta())
-      returnValue
-    } else {
-      return SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.RECURSION)
+    } catch {
+      case _ => e._args.toList.map(e => evaluate(e, env))
     }
+
+    println("args " + args)
+    val loc = e._location
+
+    this.call(name, args, loc, env)
 
   }
 
@@ -1174,30 +1125,75 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
     }
     //#else
-//@                    return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+    //@                    return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     //#endif
   }
 
   @deprecated def call(function_name: String, args: List[OakValue], loc: Location, env: Environment): OakValue = {
-    val function_call = new Call(function_name, (Paths.get(loc.getFileName), loc.getLineNumber), args)
-    val function_env = Environment.createFunctionEnvironment(env, function_call)
-    val function_def = env.getFunction(function_name)
 
-    prepareFunctionOrMethod(function_def, env, function_env, args)
-    execute(function_def.statement, env)
+    if (!(env.getCalls().map(c => c.name) contains function_name)) {
 
-    env.weaveDelta(function_env.getDelta())
+      /* If the function called refers to one implemented library function, such as
+       * count($x) for arrays or concat/. for string literals, that implementation
+       * will be used (instead). 
+       * Each plugin implements its own library method, this.plugins is a map from 
+       * the library function names to the actual plugin.
+       * */
+      if (getPlugins.contains(function_name)) {
 
-    return try {
-      function_env.lookup("$return")
-    } catch {
-      case e: Exception => {
-        try {
-          function_env.lookup("$return_ref")
-        } catch {
-          case e: Exception => NullValue("$return")
+        /* The library function plugin visits and evaluates the expression. */
+        val plugin = getPlugin(function_name)
+        return this.accept(getPlugin(function_name), args, loc, env)
+      }
+
+      val function_call = new Call(function_name, (Paths.get(loc.getFileName), loc.getLineNumber), args)
+
+      /* Retrieve the function definition from the environment. If we fail
+       * loading the function, we return with a symbol value, i.e., the called function
+       * is either undefined or unimplemented. */
+      val function = try {
+        env.getFunction(function_name)
+      } catch {
+        case ex: Exception => {
+          recordUndefinedCall(function_call)
+          return SymbolValue(function_name, OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
         }
       }
+
+      // Assert that the number of arguments in the function call and declaration match
+      //assert(function.getArgs.length == args.length)
+
+      /* CALL-BY-VALUE only */
+
+      /**
+       * Create a new (function) environment with pre-assigned arguments
+       */
+      val function_env = Environment.createFunctionEnvironment(env, function_call)
+      prepareFunctionOrMethod(function, env, function_env, args)
+      execute(function.statement, function_env)
+
+      val returnValue = try {
+        function_env.lookup("$return")
+      } catch {
+        case e: Exception => NullValue("$return")
+      }
+
+      //      returnValue match {
+      //        case s: SymbolicValue => recordDefinedSymbolicCall(functionCall, s)
+      //        case _ => {}
+      //      }
+
+      println(env.variables)
+      println(env.references)
+
+      println(function_env.variables)
+      println(function_env.getDelta().joinedHeap)
+
+      env.weaveDelta(function_env.getDelta())
+
+      returnValue
+    } else {
+      return SymbolValue(function_name, OakHeap.getIndex, SymbolFlag.RECURSION)
     }
   }
 
@@ -1720,6 +1716,21 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           //@                    return SymbolValue("", OakHeap.getIndex(), SymbolFlag.DUMMY)
           //#endif
 
+          /* Retrieve the function call arguments. */
+          var args2 = try {
+            (env.getFunction(methodName).getArgs.toList zip args.toList).map {
+              case (arg, expr) => {
+                if (arg.startsWith("&")) {
+                  env.getRef(expr.toString, true)
+                } else {
+                  evaluate(expr, env)
+                }
+              }
+            }
+          } catch {
+            case _ => args.toList.map(e => evaluate(e, env))
+          }
+
           val methodCall = Call(objectValue.objectClass.name + "." + methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
           if (!(env.getCalls().map { c => c.name } contains methodCall.name)) {
             val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
@@ -1772,7 +1783,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           Choice.optimized(choice.p, r1, r2)
 
           //#else 
-//@                                                  NullValue("")
+          //@                                                  NullValue("")
           //#endif
           //#endif
 
@@ -1960,18 +1971,17 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         try {
           val program = this.engine.loadFromFile(resolved_path.get)
           //this.includes = this.includes.push(includePaf)
-          
+
           this.setCurrentPath(resolved_path.get)
           execute(program, env)
           this.resumePreviousCurrent()
           logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
-          
-          
+
         } catch {
           case e: FileNotFoundException => {
-            logger.info(env.getCalls()+"")
-            logger.info(this.getCurrentPath()+"")
-            logger.error(e + s" $expr" + x+"")
+            logger.info(env.getCalls() + "")
+            logger.info(this.getCurrentPath() + "")
+            logger.error(e + s" $expr" + x + "")
           }
         }
       }
@@ -2014,7 +2024,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateBinaryCharAtExpr(e: BinaryCharAtExpr, env: Environment): OakValue = {
     val obj = evaluate(e._objExpr, env) // expected to be a StringValue
     val index = evaluate(e._indexExpr, env) // expected to be an IntValue
-    
+
     obj match {
       case s: StringValue => {
         index match {
@@ -2026,9 +2036,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
       case _ => SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
     }
-    
+
   }
-  
+
   def evaluate(e: Expr, env: Environment): OakValue = {
 
     e match {
@@ -2215,28 +2225,23 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       t =>
         {
           if (t._1.startsWith("&")) {
-            try {
-              val functionRef = env.getRef(t._2.toString)
-              functionEnv.setRef("$" + t._1.replace("&", ""), functionRef)
-              t._2 match {
-                case e: Expr => functionEnv.insert(functionRef, evaluate(e, env))
-                case v: OakValue => functionEnv.insert(functionRef, v)
-              }
-
-            } catch {
-              case nsee: VariableNotFoundException => {
-                val functionRef = Reference(t._1.toString, t._1.toString + OakHeap.getIndex())
-                functionEnv.setRef("$" + t._1.replace("&", ""), functionRef)
-                functionEnv.insert(functionRef, NullValue("prepareFunctionOrMethod01"))
-              }
+            if (t._2.isInstanceOf[Reference]) {
+              val reference = t._2.asInstanceOf[Reference]
+              println("jooooo " + reference)
+              functionEnv.setRef("$" + t._1.slice(1, t._1.size), reference)
+              functionEnv.insert(reference, env.extract(reference))
+            } else {
+              functionEnv.update("$" + t._1.slice(1, t._1.size), NullValue(""))
             }
-
           } else {
+            println("Passing value " + t)
             val functionVal = t._2 match {
               case e: Expr => {
                 val ev = evaluate(e, env)
+                println("passing of type " + ev.getClass())
                 ev match {
                   case av: ArrayValue => {
+                    println("DERPCOPY")
                     val deepCopy = new ArrayValue()
                     av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
                     deepCopy
@@ -2245,9 +2250,17 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                   case value: OakValue => value
                 }
               }
-              case v: OakValue => v
+              case av: ArrayValue => {
+                println("DERPCOPY")
+                val deepCopy = new ArrayValue()
+                av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
+                deepCopy
+              }
+              case null => null
+              case value: OakValue => value
 
             }
+            println(" updated $" + t._1.replace("&", ""), functionVal)
             functionEnv.update("$" + t._1.replace("&", ""), functionVal)
           }
         }
@@ -2267,6 +2280,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           }
       }
     }
+    println("§")
   }
 
   /**

@@ -84,6 +84,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * Map of fuńction names and function definitions
    */
   var funcs = AnyRefMap[String, FunctionDef]()
+  
   /**
    * Map of class definitions. All classes defined during the program execution
    * are stored here.
@@ -106,7 +107,6 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param value OakValue to assign to the variable
    */
   def update(name: String, value: OakValue) {
-    
     changed = true
     if (variables.contains(name)) {
       val ref = variables.get(name).get.asInstanceOf[Reference]

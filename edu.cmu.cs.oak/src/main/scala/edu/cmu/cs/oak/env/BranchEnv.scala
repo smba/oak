@@ -26,15 +26,6 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
    */
   var updatedClassDefs = Set[String]()
 
-  /**
-   * In addition to {@see edu.cmu.cs.oak.env.Environment#update}, we
-   * keep track of the modification of variables.
-   */
-  override def update(name: String, value: OakValue): Unit = {
-    super.update(name, value)
-    //updates += name
-  }
-
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint + "]"
 
   def definesConstant(name: String): Boolean = {
@@ -160,7 +151,7 @@ object BranchEnv {
       funcs => funcs.foreach {
         case (fname, fdef) => {
           if (!functions.get(fname).isEmpty) {
-            //logger.warn("Duplicate function name " + fname + "().")
+            logger.warn("Duplicate function name " + fname + "().")
           } else {
             functions.put(fname, fdef)
           }
@@ -177,7 +168,7 @@ object BranchEnv {
       funcs => funcs.foreach {
         case (cname, cdef) => {
           if (!functions.get(cname).isEmpty) {
-            //logger.warn("Duplicate class definition name " + cname + ".")
+            logger.warn("Duplicate class definition name " + cname + ".")
           } else {
             functions.put(cname, cdef)
           }
