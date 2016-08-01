@@ -10,7 +10,7 @@ import edu.cmu.cs.oak.nodes.SelectNode
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.Reference
 import org.slf4j.LoggerFactory
 
 /**
@@ -108,14 +108,14 @@ object BranchEnv {
   }
 
   /**
-   * Array values use references (i.e, OakVariable instances) internally to point to
+   * Array values use references (i.e, Reference instances) internally to point to
    * their elements. Since array (may) change during the execution, we union all
-   * environments heaps (OakVariable -> OakValue) in order to preserve the references.
+   * environments heaps (Reference -> OakValue) in order to preserve the references.
    *
    * @param envs List of BranchEnvironments of which we want to merge
-   * @return mapping from OakVariables to OakValues of all BranchEnvs passed
+   * @return mapping from References to OakValues of all BranchEnvs passed
    */
-  private def joinHeaps(envs: List[BranchEnv]): AnyRefMap[OakVariable, OakValue] = {
+  private def joinHeaps(envs: List[BranchEnv]): AnyRefMap[Reference, OakValue] = {
     def merge[A <: AnyRef, B](ms: List[collection.mutable.Map[A, B]]): AnyRefMap[A, B] = {
       val d = AnyRefMap[A, B]()      
       ms.foreach { m => m. foreach { case (k, v) => d.put(k, v) } }

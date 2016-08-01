@@ -116,7 +116,7 @@ import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NumericValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.Reference
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
@@ -273,7 +273,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         val value = evaluate(expr, env)
         val valueX = value match {
           case sv: StringValue => sv
-          case ov: OakVariable => env.extract(ov)
+          case ov: Reference => env.extract(ov)
           case a: ArrayValue => StringValue(a.toString(), "", 0) //throw new RuntimeException("Can't echo an entire array (" + expr + ").")
           case _ => value
         }
@@ -355,10 +355,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         /* Update the environment so that 
          * + $var is mapped to the same reference as evaluate($value)
          * */
-        val oakVariable = value match {
+        val Reference = value match {
           case varexpr: VarExpr => {
 
-            /* Look up the name of the referenced variable in the String -> OakVariable map*/
+            /* Look up the name of the referenced variable in the String -> Reference map*/
             env.getRef(varexpr.toString)
           }
           case aget: ArrayGetExpr => {
@@ -381,7 +381,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
           /*
            * Since we are inside a BinaryAssignRefExpr, we assume that the returned value 
-           * actually is a OakVariable/reference
+           * actually is a Reference/reference
            */
           case ome: ObjectMethodExpr => {
             evaluate(ome, env) // return value
@@ -393,7 +393,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         }
 
         /* Update */
-        env.setRef(name.toString, oakVariable)
+        env.setRef(name.toString, Reference)
         return ControlCode.OK
       }
 
@@ -1400,16 +1400,16 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
          *
          * @return Reference to the array value to manipulate
          */
-        def recursive_array_lookup(ref: OakVariable, indices: List[OakValue]): OakVariable = {
+        def recursive_array_lookup(ref: Reference, indices: List[OakValue]): Reference = {
           indices.size match {
             case 1 => ref
             case _ => env.extract(ref) match {
-              case vref: OakVariable => {
+              case vref: Reference => {
                 recursive_array_lookup(vref, indices)
               }
               case av: ArrayValue => {
                 if (!av.hasKey(indices.head)) {
-                  val temp_ref = OakVariable(array_name + OakHeap.getIndex(), "")
+                  val temp_ref = Reference(array_name + OakHeap.getIndex(), "")
                   env.insert(temp_ref, new ArrayValue())
                   av.setRef(indices.head, temp_ref)
                 }
@@ -1426,7 +1426,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           env.getRef(array_name, limitScope = false)
         } catch {
           case vnfe: VariableNotFoundException => {
-            val newRef = OakVariable(array_name + OakHeap.getIndex(), "")
+            val newRef = Reference(array_name + OakHeap.getIndex(), "")
             env.insert(newRef, new ArrayValue())
             env.setRef(array_name, newRef)
             newRef
@@ -1635,7 +1635,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     val ev = evaluate(e._expr, env)
 
     val ev2 = ev match {
-      case ref: OakVariable => env.extract(ref)
+      case ref: Reference => env.extract(ref)
       case _ => ev
     }
 
@@ -2225,7 +2225,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
             } catch {
               case nsee: VariableNotFoundException => {
-                val functionRef = OakVariable(t._1.toString, t._1.toString + OakHeap.getIndex())
+                val functionRef = Reference(t._1.toString, t._1.toString + OakHeap.getIndex())
                 functionEnv.setRef("$" + t._1.replace("&", ""), functionRef)
                 functionEnv.insert(functionRef, NullValue("prepareFunctionOrMethod01"))
               }

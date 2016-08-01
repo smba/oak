@@ -21,7 +21,7 @@ import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.OakVariable
+import edu.cmu.cs.oak.value.Reference
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
@@ -60,7 +60,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   /**
    * Map of references
    */
-  val references = AnyRefMap[OakVariable, OakValue]()
+  val references = AnyRefMap[Reference, OakValue]()
 
   /**
    * Map of constants that are defined during the execution
@@ -109,10 +109,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     
     changed = true
     if (variables.contains(name)) {
-      val ref = variables.get(name).get.asInstanceOf[OakVariable]
+      val ref = variables.get(name).get.asInstanceOf[Reference]
       references.put(ref, value)
     } else {
-      val variable = OakVariable(name + OakHeap.getIndex(), name)
+      val variable = Reference(name + OakHeap.getIndex(), name)
       references.put(variable, value)
       variables.put(name, variable)
     }
@@ -143,9 +143,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       getRef(name)
     }
     
-    def recursiveLookup(reference: OakVariable): OakValue = {
+    def recursiveLookup(reference: Reference): OakValue = {
       this.extract(reference) match {
-        case ref2: OakVariable => recursiveLookup(ref2)
+        case ref2: Reference => recursiveLookup(ref2)
         case null => null
         case ov: OakValue => ov
       }
@@ -195,12 +195,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    *  @param name of the variable
    *  @param reference to point to
    */
-  def setRef(name: String, ref: OakVariable): Unit = {
+  def setRef(name: String, ref: Reference): Unit = {
     changed = true
     variables.put(name, ref)
   }
 
-  def extract(reference: OakVariable): OakValue = {
+  def extract(reference: Reference): OakValue = {
     if (references.contains(reference)) {
       references.get(reference).get
     } else if ((parent != null)) {
@@ -210,7 +210,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     }
   }
 
-  def insert(reference: OakVariable, value: OakValue) {
+  def insert(reference: Reference, value: OakValue) {
     
     changed = true
     references.put(reference, value)
@@ -221,9 +221,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param name Name of the variable
    * @return reference that variable 'name points to
    */
-  def getRef(name: String, limitScope: Boolean = true): OakVariable = {
+  def getRef(name: String, limitScope: Boolean = true): Reference = {
     if (variables.contains(name)) {
-      val ref = variables.get(name).get.asInstanceOf[OakVariable]
+      val ref = variables.get(name).get.asInstanceOf[Reference]
       ref
     } else if (parent != null) {
       parent.getRef(name)
@@ -375,10 +375,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     // 3) Update the variables that have changed during the execution of the branches
     joinResult.joinedVariables.foreach {
       case (name, value) => {
-        if (!value.isInstanceOf[OakVariable]) {
+        if (!value.isInstanceOf[Reference]) {
           this.update(name, value)
         } else {
-          this.setRef(name, value.asInstanceOf[OakVariable])
+          this.setRef(name, value.asInstanceOf[Reference])
         }
       }
     }

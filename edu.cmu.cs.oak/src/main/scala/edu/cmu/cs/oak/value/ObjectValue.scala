@@ -46,7 +46,7 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
     fields.set(StringValue(fieldKey, "", 0), value, env) //FIXME is this right?
   }
 
-  def getFieldRef(fieldKey: String): OakVariable = {
+  def getFieldRef(fieldKey: String): Reference = {
     return fields.getRef(StringValue(fieldKey, "", 0))
   }
 

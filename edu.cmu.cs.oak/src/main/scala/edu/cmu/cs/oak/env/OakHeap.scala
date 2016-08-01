@@ -1,8 +1,5 @@
 package edu.cmu.cs.oak.env
 
-import edu.cmu.cs.oak.value.{OakValue, OakVariable}
-import edu.cmu.cs.oak.exceptions.VariableNotFoundException
-
 class OakHeap() {
 //
 //  val varval = collection.mutable.Map[OakVariable, OakValue]()

@@ -11,7 +11,7 @@ import edu.cmu.cs.oak.exceptions.VariableNotFoundException
  */
 class ArrayValue extends OakValue {
 
-  var array = LinkedHashMap[OakValue, OakVariable]()
+  var array = LinkedHashMap[OakValue, Reference]()
   
   var current = 0
 
@@ -27,13 +27,13 @@ class ArrayValue extends OakValue {
     val ref = if (array.keySet.contains(index)) {
       this.getRef(index)
     } else {
-      OakVariable("arrayVal" + OakHeap.getIndex, "") //FIXME find variable name
+      Reference("arrayVal" + OakHeap.getIndex, "") //FIXME find variable name
     }
     array.put(index, ref)
     env.insert(ref, value)
   }
   
-  def getCurrent(): OakVariable = {
+  def getCurrent(): Reference = {
     if (array.size == 0) {
       null
     } else {
@@ -42,7 +42,7 @@ class ArrayValue extends OakValue {
     }
   }
   
-  def getNext(): OakVariable = {
+  def getNext(): Reference = {
     if (array.size == 0) {
       null
     } else {
@@ -90,7 +90,7 @@ class ArrayValue extends OakValue {
     }
   }
   
-  def setRef(index: OakValue, ref: OakVariable): Unit = {
+  def setRef(index: OakValue, ref: Reference): Unit = {
     
     if (index.isInstanceOf[StringValue]) {
       index.asInstanceOf[StringValue].setLocation(null)
@@ -99,7 +99,7 @@ class ArrayValue extends OakValue {
     array.put(index, ref)
   }
   
-  def getRef(index: OakValue): OakVariable = {
+  def getRef(index: OakValue): Reference = {
     val ref = array.get(index)
     if (ref.isEmpty) {
       throw new VariableNotFoundException(index.toString())
