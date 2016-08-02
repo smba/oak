@@ -45,7 +45,7 @@ object OakUnitTest extends App {
   //val pp = new PrettyPrinter(200, 0)
 
   /**
-   * Read a PHP source code from file, parses & executes it.
+   * Read a PHP source codesta from file, parses & executes it.
    *
    * @param script PHP source code file
    * @return (ControlCode, Environment)
@@ -60,7 +60,7 @@ object OakUnitTest extends App {
   }
 
   
-  val env = loadAndExecute(url("wordpress/index.php"))
+  val env = loadAndExecute(url("testScripts/array_functions.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
 

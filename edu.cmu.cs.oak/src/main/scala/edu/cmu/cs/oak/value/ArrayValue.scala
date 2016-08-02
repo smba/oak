@@ -150,6 +150,7 @@ class ArrayValue extends OakValue {
           case ov: OakValue => {
             av.set(key, ov, env)
           }
+          case null => av.set(key, NullValue(""), env)
         }
       }
     }

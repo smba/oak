@@ -171,26 +171,27 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
-
+      execute(engine.loadFromFile(Paths.get(getClass.getResource("/array_shift.php").toURI())), env)
+      
       //#ifdef WORDPRESS_DEPENDENCIES
-      //@      logger.info("<Pear>")
-      //@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      //@       logger.info("</Pear>")
-      //@       
-      //@      val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-      //@      this.setCurrentPath(confpath)
-      //@      logger.info("<Config>")
-      //@      execute(engine.loadFromFile(confpath), env)
-      //@      logger.info("</Config>")
-      //@      this.resumePreviousCurrent()
-      //@      
-      //@      val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-      //@      this.setCurrentPath(pluginpath)
-      //@      logger.info("<Config>")
-      //@      execute(engine.loadFromFile(pluginpath), env)
-      //@      logger.info("</Config>")
-      //@      this.resumePreviousCurrent()
-      //@
+//@            logger.info("<Pear>")
+//@            execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+//@             logger.info("</Pear>")
+//@             
+//@            val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+//@            this.setCurrentPath(confpath)
+//@            logger.info("<Config>")
+//@            execute(engine.loadFromFile(confpath), env)
+//@            logger.info("</Config>")
+//@            this.resumePreviousCurrent()
+//@            
+//@            val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+//@            this.setCurrentPath(pluginpath)
+//@            logger.info("<Config>")
+//@            execute(engine.loadFromFile(pluginpath), env)
+//@            logger.info("</Config>")
+//@            this.resumePreviousCurrent()
+//@      
       //#endif
     } catch {
       case null => {}
@@ -1078,7 +1079,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       case _ => e._args.toList.map(e => evaluate(e, env))
     }
 
-    println("args " + args)
     val loc = e._location
 
     this.call(name, args, loc, env)
@@ -1182,12 +1182,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       //        case s: SymbolicValue => recordDefinedSymbolicCall(functionCall, s)
       //        case _ => {}
       //      }
-
-      println(env.variables)
-      println(env.references)
-
-      println(function_env.variables)
-      println(function_env.getDelta().joinedHeap)
 
       env.weaveDelta(function_env.getDelta())
 
@@ -2227,21 +2221,17 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           if (t._1.startsWith("&")) {
             if (t._2.isInstanceOf[Reference]) {
               val reference = t._2.asInstanceOf[Reference]
-              println("jooooo " + reference)
               functionEnv.setRef("$" + t._1.slice(1, t._1.size), reference)
               functionEnv.insert(reference, env.extract(reference))
             } else {
               functionEnv.update("$" + t._1.slice(1, t._1.size), NullValue(""))
             }
           } else {
-            println("Passing value " + t)
             val functionVal = t._2 match {
               case e: Expr => {
                 val ev = evaluate(e, env)
-                println("passing of type " + ev.getClass())
                 ev match {
                   case av: ArrayValue => {
-                    println("DERPCOPY")
                     val deepCopy = new ArrayValue()
                     av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
                     deepCopy
@@ -2251,7 +2241,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                 }
               }
               case av: ArrayValue => {
-                println("DERPCOPY")
                 val deepCopy = new ArrayValue()
                 av.array.foreach { case (k, v) => deepCopy.set(k, env.extract(v), functionEnv) }
                 deepCopy
@@ -2260,7 +2249,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               case value: OakValue => value
 
             }
-            println(" updated $" + t._1.replace("&", ""), functionVal)
             functionEnv.update("$" + t._1.replace("&", ""), functionVal)
           }
         }
@@ -2280,7 +2268,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           }
       }
     }
-    println("§")
   }
 
   /**

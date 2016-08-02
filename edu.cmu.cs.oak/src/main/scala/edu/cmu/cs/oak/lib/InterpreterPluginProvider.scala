@@ -48,6 +48,11 @@ import edu.cmu.cs.oak.lib.builtin.Trim
 import edu.cmu.cs.oak.lib.builtin.UcFirst
 import edu.cmu.cs.oak.lib.builtin.VersionCompare
 import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.lib.array.ArrayMerge
+import edu.cmu.cs.oak.lib.array.ArrayKeys
+import edu.cmu.cs.oak.lib.array.ArrayFlip
+import edu.cmu.cs.oak.lib.array.ArrayPush
+import edu.cmu.cs.oak.lib.array.ArrayValues
 
 /**
  * Via this plugin loader the interpreter can 
@@ -136,6 +141,11 @@ trait InterpreterPluginProvider {
     loadPlugin(new UcFirst)
     loadPlugin(new ArrayWalk)
     loadPlugin(new ArrayMap)
+    loadPlugin(new ArrayMerge)
+    loadPlugin(new ArrayKeys)
+    loadPlugin(new ArrayFlip)
+    loadPlugin(new ArrayPush)
+    loadPlugin(new ArrayValues)
   }
 
 }

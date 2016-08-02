@@ -9,9 +9,9 @@ class RegressionTests extends FunSuite {
 
   test("Simple Statements") {
     RegressionTest.test("environments/env01.php")
-    RegressionTest.test("environments/switch.php")
-    RegressionTest.test("environments/while.php")
-    RegressionTest.test("testScripts/ordie.php")
+      RegressionTest.test("environments/switch.php")
+      RegressionTest.test("environments/while.php")
+      RegressionTest.test("testScripts/ordie.php")
   }
   
   test("OOP") {
@@ -23,6 +23,7 @@ class RegressionTests extends FunSuite {
   test("arrays") {
     RegressionTest.test("testScripts/arrayValues01.php")
     RegressionTest.test("testScripts/nestedArrays.php")
+    RegressionTest.test("testScripts/array_functions.php")
   }
   
   test("References") {
