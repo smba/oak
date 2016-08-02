@@ -53,6 +53,8 @@ import edu.cmu.cs.oak.lib.array.ArrayKeys
 import edu.cmu.cs.oak.lib.array.ArrayFlip
 import edu.cmu.cs.oak.lib.array.ArrayPush
 import edu.cmu.cs.oak.lib.array.ArrayValues
+import edu.cmu.cs.oak.lib.builtin.Vsprintf
+import edu.cmu.cs.oak.lib.builtin.Printf
 
 /**
  * Via this plugin loader the interpreter can 
@@ -146,6 +148,8 @@ trait InterpreterPluginProvider {
     loadPlugin(new ArrayFlip)
     loadPlugin(new ArrayPush)
     loadPlugin(new ArrayValues)
+    loadPlugin(new Vsprintf)
+    loadPlugin(new Printf)
   }
 
 }

@@ -13,11 +13,7 @@ import edu.cmu.cs.oak.nodes.DNode
 import com.caucho.quercus.Location
 import edu.cmu.cs.oak.value.StringValue
 
-
-// FIXME TODO Formatting
-class Sprintf extends InterpreterPlugin {
-
-  override def getName(): String = "sprintf"
+object Companion {
 
   def sprintf(text: String, pars: List[Any]): String = {
     var tex = text
@@ -30,22 +26,95 @@ class Sprintf extends InterpreterPlugin {
     }
     tex
   }
-  
+}
+
+// FIXME TODO Formatting
+class Sprintf extends InterpreterPlugin {
+
+  override def getName(): String = "sprintf"
+
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has been o*/
     //assert(args.size == 1)
-    
+
     val value = args.head
-    
+
+    value match {
+      case sv: StringValue => {
+        return StringValue(Companion.sprintf(sv.value, args.tail), sv.file, sv.lineNr)
+      }
+      case _ => {
+        env.addOutput(DNode.createDNode(value, loc))
+      }
+    }
+
+    return IntValue(1)
+  }
+
+}
+
+// FIXME TODO Formatting
+class Vsprintf extends InterpreterPlugin {
+
+  override def getName(): String = "vsprintf"
+
+  def sprintf(text: String, pars: List[Any]): String = {
+    var tex = text
+    val matches = "%.".r.findAllMatchIn(text).toList
+    assert(matches.size == pars.size)
+    (matches zip pars).foreach {
+      case (matche, par) => {
+        tex = tex.replaceFirst(matche.toString, par.toString.replaceAll("\\$", ""))
+      }
+    }
+    tex
+  }
+
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
+
+    val interpreter = provider.asInstanceOf[OakInterpreter]
+
+    /* Assert that the function has been o*/
+    //assert(args.size == 1)
+
+    val value = args.head
+
     value match {
       case sv: StringValue => {
         StringValue(sprintf(sv.value, args.tail), sv.file, sv.lineNr)
       }
       case _ => {
-        env.addOutput( DNode.createDNode(value, loc) )
+        env.addOutput(DNode.createDNode(value, loc))
+      }
+    }
+
+    return IntValue(1)
+  }
+
+}
+
+class Printf extends InterpreterPlugin {
+
+  override def getName(): String = "printf"
+
+  override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
+
+    val interpreter = provider.asInstanceOf[OakInterpreter]
+
+    /* Assert that the function has been o*/
+    //assert(args.size == 1)
+
+    val value = args.head
+
+    value match {
+      case sv: StringValue => {
+        env.addOutput( DNode.createDNode(StringValue(Companion.sprintf(sv.value, args.tail), sv.file, sv.lineNr), loc) )
+      }
+      case _ => {
+        env.addOutput(DNode.createDNode(value, loc))
       }
     }
 
