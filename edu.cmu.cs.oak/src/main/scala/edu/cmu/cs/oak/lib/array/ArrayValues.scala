@@ -40,6 +40,7 @@ class ArrayValues extends InterpreterPlugin {
           }
         }
       }
+      case _ => SymbolValue("array_values(" + args.head.toString + ")", OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
     }
 
     av_v

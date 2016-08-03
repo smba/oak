@@ -55,6 +55,11 @@ import edu.cmu.cs.oak.lib.array.ArrayPush
 import edu.cmu.cs.oak.lib.array.ArrayValues
 import edu.cmu.cs.oak.lib.builtin.Vsprintf
 import edu.cmu.cs.oak.lib.builtin.Printf
+import edu.cmu.cs.oak.lib.builtin.IsInt
+import edu.cmu.cs.oak.lib.builtin.ClassExists
+import edu.cmu.cs.oak.lib.builtin.MethodExists
+import edu.cmu.cs.oak.lib.builtin.IsA
+import edu.cmu.cs.oak.lib.builtin.GetClass
 
 /**
  * Via this plugin loader the interpreter can 
@@ -150,6 +155,12 @@ trait InterpreterPluginProvider {
     loadPlugin(new ArrayValues)
     loadPlugin(new Vsprintf)
     loadPlugin(new Printf)
+    
+    loadPlugin(new MethodExists)
+    loadPlugin(new ClassExists)
+    loadPlugin(new IsA)
+    loadPlugin(new IsInt)
+    loadPlugin(new GetClass)
   }
 
 }

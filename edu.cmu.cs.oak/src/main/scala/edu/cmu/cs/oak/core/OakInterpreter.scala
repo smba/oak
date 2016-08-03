@@ -174,24 +174,24 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/array_shift.php").toURI())), env)
       
       //#ifdef WORDPRESS_DEPENDENCIES
-//@            logger.info("<Pear>")
-//@            execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-//@             logger.info("</Pear>")
-//@             
-//@            val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-//@            this.setCurrentPath(confpath)
-//@            logger.info("<Config>")
-//@            execute(engine.loadFromFile(confpath), env)
-//@            logger.info("</Config>")
-//@            this.resumePreviousCurrent()
-//@            
-//@            val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-//@            this.setCurrentPath(pluginpath)
-//@            logger.info("<Config>")
-//@            execute(engine.loadFromFile(pluginpath), env)
-//@            logger.info("</Config>")
-//@            this.resumePreviousCurrent()
-//@      
+            logger.info("<Pear>")
+            execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+             logger.info("</Pear>")
+             
+            val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+            this.setCurrentPath(confpath)
+            logger.info("<Config>")
+            execute(engine.loadFromFile(confpath), env)
+            logger.info("</Config>")
+            this.resumePreviousCurrent()
+            
+            val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+            this.setCurrentPath(pluginpath)
+            logger.info("<Config>")
+            execute(engine.loadFromFile(pluginpath), env)
+            logger.info("</Config>")
+            this.resumePreviousCurrent()
+      
       //#endif
     } catch {
       case null => {}
