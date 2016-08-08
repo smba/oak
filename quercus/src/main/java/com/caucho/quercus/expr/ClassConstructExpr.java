@@ -43,10 +43,10 @@ import com.caucho.util.L10N;
 public class ClassConstructExpr extends AbstractMethodExpr {
   private static final L10N L = new L10N(ClassConstructExpr.class);
 
-  protected final String _className;
-  protected final Expr []_args;
+  public final String _className;
+  public final Expr []_args;
 
-  protected boolean _isMethod;
+  public boolean _isMethod;
 
   public ClassConstructExpr(Location location,
                             String className,

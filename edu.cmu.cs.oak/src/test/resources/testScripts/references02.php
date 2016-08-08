@@ -1,8 +1,7 @@
 <?php 
 
-function foo(&$var)
-{
-    $var++;
+function foo(&$var) {
+    $var = $var + 1;
 }
 
 $a=5;

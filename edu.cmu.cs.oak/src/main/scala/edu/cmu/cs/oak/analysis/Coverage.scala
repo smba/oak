@@ -77,6 +77,7 @@ object Coverage extends App {
       f #:: (if (f.isDirectory) f.listFiles().toStream.flatMap(getFileTree)
       else Stream.empty)
     }
+    val s = getFileTree(file).filter(_.getName.endsWith(".php")).toList.map(f => f.toPath())
     getFileTree(file).filter(_.getName.endsWith(".php"))
   }
   
@@ -101,6 +102,6 @@ object Coverage extends App {
   }
   
   //getSchoolmateCoverage()
-  println(getWordpressCoverage())
+  println(getSchoolmateCoverage())
   
 }

@@ -52,11 +52,11 @@ trait OakFileManager {
    * @throws FileNotFoundException
    */
   def resolvePath(fragment: String): Path = {
+    
     if (!includes.isEmpty) {
       val path = includes.top.getParent.resolve(fragment).normalize()
       if (!Files.exists(path)) {
-        
-        base.get.getParent.getParent.resolve(fragment).normalize()
+        base.get.getParent.resolve(fragment).normalize()
       } else {
         path
       }
@@ -88,5 +88,14 @@ trait OakFileManager {
    */
   def getCurrentPath(): Path = {
     includes.top
+  }
+  
+  /**
+   * Returns the path to the system root.
+   * 
+   * @return Path to the entry point
+   */
+  def getBasePath(): Path = {
+    return this.base.get
   }
 }

@@ -233,9 +233,14 @@ class FileExists extends InterpreterPlugin {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size == 1)
 
-    val file_exists = (new File(args.head.toString)).exists()
+    try {
+      val file_exists = (new File(args.head.toString)).exists()
+      return BooleanValue(file_exists)
+    } catch {
+      case n: NullPointerException => BooleanValue(false)
+    }
 
-    return BooleanValue(file_exists)
+    
 
   }
 }
