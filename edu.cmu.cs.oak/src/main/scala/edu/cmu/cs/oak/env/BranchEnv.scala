@@ -151,7 +151,7 @@ object BranchEnv {
       funcs => funcs.foreach {
         case (fname, fdef) => {
           if (!functions.get(fname).isEmpty) {
-            logger.warn("Duplicate function name " + fname + "().")
+//            logger.warn("Duplicate function name " + fname + "().")
           } else {
             functions.put(fname, fdef)
           }
@@ -168,7 +168,7 @@ object BranchEnv {
       funcs => funcs.foreach {
         case (cname, cdef) => {
           if (!functions.get(cname).isEmpty) {
-            logger.warn("Duplicate class definition name " + cname + ".")
+//            logger.warn("Duplicate class definition name " + cname + ".")
           } else {
             functions.put(cname, cdef)
           }

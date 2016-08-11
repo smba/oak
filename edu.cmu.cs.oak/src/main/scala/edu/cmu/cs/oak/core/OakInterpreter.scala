@@ -123,6 +123,9 @@ import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.SymbolicValue
 import com.caucho.quercus.expr.ClassConstructExpr
+import com.caucho.quercus.expr.UnaryPlusExpr
+import java.time.Instant
+import java.time.Duration
 
 /**
  * Antenna feature definitions for configuration
@@ -168,6 +171,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       env.update("$_COOKIE", SymbolValue("$_COOKIE", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
       env.addToGlobal("$_REQUEST")
       env.update("$_REQUEST", SymbolValue("$_REQUEST", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
+      env.addToGlobal("$_CONFIG")
+      env.update("$_CONFIG", SymbolValue("$_CONFIG", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
 
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
@@ -175,25 +180,22 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/array_shift.php").toURI())), env)
 
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/config.php").toURI())), env)
+//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)
+      
       //#ifdef WORDPRESS_DEPENDENCIES
-      //@            logger.info("<Pear>")
-      //@            execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      //@             logger.info("</Pear>")
-      //@             
-      //@            val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-      //@            this.setCurrentPath(confpath)
-      //@            logger.info("<Config>")
-      //@            execute(engine.loadFromFile(confpath), env)
-      //@            logger.info("</Config>")
-      //@            this.resumePreviousCurrent()
-      //@            
-      //@            val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-      //@            this.setCurrentPath(pluginpath)
-      //@            logger.info("<Config>")
-      //@            execute(engine.loadFromFile(pluginpath), env)
-      //@            logger.info("</Config>")
-      //@            this.resumePreviousCurrent()
-      //@      
+//@                  execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+//@                   
+//@                  val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+//@                  this.setCurrentPath(confpath)
+//@                  execute(engine.loadFromFile(confpath), env)
+//@                  this.resumePreviousCurrent()
+//@                  
+//@                  val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+//@                  this.setCurrentPath(pluginpath)
+//@                  execute(engine.loadFromFile(pluginpath), env)
+//@                  this.resumePreviousCurrent()
+//@            
       //#endif
     } catch {
       case null => {}
@@ -204,13 +206,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     env.resurrect()
 
-    logger.info(s"<Program> ${env.hasTerminated()}")
+//    logger.info(s"<Program> ${env.hasTerminated()}")
+    val before = Instant.now()
     execute(program, env)
-    logger.info("</Program>")
+    val after = Instant.now()
+//    logger.info("</Program>")
 
     serializeSymbolicCalls()
     serializeUndefinedCalls()
-
+    logger.info(s"${Duration.between(before, after)}")
     return (ControlCode.OK, env)
   }
 
@@ -305,6 +309,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           case varex: VarExpr => {
             env.unset(varToUnset.toString)
           }
+          case thisf: ThisFieldExpr => {
+            val fieldname = thisf._name.toString()
+            env.lookup("$this") match {
+              case ov: ObjectValue => {
+                ov.set(fieldname, NullValue(""), env)
+              }
+              case _ => {}
+            }
+          }
           case ag: ArrayGetExpr => {
             val expr = ag._expr
             /*if (!env.lookup(expr.toString).isInstanceOf[SymbolValue]) {
@@ -358,7 +371,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         /* Update the environment so that 
          * + $var is mapped to the same reference as evaluate($value)
          * */
-        val Reference = value match {
+        val reference = value match {
           case varexpr: VarExpr => {
 
             /* Look up the name of the referenced variable in the String -> Reference map*/
@@ -392,11 +405,58 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             val ref = returnref
             ref
           }
+          
+          case e: ObjectNewExpr => {
+            val className = e._name
+            val args = e._args.toList
+            createObject(className, args, env)
+            null //FIXME
+          }
+          
+          case e: CallExpr => {
+            val fname = e._name.toString()
+            val args = e._args.toList
+            val loc = s._location
+            call(fname, args.map(e => evaluate(e, env)), loc, env)
+            null //FIXME
+          }
+          
+          case e: ClassMethodExpr => {
+            evaluateClassMethodExpr(e, env)
+            null //FIXME
+          }
+          
+          case ex: VarVarExpr => {
+            
+            val varvarname = ex._var.toString()
+            val value = env.lookup(varvarname)
+            value match {
+              case sv: StringValue => {
+                env.getRef("$" + sv.value, false)
+              }
+              case _ => {
+                null
+              }
+            }
+          }
+          
+          case ex: ThisFieldExpr => {
+            env.lookup("$this") match {
+              case ov: ObjectValue => {
+                val field_name = ex._name.toString()
+                ov.getFieldRef(field_name)
+              }
+              case _ => {
+                null// FIXME
+              }
+            }
+          }
+          
           case _ => throw new RuntimeException(value + " (" + value.getClass + ") is unimplemented.")
         }
 
         /* Update */
-        env.setRef(name.toString, Reference)
+        env.setRef(name.toString, reference)
         return ControlCode.OK
       }
 
@@ -452,9 +512,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         val vars = listHead._varList
         evaluate(value, env) match {
           case a: ArrayValue => {
-            assert(a.array.size == vars.size)
-            (vars zipWithIndex).foreach {
-              case (v, av) => env.update(v.toString, env.extract(a.array.get(IntValue(av)).get))
+            if (a.array.size == vars.size) {
+              (vars zipWithIndex).foreach {
+                case (v, av) => env.update(v.toString, env.extract(a.array.get(IntValue(av)).get))
+              }
             }
           }
           case s: SymbolicValue => {
@@ -688,7 +749,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         }
       } catch {
         case e: Exception => {
-          logger.error("Class " + parent + " could not be found.")
+//          logger.error("Class " + parent + " could not be found.")
         }
       }
     }
@@ -717,7 +778,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       case a: ArrayGetExpr => {
         val array = env.lookup(a._expr.toString()).asInstanceOf[ArrayValue]
         val index = evaluate(a._index, env)
-        array.getRef(index)
+        try {
+          array.getRef(index)
+        } catch {
+          case vnfe: VariableNotFoundException => {
+            null
+          }
+        }
       }
     }
     env.update("$returnref", returnRef)
@@ -1268,6 +1335,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           case nsee2: NoSuchElementException => SymbolValue("", OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
         }
       }
+      case e: VariableNotFoundException => {
+        SymbolValue(e.toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
+      }
     }
     objectValue
   }
@@ -1304,14 +1374,29 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   }
 
   private def evaluateBinaryAssignExpr(e: BinaryAssignExpr, env: Environment): OakValue = {
-    val name = e._var
+    val name = if (e._var.toString.startsWith("$$")) {
+      val lk_name = e._var.toString.slice(1, e._var.toString.size)
+      val value = env.lookup(lk_name)
+      value match {
+        case sv: StringValue => {
+          "$" + sv.value
+        }
+        case _ => {
+          return NullValue("")
+        }
+      }
+    } else {
+      e._var.toString
+    }
     val expr = e._value
 
-    return name match {
+    println(e._var.getClass+"")
+    
+    return e._var match {
 
       /* name is a variable */
       case n: VarExpr => {
-
+        println("X")
         if (expr.isInstanceOf[BinaryAssignExpr]) {
           var names = Set(name.toString)
           var assignExpr = expr
@@ -1336,6 +1421,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               value
             }
           }
+          
           env.update(name.toString, valueX)
         } catch {
           case vnfe: VariableNotFoundException => {
@@ -1571,7 +1657,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       
       case e: VarVarExpr => {
         // TODO
-        env.update(name.toString, SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE))
+        env.update(name.toString, evaluate(expr, env))
         null
       }
       
@@ -1708,6 +1794,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
     } catch {
       case nsee: NoSuchElementException => SymbolValue(cme.toString(), OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE)
+      case vnfe: VariableNotFoundException => SymbolValue(cme.toString(), OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE)
     }
   }
 
@@ -1755,9 +1842,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           val methodCall = Call(objectValue.objectClass.name + "." + methodName, (Paths.get(e._location.getFileName), e._location.getLineNumber), args.toList.map(e => evaluate(e, env)))
           if (!(env.getCalls().map { c => c.name } contains methodCall.name)) {
             val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
+            try {
             prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
             execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
             env.weaveDelta(methodEnv.getDelta())
+            } catch {
+              case e: VariableNotFoundException => {}
+            }
+            
             val ret = try {
               methodEnv.lookup("$return")
             } catch {
@@ -1804,7 +1896,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           Choice.optimized(choice.p, r1, r2)
 
           //#else 
-          //@                                                  NullValue("")
+//@                                                            NullValue("")
           //#endif
           //#endif
 
@@ -1915,9 +2007,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateUnaryPreIncrementExpr(e: UnaryPreIncrementExpr, env: Environment): OakValue = {
     e._expr match {
       case ag: ArrayGetExpr => {
-        val array = evaluate(ag, env).asInstanceOf[ArrayValue]
-        val ref = array.getRef(evaluate(ag._index, env))
-        env.insert(ref, SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE))
+        evaluate(ag, env) match {
+          case array: ArrayValue => {
+            val ref = array.getRef(evaluate(ag._index, env))
+            env.insert(ref, SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE))
+          }
+          case _ => {
+            env.update(e._expr.toString(), SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE))
+          }
+        }
       }
       case _ => {
         env.update(e._expr.toString(), SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE))
@@ -1966,12 +2064,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   }
 
   private def evaluateFunIncludeExpr(e: FunIncludeExpr, env: Environment): OakValue = {
-    include(e._expr, env)
+    include(e._expr, false, env)
     null
   }
 
-  def include(expr: Expr, env: Environment) {
+  def include(expr: Expr, only_once: Boolean, env: Environment) {
 
+    
+    
     val x = evaluate(expr, env)
 
     if (!(x.isInstanceOf[SymbolicValue])) {
@@ -2003,13 +2103,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           // Reset the current path
           this.resumePreviousCurrent()
 
-          logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
+//          logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
 
         } catch {
           case e: FileNotFoundException => {
 //            logger.info(env.getCalls() + "")
 //            logger.info(this.getCurrentPath() + "")
-            logger.error(e + s" $expr" + x + "")
+//            logger.error(e + s" $expr" + x + "")
           }
         }
       }
@@ -2018,7 +2118,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   }
 
   private def evaluateFunIncludeOnceExpr(e: FunIncludeOnceExpr, env: Environment): OakValue = {
-    include(e._expr, env)
+    include(e._expr, true, env)
     null
   }
 
@@ -2066,9 +2166,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     }
 
   }
+  
+  def evaluateUnaryPlusExpr(e: Expr, env: Environment): OakValue = {
+    SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
+  }
 
-  def evaluate(e: Expr, env: Environment): OakValue = {
-
+  def evaluate(e: Expr, env: Environment): OakValue = { 
     e match {
       case e: LiteralExpr => {
         evaluateLiteralExpr(e, env)
@@ -2225,6 +2328,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
       case e: BinaryCharAtExpr => {
         evaluateBinaryCharAtExpr(e, env)
+      }
+      case e: UnaryPlusExpr => {
+        evaluateUnaryPlusExpr(e, env)
       }
       case null => null
       case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)

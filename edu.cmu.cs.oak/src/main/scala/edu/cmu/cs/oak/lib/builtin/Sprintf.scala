@@ -18,13 +18,22 @@ object Companion {
   def sprintf(text: String, pars: List[Any]): String = {
     var tex = text
     val matches = "%.".r.findAllMatchIn(text).toList
-    assert(matches.size == pars.size)
-    (matches zip pars).foreach {
-      case (matche, par) => {
-        tex = tex.replaceFirst(matche.toString, par.toString.replaceAll("\\$", ""))
-      }
+    if (matches.size != pars.size) {
+      return text
     }
-    tex
+    if (tex != null && matches != null && pars != null) {
+      (matches zip pars).foreach {
+        case (matche, par) => {
+          if (matche != null && par != null) {
+            tex = tex.replaceFirst(matche.toString, par.toString.replaceAll("\\$", ""))
+          }
+        }
+      }
+      tex
+    } else {
+      text
+    }
+
   }
 }
 
@@ -64,10 +73,16 @@ class Vsprintf extends InterpreterPlugin {
   def sprintf(text: String, pars: List[Any]): String = {
     var tex = text
     val matches = "%.".r.findAllMatchIn(text).toList
-    assert(matches.size == pars.size)
+    if (matches.size != pars.size) {
+      return text
+    }
     (matches zip pars).foreach {
       case (matche, par) => {
-        tex = tex.replaceFirst(matche.toString, par.toString.replaceAll("\\$", ""))
+        if (tex != null && par != null && matche != null) {
+          tex = tex.replaceFirst(matche.toString, par.toString.replaceAll("\\$", ""))
+        } else {
+          ""
+        }
       }
     }
     tex
@@ -111,7 +126,7 @@ class Printf extends InterpreterPlugin {
 
     value match {
       case sv: StringValue => {
-        env.addOutput( DNode.createDNode(StringValue(Companion.sprintf(sv.value, args.tail), sv.file, sv.lineNr), loc) )
+        env.addOutput(DNode.createDNode(StringValue(Companion.sprintf(sv.value, args.tail), sv.file, sv.lineNr), loc))
       }
       case _ => {
         env.addOutput(DNode.createDNode(value, loc))

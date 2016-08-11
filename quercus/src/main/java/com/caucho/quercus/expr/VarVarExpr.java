@@ -43,7 +43,7 @@ import com.caucho.quercus.env.Var;
  * Represents a PHP variable expression.
  */
 public class VarVarExpr extends AbstractVarExpr {
-  protected final Expr _var;
+	public final Expr _var;
 
   public VarVarExpr(Location location, Expr var)
   {

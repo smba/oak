@@ -49,9 +49,9 @@ class CallUserFuncArray extends InterpreterPlugin {
             val args = a.array.map { case (k, v) => env.extract(v) }.toList
             val functionCall = Call(sv.value, (Paths.get(sv.file), sv.lineNr), args)
             val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
-            
+
             assert(args.size > 0)
-            
+
             interpreter.prepareFunctionOrMethod(function, env, functionEnv, args)
             interpreter.execute(function.statement, functionEnv)
             env.weaveDelta(functionEnv.getDelta())
@@ -69,28 +69,34 @@ class CallUserFuncArray extends InterpreterPlugin {
 
       // Case 2: Callback method 
       case av: ArrayValue => {
-        val obj = av.get(IntValue(0), env).asInstanceOf[ObjectValue] // ObjectValue
-        val methodName = av.get(IntValue(1), env).asInstanceOf[StringValue] // StringValue
+        av.get(IntValue(0), env) match {
+          case obj: ObjectValue => {
+            val methodName = av.get(IntValue(1), env).asInstanceOf[StringValue] // StringValue
 
-        val method = obj.getClassDef().getMethods(methodName.value)
-        val args = param_arr
-        args match {
-          case args: ArrayValue => {
-            val arguments = args.array.map { case (k, v) => env.extract(v) }.toList
+            val method = obj.getClassDef().getMethods(methodName.value)
+            val args = param_arr
+            args match {
+              case args: ArrayValue => {
+                val arguments = args.array.map { case (k, v) => env.extract(v) }.toList
 
-            val methodCall = Call(obj.objectClass.name + "." + methodName, (Paths.get(methodName.file), methodName.lineNr), arguments)
-            val methodEnv = Environment.createMethodEnvironment(env, obj, methodCall)
-            interpreter.prepareFunctionOrMethod(method, env, methodEnv, arguments)
-            interpreter.execute(method.statement, methodEnv)
-            env.weaveDelta(methodEnv.getDelta())
+                val methodCall = Call(obj.objectClass.name + "." + methodName, (Paths.get(methodName.file), methodName.lineNr), arguments)
+                val methodEnv = Environment.createMethodEnvironment(env, obj, methodCall)
+                interpreter.prepareFunctionOrMethod(method, env, methodEnv, arguments)
+                interpreter.execute(method.statement, methodEnv)
+                env.weaveDelta(methodEnv.getDelta())
 
-            try {
-              methodEnv.lookup("$return")
-            } catch {
-              case e: Exception => NullValue("")
+                try {
+                  methodEnv.lookup("$return")
+                } catch {
+                  case e: Exception => NullValue("")
+                }
+              }
+              case v: OakValue => v
             }
           }
-          case v: OakValue => v
+          case _ => {
+            NullValue("")
+          }
         }
       }
       case null => null

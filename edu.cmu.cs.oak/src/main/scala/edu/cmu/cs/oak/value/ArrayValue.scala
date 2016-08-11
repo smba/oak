@@ -82,7 +82,10 @@ class ArrayValue extends OakValue {
         try {
          env.extract(array.values.toList(index.asInstanceOf[IntValue].value.toInt))
         } catch {
-          case e: Exception => throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.");
+          case e: Exception => {
+//            throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.");
+            NullValue("something went wrong")
+          }
         }
       } else {
         NullValue("something went wrong")
@@ -144,8 +147,14 @@ class ArrayValue extends OakValue {
     this.array.foreach {
       case (key, ref) => {
         env.extract(ref) match {
-          case array: ArrayValue => {
-            av.set(key, array.deepCopy(env), env)
+          case array_value: ArrayValue => {
+            
+            if (array_value.getSize() == 0) {
+              av.set(key, new ArrayValue(), env)
+            } else {
+              av.set(key, array_value.deepCopy(env), env)
+            }
+            // compare this (ArrayValue instance and matched array_value instance)
           }
           case ov: OakValue => {
             av.set(key, ov, env)

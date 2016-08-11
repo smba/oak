@@ -1,6 +1,8 @@
 package edu.cmu.cs.oak.env
 
 import scala.collection.immutable.Stack
+import scala.collection.mutable.AnyRefMap
+import scala.collection.mutable.HashSet
 import scala.collection.mutable.ListBuffer
 import scala.xml.PrettyPrinter
 
@@ -15,23 +17,21 @@ import com.caucho.quercus.statement.Statement
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.Reference
 import edu.cmu.cs.oak.value.ObjectValue
+import edu.cmu.cs.oak.value.Reference
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.nodes.ConcatNode
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.nodes.ConcatNode
-import edu.cmu.cs.oak.value.NullValue
-import scala.collection.mutable.HashSet
-import edu.cmu.cs.oak.nodes.ConcatNode
-import scala.collection.mutable.AnyRefMap
 
 /**
  * Programs state and program state operations.
@@ -140,7 +140,14 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     var reference = if (isGlobalVariable(name)) {
       getRef(name, false)
     } else {
-      getRef(name)
+      try {
+        getRef(name)
+      } catch {
+        case vnfe: VariableNotFoundException => {
+          return NullValue("")
+        }
+          
+      }
     }
     
     def recursiveLookup(reference: Reference): OakValue = {
@@ -152,7 +159,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     }
     
     val value = try {
-      recursiveLookup(reference)
+      if (reference != null) {
+        recursiveLookup(reference)
+      } else {
+        NullValue("")
+      }
     } catch {
       case vnfe: VariableNotFoundException => throw new RuntimeException(vnfe)
     }
@@ -206,12 +217,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else if ((parent != null)) {
       parent.extract(reference)
     } else {
-      throw new VariableNotFoundException("Reference not found " + reference)
+      throw new VariableNotFoundException(s"Reference ${reference} not found.")
     }
   }
 
   def insert(reference: Reference, value: OakValue) {
-    
     changed = true
     references.put(reference, value)
   }
@@ -311,7 +321,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       val v = this.extract(this.getRef(name, false))
       v match {
         case av: ArrayValue => {
-          this.update(name, av.deepCopy(this))
+          this.update(name, av.deepCopy(this)) // FIXME maybe?
         }
         case ov: OakValue => {
           this.update(name, ov)
@@ -523,7 +533,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param value ClassDef to add
    */
   def addClass(value: ClassDef) {
-    this.classDefs += (value.getName -> value)
+    val cname = value.getName
+    this.classDefs += (cname.slice(cname.lastIndexOf("\\") + 1, cname.size) -> value)
   }
 
   /**
@@ -531,7 +542,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @param name Name of the class
    * @return corresponding class definition
    */
-  def getClassDef(name: String): ClassDef = {
+  def getClassDef(cname: String): ClassDef = {
+    val name = cname.slice(cname.lastIndexOf("\\") + 1, cname.size)
     if (!classDefs.get(name).isEmpty) {
       classDefs.get(name).get
     } else if (parent != null) {

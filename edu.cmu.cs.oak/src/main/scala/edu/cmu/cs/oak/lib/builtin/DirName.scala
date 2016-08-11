@@ -19,6 +19,9 @@ class DirName extends InterpreterPlugin {
   override def visit(provider: InterpreterPluginProvider, args: List[OakValue], loc: Location, env: Environment): OakValue = {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
+    if (args.head == null) {
+      return StringValue("", "", 0)
+    }
     val path = args.head.toString()
     
     if (Files.isDirectory(Paths.get(path))) {

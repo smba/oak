@@ -30,6 +30,7 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/functions01.php")
     RegressionTest.test("testScripts/references01.php")
     RegressionTest.test("testScripts/references02.php")
+    RegressionTest.test("testScripts/reference_expr.php")
   }
   
   test("Outer to inner scope") {

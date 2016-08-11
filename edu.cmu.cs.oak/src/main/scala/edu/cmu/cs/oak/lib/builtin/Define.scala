@@ -21,7 +21,7 @@ class Define extends InterpreterPlugin {
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has two arguments */
-    assert(args.size == 2)
+    assert(args.size > 1, s"Anzahl der Argumente ${args.size} ${args}")
 
     val constantIdentifier = args(0)
     val constantValue = args(1)

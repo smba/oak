@@ -16,6 +16,7 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
 import java.util.regex.PatternSyntaxException
 import com.caucho.quercus.Location
+import edu.cmu.cs.oak.value.NullValue
 
 class Localizate extends InterpreterPlugin {
 
@@ -25,11 +26,8 @@ class Localizate extends InterpreterPlugin {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
-    /* Assert that the function has been o*/
-    assert(args.size == 1)
-
     // TODO remove stub with implementation
-    return args.head
+    return if (args.size > 0) args.head else NullValue("")
   }
 
 }

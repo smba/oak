@@ -37,7 +37,7 @@ class Join extends InterpreterPlugin {
         StringValue(av.array.values.mkString(glue), "", 0)
       }
       case s: SymbolicValue => s
-      case _ => SymbolValue(env.getCalls().head.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+      case _ => SymbolValue("", OakHeap.getIndex, SymbolFlag.DUMMY)
     }
 
     return args(2)
