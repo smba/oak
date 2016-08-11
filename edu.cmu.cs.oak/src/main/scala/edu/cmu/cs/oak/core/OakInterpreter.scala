@@ -142,7 +142,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
-    // the entry point i
+    // the entry point if
     this.setCurrentPath(path)
 
     // The root directory is path.getParent()
@@ -180,22 +180,22 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/array_shift.php").toURI())), env)
 
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/config.php").toURI())), env)
-//      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)
-      
+      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/config.php").toURI())), env)
+      //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)
+
       //#ifdef WORDPRESS_DEPENDENCIES
-//@                  execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-//@                   
-//@                  val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-//@                  this.setCurrentPath(confpath)
-//@                  execute(engine.loadFromFile(confpath), env)
-//@                  this.resumePreviousCurrent()
-//@                  
-//@                  val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-//@                  this.setCurrentPath(pluginpath)
-//@                  execute(engine.loadFromFile(pluginpath), env)
-//@                  this.resumePreviousCurrent()
-//@            
+      //@                  execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      //@                   
+      //@                  val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+      //@                  this.setCurrentPath(confpath)
+      //@                  execute(engine.loadFromFile(confpath), env)
+      //@                  this.resumePreviousCurrent()
+      //@                  
+      //@                  val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+      //@                  this.setCurrentPath(pluginpath)
+      //@                  execute(engine.loadFromFile(pluginpath), env)
+      //@                  this.resumePreviousCurrent()
+      //@            
       //#endif
     } catch {
       case null => {}
@@ -206,15 +206,19 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     env.resurrect()
 
-//    logger.info(s"<Program> ${env.hasTerminated()}")
-    val before = Instant.now()
+    //    logger.info(s"<Program> ${env.hasTerminated()}")
+//    val before = Instant.now()
     execute(program, env)
-    val after = Instant.now()
-//    logger.info("</Program>")
+//    val after = Instant.now()
+    //    logger.info("</Program>")
 
     serializeSymbolicCalls()
     serializeUndefinedCalls()
-    logger.info(s"${Duration.between(before, after)}")
+    
+    //#ifdef LOGGING
+//@    logger.info(s"${Duration.between(before, after)}")
+    //#endif
+    
     return (ControlCode.OK, env)
   }
 
@@ -405,14 +409,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             val ref = returnref
             ref
           }
-          
+
           case e: ObjectNewExpr => {
             val className = e._name
             val args = e._args.toList
             createObject(className, args, env)
             null //FIXME
           }
-          
+
           case e: CallExpr => {
             val fname = e._name.toString()
             val args = e._args.toList
@@ -420,14 +424,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             call(fname, args.map(e => evaluate(e, env)), loc, env)
             null //FIXME
           }
-          
+
           case e: ClassMethodExpr => {
             evaluateClassMethodExpr(e, env)
             null //FIXME
           }
-          
+
           case ex: VarVarExpr => {
-            
+
             val varvarname = ex._var.toString()
             val value = env.lookup(varvarname)
             value match {
@@ -439,7 +443,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               }
             }
           }
-          
+
           case ex: ThisFieldExpr => {
             env.lookup("$this") match {
               case ov: ObjectValue => {
@@ -447,11 +451,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                 ov.getFieldRef(field_name)
               }
               case _ => {
-                null// FIXME
+                null // FIXME
               }
             }
           }
-          
+
           case _ => throw new RuntimeException(value + " (" + value.getClass + ") is unimplemented.")
         }
 
@@ -551,7 +555,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         evaluateUnaryPreIncrementExpr(e, env)
         ControlCode.OK
       }
-      
+
       case e: ClassConstructExpr => {
         val className = e._className.toString()
         val args = e._args.toList
@@ -749,7 +753,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         }
       } catch {
         case e: Exception => {
-//          logger.error("Class " + parent + " could not be found.")
+          //          logger.error("Class " + parent + " could not be found.")
         }
       }
     }
@@ -1291,7 +1295,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     val args = e._args.toList
     evaluateMethodCall(e, methodName, args, env)
   }
-  
+
   def createObject(name: String, args: List[Expr], env: Environment): OakValue = {
     val objectValue = try {
 
@@ -1345,7 +1349,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateObjectNewExpr(b: ObjectNewExpr, env: Environment): OakValue = {
     val name = b._name
     val args = b._args
-    createObject(name, args.toList, env)    
+    createObject(name, args.toList, env)
   }
 
   private def evaluateUnarySuppressErrorExpr(t: UnarySuppressErrorExpr, env: Environment): OakValue = {
@@ -1390,13 +1394,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     }
     val expr = e._value
 
-    println(e._var.getClass+"")
-    
     return e._var match {
 
       /* name is a variable */
       case n: VarExpr => {
-        println("X")
         if (expr.isInstanceOf[BinaryAssignExpr]) {
           var names = Set(name.toString)
           var assignExpr = expr
@@ -1421,7 +1422,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               value
             }
           }
-          
+
           env.update(name.toString, valueX)
         } catch {
           case vnfe: VariableNotFoundException => {
@@ -1654,21 +1655,21 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         env.setStaticClassField(className, fieldName, evaluate(expr, env))
         null
       }
-      
+
       case e: VarVarExpr => {
         // TODO
         env.update(name.toString, evaluate(expr, env))
         null
       }
-      
+
       case e: ClassConstructExpr => {
         val className = e._className.toString()
         val args = e._args.toList
-        
+
         env.update(name.toString, createObject(className, args, env))
         null
       }
-      
+
       case _ => throw new RuntimeException(name.getClass + " unexpected " + expr.toString())
     }
   }
@@ -1843,13 +1844,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           if (!(env.getCalls().map { c => c.name } contains methodCall.name)) {
             val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
             try {
-            prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
-            execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
-            env.weaveDelta(methodEnv.getDelta())
+              prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
+              execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
+              env.weaveDelta(methodEnv.getDelta())
             } catch {
               case e: VariableNotFoundException => {}
             }
-            
+
             val ret = try {
               methodEnv.lookup("$return")
             } catch {
@@ -1896,7 +1897,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           Choice.optimized(choice.p, r1, r2)
 
           //#else 
-//@                                                            NullValue("")
+          //@                                                            NullValue("")
           //#endif
           //#endif
 
@@ -2070,8 +2071,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   def include(expr: Expr, only_once: Boolean, env: Environment) {
 
-    
-    
     val x = evaluate(expr, env)
 
     if (!(x.isInstanceOf[SymbolicValue])) {
@@ -2090,7 +2089,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
       if (!resolved_path.isEmpty) {
         try {
-          
+
           // If the resolved (absolute) path exists, use file
           val program = this.engine.loadFromFile(resolved_path.get)
 
@@ -2103,13 +2102,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           // Reset the current path
           this.resumePreviousCurrent()
 
-//          logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
-
+          //#ifdef LOGGING
+//@          logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
+          //#endif
         } catch {
           case e: FileNotFoundException => {
-//            logger.info(env.getCalls() + "")
-//            logger.info(this.getCurrentPath() + "")
-//            logger.error(e + s" $expr" + x + "")
+            
+          //#ifdef LOGGING
+//@            logger.error(e + s" $expr" + x + "")
+            //#endif
           }
         }
       }
@@ -2166,12 +2167,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     }
 
   }
-  
+
   def evaluateUnaryPlusExpr(e: Expr, env: Environment): OakValue = {
     SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
   }
 
-  def evaluate(e: Expr, env: Environment): OakValue = { 
+  def evaluate(e: Expr, env: Environment): OakValue = {
     e match {
       case e: LiteralExpr => {
         evaluateLiteralExpr(e, env)

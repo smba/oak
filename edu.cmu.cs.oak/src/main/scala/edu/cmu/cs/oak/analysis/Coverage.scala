@@ -77,7 +77,10 @@ object Coverage extends App {
           println(s"${ep.toAbsolutePath()}")
           interpreter = new OakInterpreter()
           literalSet = literalSet union DNode.extractStringLiterals(loadAndExecute(ep)._2.output)
-          logger.info(s" Found ${literalSet.size} literals so far")
+          
+          //#ifdef LOGGING
+//@          logger.info(s" Found ${literalSet.size} literals so far")
+          //#endif
         }
     }
     literalSet
@@ -95,88 +98,61 @@ object Coverage extends App {
     getFileTree(file).filter(_.getName.endsWith(".php"))
   }
 
-  def getCoverage(projectPath: File, entryPoints: Seq[Path], relevant: StringValue => Boolean): (Int, Int) = {
+  def getCoverage(projectPath: File, entryPoints: Seq[Path], relevant: StringValue => Boolean): (Double, (Int, Int)) = {
     val projectLiterals = getProjectLiterals(projectPath) //.map(s => s.value)
     val relevant_projectLiterals =  projectLiterals.filter { lit => relevant(lit) }
     val foundLiterals = findProjectLiterals(entryPoints) //.map(s => s.value)
     val relevant_foundLiterals = foundLiterals.filter { lit => relevant(lit) }
     //    val foundLiterals = AnalysisService.analyzeProject(projectPath).filter { lit => relevant(lit) }
     
-    println(s"Projekt hat ${projectLiterals.size} Literale")
-    println(s"Project hat ${relevant_projectLiterals.size} relevante Literale")
-    println(s"Analyse fand ${foundLiterals.size}  Literale")
-    println(s"Analyse fand ${relevant_foundLiterals.size} relevante Literale")
+    //#ifdef LOGGING
+//@    println(s"Projekt hat ${projectLiterals.size} Literale")
+//@    println(s"Project hat ${relevant_projectLiterals.size} relevante Literale")
+//@    println(s"Analyse fand ${foundLiterals.size}  Literale")
+//@    println(s"Analyse fand ${relevant_foundLiterals.size} relevante Literale")
+    //#endif
     
-    println((foundLiterals intersect projectLiterals).size * 1.0 / projectLiterals.size * 100)
-    (foundLiterals.size, projectLiterals.size)
+    val relative_coverage = ((relevant_foundLiterals intersect relevant_projectLiterals).size * 1.0 / relevant_projectLiterals.size * 100)
+    return (relative_coverage, (relevant_foundLiterals.size, relevant_projectLiterals.size))
   }
 
   def getSchoolmateCoverage() {
     var entrypoints = getPHPFiles(SCHOOLMATE).toList.map(f => f.toPath())
-    println(getCoverage(SCHOOLMATE, entrypoints, isRelevant))
+    println(s"SchoolMate: ${getCoverage(SCHOOLMATE, entrypoints, isRelevant)}")
   }
 
   def getAddressbookCoverage() {
     var entrypoints = getPHPFiles(ADDRESSBOOK).toList.map(f => f.toPath())
-    println(getCoverage(ADDRESSBOOK, entrypoints, isRelevant))
+    println(s"AddressBook: ${getCoverage(ADDRESSBOOK, entrypoints, isRelevant)}")
   }
 
   def getTimeclockCoverage() {
     var entrypoints = getPHPFiles(TIMECLOCK).toList.map(f => f.toPath())
-    println(getCoverage(TIMECLOCK, entrypoints, isRelevant))
+    println(s"TimeClock: ${getCoverage(TIMECLOCK, entrypoints, isRelevant)}")
   }
 
   def getUPBCoverage() {
     var entrypoints = getPHPFiles(UPB).toList.map(f => f.toPath())
-    println(getCoverage(UPB, entrypoints, isRelevant))
+    println(s"UPB: ${getCoverage(UPB, entrypoints, isRelevant)}")
   }
 
   def getWebchessCoverage() {
     var entrypoints = getPHPFiles(WEBCHESS).toList.map(f => f.toPath())
-    println(getCoverage(WEBCHESS, entrypoints, isRelevant))
+    println(s"WebChess: ${getCoverage(WEBCHESS, entrypoints, isRelevant)}")
   }
 
   def getWordpressCoverage() {
     var entrypoints = getPHPFiles(WORDPRESS).toList.map(f => f.toPath())
-    println(getCoverage(WORDPRESS, entrypoints, isRelevant))
+    println(s"WordPress: ${getCoverage(WORDPRESS, entrypoints, isRelevant)}")
   }
 
-  getWordpressCoverage
-
-}
-
-object AnalysisService {
-
-  def analyzeProject(root: File): Set[StringValue] = {
-
-    val pool: ExecutorService = Executors.newFixedThreadPool(2)
-
-    val entries = Coverage.getPHPFiles(root).toIterator
-    val literal_set = scala.collection.mutable.Set[StringValue]()
-
-    try {
-      var i = 0
-      while (entries.hasNext) {
-        println(s"Script ${i} of ${entries.length}")
-        val script_file = entries.next()
-        pool.execute(new Analyzer(script_file, literal_set))
-        i += 1
-      }
-    } finally {
-      pool.shutdown()
-    }
-
-    return literal_set.toSet
+  def coverages() {
+    getAddressbookCoverage()
+    getSchoolmateCoverage()
+    getTimeclockCoverage()
+    getUPBCoverage()
+    getWebchessCoverage()
+    getWordpressCoverage()
   }
-}
 
-class Analyzer(script: File, literal_set: scala.collection.mutable.Set[StringValue]) extends Runnable {
-
-  def run() {
-    println(script.toString())
-    val interpreter = new OakInterpreter()
-    literal_set ++= DNode.extractStringLiterals(interpreter.execute(script.toPath())._2.output)
-    println(s" Found ${literal_set.size} literals so far")
-    //    System.gc();
-  }
 }
