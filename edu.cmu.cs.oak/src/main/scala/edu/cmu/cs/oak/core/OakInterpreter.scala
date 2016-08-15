@@ -12,6 +12,7 @@ import scala.collection.JavaConversions.setAsJavaSet
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.breakable
+import scala.util.control.Breaks.break
 
 import org.slf4j.LoggerFactory
 
@@ -184,18 +185,26 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)
 
       //#ifdef WORDPRESS_DEPENDENCIES
-      //@                  execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      //@                   
-      //@                  val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-      //@                  this.setCurrentPath(confpath)
-      //@                  execute(engine.loadFromFile(confpath), env)
-      //@                  this.resumePreviousCurrent()
-      //@                  
-      //@                  val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-      //@                  this.setCurrentPath(pluginpath)
-      //@                  execute(engine.loadFromFile(pluginpath), env)
-      //@                  this.resumePreviousCurrent()
-      //@            
+      //@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
+      //@
+      //@      env.resurrect()
+      //@      val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+      //@      this.setCurrentPath(confpath)
+      //@      execute(engine.loadFromFile(confpath), env)
+      //@      this.resumePreviousCurrent()
+      //@
+      //@      env.resurrect()
+      //@      val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+      //@      this.setCurrentPath(pluginpath)
+      //@      execute(engine.loadFromFile(pluginpath), env)
+      //@      this.resumePreviousCurrent()
+      //@      
+      //@      env.resurrect()
+      //@      val l10npath = Paths.get(getClass.getResource("/wordpress/wp-includes/l10n.php").toURI())
+      //@      this.setCurrentPath(l10npath)
+      //@      execute(engine.loadFromFile(l10npath), env)
+      //@      this.resumePreviousCurrent()
+      //@
       //#endif
     } catch {
       case null => {}
@@ -207,18 +216,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     env.resurrect()
 
     //    logger.info(s"<Program> ${env.hasTerminated()}")
-//    val before = Instant.now()
+    //    val before = Instant.now()
     execute(program, env)
-//    val after = Instant.now()
+    //    val after = Instant.now()
     //    logger.info("</Program>")
 
     serializeSymbolicCalls()
     serializeUndefinedCalls()
-    
-    //#ifdef LOGGING
-//@    logger.info(s"${Duration.between(before, after)}")
-    //#endif
-    
+
     return (ControlCode.OK, env)
   }
 
@@ -594,10 +599,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     if (test.isInstanceOf[BooleanValue]) {
       val testB = test.asInstanceOf[BooleanValue]
       if (testB.v) {
+        branches.head.toSingleBranch()
         execute(trueBlock, branches.head)
         env.weaveDelta(branches.head.getDelta)
       } else {
         try {
+          branches.last.toSingleBranch()
           execute(falseBlock, branches.last)
           env.weaveDelta(branches.last.getDelta)
         } catch {
@@ -655,7 +662,42 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         NullValue("Could not evaluate return value " + s._expr + ".")
       }
     }
-    env.update("$return", v)
+
+    /*
+     * These two snippets are (! need to be) equivalent:
+     * 
+     * A:
+     * if (<Constraint>) {
+     *   return 'a';
+     * }
+     * return 'b';
+     * 
+     * and B:
+     * 
+     * if (<Constraint>) {
+     *   return 'a';
+     * else {
+     *   return 'b';
+     * }
+     * 
+     * This block manages the variability-aware assignment of return values, so that
+     * for a concrete branch choice (no sibling) a concrete value is returned. As for a symbolic 
+     * branch choices (siblings) a choice is returned/handled.
+     */
+    if (env.isInstanceOf[BranchEnv] && env.asInstanceOf[BranchEnv].hasSibling()) {
+      env.update("$return", Choice(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue("")))
+    } else {
+      val ret = env.lookup("$return")
+      if (ret.isInstanceOf[Choice]) {
+        if (ret.asInstanceOf[Choice].v2.isInstanceOf[NullValue]) {
+          val ret_choice = ret.asInstanceOf[Choice]
+          env.update("$return", Choice(ret_choice.p, ret_choice.v1, v))
+        }
+      } else {
+        env.update("$return", v)
+      }
+    }
+
     env.terminate()
     return ControlCode.OK
   }
@@ -932,12 +974,43 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               env.weaveDelta(loop_env.getDelta())
 
               //#ifndef CONCRETE_FOREACH_LOOP
-              //@                                                                      break
+              //@              break
               //#endif
             }
           }
         }
+      }
 
+      case c: Choice => {
+        val elements = c.getElements()
+        elements.foreach {
+          e =>
+            e match {
+              case av: ArrayValue => {
+                breakable {
+                  (av.array zipWithIndex).foreach {
+                    case ((key, value), i) => {
+
+                      // loop environment for the current loop iteration
+                      val loop_env = Environment.createLoopEnvironment(env)
+
+                      // initialize / update key and value
+                      if (key != null) loop_env.update(key_name, key)
+                      loop_env.update(value_name, value)
+
+                      execute(block, loop_env)
+                      env.weaveDelta(loop_env.getDelta())
+
+                      //#ifndef CONCRETE_FOREACH_LOOP
+                      //@              break
+                      //#endif
+                    }
+                  }
+                }
+              }
+              case _ => {}
+            }
+        }
       }
       case _ => {}
     }
@@ -979,7 +1052,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   }
 
   def execute(stmt: Statement, env: Environment): ControlCode.Value = {
-    if (!env.hasTerminated()) {
+    if (!env.hasTerminated()) { //
+      //      slogger.info(stmt.toString + " " + stmt._location.getFileName + " " + stmt._location.getLineNumber)
       stmt match {
         case s: ClassDefStatement => {
           executeClassDefStatement(s, env)
@@ -1897,7 +1971,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           Choice.optimized(choice.p, r1, r2)
 
           //#else 
-          //@                                                            NullValue("")
+          //@                                                                      NullValue("")
           //#endif
           //#endif
 
@@ -1961,8 +2035,23 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
   }
 
+  /**
+   * <?php
+   * $a = (string) $b;
+   * ?>
+   */
   private def evaluateToStringExpr(e: ToStringExpr, env: Environment): OakValue = {
-    SymbolValue(e._expr.toString, OakHeap.getIndex, SymbolFlag.TYPE_CONVERSION)
+    evaluate(e._expr, env) match {
+      case sv: StringValue => {
+        return sv
+      }
+      case nv: NumericValue => {
+        return StringValue(nv.toString(), "", 0)
+      }
+      case _ => {
+        SymbolValue(e._expr.toString, OakHeap.index, SymbolFlag.TYPE_CONVERSION)
+      }
+    }
   }
 
   private def evaluateThisExpr(e: ThisExpr, env: Environment): OakValue = {
@@ -2103,13 +2192,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           this.resumePreviousCurrent()
 
           //#ifdef LOGGING
-//@          logger.info(s"Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
+          logger.info(s" ${this.includes.size} Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
           //#endif
         } catch {
           case e: FileNotFoundException => {
-            
-          //#ifdef LOGGING
-//@            logger.error(e + s" $expr" + x + "")
+
+            //#ifdef LOGGING
+            logger.error(e + s" $expr" + x + "")
             //#endif
           }
         }

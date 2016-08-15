@@ -561,13 +561,21 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.terminated = false
   }
   
+  // Triggers termination of the environment
   def terminate() {
     this.terminate(calls.size)
   }
   
+  
   private def terminate(call_stack_size: Int) {
+    
+    // This environment -> terminated
     this.terminated = true
-    if (parent != null && parent.getCalls().size == call_stack_size) {
+    
+    /* Environment is not the root environment && parent environment 
+     * has the same call stack size.
+     */
+    if (parent != null && parent.getCalls().size == call_stack_size && !this.isInstanceOf[BranchEnv]) {
       parent.terminate(call_stack_size)
     }
   }

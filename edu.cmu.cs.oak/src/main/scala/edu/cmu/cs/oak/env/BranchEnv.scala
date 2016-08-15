@@ -25,13 +25,20 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
    * "New" (conditional) class definitions
    */
   var updatedClassDefs = Set[String]()
+  
+  var has_sibling = true
 
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint + "]"
 
   def definesConstant(name: String): Boolean = {
     (this.constants.contains(name))
   }
+  
+  def hasSibling() = has_sibling
 
+  def toSingleBranch() {
+    has_sibling = false
+  }
 }
 /**
  * Static methods used for the join operation of BranchEnvs.
