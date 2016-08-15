@@ -1,4 +1,7 @@
 <?php
+
+echo 'Included wp-config.php';
+
 /**
  * The base configuration for WordPress
  *

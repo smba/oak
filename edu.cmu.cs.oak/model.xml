@@ -61,6 +61,11 @@
 						</description>
 					</feature>
 				</and>
+				<feature name="LOGGING">
+					<description>
+						
+					</description>
+				</feature>
 			</and>
 		</struct>
 		<constraints/>

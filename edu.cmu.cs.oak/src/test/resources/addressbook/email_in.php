@@ -1,4 +1,4 @@
-<?phpko
+<?php
 
 include "include/dbconnect.php";
 include "include/export.vcard.php";
@@ -75,14 +75,7 @@ echo nl2br(print_r($hds, true));
 
 // Check if mail is authorized
 $to  = $hds->from[0]->mailbox."@".$hds->from[0]->host;
-if(count($mail_accept) > 0 && !in_array($to, $mail_accept) {
-	
-	// delete without warning
-	imap_delete ($connection, "$messageNumber");
-	
-	// process next mail
-	die;
-}
+
 
 //
 // Process last mail

@@ -16,10 +16,10 @@ $count=mysql_num_rows($result);
 
 if($count==0){
 
-{
+}{
 
-echo"Sorry but we don't have that email in our system.  <a href='email_password.php'>Please try again.</a>  Thank you!"
+echo "Sorry but we don't have that email in our system.  <a href='email_password.php'>Please try again.</a>  Thank you!";
 
 }
 
-?>
+?>

@@ -197,48 +197,58 @@ function has_filter($tag, $function_to_check = false) {
  * @return mixed The filtered value after all hooked functions are applied to it.
  */
 function apply_filters( $tag, $value ) {
+	echo "APPLY_FILTES(1) ";
 	global $wp_filter, $merged_filters, $wp_current_filter;
-
+	echo "APPLY_FILTES(2) ";
 	$args = array();
-
+	echo "APPLY_FILTES(3) ";
 	// Do 'all' actions first.
 	if ( isset($wp_filter['all']) ) {
+		echo "APPLY_FILTES(4) ";
 		$wp_current_filter[] = $tag;
 		$args = func_get_args();
 		_wp_call_all_hook($args);
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
+		echo "APPLY_FILTES(5) ";
 		if ( isset($wp_filter['all']) )
 			array_pop($wp_current_filter);
 		return $value;
 	}
 
-	if ( !isset($wp_filter['all']) )
+	if ( !isset($wp_filter['all']) ) {
+		echo "APPLY_FILTES(6) ";
 		$wp_current_filter[] = $tag;
+	}
 
 	// Sort.
 	if ( !isset( $merged_filters[ $tag ] ) ) {
+		echo "APPLY_FILTES(7) ";
 		ksort($wp_filter[$tag]);
 		$merged_filters[ $tag ] = true;
 	}
-
+	echo "APPLY_FILTES(8) ";
 	reset( $wp_filter[ $tag ] );
-
-	if ( empty($args) )
+	echo "APPLY_FILTES(9) ";
+	if ( empty($args) ) {
+		echo "APPLY_FILTES(10) ";
 		$args = func_get_args();
+	}
 
 	do {
+		echo "APPLY_FILTES(11) ";
 		foreach ( (array) current($wp_filter[$tag]) as $the_ )
 			if ( !is_null($the_['function']) ){
+				echo "APPLY_FILTES(12) ";
 				$args[1] = $value;
 				$value = call_user_func_array($the_['function'], array_slice($args, 1, (int) $the_['accepted_args']));
 			}
 
 	} while ( next($wp_filter[$tag]) !== false );
-
-	array_pop( $wp_current_filter );
-
+	echo "APPLY_FILTES(13) ";
+	array_pop( $wp_curr1ent_filter );
+	echo "APPLY_FILTES(14) " .  $tag . $value;
 	return $value;
 }
 

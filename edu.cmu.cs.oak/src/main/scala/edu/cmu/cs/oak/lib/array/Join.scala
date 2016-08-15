@@ -27,14 +27,14 @@ class Join extends InterpreterPlugin {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
-    /* Assert that the function has been o*/
+    /* Assert that the function has more than one argument*/
     assert(args.size > 0)
     val pieces = args(if (args.size == 1) 0 else 1)
     val glue = if (args.size == 1) "" else args(1).toString()
     
     return pieces match {
       case av: ArrayValue => {
-        StringValue(av.array.values.mkString(glue), "", 0)
+        StringValue(av.array.values.map(ref => env.extract(ref)).mkString(glue), "", 0)
       }
       case s: SymbolicValue => s
       case _ => SymbolValue("", OakHeap.getIndex, SymbolFlag.DUMMY)

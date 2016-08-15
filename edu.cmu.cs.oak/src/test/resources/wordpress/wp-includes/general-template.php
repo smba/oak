@@ -163,6 +163,8 @@ function get_template_part( $slug, $name = null ) {
 		$templates[] = "{$slug}-{$name}.php";
 
 	$templates[] = "{$slug}.php";
+	
+	echo $slug;
 
 	locate_template($templates, true, false);
 }

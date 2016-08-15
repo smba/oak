@@ -26,7 +26,8 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
    */
   var updatedClassDefs = Set[String]()
   
-  var has_sibling = true
+  var symbolic = true
+  var single_branch = false
 
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint + "]"
 
@@ -34,10 +35,17 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
     (this.constants.contains(name))
   }
   
-  def hasSibling() = has_sibling
+  def isSymbolic() = symbolic
+
+  def toConcreteBranch() {
+    symbolic = false
+    this.toSingleBranch()
+  }
+  
+  def isSingleBranch() = single_branch
 
   def toSingleBranch() {
-    has_sibling = false
+    single_branch = true
   }
 }
 /**

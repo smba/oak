@@ -5,9 +5,11 @@
  * @package WordPress
  * @subpackage Administration
  */
-
+echo "BEGIN";
 /** Load WordPress Bootstrap */
+echo "HEY I AM ABOUT TO IMPORT ADMIN.PHP";
 require_once( dirname( __FILE__ ) . '/admin.php' );
+echo "HEY I JUST IMPORTED ADMIN.PHP";
 
 /** Load WordPress dashboard API */
 require_once(ABSPATH . 'wp-admin/includes/dashboard.php');
@@ -138,3 +140,4 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 
 // <?php
 require( ABSPATH . 'wp-admin/admin-footer.php' );
+echo "END";

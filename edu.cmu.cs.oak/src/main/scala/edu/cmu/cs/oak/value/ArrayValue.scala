@@ -17,6 +17,10 @@ class ArrayValue extends OakValue {
 
   def set(index: OakValue, value: OakValue, env: Environment) {
     
+    if (index.isInstanceOf[SymbolicValue]) {
+      return
+    }
+    
     if (index.isInstanceOf[StringValue]) {
       index.asInstanceOf[StringValue].setLocation(null)
     }

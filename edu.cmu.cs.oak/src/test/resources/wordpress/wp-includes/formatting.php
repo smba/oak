@@ -1023,39 +1023,60 @@ function wp_specialchars_decode( $string, $quote_style = ENT_NOQUOTES ) {
  */
 function wp_check_invalid_utf8( $string, $strip = false ) {
 	$string = (string) $string;
-
+	echo "wp_check_invalid_utf8() 1 " . $string;
 	if ( 0 === strlen( $string ) ) {
+		echo "wp_check_invalid_utf8() 2 " . $string;
 		return '';
 	}
 
+	echo "wp_check_invalid_utf8() 3 " . $string;
+	
 	// Store the site charset as a static to avoid multiple calls to get_option()
 	static $is_utf8 = null;
+	echo "wp_check_invalid_utf8() 4 " . $string;
 	if ( ! isset( $is_utf8 ) ) {
+		echo "wp_check_invalid_utf8() 1 " . $string;
 		$is_utf8 = in_array( get_option( 'blog_charset' ), array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) );
 	}
+	echo "wp_check_invalid_utf8() 5 " . $string;
 	if ( ! $is_utf8 ) {
+		echo "wp_check_invalid_utf8() 6 " . $string;
 		return $string;
 	}
 
+	echo "wp_check_invalid_utf8() 7 " . $string;
+	
 	// Check for support for utf8 in the installed PCRE library once and store the result in a static
 	static $utf8_pcre = null;
+	echo "wp_check_invalid_utf8() 8 " . $string;
 	if ( ! isset( $utf8_pcre ) ) {
+		echo "wp_check_invalid_utf8() 9 " . $string;
 		$utf8_pcre = @preg_match( '/^./u', 'a' );
 	}
+	echo "wp_check_invalid_utf8() 10 " . $string;
 	// We can't demand utf8 in the PCRE installation, so just return the string in those cases
 	if ( !$utf8_pcre ) {
+		echo "wp_check_invalid_utf8() 11 " . $string;
 		return $string;
 	}
 
+	echo "wp_check_invalid_utf8() 12 " . $string;
+	
 	// preg_match fails when it encounters invalid UTF8 in $string
 	if ( 1 === @preg_match( '/^./us', $string ) ) {
+		echo "wp_check_invalid_utf8() 13 " . $string;
 		return $string;
 	}
 
+	echo "wp_check_invalid_utf8() 14 " . $string;
+	
 	// Attempt to strip the bad chars if requested (not recommended)
 	if ( $strip && function_exists( 'iconv' ) ) {
+		echo "wp_check_invalid_utf8() 5 " . $string;
 		return iconv( 'utf-8', 'utf-8', $string );
 	}
+	
+	echo "wp_check_invalid_utf8() 16 " . $string;
 
 	return '';
 }
@@ -3527,8 +3548,11 @@ function esc_js( $text ) {
  * @return string
  */
 function esc_html( $text ) {
+	
 	$safe_text = wp_check_invalid_utf8( $text );
-	$safe_text = _wp_specialchars( $safe_text, ENT_QUOTES );
+	echo "ESC_HTML()1 " . $text . $safe_text;
+	//$safe_text = _wp_specialchars( $safe_text, ENT_QUOTES );
+	//echo "ESC_HTML()2 " . $text . $safe_text;
 	/**
 	 * Filters a string cleaned and escaped for output in HTML.
 	 *
@@ -3540,7 +3564,7 @@ function esc_html( $text ) {
 	 * @param string $safe_text The text after it has been escaped.
  	 * @param string $text      The text prior to being escaped.
 	 */
-	return apply_filters( 'esc_html', $safe_text, $text );
+	return apply_filters( 'esc_html', /*$safe_text, */$text );
 }
 
 /**

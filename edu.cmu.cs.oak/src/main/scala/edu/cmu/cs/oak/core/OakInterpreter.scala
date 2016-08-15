@@ -599,12 +599,16 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     if (test.isInstanceOf[BooleanValue]) {
       val testB = test.asInstanceOf[BooleanValue]
       if (testB.v) {
-        branches.head.toSingleBranch()
+
+        branches.head.toConcreteBranch()
+
         execute(trueBlock, branches.head)
         env.weaveDelta(branches.head.getDelta)
       } else {
         try {
-          branches.last.toSingleBranch()
+
+          branches.last.toConcreteBranch()
+
           execute(falseBlock, branches.last)
           env.weaveDelta(branches.last.getDelta)
         } catch {
@@ -613,6 +617,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
     } else {
       //#endif
+
+      if (falseBlock == null) {
+        branches.head.toSingleBranch()
+      }
 
       execute(trueBlock, branches.head)
 
@@ -684,21 +692,32 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
      * for a concrete branch choice (no sibling) a concrete value is returned. As for a symbolic 
      * branch choices (siblings) a choice is returned/handled.
      */
-    if (env.isInstanceOf[BranchEnv] && env.asInstanceOf[BranchEnv].hasSibling()) {
-      env.update("$return", Choice(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue("")))
-    } else {
-      val ret = env.lookup("$return")
-      if (ret.isInstanceOf[Choice]) {
-        if (ret.asInstanceOf[Choice].v2.isInstanceOf[NullValue]) {
-          val ret_choice = ret.asInstanceOf[Choice]
-          env.update("$return", Choice(ret_choice.p, ret_choice.v1, v))
+    if (env.isInstanceOf[BranchEnv]) {
+      val branch = env.asInstanceOf[BranchEnv]
+      if (branch.isSymbolic()) { // symbolic
+        if (branch.isSingleBranch()) {
+          env.update("$return", Choice.optimized(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue("")))
+        } else {
+          env.update("$return", v)
         }
-      } else {
+      } else { // concrete
         env.update("$return", v)
+      }
+    } else {
+      val return_value = env.lookup("$return")
+      return_value match {
+        case nv: NullValue => {
+          env.update("$return", v)
+        }
+        case cv: Choice => {
+          cv.setV2(v)
+        }
+        case _ => {}
       }
     }
 
     env.terminate()
+
     return ControlCode.OK
   }
 
@@ -1053,7 +1072,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   def execute(stmt: Statement, env: Environment): ControlCode.Value = {
     if (!env.hasTerminated()) { //
-      //      slogger.info(stmt.toString + " " + stmt._location.getFileName + " " + stmt._location.getLineNumber)
       stmt match {
         case s: ClassDefStatement => {
           executeClassDefStatement(s, env)

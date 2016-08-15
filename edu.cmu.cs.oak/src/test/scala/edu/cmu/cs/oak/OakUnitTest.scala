@@ -60,11 +60,15 @@ object OakUnitTest extends App {
   }
 
   
-  val env = loadAndExecute(url("testScripts/array_functions.php"))
+  val env = loadAndExecute(url("testScripts/branching1.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
 
-  val pw = new PrintWriter(new File("/home/stefan/Desktop/output2.xml"))
+  val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close
+  
+//  val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml"))
+//  pw.write(env._2.getOutputAsPrettyXML())
+//  pw.close
 }

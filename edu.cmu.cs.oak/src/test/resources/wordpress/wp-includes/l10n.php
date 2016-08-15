@@ -102,7 +102,7 @@ function translate( $text, $domain = 'default' ) {
 	 * @param string $text         Text to translate.
 	 * @param string $domain       Text domain. Unique identifier for retrieving translated strings.
 	 */
-	return apply_filters( 'gettext', $translations, $text, $domain );
+	return $text;//;apply_filters( 'gettext', $translations, $text, $domain );
 }
 
 /**
@@ -202,7 +202,8 @@ function esc_attr__( $text, $domain = 'default' ) {
  * @return string Translated text
  */
 function esc_html__( $text, $domain = 'default' ) {
-	return esc_html( translate( $text, $domain ) );
+	echo "ESC_HTML__() " . $text;
+	esc_html( translate( $text, $domain ) );
 }
 
 /**
@@ -215,7 +216,7 @@ function esc_html__( $text, $domain = 'default' ) {
  *                       Default 'default'.
  */
 function _e( $text, $domain = 'default' ) {
-	echo translate( $text, $domain );
+	echo '_e(' . translate( $text, $domain ) . ')';
 }
 
 /**

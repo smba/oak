@@ -390,3 +390,4 @@ if ( ! empty( $_REQUEST['action'] ) ) {
 }
 
 echo "XXX-01";
+?>

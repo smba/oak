@@ -337,13 +337,15 @@ function wp_templating_constants() {
 	 * Filesystem path to the current active template directory
 	 * @since 1.5.0
 	 */
-	define('TEMPLATEPATH', get_template_directory());
+	//Hard coded
+	define('TEMPLATEPATH', '/wordpress/wp-content/themes/twentyeleven');
 
 	/**
 	 * Filesystem path to the current active template stylesheet directory
 	 * @since 2.1.0
 	 */
-	define('STYLESHEETPATH', get_stylesheet_directory());
+	// Hard coded
+	define('STYLESHEETPATH', '/wordpress/wp-content/themes/twentyeleven');
 
 	/**
 	 * Slug of the default theme for this install.

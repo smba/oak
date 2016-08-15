@@ -39,11 +39,11 @@ import edu.cmu.cs.oak.value.SymbolValue
  * @author Stefan Muehlbauer <smuhlbau@andrew.cmu.edu>
  */
 class Environment(parent: Environment, calls: Stack[Call], constraint: Constraint) extends EnvListener {
-  
-  var age = 0 
-  
+
+  var age = 0
+
   var changed = false
-  
+
   /**
    * Map of variable identifiers and variable references.
    * In various contexts, variables can refer to the same value.
@@ -55,8 +55,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * Changes in the static class fields
    */
   val staticClassFields = collection.mutable.Map[String, collection.mutable.Map[String, OakValue]]()
-  
-  
+
   /**
    * Map of references
    */
@@ -67,7 +66,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    *  of a PHP script.
    */
   val constants = AnyRefMap[String, OakValue]()
-  
+
   /**
    * Map of global variable identifiers and variable references.
    */
@@ -84,20 +83,20 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * Map of fuńction names and function definitions
    */
   var funcs = AnyRefMap[String, FunctionDef]()
-  
+
   /**
    * Map of class definitions. All classes defined during the program execution
    * are stored here.
    */
   var classDefs = AnyRefMap[String, ClassDef]()
-  
+
   /**
-   * Environment flag to be set to TRUE, once a return statement has 
-   * been executed. This flag will be checked when a statement/block 
+   * Environment flag to be set to TRUE, once a return statement has
+   * been executed. This flag will be checked when a statement/block
    * is executed.
    */
   private var terminated = false
-  
+
   val logger = LoggerFactory.getLogger(classOf[Environment])
 
   /**
@@ -119,13 +118,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   }
 
   def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
-  
+
   def hasChanged = changed
-  
+
   def isGlobalVariable(varname: String): Boolean = {
     if (globalVariables contains varname) {
       return true
-    } else if (parent != null  && (!(parent eq this))) {
+    } else if (parent != null && (!(parent eq this))) {
       return parent.isGlobalVariable(varname)
     } else {
       return false
@@ -146,10 +145,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
         case vnfe: VariableNotFoundException => {
           return NullValue("")
         }
-          
+
       }
     }
-    
+
     def recursiveLookup(reference: Reference): OakValue = {
       this.extract(reference) match {
         case ref2: Reference => recursiveLookup(ref2)
@@ -157,7 +156,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
         case ov: OakValue => ov
       }
     }
-    
+
     val value = try {
       if (reference != null) {
         recursiveLookup(reference)
@@ -312,10 +311,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   def addToGlobal(name: String) {
     changed = true
-    
+
     // Add name to the list of global variables
     this.globalVariables += name
-    
+
     // get a local copy
     try {
       val v = this.extract(this.getRef(name, false))
@@ -342,8 +341,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * @return FunctionDef instance to be stored by the Intepreter
    */
   def defineFunction(fu: AbstractFunction): FunctionDef = {
-    
-    
+
     val f = fu.asInstanceOf[Function]
     val s = f._name
 
@@ -385,10 +383,22 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     // 3) Update the variables that have changed during the execution of the branches
     joinResult.joinedVariables.foreach {
       case (name, value) => {
-        if (!value.isInstanceOf[Reference]) {
-          this.update(name, value)
+        if (name != null && (name equals "$return")) {
+          if (this.isFunctionEnv()) {
+            if (!value.isInstanceOf[Reference]) {
+              this.update(name, value)
+            } else {
+              this.setRef(name, value.asInstanceOf[Reference])
+            }
+          } else {
+            // do nothing
+          }
         } else {
-          this.setRef(name, value.asInstanceOf[Reference])
+          if (!value.isInstanceOf[Reference]) {
+            this.update(name, value)
+          } else {
+            this.setRef(name, value.asInstanceOf[Reference])
+          }
         }
       }
     }
@@ -397,7 +407,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     joinResult.joinedGlobals.foreach {
       g => this.addToGlobal(g)
     }
-    
+
     // 5 Static fields
     joinResult.joinedStaticClassVariables.foreach {
       case (c, m) => {
@@ -408,17 +418,17 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
         }
       }
     }
-    
+
     // 6) Constants
     joinResult.joinedConstants.foreach {
       case (n, c) => this.defineConstant(n, c)
     }
-    
+
     // 7) Functions
     joinResult.joinedFunctionDefs.foreach {
       case (name, f) => this.defineFunction(f)
     }
-    
+
     // 8) Classes
     joinResult.joinedClassDefs.foreach {
       case (name, c) => this.addClass(c)
@@ -429,25 +439,26 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     var returnMap = AnyRefMap[String, OakValue]()
     if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
     if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
-    
-    globalVariables.foreach { 
-      gv => {
-//        if (!(variables.keySet contains gv)) {
-//          update(gv, NullValue(gv))
-//        }
-//        if ( ! this.extract(this.getRef(gv, false)).isInstanceOf[ArrayValue]) {
-        try {
-          returnMap += (gv -> this.getRef(gv, true)) 
-//        }
-        } catch {
-          case e: VariableNotFoundException => {
-            //logger.info("Variable not found: " + gv)
+
+    globalVariables.foreach {
+      gv =>
+        {
+          //        if (!(variables.keySet contains gv)) {
+          //          update(gv, NullValue(gv))
+          //        }
+          //        if ( ! this.extract(this.getRef(gv, false)).isInstanceOf[ArrayValue]) {
+          try {
+            returnMap += (gv -> this.getRef(gv, true))
+            //        }
+          } catch {
+            case e: VariableNotFoundException => {
+              //logger.info("Variable not found: " + gv)
+            }
           }
+
         }
-        
-      }
     }
-    
+
     var t = AnyRefMap[String, Map[String, OakValue]]()
     this.staticClassFields.foreach {
       case (m1, m2) => t.put(m1, m2.toMap)
@@ -472,14 +483,14 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   def getStaticClassField(className: String, fieldName: String): OakValue = {
     if (!this.staticClassFields.get(className).isEmpty && !this.staticClassFields.get(className).get.get(fieldName).isEmpty) {
-        this.staticClassFields.get(className).get.get(fieldName).get
+      this.staticClassFields.get(className).get.get(fieldName).get
     } else if (this.parent != null) {
       this.parent.getStaticClassField(className, fieldName)
     } else {
       getClassDef(className).getStaticFields().get(fieldName).get
     }
   }
-  
+
   def setStaticClassField(className: String, fieldName: String, value: OakValue) = {
     changed = true
     if (this.staticClassFields.get(className).isEmpty) {
@@ -487,8 +498,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     }
     this.staticClassFields.get(className).get.put(fieldName, value)
   }
-  
-    /**
+
+  /**
    * Defines a constant used during the program execution.
    *
    * @param name Name of the constant
@@ -497,8 +508,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   def defineConstant(name: String, value: OakValue) {
     constants.put(name, value)
   }
-  
-   /**
+
+  /**
    * Defines a constant used during the program execution.
    *
    * @param name Name of the constant
@@ -510,10 +521,10 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else if (parent != null) {
       parent.getConstant(name)
     } else {
-      StringValue("", "", 0)//NullValue("not found")//
+      StringValue("", "", 0) //NullValue("not found")//
     }
   }
-  
+
   def defineFunction(f: FunctionDef): Unit = {
     funcs.put(f.getName.toLowerCase, f)
   }
@@ -552,31 +563,39 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       throw new VariableNotFoundException("ClassDef " + name + " not defined!")
     }
   }
-  
+
   def containsFunction(name: String) = !funcs.get(name).isEmpty
-  
+
   def hasTerminated(): Boolean = this.terminated
-  
+
   def resurrect() {
     this.terminated = false
   }
-  
+
   // Triggers termination of the environment
   def terminate() {
     this.terminate(calls.size)
   }
-  
-  
+
   private def terminate(call_stack_size: Int) {
-    
+
     // This environment -> terminated
     this.terminated = true
-    
+
     /* Environment is not the root environment && parent environment 
      * has the same call stack size.
      */
-    if (parent != null && parent.getCalls().size == call_stack_size && !this.isInstanceOf[BranchEnv]) {
-      parent.terminate(call_stack_size)
+    if (parent != null && parent.getCalls().size == call_stack_size) {
+
+      /* Special case: If this environment is a branch, check, if it is a concrete
+      * branch choice or not */
+      if (this.isInstanceOf[BranchEnv]) {
+        if (!this.asInstanceOf[BranchEnv].isSymbolic()) {
+          parent.terminate(call_stack_size)
+        }
+      } else {
+        parent.terminate(call_stack_size)
+      }
     }
   }
 }
@@ -600,31 +619,32 @@ object Environment {
     Environment.forks += 1
     val b1 = new BranchEnv(parent, parent.getCalls(), newConstraint)
     val b2 = new BranchEnv(parent, parent.getCalls(), newConstraint.NOT())
-    
+
     copyGlobalVariables(parent, b1)
     copyGlobalVariables(parent, b2)
-    
+
     return (b1, b2)
   }
 
   def fork(environment: Environment, conditions: List[Constraint]): List[BranchEnv] = {
     val forked = Environment.simpleFork(environment, conditions(0))
-    forked._1.age = environment.age+1
-    forked._2.age = environment.age+1
+    forked._1.age = environment.age + 1
+    forked._2.age = environment.age + 1
     if (conditions.size == 1) {
       List(forked._1, forked._2)
     } else {
       forked._1 :: fork(forked._2, conditions.tail)
     }
   }
-  
+
   private def copyGlobalVariables(parent: Environment, env: Environment) {
     parent.globalVariables.foreach {
-      gvn => try {
-        env.addToGlobal(gvn)
-      } catch {
-        case vnfe: VariableNotFoundException => {}
-      }
+      gvn =>
+        try {
+          env.addToGlobal(gvn)
+        } catch {
+          case vnfe: VariableNotFoundException => {}
+        }
     }
   }
 
@@ -645,9 +665,9 @@ object Environment {
   def createFunctionEnvironment(dis: Environment, fc: Call): Environment = {
     val env = new Environment(dis, dis.getCalls push fc, dis.getConstraint)
     env.age = dis.age + 1
-    
+
     copyGlobalVariables(dis, env)
-    
+
     env
   }
 
@@ -662,10 +682,10 @@ object Environment {
   def createObjectEnvironment(dis: Environment, obj: ObjectValue): Environment = {
     val env = new Environment(dis, dis.getCalls(), dis.getConstraint)
     env.update("$this", obj)
-    env.age = dis.age+1
-    
+    env.age = dis.age + 1
+
     copyGlobalVariables(dis, env)
-    
+
     env
   }
 
@@ -686,19 +706,19 @@ object Environment {
   def createMethodEnvironment(dis: Environment, obj: ObjectValue, mc: Call): Environment = {
     val env = createFunctionEnvironment(dis, mc)
     env.update("$this", obj)
-    env.age = dis.age+1
-    
+    env.age = dis.age + 1
+
     copyGlobalVariables(dis, env)
-    
+
     env
   }
 
   def createLoopEnvironment(dis: Environment): LoopEnv = {
     val env = new LoopEnv(dis, dis.getCalls, dis.getConstraint)
-    env.age = dis.age+1
-    
+    env.age = dis.age + 1
+
     copyGlobalVariables(dis, env)
-    
+
     env
   }
 

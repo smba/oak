@@ -1406,6 +1406,8 @@ function is_blog_installed() {
 		dead_db();
 	}
 
+	echo "is_blog_installed(1409)";
+	
 	$wpdb->suppress_errors( $suppress );
 
 	wp_cache_set( 'is_blog_installed', false );
@@ -3588,7 +3590,7 @@ function dead_db() {
 	// Load custom DB error template, if present.
 	if ( file_exists( WP_CONTENT_DIR . '/db-error.php' ) ) {
 		require_once( WP_CONTENT_DIR . '/db-error.php' );
-		die();
+		//die();
 	}
 
 	// If installing or in the admin, provide the verbose message.
@@ -3612,7 +3614,7 @@ function dead_db() {
 </body>
 </html>
 <?php
-	die();
+	//die();
 }
 
 /**

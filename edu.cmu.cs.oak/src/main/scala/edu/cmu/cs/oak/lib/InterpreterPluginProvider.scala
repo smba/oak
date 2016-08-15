@@ -61,6 +61,7 @@ import edu.cmu.cs.oak.lib.builtin.MethodExists
 import edu.cmu.cs.oak.lib.builtin.IsA
 import edu.cmu.cs.oak.lib.builtin.GetClass
 import edu.cmu.cs.oak.lib.builtin.Getcwd
+import edu.cmu.cs.oak.lib.builtin.Strlen
 
 /**
  * Via this plugin loader the interpreter can 
@@ -163,6 +164,7 @@ trait InterpreterPluginProvider {
     loadPlugin(new IsInt)
     loadPlugin(new GetClass)
     loadPlugin(new Getcwd)
+    loadPlugin(new Strlen)
   }
 
 }

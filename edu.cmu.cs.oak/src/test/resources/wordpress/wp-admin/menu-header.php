@@ -69,8 +69,10 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 	global $self, $parent_file, $submenu_file, $plugin_page, $typenow;
 
 	$first = true;
-	// 0 = menu_title, 1 = capability, 2 = menu_slug, 3 = page_title, 4 = classes, 5 = hookname, 6 = icon_url
+	echo 'count(menu)' . count($menu);
+	// 0 = menu_tit;le, 1 = capability, 2 = menu_slug, 3 = page_title, 4 = classes, 5 = hookname, 6 = icon_url
 	foreach ( $menu as $key => $item ) {
+		echo 'inside loop ' . $key;
 		$admin_is_parent = false;
 		$class = array();
 		$aria_attributes = '';

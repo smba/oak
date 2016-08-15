@@ -1,12 +1,7 @@
 package edu.cmu.cs.oak.value
 
-import edu.cmu.cs.oak.env.Delta
-import edu.cmu.cs.oak.env.Constraint
 import edu.cmu.cs.oak.core.SymbolFlag
-import edu.cmu.cs.oak.env.OakHeap
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.env.Environment
-import scala.collection.mutable.AnyRefMap
+import edu.cmu.cs.oak.env.{Constraint, Environment, OakHeap}
 
 case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
 
@@ -20,14 +15,20 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
   def setV1(v1: OakValue) { this.v1 = v1 }
   def setV2(v2: OakValue) { this.v2 = v2 }
 
+  override def toString(): String = {
+    s"Choice"
+  }
+  
   //
   def getElements(): Set[OakValue] = {
     (v1 match {
       case c: Choice => c.getElements
       case v: OakValue => Set(v)
+      case _ => Set[OakValue]()
     }) union (v2 match {
       case c: Choice => c.getElements
       case v: OakValue => Set(v)
+      case _ => Set[OakValue]()
     })
   }
 
