@@ -44,7 +44,7 @@ class ArrayKeys extends InterpreterPlugin {
         }
         keys
       }
-      case _ => NullValue("")
+      case _ => NullValue
     }
     
   }

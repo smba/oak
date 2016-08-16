@@ -43,7 +43,7 @@ class Tree(value: OakValue) {
 
 object Tree {
   def construct(xs: List[OakValue]): Tree = {
-    val root = new Tree(NullValue("root"))
+    val root = new Tree(NullValue)
     xs.foreach {
       x =>
         x match {

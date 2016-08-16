@@ -159,7 +159,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
         getRef(name)
       } catch {
         case vnfe: VariableNotFoundException => {
-          return NullValue("")
+          return NullValue
         }
 
       }
@@ -177,7 +177,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       if (reference != null) {
         recursiveLookup(reference)
       } else {
-        NullValue("")
+        NullValue
       }
     } catch {
       case vnfe: VariableNotFoundException => throw new RuntimeException(vnfe)
@@ -286,7 +286,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     assert(arrayValueO.isInstanceOf[ArrayValue])
     val arrayValue = arrayValueO.asInstanceOf[ArrayValue]
     //heap.unsetVariable(arrayValue.getRef(index))
-    arrayValue.set(index, NullValue("AbstractEnv::unsetArrayElement"), this)
+    arrayValue.set(index, NullValue, this)
   }
 
   def ifdefy(node: OakValue): List[String] = {
@@ -485,7 +485,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     }
     
     if (this.isSymbolic() && this.isSingleBranch()) {
-      update("$return", Choice(constraint, lookup("$return"), NullValue("")))
+      update("$return", Choice(constraint, lookup("$return"), NullValue))
     }
     
     new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)

@@ -213,7 +213,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             val fieldname = thisf._name.toString()
             env.lookup("$this") match {
               case ov: ObjectValue => {
-                ov.set(fieldname, NullValue(""), env)
+                ov.set(fieldname, NullValue, env)
               }
               case _ => {}
             }
@@ -558,7 +558,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       evaluate(expr, env)
     } catch {
       case vnfe: VariableNotFoundException => {
-        NullValue("Could not evaluate return value " + s._expr + ".")
+        NullValue
       }
     }
 
@@ -598,7 +598,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     } else {
       val return_value = env.lookup("$return")
       return_value match {
-        case nv: NullValue => {
+        case NullValue => {
           env.update("$return", v)
         }
         case cv: Choice => {
@@ -1195,12 +1195,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           }
           av.get(index, env)
         } catch {
-          case t: ArrayIndexOutOfBoundsException => NullValue("Bazinga")
+          case t: ArrayIndexOutOfBoundsException => NullValue
         }
         value
       }
       case v: OakValue => {
-        NullValue("evaluateArrayGetExpr02 " + v.getClass)
+        NullValue
       }
     }
     //#else
@@ -1254,7 +1254,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       val returnValue = try {
         function_env.lookup("$return")
       } catch {
-        case e: Exception => NullValue("$return")
+        case e: Exception => NullValue
       }
 
       //      returnValue match {
@@ -1323,8 +1323,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           //}
           obj
         }
-        case n: NullValue => {
-          SymbolValue(n.toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
+        case NullValue => {
+          SymbolValue("".toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
         }
         case sym: SymbolicValue => {
           SymbolValue(sym.toString(), OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
@@ -1365,7 +1365,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           val ref = objectValue.getFields().getRef(StringValue(fieldName, "", 0))
           env.extract(ref)
         } catch {
-          case _ => NullValue("evaluateThisFieldExpr") //objectValue.getClassDef().getFieldMap().get(fieldName).get
+          case _ => NullValue
         }
       }
       case _ => SymbolValue(t.toString, OakHeap.getIndex(), SymbolFlag.AMBIGUOUS_VALUE)
@@ -1373,7 +1373,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   }
 
   private def evaluateLiteralNullExpr(t: LiteralNullExpr, env: Environment): OakValue = {
-    NullValue("LiteralNullExpr")
+    NullValue
   }
 
   private def evaluateBinaryAssignExpr(e: BinaryAssignExpr, env: Environment): OakValue = {
@@ -1385,7 +1385,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           "$" + sv.value
         }
         case _ => {
-          return NullValue("")
+          return NullValue
         }
       }
     } else {
@@ -1468,7 +1468,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                     case ov: OakValue => ov
                   }
                 } catch {
-                  case vnfe: VariableNotFoundException => NullValue("")
+                  case vnfe: VariableNotFoundException => NullValue
                 }
               } else {
                 try {
@@ -1567,7 +1567,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             thisValue.set(fieldName.toString(), valueX, env)
             env.update("$this", thisValue)
           }
-          case n: NullValue => {}
+          case NullValue => {}
           case s: SymbolicValue => {
             //logger.info("Object is symbolic")
           }
@@ -1779,7 +1779,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           val returnValue = try {
             env.lookup("$return")
           } catch {
-            case e: VariableNotFoundException => NullValue("$return")
+            case e: VariableNotFoundException => NullValue
           }
 
           //          returnValue match {
@@ -1853,7 +1853,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             val ret = try {
               methodEnv.lookup("$return")
             } catch {
-              case _: Throwable => NullValue("$return")
+              case _: Throwable => NullValue
             }
 
             //            ret match {
@@ -1863,13 +1863,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
             return ret
           } else {
-            NullValue("applyMethod01")
+            NullValue
           }
         }
 
-        case null => NullValue("applyMethod01")
+        case null => NullValue
         case s: SymbolValue => {
-          NullValue("applyMethod01")
+          NullValue
         }
 
         case choice: Choice => {
@@ -1902,7 +1902,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
         }
         case ov: OakValue => {
-          NullValue("applyMethod02") //SymbolValue(e.toString(), OakHeap.getIndex(), SymbolFlag.FUNCTION_CALL)
+          NullValue
         }
       }
     }
@@ -1942,7 +1942,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       try {
         obj.asInstanceOf[ObjectValue].get(e._name.toString(), env)
       } catch {
-        case aioob: ArrayIndexOutOfBoundsException => NullValue("evaluateObjectField")
+        case aioob: ArrayIndexOutOfBoundsException => NullValue
       }
     } else {
       SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
@@ -2384,7 +2384,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               functionEnv.setRef("$" + t._1.slice(1, t._1.size), reference)
               functionEnv.insert(reference, env.extract(reference))
             } else {
-              functionEnv.update("$" + t._1.slice(1, t._1.size), NullValue(""))
+              functionEnv.update("$" + t._1.slice(1, t._1.size), NullValue)
             }
           } else {
             val functionVal = t._2 match {
@@ -2422,7 +2422,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             val defaultValue = try {
               evaluate(function.defaults.get(a).get, env)
             } catch {
-              case nsee: NoSuchElementException => NullValue("prepareFunctionOrMethod02")
+              case nsee: NoSuchElementException => NullValue
             }
             functionEnv.update("$" + a.replace("&", ""), defaultValue)
           }

@@ -2,6 +2,7 @@ package edu.cmu.cs.oak.value
 
 import edu.cmu.cs.oak.env.{Constraint, Environment}
 
+
 case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
 
   var depth: Int = Math.max( (if (v1.isInstanceOf[Choice]) v1.asInstanceOf[Choice].depth + 1 else 1), (if (v2.isInstanceOf[Choice]) v2.asInstanceOf[Choice].depth + 1 else 1))
@@ -67,10 +68,10 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 object Choice {
 
   def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
-    if (((v1 == null || v1.isInstanceOf[NullValue]) && (v2 == null || v2.isInstanceOf[NullValue]))) {
-      NullValue("")
-    } else if ((v1 != null) && (v1.hashCode() equals v2.hashCode())){ // safe?
-      v1//NullValue("optimized choice")
+    if (((v1 == null || (v1 equals NullValue)) && (v2 == null || (v2 equals NullValue)))) {
+      NullValue
+    } else if ((v1 != null) && (v1.hashCode() equals v2.hashCode())){ // TODO safe?
+      v1
     } else {
       Choice(p, v1, v2)
     }

@@ -61,7 +61,7 @@ class ArrayValue extends OakValue {
   
   def pop(): OakValue = {
     if (array.size == 0) {
-      NullValue("Array is already empty (pop)")
+      NullValue
     } else {
       val r = array.get( array.keys.toList.reverse.head ).get
       
@@ -87,12 +87,11 @@ class ArrayValue extends OakValue {
          env.extract(array.values.toList(index.asInstanceOf[IntValue].value.toInt))
         } catch {
           case e: Exception => {
-//            throw new ArrayIndexOutOfBoundsException("Index " + index + "  not found in key set.");
-            NullValue("something went wrong")
+            NullValue
           }
         }
       } else {
-        NullValue("something went wrong")
+        NullValue
       }
     }
   }
@@ -163,7 +162,7 @@ class ArrayValue extends OakValue {
           case ov: OakValue => {
             av.set(key, ov, env)
           }
-          case null => av.set(key, NullValue(""), env)
+          case null => av.set(key, NullValue, env)
         }
       }
     }

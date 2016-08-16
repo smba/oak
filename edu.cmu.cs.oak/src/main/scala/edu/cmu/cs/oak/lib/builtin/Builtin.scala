@@ -28,7 +28,7 @@ class IsNull extends InterpreterPlugin {
     val interpreter = provider.asInstanceOf[OakInterpreter]
     assert(args.size == 1)
     return args.head match {
-      case n: NullValue => BooleanValue(true)
+      case NullValue => BooleanValue(true)
       case s: SymbolicValue => SymbolValue("is_null(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
       case _ => BooleanValue(false)
     }
@@ -166,7 +166,7 @@ class Explode extends InterpreterPlugin {
           case _ => SymbolValue("explode(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
         }
       }
-      case n: NullValue => NullValue("explode()")
+      case NullValue => NullValue
       case _ => SymbolValue("explode(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
     }
     null
@@ -186,7 +186,7 @@ class InArray extends InterpreterPlugin {
       case av: ArrayValue => {
         BooleanValue(av.array.map { case (k, ref) => env.extract(ref) }.toSet.contains(needle))
       }
-      case n: NullValue => NullValue("in_array()")
+      case NullValue => NullValue
       case _ => SymbolValue("in_array(" + args.head + ")", OakHeap.getIndex, SymbolFlag.DUMMY)
     }
   }
@@ -203,7 +203,7 @@ class FunctionExists extends InterpreterPlugin {
       case sv: StringValue => {
         BooleanValue(env.containsFunction(sv.value))
       }
-      case _ => NullValue("function_exists()")
+      case _ => NullValue
     }
   }
 }
@@ -222,7 +222,7 @@ class FuncGetArg extends InterpreterPlugin {
         }
         av
       }
-      case _ => NullValue("func_get_arg()")
+      case _ => NullValue
     }
   }
 }

@@ -59,9 +59,9 @@ class CallUserFuncArray extends InterpreterPlugin {
             try {
               functionEnv.lookup("$return")
             } catch {
-              case e: Exception => NullValue("")
+              case e: Exception => NullValue
             }
-          } case _ => NullValue("")
+          } case _ => NullValue
 
         }
 
@@ -88,19 +88,19 @@ class CallUserFuncArray extends InterpreterPlugin {
                 try {
                   methodEnv.lookup("$return")
                 } catch {
-                  case e: Exception => NullValue("")
+                  case e: Exception => NullValue
                 }
               }
               case v: OakValue => v
             }
           }
           case _ => {
-            NullValue("")
+            NullValue
           }
         }
       }
       case null => null
-      case n: NullValue => n
+      case NullValue => NullValue
       case s: SymbolValue => s
     }
 

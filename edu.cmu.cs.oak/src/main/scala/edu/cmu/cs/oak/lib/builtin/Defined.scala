@@ -25,7 +25,7 @@ class Defined extends InterpreterPlugin {
     /* Assert that the function has one argument */
     assert(args.size == 1)
     
-    val b = BooleanValue( env.getConstant(args(0).toString.replace("\"", "")).isInstanceOf[NullValue])
+    val b = BooleanValue( env.getConstant(args(0).toString.replace("\"", "")) equals NullValue)
   
     return b
   }

@@ -40,7 +40,7 @@ class ArrayMap extends InterpreterPlugin {
         new_av
       }
       case _ => {
-        NullValue("")
+        NullValue
       }
     }
   }

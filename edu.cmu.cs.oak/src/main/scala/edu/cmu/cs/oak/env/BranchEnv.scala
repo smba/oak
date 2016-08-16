@@ -74,19 +74,23 @@ object BranchEnv {
       val a = try {
         if (envs(0).hasChanged) {
           envs(0).lookup(variable)
-        } else { NullValue("joinV") }
+        } else { 
+          NullValue 
+        }
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("Vnf")
+        case vnfe: VariableNotFoundException => NullValue
       }
       val b = try {
         if (envs(1).hasChanged) {
           envs(1).lookup(variable)
-        } else { NullValue("joinV") }
+        } else { 
+          NullValue 
+        }
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("Vnf")
+        case vnfe: VariableNotFoundException => NullValue
       }
-      if (a.isInstanceOf[NullValue] && b.isInstanceOf[NullValue]) {
-        NullValue("joinV")
+      if ((a equals NullValue) && (b equals NullValue)) {
+        NullValue
       } else {
 //        println(a, b)
         Choice.optimized(constraints(0), a, b)
@@ -95,9 +99,9 @@ object BranchEnv {
       Choice.optimized(constraints(0), try {
         if (envs(0).hasChanged) {
           envs(0).lookup(variable)
-        } else { NullValue("joinV") }
+        } else { NullValue }
       } catch {
-        case vnfe: VariableNotFoundException => NullValue("Vnf")
+        case vnfe: VariableNotFoundException => NullValue
       }, joinVariable(envs.tail, constraints.tail, variable))
     }
   }
@@ -124,25 +128,25 @@ object BranchEnv {
       Choice.optimized(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: NoSuchElementException => NullValue("joinStCF")
+        case vnfe: NoSuchElementException => NullValue
       }, try {
         envs(1).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: NoSuchElementException => NullValue("joinStCF")
+        case vnfe: NoSuchElementException => NullValue
       })
     } else {
       Choice.optimized(constraints(0), try {
         envs(0).getStaticClassField(className, fieldName)
       } catch {
-        case vnfe: NoSuchElementException => NullValue("joinStCF")
+        case vnfe: NoSuchElementException => NullValue
       }, joinStaticClassField(envs.tail, constraints.tail, className, fieldName))
     }
   }
 
   private def joinConstants(envs: List[BranchEnv], constraints: List[Constraint], cname: String): OakValue = {
-    val c1 = if (envs(0).definesConstant(cname)) envs(0).getConstant(cname) else NullValue("")
+    val c1 = if (envs(0).definesConstant(cname)) envs(0).getConstant(cname) else NullValue
     if ((envs.size == 2) && (constraints.size == 1)) {
-      val c2 = if (envs(1).definesConstant(cname)) envs(1).getConstant(cname) else NullValue("")
+      val c2 = if (envs(1).definesConstant(cname)) envs(1).getConstant(cname) else NullValue
       Choice.optimized(constraints(0), c1, c2)
     } else {
       Choice.optimized(constraints(0), c1, joinConstants(envs.tail, constraints.tail, cname))

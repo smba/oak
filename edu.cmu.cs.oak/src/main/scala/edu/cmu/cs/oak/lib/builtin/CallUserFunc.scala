@@ -52,7 +52,7 @@ class CallUserFunc extends InterpreterPlugin {
         try {
           functionEnv.lookup("$return")
         } catch {
-          case e: Exception => NullValue("")
+          case e: Exception => NullValue
         }
 
       }
@@ -84,7 +84,7 @@ class CallUserFunc extends InterpreterPlugin {
         //        }
       }
       
-      case n: NullValue => n
+      case NullValue => NullValue
       case s: SymbolValue => s
       case _ => null
     }

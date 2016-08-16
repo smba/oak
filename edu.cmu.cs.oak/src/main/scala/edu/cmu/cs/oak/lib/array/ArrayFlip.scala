@@ -38,7 +38,7 @@ class ArrayFlip extends InterpreterPlugin {
         
         flipped
       }
-      case _ => NullValue("")
+      case _ => NullValue
     }
     
   }

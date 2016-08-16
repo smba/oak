@@ -39,6 +39,6 @@ class ArrayWalk extends InterpreterPlugin {
         null
       }
     }
-    NullValue("")
+    NullValue
   }
 }

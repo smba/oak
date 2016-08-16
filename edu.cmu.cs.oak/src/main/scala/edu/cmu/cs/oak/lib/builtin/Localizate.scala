@@ -27,7 +27,7 @@ class Localizate extends InterpreterPlugin {
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     // TODO remove stub with implementation
-    return if (args.size > 0) args.head else NullValue("")
+    return if (args.size > 0) args.head else NullValue
   }
 
 }

@@ -13,6 +13,9 @@ import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
 import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.nodes.SymbolNode
+import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.NullValue
+
 
 /**
  * Model for  output of a symbolically executed PHP program.
@@ -59,14 +62,10 @@ abstract class DNode {
     if (ifd1.size == ifd2.size) {
       (ifd1 zip ifd2).map {
         case (x, y) => {
-          if (!(chop(x) equals chop(y))) {
-            println(s"${x} did not equal ${y}")
-          }
-          chop(x) equals chop(y);
+          chop(x) equals chop(y)
         }
       }.fold(true)(_ && _)
     } else {
-      println(s"Size does not match: ${ifd1.size} ${ifd2.size}")
       false
     }
   }
@@ -97,7 +96,7 @@ object DNode {
       case sv: StringValue => {
         LiteralNode(sv.value, sv.getFileName(), sv.getLineNr())
       }
-      case n: NullValue => UndefNode
+      case NullValue => UndefNode
       case null => UndefNode
       case _ => {
         LiteralNode(value.toString(), location.getFileName, location.getLineNumber)
