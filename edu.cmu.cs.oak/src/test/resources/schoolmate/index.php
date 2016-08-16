@@ -34,8 +34,9 @@
   // Make the $page varialbe easy to use //
   $page = $_POST["page"];
 
-  if($page == null)
+  if($page == null) {
 	$page = 0;
+  }
 
   // Validate and log the user into the system //
   if($_POST["login"] == 1)
@@ -50,6 +51,9 @@
    $page=0;
   }
 
+  echo $page;
+  
+  
   switch ($page)
   {
 

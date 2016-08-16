@@ -26,8 +26,7 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
    */
   var updatedClassDefs = Set[String]()
   
-  var symbolic = true
-  var single_branch = false
+  
 
   override def toString() = "BranchEnv" + this.hashCode() + "[" + this.constraint + "]"
 
@@ -35,18 +34,7 @@ class BranchEnv(parent: Environment, calls: Stack[Call], constraint: Constraint)
     (this.constants.contains(name))
   }
   
-  def isSymbolic() = symbolic
-
-  def toConcreteBranch() {
-    symbolic = false
-    this.toSingleBranch()
-  }
   
-  def isSingleBranch() = single_branch
-
-  def toSingleBranch() {
-    single_branch = true
-  }
 }
 /**
  * Static methods used for the join operation of BranchEnvs.
@@ -100,6 +88,7 @@ object BranchEnv {
       if (a.isInstanceOf[NullValue] && b.isInstanceOf[NullValue]) {
         NullValue("joinV")
       } else {
+//        println(a, b)
         Choice.optimized(constraints(0), a, b)
       }
     } else {

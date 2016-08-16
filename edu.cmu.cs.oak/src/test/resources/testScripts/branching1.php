@@ -8,14 +8,6 @@ function abc() {
 	return "b";
 }
 
-function jkl() {
-	if ($d + 6 < 1) {
-		return "a";
-	} else {
-		return "b";
-	}
-}
-
 //should return a
 function def() {
 	if (true) {
@@ -29,6 +21,14 @@ function ghi() {
 		return "a";
 	} else {
 		return 'b';
+	}
+}
+
+function jkl() {
+	if ($d + 6 < 1) {
+		return "a";
+	} else {
+		return "b";
 	}
 }
 

@@ -300,6 +300,7 @@
         </Concat>
       </Select>
     </Concat>
+    <Literal Text="0" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/index.php" Line="54"/>
     <Select>
       <Constraint Text="$page == 0"/>
       <Concat>
@@ -6563,13 +6564,21 @@
                                                                                   <Literal Text=");' /&gt;&lt;/td&gt; &lt;td&gt;" Length="19" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
                                                                                   <Select>
                                                                                     <Constraint Text="($class[0] != &quot;&quot;)"/>
-                                                                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
+                                                                                      <Undef/>
+                                                                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                                                                    </Select>
                                                                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="163"/>
                                                                                   </Select>
                                                                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
                                                                                   <Select>
                                                                                     <Constraint Text="($class[1] != &quot;&quot;)"/>
-                                                                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                                                                    <Select>
+                                                                                      <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
+                                                                                      <Undef/>
+                                                                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                                                                    </Select>
                                                                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="164"/>
                                                                                   </Select>
                                                                                   <Literal Text="&lt;/td&gt; &lt;/tr&gt; " Length="18" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageAttendance.php" Line="166"/>
@@ -7759,7 +7768,11 @@
                             <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="220"/>
                             <Select>
                               <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                              <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                              <Select>
+                                <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
+                                <Undef/>
+                                <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                              </Select>
                               <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="220"/>
                             </Select>
                             <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ManageGrades.php" Line="221"/>
@@ -9042,7 +9055,11 @@
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                 <Select>
                                   <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                  <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                  <Select>
+                                    <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
+                                    <Undef/>
+                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                  </Select>
                                   <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                 </Select>
                                 <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="52"/>
@@ -9863,7 +9880,11 @@
                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                   <Select>
                                     <Constraint Text="(convertfromdb() != &quot;//&quot;)"/>
-                                    <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                    <Select>
+                                      <Constraint Text="($ret_date == &quot;00/00/0000&quot;)"/>
+                                      <Undef/>
+                                      <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/DBFunctions.php" Line="44"/>
+                                    </Select>
                                     <Literal Text="" Length="0" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="51"/>
                                   </Select>
                                   <Literal Text="&lt;/td&gt; &lt;td&gt;" Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate/ViewGrades.php" Line="52"/>

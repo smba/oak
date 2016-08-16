@@ -43,6 +43,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   var age = 0
 
   var changed = false
+  
+  var symbolic = true
+  var single_branch = false
 
   /**
    * Map of variable identifiers and variable references.
@@ -117,6 +120,19 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     }
   }
 
+  def isSymbolic() = symbolic
+
+  def toConcreteBranch() {
+    symbolic = false
+    this.toSingleBranch()
+  }
+  
+  def isSingleBranch() = single_branch
+
+  def toSingleBranch() {
+    single_branch = true
+  }
+  
   def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
 
   def hasChanged = changed
@@ -437,8 +453,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   def getDelta(): Delta = {
     var returnMap = AnyRefMap[String, OakValue]()
-    if (variables.contains("$return")) returnMap += ("$return" -> getRef("$return"))
-    if (variables.contains("$returnref")) returnMap += ("$returnref" -> getRef("$returnref"))
+    if (variables.contains("$return")) {
+        returnMap += ("$return" -> getRef("$return"))
+    }
+    if (variables.contains("$returnref")) {
+      returnMap += ("$returnref" -> getRef("$returnref"))
+    }
 
     globalVariables.foreach {
       gv =>
@@ -463,6 +483,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.staticClassFields.foreach {
       case (m1, m2) => t.put(m1, m2.toMap)
     }
+    
+    if (this.isSymbolic() && this.isSingleBranch()) {
+      update("$return", Choice(constraint, lookup("$return"), NullValue("")))
+    }
+    
     new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)
   }
 

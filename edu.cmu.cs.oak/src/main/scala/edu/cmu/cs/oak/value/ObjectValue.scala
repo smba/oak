@@ -20,6 +20,10 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
   def getName(): String = name
 
   override def toString() = "ObjectValue" + this.hashCode()
+  
+  override def hashCode(): Int = {
+    objectClass.name.hashCode() + fields.array.hashCode()
+  }
 
   override def equals(that: Any): Boolean = {
     that match {

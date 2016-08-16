@@ -1,132 +1,23 @@
 package edu.cmu.cs.oak.core
 
-import java.io.File
-import java.io.FileNotFoundException
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-
-import scala.collection.JavaConversions.mapAsJavaMap
-import scala.collection.JavaConversions.mapAsScalaMap
-import scala.collection.JavaConversions.setAsJavaSet
-import scala.collection.immutable.Stack
-import scala.collection.mutable.ListBuffer
-import scala.util.control.Breaks.breakable
-import scala.util.control.Breaks.break
-
-import org.slf4j.LoggerFactory
+import java.io.{File, FileNotFoundException}
+import java.nio.file.{Files, Path, Paths}
 
 import com.caucho.quercus.Location
-import com.caucho.quercus.expr.AbstractBinaryExpr
-import com.caucho.quercus.expr.ArrayGetExpr
-import com.caucho.quercus.expr.ArrayTailExpr
-import com.caucho.quercus.expr.BinaryAppendExpr
-import com.caucho.quercus.expr.BinaryAssignExpr
-import com.caucho.quercus.expr.BinaryAssignListExpr
-import com.caucho.quercus.expr.BinaryAssignRefExpr
-import com.caucho.quercus.expr.BinaryCharAtExpr
-import com.caucho.quercus.expr.BinaryInstanceOfExpr
-import com.caucho.quercus.expr.BinaryOrExpr
-import com.caucho.quercus.expr.CallExpr
-import com.caucho.quercus.expr.CallVarExpr
-import com.caucho.quercus.expr.ClassConstExpr
-import com.caucho.quercus.expr.ClassFieldExpr
-import com.caucho.quercus.expr.ClassMethodExpr
-import com.caucho.quercus.expr.ConditionalExpr
-import com.caucho.quercus.expr.ConstDirExpr
-import com.caucho.quercus.expr.ConstExpr
-import com.caucho.quercus.expr.ConstFileExpr
-import com.caucho.quercus.expr.Expr
-import com.caucho.quercus.expr.FunArrayExpr
-import com.caucho.quercus.expr.FunCloneExpr
-import com.caucho.quercus.expr.FunDieExpr
-import com.caucho.quercus.expr.FunEmptyExpr
-import com.caucho.quercus.expr.FunExitExpr
-import com.caucho.quercus.expr.FunIncludeExpr
-import com.caucho.quercus.expr.FunIncludeOnceExpr
-import com.caucho.quercus.expr.FunIssetExpr
-import com.caucho.quercus.expr.LiteralExpr
-import com.caucho.quercus.expr.LiteralLongExpr
-import com.caucho.quercus.expr.LiteralNullExpr
-import com.caucho.quercus.expr.LiteralUnicodeExpr
-import com.caucho.quercus.expr.ObjectFieldExpr
-import com.caucho.quercus.expr.ObjectFieldVarExpr
-import com.caucho.quercus.expr.ObjectMethodExpr
-import com.caucho.quercus.expr.ObjectNewExpr
-import com.caucho.quercus.expr.ObjectNewVarExpr
-import com.caucho.quercus.expr.ParamRequiredExpr
-import com.caucho.quercus.expr.ThisExpr
-import com.caucho.quercus.expr.ThisFieldExpr
-import com.caucho.quercus.expr.ThisFieldVarExpr
-import com.caucho.quercus.expr.ThisMethodExpr
-import com.caucho.quercus.expr.ToArrayExpr
-import com.caucho.quercus.expr.ToBooleanExpr
-import com.caucho.quercus.expr.ToDoubleExpr
-import com.caucho.quercus.expr.ToLongExpr
-import com.caucho.quercus.expr.ToObjectExpr
-import com.caucho.quercus.expr.ToStringExpr
-import com.caucho.quercus.expr.UnaryBitNotExpr
-import com.caucho.quercus.expr.UnaryMinusExpr
-import com.caucho.quercus.expr.UnaryNotExpr
-import com.caucho.quercus.expr.UnaryPostIncrementExpr
-import com.caucho.quercus.expr.UnaryPreIncrementExpr
-import com.caucho.quercus.expr.UnaryRefExpr
-import com.caucho.quercus.expr.UnarySuppressErrorExpr
-import com.caucho.quercus.expr.VarExpr
-import com.caucho.quercus.expr.VarUnsetExpr
-import com.caucho.quercus.expr.VarVarExpr
+import com.caucho.quercus.expr._
 import com.caucho.quercus.program.QuercusProgram
-import com.caucho.quercus.statement.BlockStatement
-import com.caucho.quercus.statement.BreakStatement
-import com.caucho.quercus.statement.ClassDefStatement
-import com.caucho.quercus.statement.ClassStaticStatement
-import com.caucho.quercus.statement.ContinueStatement
-import com.caucho.quercus.statement.DoStatement
-import com.caucho.quercus.statement.EchoStatement
-import com.caucho.quercus.statement.ExprStatement
-import com.caucho.quercus.statement.ForStatement
-import com.caucho.quercus.statement.ForeachStatement
-import com.caucho.quercus.statement.FunctionDefStatement
-import com.caucho.quercus.statement.GlobalStatement
-import com.caucho.quercus.statement.IfStatement
-import com.caucho.quercus.statement.ReturnRefStatement
-import com.caucho.quercus.statement.ReturnStatement
-import com.caucho.quercus.statement.Statement
-import com.caucho.quercus.statement.StaticStatement
-import com.caucho.quercus.statement.SwitchStatement
-import com.caucho.quercus.statement.TextStatement
-import com.caucho.quercus.statement.ThrowStatement
-import com.caucho.quercus.statement.TryStatement
-import com.caucho.quercus.statement.WhileStatement
-
-import edu.cmu.cs.oak.env.BranchEnv
-import edu.cmu.cs.oak.env.Call
-import edu.cmu.cs.oak.env.ClassDef
-import edu.cmu.cs.oak.env.Constraint
-import edu.cmu.cs.oak.env.Environment
-import edu.cmu.cs.oak.env.FunctionDef
-import edu.cmu.cs.oak.env.OakHeap
+import com.caucho.quercus.statement._
+import edu.cmu.cs.oak.env._
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.lib.InterpreterPluginProvider
 import edu.cmu.cs.oak.nodes.DNode
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.NumericValue
-import edu.cmu.cs.oak.value.OakValue
-import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.value.Reference
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.value.SymbolicValue
-import com.caucho.quercus.expr.ClassConstructExpr
-import com.caucho.quercus.expr.UnaryPlusExpr
-import java.time.Instant
-import java.time.Duration
+import edu.cmu.cs.oak.value._
+import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConversions.{mapAsJavaMap, mapAsScalaMap, setAsJavaSet}
+import scala.collection.immutable.Stack
+import scala.collection.mutable.ListBuffer
+import scala.util.control.Breaks.breakable
 
 /**
  * Antenna feature definitions for configuration
@@ -695,11 +586,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     if (env.isInstanceOf[BranchEnv]) {
       val branch = env.asInstanceOf[BranchEnv]
       if (branch.isSymbolic()) { // symbolic
-        if (branch.isSingleBranch()) {
-          env.update("$return", Choice.optimized(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue("")))
-        } else {
-          env.update("$return", v)
-        }
+//        if (branch.isSingleBranch()) {
+//           env.update("$return", Choice(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue("")))
+//        } else {
+//          env.update("$return", v)
+//        }
+        env.update("$return", v)
       } else { // concrete
         env.update("$return", v)
       }
@@ -710,7 +602,20 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           env.update("$return", v)
         }
         case cv: Choice => {
-          cv.setV2(v)
+          if (v.isInstanceOf[Choice]) {
+            
+            /*
+             * Check, if values are equal. If so, prevent cycle construction
+             * for the good of the JVM call stack... 
+             */
+            if (cv equals v) { 
+              env.update("$return", v)
+            } else {
+              cv.setV2(v)
+            }
+          } else {
+            cv.setV2(v)
+          }
         }
         case _ => {}
       }
@@ -886,6 +791,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     val delta = BranchEnv.join(bResults, conditions)
     env.weaveDelta(delta)
+    return ControlCode.OK
+
     return ControlCode.OK
   }
 
@@ -2200,6 +2107,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           // If the resolved (absolute) path exists, use file
           val program = this.engine.loadFromFile(resolved_path.get)
 
+          //#ifdef LOGGING
+          logger.info(s" ${this.includes.size} Will include ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
+          //#endif
+          
           // Set include path as current path
           this.setCurrentPath(resolved_path.get)
 
@@ -2210,8 +2121,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           this.resumePreviousCurrent()
 
           //#ifdef LOGGING
-          logger.info(s" ${this.includes.size} Included ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
+          logger.info(s" ${this.includes.size} Resuming ${getCurrentPath().toString.takeRight(30)}")
           //#endif
+          
         } catch {
           case e: FileNotFoundException => {
 
