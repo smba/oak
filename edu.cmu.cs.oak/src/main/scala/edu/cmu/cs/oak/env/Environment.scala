@@ -43,7 +43,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   var age = 0
 
   var changed = false
-  
+
   var symbolic = true
   var single_branch = false
 
@@ -126,13 +126,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     symbolic = false
     this.toSingleBranch()
   }
-  
+
   def isSingleBranch() = single_branch
 
   def toSingleBranch() {
     single_branch = true
   }
-  
+
   def isFunctionEnv(): Boolean = (this.parent != null) && (this.parent.getCalls().size < getCalls().size)
 
   def hasChanged = changed
@@ -454,7 +454,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   def getDelta(): Delta = {
     var returnMap = AnyRefMap[String, OakValue]()
     if (variables.contains("$return")) {
-        returnMap += ("$return" -> getRef("$return"))
+      returnMap += ("$return" -> getRef("$return"))
     }
     if (variables.contains("$returnref")) {
       returnMap += ("$returnref" -> getRef("$returnref"))
@@ -483,11 +483,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     this.staticClassFields.foreach {
       case (m1, m2) => t.put(m1, m2.toMap)
     }
-    
-    if (this.isSymbolic() && this.isSingleBranch()) {
-      update("$return", Choice(constraint, lookup("$return"), NullValue))
-    }
-    
+
+    /*if (this.isSymbolic() && this.isSingleBranch()) {
+      val re = lookup("$return")
+      update("$return", Choice.optimized(constraint, if (re == null) NullValue else re, NullValue))
+    }*/
+
     new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)
   }
 
@@ -599,13 +600,13 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   // Triggers termination of the environment
   def terminate() {
-    this.terminate(calls.size)
+    this.terminate(this.getCalls().size)
   }
 
   private def terminate(call_stack_size: Int) {
 
     // This environment -> terminated
-    this.terminated = true
+    terminated = true
 
     /* Environment is not the root environment && parent environment 
      * has the same call stack size.
@@ -614,13 +615,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
       /* Special case: If this environment is a branch, check, if it is a concrete
       * branch choice or not */
-      if (this.isInstanceOf[BranchEnv]) {
-        if (!this.asInstanceOf[BranchEnv].isSymbolic()) {
-          parent.terminate(call_stack_size)
-        }
-      } else {
+      if (!this.isSymbolic()) {
         parent.terminate(call_stack_size)
       }
+    } else {
+      //parent.terminate(call_stack_size)
     }
   }
 }

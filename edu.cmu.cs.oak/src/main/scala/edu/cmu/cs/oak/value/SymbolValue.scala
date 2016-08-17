@@ -4,6 +4,7 @@ import com.caucho.quercus.expr.Expr
 import com.caucho.quercus.Location
 import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.core.OakInterpreter
+import edu.cmu.cs.oak.env.OakHeap
 
 /**
   *

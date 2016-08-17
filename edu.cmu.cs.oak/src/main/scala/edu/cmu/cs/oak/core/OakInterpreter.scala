@@ -1,7 +1,7 @@
 package edu.cmu.cs.oak.core
 
-import java.io.{File, FileNotFoundException}
-import java.nio.file.{Files, Path, Paths}
+import java.io.{ File, FileNotFoundException }
+import java.nio.file.{ Files, Path, Paths }
 
 import com.caucho.quercus.Location
 import com.caucho.quercus.expr._
@@ -14,7 +14,7 @@ import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value._
 import org.slf4j.LoggerFactory
 
-import scala.collection.JavaConversions.{mapAsJavaMap, mapAsScalaMap, setAsJavaSet}
+import scala.collection.JavaConversions.{ mapAsJavaMap, mapAsScalaMap, setAsJavaSet }
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.breakable
@@ -108,6 +108,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     //    logger.info(s"<Program> ${env.hasTerminated()}")
     //    val before = Instant.now()
+    println(getCurrentPath().toString.split("/").takeRight(2).mkString("/"))
     execute(program, env)
     //    val after = Instant.now()
     //    logger.info("</Program>")
@@ -564,62 +565,102 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     /*
      * These two snippets are (! need to be) equivalent:
-     * 
+     *
      * A:
      * if (<Constraint>) {
      *   return 'a';
      * }
      * return 'b';
-     * 
+     *
      * and B:
-     * 
+     *
      * if (<Constraint>) {
      *   return 'a';
      * else {
      *   return 'b';
      * }
-     * 
+     *
      * This block manages the variability-aware assignment of return values, so that
-     * for a concrete branch choice (no sibling) a concrete value is returned. As for a symbolic 
+     * for a concrete branch choice (no sibling) a concrete value is returned. As for a symbolic
      * branch choices (siblings) a choice is returned/handled.
      */
-    if (env.isInstanceOf[BranchEnv]) {
-      val branch = env.asInstanceOf[BranchEnv]
-      if (branch.isSymbolic()) { // symbolic
-//        if (branch.isSingleBranch()) {
-//           env.update("$return", Choice(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue("")))
-//        } else {
-//          env.update("$return", v)
-//        }
-        env.update("$return", v)
-      } else { // concrete
-        env.update("$return", v)
-      }
-    } else {
-      val return_value = env.lookup("$return")
-      return_value match {
-        case NullValue => {
+
+    // Check if there is already a $return value  defined
+    if (env.variables.keySet.contains("$return")) {
+      val previous_return_value = env.lookup("$return")
+      previous_return_value match {
+        case NullValue => { // previous return value is an undefined value -> omit
           env.update("$return", v)
         }
+
+        /*
+         * No other value than a choice can be defined
+         */
         case cv: Choice => {
-          if (v.isInstanceOf[Choice]) {
-            
-            /*
-             * Check, if values are equal. If so, prevent cycle construction
-             * for the good of the JVM call stack... 
-             */
-            if (cv equals v) { 
-              env.update("$return", v)
-            } else {
-              cv.setV2(v)
-            }
-          } else {
-            cv.setV2(v)
-          }
+
+          /*
+           * XXX This snippet is still to be tested
+           * 
+           */
+//          println(s"Unexpected return value was already defined: ${previous_return_value}, but wanted to return ${v} at ${s._location}")
+//          if (cv.getV2().isEmpty()) {
+//            cv.setV2(v)
+//          } else {
+            env.update("$return", Choice.optimized(cv.getConstraint().NOT(), v, previous_return_value))
+//          }
         }
-        case _ => {}
+        case _ => {
+          //throw new RuntimeException()
+          env.update("$return", v) // assign return value and omit previous one
+        }
+      }
+    } else { // $return is not defined yet
+      if (env.isSymbolic()) {
+        if (env.getConstraint() equals Constraint("true")) {
+          env.update("$return", v)
+        } else {
+          env.update("$return", Choice.optimized(env.getConstraint(), v, NullValue))
+        }
+      } else {
+        env.update("$return", v) // assign return value
       }
     }
+    //    if (env.isInstanceOf[BranchEnv]) {
+    //      val branch = env.asInstanceOf[BranchEnv]
+    //      if (branch.isSymbolic()) { // symbolic
+    //        if (branch.isSingleBranch()) {
+    //           env.update("$return", Choice.optimized(env.asInstanceOf[BranchEnv].getConstraint(), v, NullValue))
+    //        } else {
+    //          env.update("$return", v) // join kümmert sich darum
+    //        }
+    //      } else { // concrete
+    //        env.update("$return", v)
+    //      }
+    //    } else {
+    //      val return_value = env.lookup("$return")
+    //      return_value match {
+    //        case NullValue => {
+    //          env.update("$return", v)
+    //        }
+    //        case cv: Choice => {
+    //          if (v.isInstanceOf[Choice]) {
+    //
+    //            /*
+    //             * Check, if values are equal. If so, prevent cycle construction
+    //             * for the good of the JVM call stack...
+    //             */
+    //            if (cv equals v) {
+    //              env.update("$return", v)
+    //            } else {
+    //              cv.setV2(v)
+    //            }
+    //          } else {
+    //            cv.setV2(v)
+    //          }
+    //        }
+    //        case _ => {}
+    //      }
+    //    }
 
     env.terminate()
 
@@ -1249,6 +1290,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
        */
       val function_env = Environment.createFunctionEnvironment(env, function_call)
       prepareFunctionOrMethod(function, env, function_env, args)
+
+      //#ifdef LOGGING_CALLS
+                  val n = env.getCalls().size
+                  val file = loc.getFileName.split("/").takeRight(3).mkString("/")
+                  val line = loc.getLineNumber
+                  println(s"${"| " * (n - 1)}- ${function_name} (${file}:${line})")
+                  //println(env.getCalls())
+      //#endif
+
       execute(function.statement, function_env)
 
       val returnValue = try {
@@ -1465,6 +1515,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                       sv.setLocation(null)
                       sv
                     }
+                    case null => NullValue
                     case ov: OakValue => ov
                   }
                 } catch {
@@ -1844,6 +1895,14 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             val methodEnv = Environment.createMethodEnvironment(env, objectValue, methodCall)
             try {
               prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
+
+              //#ifdef LOGGING_CALLS
+                                          val n = env.getCalls().size
+                                          val file = e._location.getFileName.split("/").takeRight(3).mkString("/")
+                                          val line = e._location.getLineNumber
+                                          println(s"${"| " * (n - 1)}- ${objectValue.objectClass.name + "." + methodName} (${file}:${line})")
+              //#endif
+
               execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
               env.weaveDelta(methodEnv.getDelta())
             } catch {
@@ -1875,23 +1934,23 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         case choice: Choice => {
 
           val elements = choice.getElements()
-
+            
           //#ifdef FIRST_CONCRETE_METHOD_APPLICATION
-          //@          val objects = elements.filter { x => x.isInstanceOf[ObjectValue] }
-          //@          if (objects.size > 0) {
-          //@            val object_value = objects.head.asInstanceOf[ObjectValue]
-          //@            logger.warn(object_value.objectClass.name + "::" + methodName + "()")
-          //@            applyMethod(object_value, methodName, args, env)
-          //@          } else {
-          //@            NullValue("")
-          //@          }
+          //@                    val objects = elements.filter { x => x.isInstanceOf[ObjectValue] }
+          //@                    if (objects.size > 0) {
+          //@                      val object_value = objects.head.asInstanceOf[ObjectValue]
+          //@                      logger.warn(object_value.objectClass.name + "::" + methodName + "()")
+          //@                      applyMethod(object_value, methodName, args, env)
+          //@                    } else {
+          //@                      NullValue
+          //@                    }
           //#else
 
           //#ifdef CHOICE_METHOD_APPLICATION
           val branches = Environment.fork(env, List(choice.p))
 
-          val r1 = applyMethod(choice.v1, methodName, args, branches.head)
-          val r2 = applyMethod(choice.v2, methodName, args, branches(1))
+          val r1 = applyMethod(choice.getV1(), methodName, args, branches.head)
+          val r2 = applyMethod(choice.getV2(), methodName, args, branches(1))
           env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
           Choice.optimized(choice.p, r1, r2)
 
@@ -2075,6 +2134,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateFunDieExpr(e: FunDieExpr, env: Environment): OakValue = {
     val value = evaluate(e._value, env)
     env.addOutput(DNode.createDNode(value, e._location))
+    env.terminate()
     null
   }
 
@@ -2107,12 +2167,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           // If the resolved (absolute) path exists, use file
           val program = this.engine.loadFromFile(resolved_path.get)
 
-          //#ifdef LOGGING
-          logger.info(s" ${this.includes.size} Will include ${resolved_path.get.toString.takeRight(30)} from ${getCurrentPath().toString.takeRight(30)}")
-          //#endif
-          
           // Set include path as current path
           this.setCurrentPath(resolved_path.get)
+
+          //#ifdef LOGGING
+//@          val n = this.includes.size
+//@          var spath = resolved_path.get.toString
+//@          spath = spath.split("/").takeRight(3).mkString("/")
+//@          println(s"${"| " * (n - 1)}- ${spath}")
+          //#endif
 
           // Execute included script file
           execute(program, env)
@@ -2120,15 +2183,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           // Reset the current path
           this.resumePreviousCurrent()
 
-          //#ifdef LOGGING
-          logger.info(s" ${this.includes.size} Resuming ${getCurrentPath().toString.takeRight(30)}")
-          //#endif
-          
         } catch {
           case e: FileNotFoundException => {
 
-            //#ifdef LOGGING
-            logger.error(e + s" $expr" + x + "")
+            //#ifdef AbstractLogging
+            //@            logger.error(e + s" $expr" + x + "")
             //#endif
           }
         }

@@ -3,7 +3,9 @@ package edu.cmu.cs.oak.value
 import edu.cmu.cs.oak.env.{Constraint, Environment}
 
 
-case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends SymbolicValue {
+case class Choice(p: Constraint, private var v1: OakValue, private var v2: OakValue) extends SymbolicValue {
+
+  assert(v1 != null && v2 != null)
 
   var depth: Int = Math.max( (if (v1.isInstanceOf[Choice]) v1.asInstanceOf[Choice].depth + 1 else 1), (if (v2.isInstanceOf[Choice]) v2.asInstanceOf[Choice].depth + 1 else 1))
 
@@ -11,25 +13,31 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 
   def getV1(): OakValue = v1
   def getV2(): OakValue = v2
-
-  def setV1(v1: OakValue) { this.v1 = v1 }
-  def setV2(v2: OakValue) { this.v2 = v2 }
-
-  override def toString(): String = {
-    s"Choice ${depth}"
+  
+  def setV1(v: OakValue) {
+    v1 = v
   }
+  
+  def setV2(v: OakValue) {
+    v2 = v
+  }
+
+
+//  override def toString(): String = {
+//    s"Choice(${depth}"
+//  }
 
   override def hashCode(): Int = {
     42 + (if (v1 != null) v1.hashCode() else 0) + (if (v2 != null) v2.hashCode() else 0)
   }
   
-  override def equals(that: Any): Boolean = {
-    if (!that.isInstanceOf[Choice]) {
+  /*override def equals(that: Any): Boolean = {
+    if (!that.isInstanceOf[Choice] || that == null) {
       return false
     }
     val thatChoice = that.asInstanceOf[Choice]
     return ((p equals thatChoice.getConstraint()) && (v1 equals thatChoice.v1) && (v2 equals thatChoice.v2))
-  }
+  }*/
   //
   def getElements(): Set[OakValue] = {
     (v1 match {
@@ -38,6 +46,18 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
       case _ => Set[OakValue]()
     }) union (v2 match {
       case c: Choice => c.getElements
+      case v: OakValue => Set(v)
+      case _ => Set[OakValue]()
+    })
+  }
+
+  def getAllElements(): Set[OakValue] = {
+    (v1 match {
+      case c: Choice => c.getAllElements.union(Set(c))
+      case v: OakValue => Set(v)
+      case _ => Set[OakValue]()
+    }) union (v2 match {
+      case c: Choice => c.getAllElements.union(Set(c))
       case v: OakValue => Set(v)
       case _ => Set[OakValue]()
     })
@@ -67,14 +87,20 @@ case class Choice(p: Constraint, var v1: OakValue, var v2: OakValue) extends Sym
 
 object Choice {
 
+  /**
+   * If one of v1 or v2 is null, replace vals with NullValue
+   */
   def optimized(p: Constraint, v1: OakValue, v2: OakValue): OakValue = {
-    if (((v1 == null || (v1 equals NullValue)) && (v2 == null || (v2 equals NullValue)))) {
-      NullValue
-    } else if ((v1 != null) && (v1.hashCode() equals v2.hashCode())){ // TODO safe?
-      v1
+    
+    val v1_ = if (v1 == null) NullValue else v1
+    val v2_ = if (v2 == null) NullValue else v2
+    
+    if (v1_ equals v2_) { // equal, even NullValue 
+      v1_
     } else {
-      Choice(p, v1, v2)
+      Choice(p, v1_, v2_)
     }
+    
   }
 
   def arrayLookup(c: OakValue, indices: List[OakValue], env: Environment): OakValue = {

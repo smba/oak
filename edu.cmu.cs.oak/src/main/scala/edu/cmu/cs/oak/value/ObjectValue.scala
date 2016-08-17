@@ -28,7 +28,7 @@ case class ObjectValue(name: String, objectClass: ClassDef) extends OakValue {
   override def equals(that: Any): Boolean = {
     that match {
       case ov: ObjectValue => {
-        ov.fields equals fields
+        ov.hashCode equals hashCode()
       }
       case _ => false
     }

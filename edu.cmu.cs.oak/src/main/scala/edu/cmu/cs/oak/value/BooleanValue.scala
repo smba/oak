@@ -8,4 +8,10 @@ case class BooleanValue(v:Boolean) extends OakValue {
   def not(): BooleanValue = BooleanValue(!v)
   def value = v
   override def isEmpty() = false
+  override def toString(): String = {
+    v match {
+      case true => "true"
+      case false => "false"
+    }
+  }
  }

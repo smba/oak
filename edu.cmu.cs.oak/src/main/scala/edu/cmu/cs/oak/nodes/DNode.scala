@@ -88,7 +88,7 @@ object DNode {
         SymbolNode(s)
       }
       case c: Choice => {
-        SelectNode(c.p, createDNode(c.v1, location), createDNode(c.v2, location))
+        SelectNode(c.p, createDNode(c.getV1(), location), createDNode(c.getV2(), location))
       }
       case se: OakValueSequence => {
         ConcatNode(se.getSequence.reverse.map { v => createDNode(v, location) })
