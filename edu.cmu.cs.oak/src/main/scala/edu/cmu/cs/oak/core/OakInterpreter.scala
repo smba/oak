@@ -18,6 +18,8 @@ import scala.collection.JavaConversions.{ mapAsJavaMap, mapAsScalaMap, setAsJava
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.breakable
+import edu.cmu.cs.oak.value.Choice
+import de.fosd.typechef.featureexpr.bdd.BDDFeatureExprFactory
 
 /**
  * Antenna feature definitions for configuration
@@ -41,7 +43,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     this.setBasePath(path)
 
     val program = engine.loadFromFile(path)
-    val env = new Environment(null, Stack[Call](), Constraint("true"))
+    val env = new Environment(null, Stack[Call](), new Constraint(BDDFeatureExprFactory.True))
 
     // Make sure, the OakHeap is cleared
     OakHeap.clear()
@@ -476,7 +478,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     /* Retrieve the condition and both statements 
      * from the IfStatement AST node via reflection. */
-    val condition = Constraint(s._test.toString())
+    val condition = new Constraint(BDDFeatureExprFactory.createDefinedExternal(s._test.toString())) 
     val test = evaluate(s._test, env)
     val trueBlock = s._trueBlock
     val falseBlock = s._falseBlock
@@ -596,18 +598,18 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         /*
          * No other value than a choice can be defined
          */
-        case cv: Choice => {
+        case cv: MapChoice => {
 
           /*
            * XXX This snippet is still to be tested
            * 
            */
-//          println(s"Unexpected return value was already defined: ${previous_return_value}, but wanted to return ${v} at ${s._location}")
-//          if (cv.getV2().isEmpty()) {
-//            cv.setV2(v)
-//          } else {
-            env.update("$return", Choice.optimized(cv.getConstraint().NOT(), v, previous_return_value))
-//          }
+          //          println(s"Unexpected return value was already defined: ${previous_return_value}, but wanted to return ${v} at ${s._location}")
+          //          if (cv.getV2().isEmpty()) {
+          //            cv.setV2(v)
+          //          } else {
+          env.update("$return", Choice.optimized(env.getConstraint(), v, previous_return_value))
+          //          }
         }
         case _ => {
           //throw new RuntimeException()
@@ -616,7 +618,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
     } else { // $return is not defined yet
       if (env.isSymbolic()) {
-        if (env.getConstraint() equals Constraint("true")) {
+        if (env.getConstraint() equals new Constraint(BDDFeatureExprFactory.True)) {
           env.update("$return", v)
         } else {
           env.update("$return", Choice.optimized(env.getConstraint(), v, NullValue))
@@ -824,7 +826,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     val cases = s._cases.toList.map { m => m(0) }
     val blocks = s._blocks.toList
     val default = if (s._defaultBlock != null) s._defaultBlock else new BlockStatement(null, Array[Statement]())
-    val conditions = cases.map { c => Constraint(v + " == " + c) }
+    val conditions = cases.map { c => new Constraint(BDDFeatureExprFactory.createDefinedExternal(v + " == " + c)) }
 
     val results = (Environment.fork(env, conditions) zip (default :: blocks.reverse).reverse)
     results.foreach { case (e, s) => execute(s, e) }
@@ -948,37 +950,37 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         }
       }
 
-      case c: Choice => {
-        val elements = c.getElements()
-        elements.foreach {
-          e =>
-            e match {
-              case av: ArrayValue => {
-                breakable {
-                  (av.array zipWithIndex).foreach {
-                    case ((key, value), i) => {
-
-                      // loop environment for the current loop iteration
-                      val loop_env = Environment.createLoopEnvironment(env)
-
-                      // initialize / update key and value
-                      if (key != null) loop_env.update(key_name, key)
-                      loop_env.update(value_name, value)
-
-                      execute(block, loop_env)
-                      env.weaveDelta(loop_env.getDelta())
-
-                      //#ifndef CONCRETE_FOREACH_LOOP
-                      //@              break
-                      //#endif
-                    }
-                  }
-                }
-              }
-              case _ => {}
-            }
-        }
-      }
+      //      case c: MapChoice => {
+      //        val elements = c.getElements()
+      //        elements.foreach {
+      //          e =>
+      //            e match {
+      //              case av: ArrayValue => {
+      //                breakable {
+      //                  (av.array zipWithIndex).foreach {
+      //                    case ((key, value), i) => {
+      //
+      //                      // loop environment for the current loop iteration
+      //                      val loop_env = Environment.createLoopEnvironment(env)
+      //
+      //                      // initialize / update key and value
+      //                      if (key != null) loop_env.update(key_name, key)
+      //                      loop_env.update(value_name, value)
+      //
+      //                      execute(block, loop_env)
+      //                      env.weaveDelta(loop_env.getDelta())
+      //
+      //                      //#ifndef CONCRETE_FOREACH_LOOP
+      //                      //@              break
+      //                      //#endif
+      //                    }
+      //                  }
+      //                }
+      //              }
+      //              case _ => {}
+      //            }
+      //        }
+      //      }
       case _ => {}
     }
     ControlCode.OK
@@ -1292,11 +1294,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       prepareFunctionOrMethod(function, env, function_env, args)
 
       //#ifdef LOGGING_CALLS
-                  val n = env.getCalls().size
-                  val file = loc.getFileName.split("/").takeRight(3).mkString("/")
-                  val line = loc.getLineNumber
-                  println(s"${"| " * (n - 1)}- ${function_name} (${file}:${line})")
-                  //println(env.getCalls())
+      val n = env.getCalls().size
+      val file = loc.getFileName.split("/").takeRight(3).mkString("/")
+      val line = loc.getLineNumber
+      println(s"${"| " * (n - 1)}- ${function_name} (${file}:${line})")
+      //println(env.getCalls())
       //#endif
 
       execute(function.statement, function_env)
@@ -1686,13 +1688,13 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             o.set(fieldName.toString(), evaluate(expr, env), env)
             env.update("$this", o)
           }
-          case c: Choice => {
-            val func = (o: ObjectValue) => {
-              o.set(fieldName.toString(), evaluate(expr, env), env)
-              env.update("$this", c)
-            }
-            c.applyToObjects(func)
-          }
+          //          case c: Choice => {
+          //            val func = (o: ObjectValue) => {
+          //              o.set(fieldName.toString(), evaluate(expr, env), env)
+          //              env.update("$this", c)
+          //            }
+          //            c.applyToObjects(func)
+          //          }
           case _ => {}
 
         }
@@ -1737,7 +1739,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     val falseExpr = e._falseExpr
 
     if (testV.isInstanceOf[SymbolicValue]) {
-      Choice.optimized(Constraint(test.toString), evaluate(trueExpr, env), evaluate(falseExpr, env))
+      Choice.optimized(new Constraint(BDDFeatureExprFactory.createDefinedExternal(test.toString)), evaluate(trueExpr, env), evaluate(falseExpr, env))
     } else {
       testV match {
         case b: BooleanValue => {
@@ -1747,7 +1749,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             evaluate(falseExpr, env)
           }
         }
-        case _ => Choice.optimized(Constraint(test.toString), evaluate(trueExpr, env), evaluate(falseExpr, env)) //throw new RuntimeException("Expression did not evaluate to BooleanExpression.")
+        case _ => Choice.optimized(new Constraint(BDDFeatureExprFactory.createDefinedExternal(test.toString)), evaluate(trueExpr, env), evaluate(falseExpr, env)) //throw new RuntimeException("Expression did not evaluate to BooleanExpression.")
       }
     }
   }
@@ -1897,10 +1899,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
 
               //#ifdef LOGGING_CALLS
-                                          val n = env.getCalls().size
-                                          val file = e._location.getFileName.split("/").takeRight(3).mkString("/")
-                                          val line = e._location.getLineNumber
-                                          println(s"${"| " * (n - 1)}- ${objectValue.objectClass.name + "." + methodName} (${file}:${line})")
+              val n = env.getCalls().size
+              val file = e._location.getFileName.split("/").takeRight(3).mkString("/")
+              val line = e._location.getLineNumber
+              println(s"${"| " * (n - 1)}- ${objectValue.objectClass.name + "." + methodName} (${file}:${line})")
               //#endif
 
               execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
@@ -1931,34 +1933,17 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           NullValue
         }
 
-        case choice: Choice => {
+        case choice: MapChoice => {
 
-          val elements = choice.getElements()
-            
-          //#ifdef FIRST_CONCRETE_METHOD_APPLICATION
-          //@                    val objects = elements.filter { x => x.isInstanceOf[ObjectValue] }
-          //@                    if (objects.size > 0) {
-          //@                      val object_value = objects.head.asInstanceOf[ObjectValue]
-          //@                      logger.warn(object_value.objectClass.name + "::" + methodName + "()")
-          //@                      applyMethod(object_value, methodName, args, env)
-          //@                    } else {
-          //@                      NullValue
-          //@                    }
-          //#else
-
-          //#ifdef CHOICE_METHOD_APPLICATION
-          val branches = Environment.fork(env, List(choice.p))
-
-          val r1 = applyMethod(choice.getV1(), methodName, args, branches.head)
-          val r2 = applyMethod(choice.getV2(), methodName, args, branches(1))
-          env.weaveDelta(BranchEnv.join(List(branches(0), branches(1)), List(choice.p)))
-          Choice.optimized(choice.p, r1, r2)
-
-          //#else 
-          //@                                                                      NullValue("")
-          //#endif
-          //#endif
-
+          choice.map {
+            x =>
+              ((y: OakValue) => {
+                val branches = Environment.fork(env, List(choice.getConstraint(y)))
+                val r1 = applyMethod(y, methodName, args, branches.head)
+                env.weaveDelta(branches.head.getDelta())
+                r1
+              })(x)
+          }
         }
         case ov: OakValue => {
           NullValue
@@ -2134,7 +2119,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateFunDieExpr(e: FunDieExpr, env: Environment): OakValue = {
     val value = evaluate(e._value, env)
     env.addOutput(DNode.createDNode(value, e._location))
-    env.terminate()
+    //    env.terminate()
     null
   }
 
@@ -2171,10 +2156,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           this.setCurrentPath(resolved_path.get)
 
           //#ifdef LOGGING
-//@          val n = this.includes.size
-//@          var spath = resolved_path.get.toString
-//@          spath = spath.split("/").takeRight(3).mkString("/")
-//@          println(s"${"| " * (n - 1)}- ${spath}")
+          val n = this.includes.size
+          var spath = resolved_path.get.toString
+          spath = spath.split("/").takeRight(3).mkString("/")
+          println(s"${"| " * (n - 1)}- ${spath}")
           //#endif
 
           // Execute included script file
@@ -2187,7 +2172,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           case e: FileNotFoundException => {
 
             //#ifdef AbstractLogging
-            //@            logger.error(e + s" $expr" + x + "")
+            logger.error(e + s" $expr" + x + "")
             //#endif
           }
         }
@@ -2508,7 +2493,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           val sequenceFlattened = s.getSequence.map {
             v =>
               v match {
-                case c: Choice => new OakValueSequence(c.getElements.toList)
+                case c: MapChoice => new OakValueSequence(c.toMap().keys.toList)
                 case v: OakValue => v
                 case null => null
               }

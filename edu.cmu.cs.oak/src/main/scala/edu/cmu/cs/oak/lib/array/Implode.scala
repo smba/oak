@@ -37,7 +37,7 @@ class Implode extends InterpreterPlugin {
       val p = args(1)
       p match { 
         case null => "" 
-        case _ => p.toString()
+        case _ => ""
       }
     }
     

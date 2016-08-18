@@ -1,33 +1,12 @@
 package edu.cmu.cs.oak
 
-import scala.xml.PrettyPrinter
+import java.io.{File, PrintWriter}
+import java.nio.file.{Path, Paths}
 
-import org.junit.runner.RunWith
-import org.scalatest.FunSpec
-import org.scalatest.FunSuite
-import org.scalatest.junit.JUnitRunner
-import edu.cmu.cs.oak.core.OakInterpreter
-import edu.cmu.cs.oak.core.OakEngine
-import java.nio.file.Paths
+import edu.cmu.cs.oak.core.{ControlCode, OakEngine, OakInterpreter}
 import edu.cmu.cs.oak.env.Environment
-import java.nio.file.Path
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import scala.collection.immutable.Stack
-import edu.cmu.cs.oak.value.ArrayValue
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.IntValue
-import edu.cmu.cs.oak.value.StringValue
-import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.DoubleValue
-import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.core.ControlCode
-import java.io.PrintWriter
-import java.io.File
-import edu.cmu.cs.oak.nodes.DNodeParser
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -45,7 +24,7 @@ object OakUnitTest extends App {
   //val pp = new PrettyPrinter(200, 0)
 
   /**
-   * Read a PHP source codesta from file, parses & executes it.
+   * Read a PHP source code from file, parses & executes it.
    *
    * @param script PHP source code file
    * @return (ControlCode, Environment)
@@ -60,7 +39,7 @@ object OakUnitTest extends App {
   }
 
   
-  val env = loadAndExecute(url("testScripts/branching1.php"))
+  val env = loadAndExecute(url("wordpress/wp-admin/index.php"))
   //val after = Instant.now()
   //println("Symbolic execution successful, duration: " + Duration.between(before, after).toString())
 

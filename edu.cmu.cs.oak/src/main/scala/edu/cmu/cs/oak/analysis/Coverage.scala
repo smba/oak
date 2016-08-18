@@ -78,7 +78,7 @@ object Coverage extends App {
           literalSet = literalSet union DNode.extractStringLiterals(loadAndExecute(ep)._2.output)
           
           //#ifdef AbstractLogging
-//@          logger.info(s" Found ${literalSet.size} literals so far")
+          logger.info(s" Found ${literalSet.size} literals so far")
           //#endif
         }
     }
@@ -105,10 +105,10 @@ object Coverage extends App {
     //    val foundLiterals = AnalysisService.analyzeProject(projectPath).filter { lit => relevant(lit) }
     
     //#ifdef AbstractLogging
-//@    println(s"Projekt hat ${projectLiterals.size} Literale")
-//@    println(s"Project hat ${relevant_projectLiterals.size} relevante Literale")
-//@    println(s"Analyse fand ${foundLiterals.size}  Literale")
-//@    println(s"Analyse fand ${relevant_foundLiterals.size} relevante Literale")
+    println(s"Projekt hat ${projectLiterals.size} Literale")
+    println(s"Project hat ${relevant_projectLiterals.size} relevante Literale")
+    println(s"Analyse fand ${foundLiterals.size}  Literale")
+    println(s"Analyse fand ${relevant_foundLiterals.size} relevante Literale")
     //#endif
     
     val relative_coverage = ((relevant_foundLiterals intersect relevant_projectLiterals).size * 1.0 / relevant_projectLiterals.size * 100)

@@ -32,6 +32,7 @@ import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.Reference
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
+import edu.cmu.cs.oak.value.MapChoice
 
 /**
  * Programs state and program state operations.
@@ -295,12 +296,8 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       case seq: OakValueSequence => {
         seq.getSequence.foreach { v => res = res ++ ifdefy(v) }
       }
-      case ite: Choice => {
-        res = res ++ List("#if " + ite.getConstraint())
-        res = res ++ ifdefy(ite.getV1()).map { x => x.trim }
-        res = res ++ List("#else")
-        res = res ++ ifdefy(ite.getV2()).map { x => x.trim }
-        res = res ++ List("#endif")
+      case ite: MapChoice => {
+        res = res ++ List("# MapChoice ")
       }
       case s: SymbolValue => res = res.::(s.toString())
       case null => res

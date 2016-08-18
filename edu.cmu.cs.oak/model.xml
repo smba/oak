@@ -61,11 +61,21 @@
 						</description>
 					</feature>
 				</and>
-				<feature name="LOGGING">
+				<alt name="AbstractLogging">
 					<description>
 						
 					</description>
-				</feature>
+					<feature mandatory="true" name="LOGGING_CALLS">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="LOGGING">
+						<description>
+							
+						</description>
+					</feature>
+				</alt>
 			</and>
 		</struct>
 		<constraints/>

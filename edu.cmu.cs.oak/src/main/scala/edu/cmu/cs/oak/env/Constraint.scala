@@ -1,12 +1,22 @@
 package edu.cmu.cs.oak.env
 
-case class Constraint(text: String) {
+import de.fosd.typechef.featureexpr.FeatureExpr
+import de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr
+
+class Constraint(expr: FeatureExpr) {
+  
+  def get(): FeatureExpr = expr
   
   def AND(that: Constraint): Constraint = {
-    Constraint(this.text + " && " + that.text)
+    new Constraint(expr.and(that.get))  
+  }
+  
+  def OR(that: Constraint): Constraint = {
+   new Constraint(expr.or(that.get))
   }
   
   def NOT(): Constraint = {
-    Constraint("!("+this.text+")")
+    new Constraint(expr.not())
   }
+  
 }

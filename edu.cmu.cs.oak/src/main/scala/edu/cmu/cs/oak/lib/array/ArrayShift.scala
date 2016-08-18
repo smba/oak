@@ -31,13 +31,14 @@ class ArrayShift extends InterpreterPlugin {
     
     args.head match {
       case av: ArrayValue => {
-        av.array.foreach {
-          case (key, ref) => {
-            val value = interpreter.call(args(1).toString, env.extract(ref) :: key :: args.slice(2, args.size), loc, env)
-            new_av.set(key, value, env)
-          }
-        }
-        new_av
+//        av.array.foreach {
+//          case (key, ref) => {
+//            val value = interpreter.call(args(1).toString, env.extract(ref) :: key :: args.slice(2, args.size), loc, env)
+//            new_av.set(key, value, env)
+//          }
+//        }
+//        new_av
+        av
       }
       case _ => {
         NullValue

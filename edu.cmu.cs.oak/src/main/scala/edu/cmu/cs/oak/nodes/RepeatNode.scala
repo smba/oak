@@ -8,7 +8,7 @@ case class RepeatNode(constraint: Constraint, node: DNode) extends DNode {
 
   def toXml(): scala.xml.Elem = {
     <Repeat>
-			<Constraint Text={constraint.text} />
+			<Constraint Text={constraint.toString()} />
 			{node.toXml}
 		</Repeat>
   }

@@ -9,7 +9,7 @@ case class SelectNode(constraint: Constraint, v1: DNode, v2: DNode) extends DNod
   
   override def toXml() = {
     <Select>
-			<Constraint Text={constraint.text} />
+			<Constraint Text={constraint.toString()} />
       {v1.toXml}
       {v2.toXml}
     </Select>

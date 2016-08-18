@@ -21,3 +21,6 @@ libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.3.0-SNAP2"
 // https://mvnrepository.com/artifact/org.scala-lang/scala-xml
 libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
 
+// https://mvnrepository.com/artifact/de.fosd.typechef/featureexprlib_2.11
+libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.4.1"
+

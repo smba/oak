@@ -1,9 +1,12 @@
 package edu.cmu.cs.oak.nodes
 
-import scala.xml.XML
-import edu.cmu.cs.oak.value.SymbolValue
+import scala.xml.NodeSeq.seqToNodeSeq
+
 import edu.cmu.cs.oak.env.OakHeap
+import edu.cmu.cs.oak.value.SymbolValue
+import de.fosd.typechef.featureexpr.bdd.BDDFeatureExprFactory
 import edu.cmu.cs.oak.env.Constraint
+
 
 /**
  * Parser XML -> DNode
@@ -38,12 +41,12 @@ object DNodeParser extends App {
   }
   
   def parseRepeatNode(node: scala.xml.Node): DNode = {
-    RepeatNode(Constraint( (node \ "Constraint").text.trim), ConcatNode(node.child.filter { n => p(n.label) }.map(c => parseNode(c)).toList.reverse))
+    RepeatNode(new Constraint( BDDFeatureExprFactory.createDefinedExternal((node \ "Constraint").text.trim)), ConcatNode(node.child.filter { n => p(n.label) }.map(c => parseNode(c)).toList.reverse))
   }
   
   def parseSelectNode(node: scala.xml.Node): DNode = {
     val children = node.child.filter { n => p(n.label) }
-    SelectNode(Constraint( (node \ "Constraint").text.trim), parseNode(children(0)), parseNode(children(1)))
+    SelectNode(new Constraint( BDDFeatureExprFactory.createDefinedExternal((node \ "Constraint").text.trim)), parseNode(children(0)), parseNode(children(1)))
   }
   
   def parseSymbolicNode(node: scala.xml.Node): DNode = {

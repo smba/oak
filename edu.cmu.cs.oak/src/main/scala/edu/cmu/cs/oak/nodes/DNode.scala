@@ -15,6 +15,7 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.nodes.SymbolNode
 import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.MapChoice
 
 
 /**
@@ -87,8 +88,8 @@ object DNode {
       case s: SymbolValue => {
         SymbolNode(s)
       }
-      case c: Choice => {
-        SelectNode(c.p, createDNode(c.getV1(), location), createDNode(c.getV2(), location))
+      case c: MapChoice => {
+        UndefNode//SelectNode(c.p, createDNode(c.getV1(), location), createDNode(c.getV2(), location))
       }
       case se: OakValueSequence => {
         ConcatNode(se.getSequence.reverse.map { v => createDNode(v, location) })

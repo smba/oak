@@ -89,10 +89,9 @@ object BranchEnv {
       } catch {
         case vnfe: VariableNotFoundException => NullValue
       }
-      if ((a equals NullValue) && (b equals NullValue)) {
+      if ((a == null) || (NullValue equals a) && (NullValue equals b) || (b == null)) {
         NullValue
       } else {
-//        println(a, b)
         Choice.optimized(constraints(0), a, b)
       }
     } else {
