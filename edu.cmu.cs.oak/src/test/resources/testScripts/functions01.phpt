@@ -5,26 +5,32 @@
     <Concat>
       <Literal Text="pre" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="5"/>
       <Select>
-        <Constraint Text="($x &gt; 0)"/>
-        <Concat>
-          <Literal Text="B2D" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="7"/>
-        </Concat>
-        <Concat>
-          <Literal Text="B3" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="9"/>
-        </Concat>
+        <Condition text="def(($x &gt; 0))">
+          <Concat>
+            <Literal Text="B2D" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="7"/>
+          </Concat>
+        </Condition>
+        <Condition text="!def(($x &gt; 0))">
+          <Concat>
+            <Literal Text="B3" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="9"/>
+          </Concat>
+        </Condition>
       </Select>
       <Literal Text="post" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="11"/>
     </Concat>
     <Concat>
       <Literal Text="pre" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="5"/>
       <Select>
-        <Constraint Text="($x &gt; 0)"/>
-        <Concat>
-          <Literal Text="B2D" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="7"/>
-        </Concat>
-        <Concat>
-          <Literal Text="B3" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="9"/>
-        </Concat>
+        <Condition text="def(($x &gt; 0))">
+          <Concat>
+            <Literal Text="B2D" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="7"/>
+          </Concat>
+        </Condition>
+        <Condition text="!def(($x &gt; 0))">
+          <Concat>
+            <Literal Text="B3" Length="2" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="9"/>
+          </Concat>
+        </Condition>
       </Select>
       <Literal Text="post" Length="4" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/functions01.php" Line="11"/>
     </Concat>

@@ -12,11 +12,18 @@
         <Literal Text=" says Hi!" Length="9" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="13"/>
       </Concat>
     </Concat>
-    <Concat>
-      <Literal Text="Peer " Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="17"/>
-      <Literal Text="Steinbrück" Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="22"/>
-      <Literal Text=" greets Peer " Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="17"/>
-      <Literal Text="Mertesacker" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="24"/>
-    </Concat>
+    <Select>
+      <Condition text="True">
+        <Concat>
+          <Literal Text="Peer " Length="5" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="17"/>
+          <Literal Text="Steinbrück" Length="10" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="22"/>
+          <Literal Text=" greets Peer " Length="13" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="17"/>
+          <Literal Text="Mertesacker" Length="11" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/classes01.php" Line="24"/>
+        </Concat>
+      </Condition>
+      <Condition text="False">
+        <Undef/>
+      </Condition>
+    </Select>
   </Concat>
 </DataModel>

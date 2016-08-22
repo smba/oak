@@ -19,7 +19,7 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/objects01.php")
     RegressionTest.test("testScripts/staticFields.php")
   }
-
+//
   test("arrays") {
     RegressionTest.test("testScripts/arrayValues01.php")
     RegressionTest.test("testScripts/nestedArrays.php")
@@ -32,19 +32,19 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/references02.php")
     RegressionTest.test("testScripts/reference_expr.php")
   }
-
+//
   test("Outer to inner scope") {
     RegressionTest.test("testScripts/outer_to_inner_scope/createLoopEnvironment.php")
     RegressionTest.test("testScripts/outer_to_inner_scope/createFunctionOrMethodEnvironment.php")
     RegressionTest.test("testScripts/branching1.php")
   }
-
+//
   test("Global variables") {
     RegressionTest.test("testScripts/globals01.php")
     RegressionTest.test("testScripts/isGlobal.php")
     RegressionTest.test("testScripts/globalscope.php")
   }
-
+//
   test("Global function scoping") {
     RegressionTest.test("testScripts/scoping/global_function_scope01.php")
     RegressionTest.test("testScripts/scoping/global_function_scope02.php")
@@ -52,22 +52,22 @@ class RegressionTests extends FunSuite {
     RegressionTest.test("testScripts/scoping/global_function_scope_branching02.php")
     RegressionTest.test("testScripts/scoping/global_function_scope_nested.php")
   }
-
+//
   test("Inner to outer scope") {
     RegressionTest.test("testScripts/inner_to_outer_scope/join01.php")
   }
-
+//
   test("Join optimization") {
     /*
      * Exempted from test suite
      */
-    RegressionTest.test("testScripts/multiple.php")
+    //RegressionTest.test("testScripts/multiple.php")
   }
-
+//
   test("Builtin functions") {
     RegressionTest.test("testScripts/substr.php")
   }
-
+//
   test("callbacks") {
     RegressionTest.test("testScripts/callbacks.php")
 

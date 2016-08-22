@@ -44,9 +44,27 @@ object DNodeParser extends App {
     RepeatNode(new Constraint( BDDFeatureExprFactory.createDefinedExternal((node \ "Constraint").text.trim)), ConcatNode(node.child.filter { n => p(n.label) }.map(c => parseNode(c)).toList.reverse))
   }
   
+  /**
+   * <Select>
+   * 		<Condition text="...">
+   * 			...
+   * 		</Condition>
+   * 		<Condition text="...">
+   * 		</Condition>
+   * </Select>
+   */
   def parseSelectNode(node: scala.xml.Node): DNode = {
-    val children = node.child.filter { n => p(n.label) }
-    SelectNode(new Constraint( BDDFeatureExprFactory.createDefinedExternal((node \ "Constraint").text.trim)), parseNode(children(0)), parseNode(children(1)))
+    val children = node.child.filter { 
+      n => p(n.label) && (n.label equals "Condition")
+    }
+    val nmap = children.map {
+      node => {
+        val constraint_raw = node.attribute("text").head.text.trim
+        val constraint = new Constraint(BDDFeatureExprFactory.createDefinedExternal(constraint_raw))
+        (parseNode(node.child.filter(n => p(n.label)).head), constraint)
+      }
+    }.toMap
+    SelectNode(nmap)
   }
   
   def parseSymbolicNode(node: scala.xml.Node): DNode = {
@@ -67,4 +85,6 @@ object DNodeParser extends App {
     LiteralNode(text, file, line)
   }
   
+  val node = scala.xml.XML.load("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml")
+  println(parseNode(node))
 }

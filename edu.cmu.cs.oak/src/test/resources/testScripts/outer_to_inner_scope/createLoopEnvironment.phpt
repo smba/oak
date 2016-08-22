@@ -2,6 +2,7 @@
 <DataModel>
   <Concat>
     <Repeat>
+      <Constraint Text="True"/>
       <Concat>
         <Literal Text="abc" Length="3" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/outer_to_inner_scope/createLoopEnvironment.php" Line="3"/>
         <Literal Text="3" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/testScripts/outer_to_inner_scope/createLoopEnvironment.php" Line="7"/>

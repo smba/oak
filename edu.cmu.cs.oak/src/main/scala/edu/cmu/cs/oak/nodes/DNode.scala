@@ -89,7 +89,10 @@ object DNode {
         SymbolNode(s)
       }
       case c: MapChoice => {
-        UndefNode//SelectNode(c.p, createDNode(c.getV1(), location), createDNode(c.getV2(), location))
+        val x = c.toMap().map{
+          case (v, cs) => (createDNode(v, location), cs)
+        }
+        SelectNode(x)
       }
       case se: OakValueSequence => {
         ConcatNode(se.getSequence.reverse.map { v => createDNode(v, location) })
@@ -116,7 +119,9 @@ object DNode {
 
     // utility method for DModel tree traversal
     def extractStringLiterals(node: DNode, literals: List[StringValue]): List[StringValue] = node match {
-      case c: SelectNode => literals ++ extractStringLiterals(c.v1, literals) ++ extractStringLiterals(c.v2, literals)
+      case c: SelectNode => {
+        literals ++ c.mapc.keySet.flatMap(node => extractStringLiterals(node, literals)).toList
+      }
       case s: ConcatNode => {
         var lits = List[StringValue]()
         s.getChildren.foreach {

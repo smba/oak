@@ -2,6 +2,7 @@
 <DataModel>
   <Concat>
     <Repeat>
+      <Constraint Text="True"/>
       <Concat>
         <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/while.php" Line="4"/>
         <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/while.php" Line="6"/>

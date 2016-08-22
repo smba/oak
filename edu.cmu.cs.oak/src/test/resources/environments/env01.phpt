@@ -3,15 +3,18 @@
   <Concat>
     <Concat>
       <Select>
-        <Constraint Text="($x &lt; 0)"/>
-        <Concat>
-          <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="14"/>
-        </Concat>
-        <Concat>
+        <Condition text="def(($x &lt; 0))">
           <Concat>
-            <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="16"/>
+            <Literal Text="A" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="14"/>
           </Concat>
-        </Concat>
+        </Condition>
+        <Condition text="!def(($x &lt; 0))">
+          <Concat>
+            <Concat>
+              <Literal Text="B" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="16"/>
+            </Concat>
+          </Concat>
+        </Condition>
       </Select>
       <Literal Text="C" Length="1" File="/home/stefan/git/oak/edu.cmu.cs.oak/bin/environments/env01.php" Line="18"/>
     </Concat>

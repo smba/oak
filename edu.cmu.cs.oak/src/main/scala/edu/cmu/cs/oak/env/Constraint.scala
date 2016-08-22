@@ -19,4 +19,6 @@ class Constraint(expr: FeatureExpr) {
     new Constraint(expr.not())
   }
   
+  override def toString() = expr.toString()
+  
 }

@@ -2,34 +2,37 @@ package edu.cmu.cs.oak.nodes
 
 import edu.cmu.cs.oak.env.Constraint
 
-case class SelectNode(constraint: Constraint, v1: DNode, v2: DNode) extends DNode {
-    
-  assert((v1 != null) && (v2 != null))
-  def getChildren(): Seq[DNode] = List(v1, v2)
+case class SelectNode(mapc: Map[DNode, Constraint]) extends DNode {
   
   override def toXml() = {
     <Select>
-			<Constraint Text={constraint.toString()} />
-      {v1.toXml}
-      {v2.toXml}
+			{for ((v, c) <- mapc) yield { 
+          <Condition text={c.get().toString()}>
+						{v.toXml()}
+					</Condition>
+        }
+      }
     </Select>
   }
   
-  override def ifdefy(): List[String] = {
+    override def ifdefy(): List[String] = {
     var sequence = List[String]()
-//    sequence ++= List("#ifdef")
-    sequence ++= List("<!-- #ifdef -->")
-    sequence ++= v1.ifdefy()
-//    sequence ++= List("#else")
-    sequence ++= List("<!-- #else -->")
-    sequence ++= v2.ifdefy()
-//    sequence ++= List("#endif")
-    sequence ++= List("<!-- #endif -->")
+    mapc.slice(0, mapc.size - 1)foreach {
+      case (v, c) => {
+        sequence ++= List(s"<!-- #ifdef -->")
+        sequence ++= v.ifdefy()
+        sequence ++= List(s"<!-- #else -->")
+        
+      }
+    }
+    sequence ++= List(s"<!-- #ifdef -->")
+    sequence ++= mapc.last._1.ifdefy()
+    sequence ++= List(s"<!-- #endif -->")
+   
     sequence
   }
+    
+  override def isEmpty() = (mapc.size == 0)
   
-  override def toString() = "π(" + constraint + "," + v1 + "," + v2 + ")"
-  
-  override def isEmpty() = (v1.isEmpty() && v2.isEmpty())
-  
+  override def getChildren() = mapc.keys.toSeq
 }

@@ -28,6 +28,8 @@ import de.fosd.typechef.featureexpr.bdd.BDDFeatureExprFactory
 import edu.cmu.cs.oak.value.DoubleValue
 import java.time.Instant
 import java.time.Duration
+import edu.cmu.cs.oak.value.IntValue
+import edu.cmu.cs.oak.value.DoubleValue
 
 /**
  * Antenna feature definitions for configuration
@@ -1941,7 +1943,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         case choice: MapChoice => {
 
           //#ifdef SYMBOLIC_RETURN_VALUE 
-                    return SymbolValue(value.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
+//@                    return SymbolValue(value.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
           //#endif
 
           //#ifdef CHOICE_LOGGING
@@ -2221,7 +2223,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
                     //#ifdef INCLUDE_LOGGING
                                 val n = this.includes.size
-                                println(s"${"| " * (n - 1)}- [FAILED] ${expr.toString()} was ${y}")
+                                println(s"${"| " * (n - 1)}- [FAILED] ${expr.toString()} was ${resolved_path.toString()}")
                     //#endif
 
                   }
@@ -2466,7 +2468,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         evaluateConditionalShortExpr(e, env)
       }
       case null => null
-      case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      case _ => {
+        logger.warn(e.getClass + " " + e + " not implemented.")
+        null
+//        throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
+      }
     }
   }
 

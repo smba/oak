@@ -33,6 +33,7 @@ import edu.cmu.cs.oak.value.Reference
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.MapChoice
+import edu.cmu.cs.oak.nodes.ConcatNode
 
 /**
  * Programs state and program state operations.
