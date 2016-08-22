@@ -18,8 +18,16 @@ import scala.collection.JavaConversions.{ mapAsJavaMap, mapAsScalaMap, setAsJava
 import scala.collection.immutable.Stack
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.breakable
+
+//#ifndef CONCRETE_FOREACH_LOOP
+//@import scala.util.control.Breaks.break
+//#endif
+
 import edu.cmu.cs.oak.value.Choice
 import de.fosd.typechef.featureexpr.bdd.BDDFeatureExprFactory
+import edu.cmu.cs.oak.value.DoubleValue
+import java.time.Instant
+import java.time.Duration
 
 /**
  * Antenna feature definitions for configuration
@@ -33,6 +41,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   val logger = LoggerFactory.getLogger(classOf[OakInterpreter])
 
   val engine = new OakEngine()
+
+  //#ifdef CHOICE_LOGGING
+  //@  val choice_depth = new collection.mutable.Stack[(String, Location, Int)]()
+  //#endif
 
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
@@ -78,26 +90,26 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)
 
       //#ifdef WORDPRESS_DEPENDENCIES
-      //@      execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      //@
-      //@      env.resurrect()
-      //@      val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
-      //@      this.setCurrentPath(confpath)
-      //@      execute(engine.loadFromFile(confpath), env)
-      //@      this.resumePreviousCurrent()
-      //@
-      //@      env.resurrect()
-      //@      val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
-      //@      this.setCurrentPath(pluginpath)
-      //@      execute(engine.loadFromFile(pluginpath), env)
-      //@      this.resumePreviousCurrent()
+      //@            execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
       //@      
-      //@      env.resurrect()
-      //@      val l10npath = Paths.get(getClass.getResource("/wordpress/wp-includes/l10n.php").toURI())
-      //@      this.setCurrentPath(l10npath)
-      //@      execute(engine.loadFromFile(l10npath), env)
-      //@      this.resumePreviousCurrent()
-      //@
+      //@            env.resurrect()
+      //@            val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
+      //@            this.setCurrentPath(confpath)
+      //@            execute(engine.loadFromFile(confpath), env)
+      //@            this.resumePreviousCurrent()
+      //@      
+      //@            env.resurrect()
+      //@            val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
+      //@            this.setCurrentPath(pluginpath)
+      //@            execute(engine.loadFromFile(pluginpath), env)
+      //@            this.resumePreviousCurrent()
+      //@            
+      //@            env.resurrect()
+      //@            val l10npath = Paths.get(getClass.getResource("/wordpress/wp-includes/l10n.php").toURI())
+      //@            this.setCurrentPath(l10npath)
+      //@            execute(engine.loadFromFile(l10npath), env)
+      //@            this.resumePreviousCurrent()
+      //@      
       //#endif
     } catch {
       case null => {}
@@ -109,11 +121,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     env.resurrect()
 
     //    logger.info(s"<Program> ${env.hasTerminated()}")
-    //    val before = Instant.now()
+    val before = Instant.now()
     println(getCurrentPath().toString.split("/").takeRight(2).mkString("/"))
     execute(program, env)
-    //    val after = Instant.now()
-    //    logger.info("</Program>")
+    val after = Instant.now()
+    logger.info(Duration.between(before, after) + "")
+    logger.info(s"${stmt_counter} Statements executed")
 
     serializeSymbolicCalls()
     serializeUndefinedCalls()
@@ -478,7 +491,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     /* Retrieve the condition and both statements 
      * from the IfStatement AST node via reflection. */
-    val condition = new Constraint(BDDFeatureExprFactory.createDefinedExternal(s._test.toString())) 
+    val condition = new Constraint(BDDFeatureExprFactory.createDefinedExternal(s._test.toString()))
     val test = evaluate(s._test, env)
     val trueBlock = s._trueBlock
     val falseBlock = s._falseBlock
@@ -943,7 +956,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               env.weaveDelta(loop_env.getDelta())
 
               //#ifndef CONCRETE_FOREACH_LOOP
-              //@              break
+//@              break
               //#endif
             }
           }
@@ -1020,8 +1033,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     ControlCode.OK
   }
 
+  var stmt_counter: Long = 0
   def execute(stmt: Statement, env: Environment): ControlCode.Value = {
     if (!env.hasTerminated()) { //
+      stmt_counter += 1
       stmt match {
         case s: ClassDefStatement => {
           executeClassDefStatement(s, env)
@@ -1222,32 +1237,32 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateArrayGetExpr(arrayGet: ArrayGetExpr, env: Environment): OakValue = {
 
     //#ifdef ARRAY_GET_CONCRETE
-    val exx = arrayGet._expr
-    if (exx.toString.equals("$_POST") || exx.toString.equals("$_GET") || exx.toString.equals("$_SESSION") || exx.toString.equals("$_SERVER")) {
-      return SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE)
-    }
-
-    val expr = evaluate(exx, env)
-    val index = evaluate(arrayGet._index, env)
-    expr match {
-      case null => null
-      case av: ArrayValue => {
-        val value = try {
-          if (index.isInstanceOf[StringValue]) {
-            index.asInstanceOf[StringValue].setLocation(null)
-          }
-          av.get(index, env)
-        } catch {
-          case t: ArrayIndexOutOfBoundsException => NullValue
+        val exx = arrayGet._expr
+        if (exx.toString.equals("$_POST") || exx.toString.equals("$_GET") || exx.toString.equals("$_SESSION") || exx.toString.equals("$_SERVER")) {
+          return SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE)
         }
-        value
-      }
-      case v: OakValue => {
-        NullValue
-      }
-    }
+    
+        val expr = evaluate(exx, env)
+        val index = evaluate(arrayGet._index, env)
+        expr match {
+          case null => null
+          case av: ArrayValue => {
+            val value = try {
+              if (index.isInstanceOf[StringValue]) {
+                index.asInstanceOf[StringValue].setLocation(null)
+              }
+              av.get(index, env)
+            } catch {
+              case t: ArrayIndexOutOfBoundsException => NullValue
+            }
+            value
+          }
+          case v: OakValue => {
+            NullValue
+          }
+        }
     //#else
-    //@                    return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+//@    return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     //#endif
   }
 
@@ -1293,12 +1308,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       val function_env = Environment.createFunctionEnvironment(env, function_call)
       prepareFunctionOrMethod(function, env, function_env, args)
 
-      //#ifdef LOGGING_CALLS
-      val n = env.getCalls().size
-      val file = loc.getFileName.split("/").takeRight(3).mkString("/")
-      val line = loc.getLineNumber
-      println(s"${"| " * (n - 1)}- ${function_name} (${file}:${line})")
-      //println(env.getCalls())
+      //#ifdef CALL_LOGGING
+      //@                  val n = env.getCalls().size
+      //@                  val file = loc.getFileName.split("/").takeRight(3).mkString("/")
+      //@                  val line = loc.getLineNumber
+      //@                  println(s"${"| " * (n - 1)}- ${function_name} (${file}:${line})")
       //#endif
 
       execute(function.statement, function_env)
@@ -1308,11 +1322,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       } catch {
         case e: Exception => NullValue
       }
-
-      //      returnValue match {
-      //        case s: SymbolicValue => recordDefinedSymbolicCall(functionCall, s)
-      //        case _ => {}
-      //      }
 
       env.weaveDelta(function_env.getDelta())
 
@@ -1873,10 +1882,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       value match {
         case objectValue: ObjectValue => {
 
-          //#ifdef SYMBOLIC_METHOD_CALLS
-          //@                    return SymbolValue("", OakHeap.getIndex(), SymbolFlag.DUMMY)
-          //#endif
-
           /* Retrieve the function call arguments. */
           var args2 = try {
             (env.getFunction(methodName).getArgs.toList zip args.toList).map {
@@ -1898,11 +1903,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
             try {
               prepareFunctionOrMethod(objectValue.getClassDef().getMethods(methodName), env, methodEnv, args)
 
-              //#ifdef LOGGING_CALLS
-              val n = env.getCalls().size
-              val file = e._location.getFileName.split("/").takeRight(3).mkString("/")
-              val line = e._location.getLineNumber
-              println(s"${"| " * (n - 1)}- ${objectValue.objectClass.name + "." + methodName} (${file}:${line})")
+              //#ifdef CALL_LOGGING
+              //@                                          val n = env.getCalls().size
+              //@                                          val file = e._location.getFileName.split("/").takeRight(3).mkString("/")
+              //@                                          val line = e._location.getLineNumber
+              //@                                          println(s"${"| " * (n - 1)}- ${objectValue.objectClass.name + "." + methodName} (${file}:${line})")
               //#endif
 
               execute(objectValue.getClassDef().getMethods(methodName).statement, methodEnv)
@@ -1935,15 +1940,40 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
         case choice: MapChoice => {
 
-          choice.map {
+          //#ifdef SYMBOLIC_RETURN_VALUE 
+                    return SymbolValue(value.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
+          //#endif
+
+          //#ifdef CHOICE_LOGGING
+          //@          println(s"${"| " * (choice_depth.size - 1)} ${methodName} for ${choice.getSize()} choice elements" )
+          //@          this.choice_depth.push( (methodName, e._location, choice.getSize()) )
+          //#endif
+
+          val ret = choice.map {
             x =>
               ((y: OakValue) => {
-                val branches = Environment.fork(env, List(choice.getConstraint(y)))
+
+                //#ifdef CHOICE_LOGGING
+                //@                println(s"${"| " * (choice_depth.size - 1)}- ${choice_depth.top._1} at ${choice_depth.top._2}" )
+                //#endif
+
+                val constraint = try {
+                  choice.getConstraint(y)
+                } catch {
+                  case nsee: NoSuchElementException => new Constraint(BDDFeatureExprFactory.createDefinedExternal("dummy"))
+                }
+                val branches = Environment.fork(env, List(constraint))
                 val r1 = applyMethod(y, methodName, args, branches.head)
                 env.weaveDelta(branches.head.getDelta())
                 r1
               })(x)
           }
+
+          //#ifdef CHOICE_LOGGING
+          //@          this.choice_depth.pop()
+          //#endif
+
+          ret
         }
         case ov: OakValue => {
           NullValue
@@ -2113,7 +2143,11 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     }
   }
   private def evaluateUnaryRefExpr(e: UnaryRefExpr, env: Environment): OakValue = {
-    env.getRef(e._expr.toString)
+    try {
+      env.getRef(e._expr.toString)
+    } catch {
+      case vnfe: VariableNotFoundException => NullValue
+    }
   }
 
   private def evaluateFunDieExpr(e: FunDieExpr, env: Environment): OakValue = {
@@ -2130,52 +2164,71 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   def include(expr: Expr, only_once: Boolean, env: Environment) {
 
-    val x = evaluate(expr, env)
+    val y = evaluate(expr, env)
 
-    if (!(x.isInstanceOf[SymbolicValue])) {
-      val resolved_path: Option[Path] = try {
-        Some(this.resolvePath(x.toString))
-      } catch {
-        case e: FileNotFoundException => {
-          val path_raw = Paths.get(evaluate(expr, env).toString())
-          if (Files.exists(path_raw)) {
-            Some(path_raw.toAbsolutePath())
-          } else {
-            None
+    if (!(y.isInstanceOf[SymbolicValue])) {
+
+      val flattened_path_value = flattenPath(y)
+
+      val resolved_paths: List[Option[Path]] = flattened_path_value.map {
+        x =>
+          {
+            try {
+              Some(this.resolvePath(x.toString))
+            } catch {
+              case e: FileNotFoundException => {
+                val path_raw = Paths.get(evaluate(expr, env).toString())
+                if (Files.exists(path_raw)) {
+                  Some(path_raw.toAbsolutePath())
+                } else {
+                  None
+                }
+              }
+            }
           }
-        }
       }
 
-      if (!resolved_path.isEmpty) {
-        try {
+      //TODO  For each resolved path, unless it is empty, do... until finished or an include succeeds
+      resolved_paths.foreach {
+        resolved_path =>
+          {
+            if (!resolved_path.isEmpty) {
 
-          // If the resolved (absolute) path exists, use file
-          val program = this.engine.loadFromFile(resolved_path.get)
+              if ((only_once && !includes.contains(resolved_path.get)) || !only_once) {
 
-          // Set include path as current path
-          this.setCurrentPath(resolved_path.get)
+                try {
+                  // If the resolved (absolute) path exists, use file
+                  val program = this.engine.loadFromFile(resolved_path.get.toAbsolutePath())
 
-          //#ifdef LOGGING
-          val n = this.includes.size
-          var spath = resolved_path.get.toString
-          spath = spath.split("/").takeRight(3).mkString("/")
-          println(s"${"| " * (n - 1)}- ${spath}")
-          //#endif
+                  // Set include path as current path
+                  this.setCurrentPath(resolved_path.get)
 
-          // Execute included script file
-          execute(program, env)
+                  //#ifdef INCLUDE_LOGGING
+                              val n = this.includes.size
+                              var spath = resolved_path.get.toString
+                              spath = spath.split("/").takeRight(3).mkString("/")
+                              println(s"${"| " * (n - 1)}- ${spath}")
+                  //#endif
 
-          // Reset the current path
-          this.resumePreviousCurrent()
+                  // Execute included script file
+                  execute(program, env)
 
-        } catch {
-          case e: FileNotFoundException => {
+                  // Reset the current path
+                  this.resumePreviousCurrent()
 
-            //#ifdef AbstractLogging
-            logger.error(e + s" $expr" + x + "")
-            //#endif
+                } catch {
+                  case n: Throwable => {
+
+                    //#ifdef INCLUDE_LOGGING
+                                val n = this.includes.size
+                                println(s"${"| " * (n - 1)}- [FAILED] ${expr.toString()} was ${y}")
+                    //#endif
+
+                  }
+                }
+              }
+            }
           }
-        }
       }
 
     }
@@ -2233,6 +2286,25 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   def evaluateUnaryPlusExpr(e: Expr, env: Environment): OakValue = {
     SymbolValue(e.toString, OakHeap.getIndex, SymbolFlag.AMBIGUOUS_VALUE)
+  }
+
+  def evaluateConditionalShortExpr(e: ConditionalShortExpr, env: Environment): OakValue = {
+    val test = evaluate(e._test, env)
+    test match {
+      case s: SymbolicValue => {
+        val constraint = new Constraint(BDDFeatureExprFactory.createDefinedExternal(e._test.toString()))
+        Choice.optimized(constraint, s, evaluate(e._falseExpr, env))
+      }
+      case b: BooleanValue => {
+        b.v match {
+          case true => BooleanValue(true)
+          case false => BooleanValue(false)
+        }
+      }
+      case _ => {
+        NullValue
+      }
+    }
   }
 
   def evaluate(e: Expr, env: Environment): OakValue = {
@@ -2308,12 +2380,6 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       }
       case e: ClassMethodExpr => {
         evaluateClassMethodExpr(e, env)
-      }
-      case e: ToLongExpr => {
-        evaluateToLongExpr(e, env)
-      }
-      case e: ToLongExpr => {
-        evaluateToLongExpr(e, env)
       }
       case e: ToLongExpr => {
         evaluateToLongExpr(e, env)
@@ -2396,6 +2462,9 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       case e: UnaryPlusExpr => {
         evaluateUnaryPlusExpr(e, env)
       }
+      case e: ConditionalShortExpr => {
+        evaluateConditionalShortExpr(e, env)
+      }
       case null => null
       case _ => throw new RuntimeException(e.getClass + " " + e + " not implemented.") //return SymbolValue(e.toString(), 0, SymbolFlag.EXPR_UNIMPLEMENTED)
     }
@@ -2474,51 +2543,54 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     }
   }
 
-  /**
-   * Gets the include path according to the passed Expr
-   * @param expr IncludeExpression
-   * @param env current Environment
-   *
-   * @return java.nio.Path includePath
-   */
-  def getInlcudePath(expr: Expr, env: Environment): List[Path] = {
-
-    var paf = evaluate(expr, env) //
-
-    val z = paf
-    if (!(new File(paf.toString())).exists()) {
-      val pathsRaw = paf match {
-        case s: OakValueSequence => {
-          // Flatten all choices
-          val sequenceFlattened = s.getSequence.map {
-            v =>
-              v match {
-                case c: MapChoice => new OakValueSequence(c.toMap().keys.toList)
-                case v: OakValue => v
-                case null => null
-              }
-          }
-
-          val tree = Tree.construct(sequenceFlattened)
-          val paths = new ListBuffer[OakValueSequence]()
-          tree.plainTraverse(paths)
-          paths.toList
-        }
-        case v: OakValue => List(v)
-      }
-
-      val paths = pathsRaw.map {
-        paf =>
-          {
-            var path = paf.toString //.replaceAll("\"", "").replace("./", "")
-            Paths.get(path)
-          }
-      }
-      paths // TODO remove duplicates
-    } else {
-      List(Paths.get(paf.toString))
-    }
-  }
+  //  /**
+  //   * Gets the include path according to the passed Expr
+  //   * @param expr IncludeExpression
+  //   * @param env current Environment
+  //   *
+  //   * @return java.nio.Path includePath
+  //   */
+//  deprecated def getInlcudePath(expr: Expr, env: Environment): List[Path] = {
+  //
+  //    var paf = evaluate(expr, env) //
+  //
+  //    val z = paf
+  //    if (!(new File(paf.toString())).exists()) {
+  //
+  //      // XXX <export start>
+  //      val pathsRaw = paf match {
+  //        case s: OakValueSequence => {
+  //          // Flatten all choices
+  //          val sequenceFlattened = s.getSequence.map {
+  //            v =>
+  //              v match {
+  //                case c: MapChoice => new OakValueSequence(c.toMap().keys.toList)
+  //                case v: OakValue => v
+  //                case null => null
+  //              }
+  //          }
+  //
+  //          val tree = Tree.construct(sequenceFlattened)
+  //          val paths = new ListBuffer[OakValueSequence]()
+  //          tree.plainTraverse(paths)
+  //          paths.toList
+  //        }
+  //        case v: OakValue => List(v)
+  //      }
+  //      // XXX export end
+  //
+  //      val paths = pathsRaw.map {
+  //        paf =>
+  //          {
+  //            var path = paf.toString //.replaceAll("\"", "").replace("./", "")
+  //            Paths.get(path)
+  //          }
+  //      }
+  //      paths // TODO remove duplicates
+  //    } else {
+  //      List(Paths.get(paf.toString))
+  //    }
+  //  }
 
 }
 
