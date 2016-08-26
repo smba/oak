@@ -6,36 +6,6 @@
 				<description>
 					
 				</description>
-				<and abstract="true" name="Performance">
-					<description>
-						
-					</description>
-					<feature name="SYMBOLIC_METHOD_CALLS">
-						<description>
-							
-						</description>
-					</feature>
-					<alt name="ObjectSelection">
-						<description>
-							
-						</description>
-						<feature mandatory="true" name="CHOICE_METHOD_APPLICATION">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="FIRST_CONCRETE_METHOD_APPLICATION">
-							<description>
-								
-							</description>
-						</feature>
-					</alt>
-					<feature name="ALL_BRANCHES">
-						<description>
-							
-						</description>
-					</feature>
-				</and>
 				<or abstract="true" name="WordpressSetup">
 					<description>
 						
@@ -46,36 +16,102 @@
 						</description>
 					</feature>
 				</or>
-				<and name="Base">
+				<or abstract="true" name="Base">
 					<description>
 						
 					</description>
-					<feature name="CONCRETE_FOREACH_LOOP">
+					<feature mandatory="true" name="CONCRETE_FOREACH_LOOP">
 						<description>
 							
 						</description>
 					</feature>
-					<feature name="ARRAY_GET_CONCRETE">
+					<feature mandatory="true" name="ARRAY_GET_CONCRETE">
 						<description>
 							
 						</description>
 					</feature>
-				</and>
-				<alt name="AbstractLogging">
+				</or>
+				<alt abstract="true" name="Logging">
 					<description>
 						
 					</description>
-					<feature mandatory="true" name="LOGGING_CALLS">
+					<feature mandatory="true" name="CALL_LOGGING">
 						<description>
+							Log every function/method call in a tree-like representation of the call stack.
+						</description>
+					</feature>
+					<feature mandatory="true" name="INCLUDE_LOGGING">
+						<description>
+							Log every file script include in a tree-like representation of the include stack.
 							
 						</description>
 					</feature>
-					<feature mandatory="true" name="LOGGING">
+					<feature mandatory="true" name="CHOICE_LOGGING">
 						<description>
-							
+							Log every method call targeted at a choice (hopefully of objects).
 						</description>
 					</feature>
 				</alt>
+				<alt name="ChoicePrecision">
+					<description>
+						
+					</description>
+					<and mandatory="true" name="FIRST_CHOICE_ELEMENT">
+						<description>
+							A method call targeted at a choice will only be executed for the first concrete value / object value.
+						</description>
+						<feature name="SYMBOLIC_CHOICE_ELEMENT">
+							<description>
+								An additional symbolic value representing all other choice elements is target of the method call.
+							</description>
+						</feature>
+					</and>
+					<feature mandatory="true" name="SYMBOLIC_RETURN_VALUE">
+						<description>
+							Omit execution for methods targeted at choices and simply return a symbolic value.
+						</description>
+					</feature>
+				</alt>
+				<and abstract="true" mandatory="true" name="CoverageHeuristic">
+					<description>
+						
+					</description>
+					<or abstract="true" mandatory="true" name="Contains">
+						<description>
+							
+						</description>
+						<feature mandatory="true" name="ContainsLessThan">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="ContainsGreaterThan">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="ContainsWhitespace">
+							<description>
+								
+							</description>
+						</feature>
+					</or>
+					<alt abstract="true" mandatory="true" name="JunctiveContains">
+						<description>
+							
+						</description>
+						<feature mandatory="true" name="ConjunctiveContains">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="DisjunctiveContains">
+							<description>
+								
+							</description>
+						</feature>
+					</alt>
+				</and>
 			</and>
 		</struct>
 		<constraints/>

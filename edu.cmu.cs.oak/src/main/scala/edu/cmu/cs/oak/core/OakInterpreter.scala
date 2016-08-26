@@ -2220,10 +2220,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                   this.setCurrentPath(resolved_path.get)
 
                   //#ifdef INCLUDE_LOGGING
-                              val n = this.includes.size
-                              var spath = resolved_path.get.toString
-                              spath = spath.split("/").takeRight(3).mkString("/")
-                              println(s"${"| " * (n - 1)}- ${spath}")
+//@                              val n = this.includes.size
+//@                              var spath = resolved_path.get.toString
+//@                              spath = spath.split("/").takeRight(3).mkString("/")
+//@                              println(s"${"| " * (n - 1)}- ${spath}")
                   //#endif
 
                   // Execute included script file
@@ -2236,8 +2236,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                   case n: Throwable => {
 
                     //#ifdef INCLUDE_LOGGING
-                                val n = this.includes.size
-                      //          println(s"${"| " * (n - 1)}- [FAILED] ${expr.toString()} was ${resolved_path.toString()}")
+//@                                val n = this.includes.size
+//@                      //          println(s"${"| " * (n - 1)}- [FAILED] ${expr.toString()} was ${resolved_path.toString()}")
                     //#endif
 
                   }
