@@ -36,8 +36,8 @@ import com.caucho.quercus.env.Value;
  * Represents a conditional expression.
  */
 public class ConditionalShortExpr extends Expr {
-  protected final Expr _test;
-  protected final Expr _falseExpr;
+	public final Expr _test;
+	public final Expr _falseExpr;
 
   public ConditionalShortExpr(Expr test, Expr falseExpr)
   {

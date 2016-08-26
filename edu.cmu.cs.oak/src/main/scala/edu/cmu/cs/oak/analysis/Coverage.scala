@@ -36,9 +36,15 @@ object Coverage extends App {
   val UPB = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/upb")
   val WEBCHESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/webchess")
 
+  val DRUPAL = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/drupal")
+  val JOOMLA = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/joomla")
+  val MEDIAWIKI = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/mediawiki")
+  val MOODLE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/moodle")
+  val PHPBB = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/phpbb")
+  val PHPMYADMIN = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/phpmyadmin")
   val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
 
-  val isRelevant = (lit: StringValue) => ((lit.value contains '<') || (lit.value contains '.'))
+  val isRelevant = (lit: StringValue) => ((lit.value contains "<") || (lit.value contains ">"))
   //val pp = new PrettyPrinter(200, 0)
 
   /**
@@ -56,6 +62,19 @@ object Coverage extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
+  def countProjectLiterals(projects: Seq[File]) {
+    var i = 0
+    projects.foreach {
+      p =>
+        {
+          val d = getProjectLiterals(p).size
+          println(p, d)
+          i += d
+        }
+    }
+    println(i)
+  }
+
   def getSample(n: Int, projects: Seq[File], path: Path) {
     val allLiterals = projects.map(p => getProjectLiterals(p)).fold(Set[StringValue]())(_ union _).toIterator
     val sample = Random.shuffle(allLiterals).take(n).toList
@@ -71,14 +90,17 @@ object Coverage extends App {
    */
   def findProjectLiterals(entryPoints: Seq[Path]): Set[StringValue] = {
     var literalSet = Set[StringValue]()
+    
+    var i = 1
     entryPoints.foreach {
       ep =>
         {
+          println(s"Now analyzing (${i}/${entryPoints.size}) ${ep.toAbsolutePath().toString()}")
           interpreter = new OakInterpreter()
           literalSet = literalSet union DNode.extractStringLiterals(loadAndExecute(ep)._2.output)
-          
+          i = i + 1
           //#ifdef AbstractLogging
-//@          logger.info(s" Found ${literalSet.size} literals so far")
+          //@          logger.info(s" Found ${literalSet.size} literals so far")
           //#endif
         }
     }
@@ -86,7 +108,13 @@ object Coverage extends App {
   }
 
   def getProjectLiterals(file: File): Set[StringValue] = {
-    getPHPFiles(file).map { f => (new ASTVisitor(Paths.get(f.getAbsolutePath))).retrieveStringLiterals() }.foldLeft(Set[StringValue]())(_ union _)
+    getPHPFiles(file).map {
+      f =>
+        {
+          println(s"getitng all string literals from ${f}")
+          (new ASTVisitor(Paths.get(f.getAbsolutePath))).retrieveStringLiterals()
+        }
+    }.foldLeft(Set[StringValue]())(_ union _)
   }
 
   def getPHPFiles(file: File): Stream[File] = {
@@ -99,18 +127,18 @@ object Coverage extends App {
 
   def getCoverage(projectPath: File, entryPoints: Seq[Path], relevant: StringValue => Boolean): (Double, (Int, Int)) = {
     val projectLiterals = getProjectLiterals(projectPath) //.map(s => s.value)
-    val relevant_projectLiterals =  projectLiterals.filter { lit => relevant(lit) }
+    val relevant_projectLiterals = projectLiterals.filter { lit => relevant(lit) }
     val foundLiterals = findProjectLiterals(entryPoints) //.map(s => s.value)
     val relevant_foundLiterals = foundLiterals.filter { lit => relevant(lit) }
     //    val foundLiterals = AnalysisService.analyzeProject(projectPath).filter { lit => relevant(lit) }
-    
+
     //#ifdef AbstractLogging
-//@    println(s"Projekt hat ${projectLiterals.size} Literale")
-//@    println(s"Project hat ${relevant_projectLiterals.size} relevante Literale")
-//@    println(s"Analyse fand ${foundLiterals.size}  Literale")
-//@    println(s"Analyse fand ${relevant_foundLiterals.size} relevante Literale")
+    //@    println(s"Projekt hat ${projectLiterals.size} Literale")
+    //@    println(s"Project hat ${relevant_projectLiterals.size} relevante Literale")
+    //@    println(s"Analyse fand ${foundLiterals.size}  Literale")
+    //@    println(s"Analyse fand ${relevant_foundLiterals.size} relevante Literale")
     //#endif
-    
+
     val relative_coverage = ((relevant_foundLiterals intersect relevant_projectLiterals).size * 1.0 / relevant_projectLiterals.size * 100)
     return (relative_coverage, (relevant_foundLiterals.size, relevant_projectLiterals.size))
   }
@@ -145,14 +173,53 @@ object Coverage extends App {
     println(s"WordPress: ${getCoverage(WORDPRESS, entrypoints, isRelevant)}")
   }
 
-  def coverages() {
-    getAddressbookCoverage()
-    getSchoolmateCoverage()
-    getTimeclockCoverage()
-    getUPBCoverage()
-    getWebchessCoverage()
-    getWordpressCoverage()
+  def getPHPBBCoverage() {
+    var entrypoints = getPHPFiles(PHPBB).toList.map(f => f.toPath())
+    println(s"PHPBB: ${getCoverage(PHPBB, entrypoints, isRelevant)}")
   }
+
+  def getDrupalCoverage() {
+    var entrypoints = getPHPFiles(DRUPAL).toList.map(f => f.toPath())
+    println(s"Drupal: ${getCoverage(DRUPAL, entrypoints, isRelevant)}")
+  }
+  
+  def getMediaWikiCoverage() {
+    var entrypoints = getPHPFiles(MEDIAWIKI).toList.map(f => f.toPath())
+    println(s"Drupal: ${getCoverage(MEDIAWIKI, entrypoints, isRelevant)}")
+  }
+  
+  def getJoomlaCoverage() {
+    var entrypoints = getPHPFiles(JOOMLA).toList.map(f => f.toPath())
+    println(s"Joomla: ${getCoverage(JOOMLA, entrypoints, isRelevant)}")
+  }
+  
+  def getMoodleCoverage() {
+    var entrypoints = getPHPFiles(MOODLE).toList.map(f => f.toPath())
+    println(s"Moodle: ${getCoverage(MOODLE, entrypoints, isRelevant)}")
+  }
+  
+  def getPhpMyAdminCoverage() {
+    var entrypoints = getPHPFiles(PHPMYADMIN).toList.map(f => f.toPath())
+    println(s"phpMyAdmin: ${getCoverage(PHPMYADMIN, entrypoints, isRelevant)}")
+  }
+  
+  def coverages() {
+//    getAddressbookCoverage() // x
+//    getSchoolmateCoverage() // x
+//    getTimeclockCoverage() // x
+//    getUPBCoverage() // x
+//    getWebchessCoverage() // x
+//    getWordpressCoverage() // (x)
+    //getPHPBBCoverage() // x
+//    getDrupalCoverage()
+    getMediaWikiCoverage()
+//    getMoodleCoverage()
+//    getPhpMyAdminCoverage()  // x
+//    getJoomlaCoverage()
+  }
+
+//  val all = List(ADDRESSBOOK, SCHOOLMATE, TIMECLOCK, WEBCHESS)
+//  getSample(100, all, Paths.get("/home/stefan/git/oak/edu.cmu.cs.oak/out/sample100.csv"))
 
   coverages()
 }

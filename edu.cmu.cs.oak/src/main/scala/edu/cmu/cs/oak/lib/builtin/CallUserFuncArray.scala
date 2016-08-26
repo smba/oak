@@ -36,72 +36,76 @@ class CallUserFuncArray extends InterpreterPlugin {
     val callback = args.head
     val param_arr = args.last
 
-    val rv = callback match {
+    val rv = try {
+      callback match {
 
-      // Case 1: Callback function
-      case sv: StringValue => {
-        println(callback)
-        val function = env.getFunction(sv.value)
-        val argsE = param_arr
-        argsE match {
+        // Case 1: Callback function
+        case sv: StringValue => {
+          println(callback)
+          val function = env.getFunction(sv.value)
+          val argsE = param_arr
+          argsE match {
 
-          case a: ArrayValue => {
-            val args = a.array.map { case (k, v) => env.extract(v) }.toList
-            val functionCall = Call(sv.value, (Paths.get(sv.file), sv.lineNr), args)
-            val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
+            case a: ArrayValue => {
+              val args = a.array.map { case (k, v) => env.extract(v) }.toList
+              val functionCall = Call(sv.value, (Paths.get(sv.file), sv.lineNr), args)
+              val functionEnv = Environment.createFunctionEnvironment(env, functionCall)
 
-            assert(args.size > 0)
+              assert(args.size > 0)
 
-            interpreter.prepareFunctionOrMethod(function, env, functionEnv, args)
-            interpreter.execute(function.statement, functionEnv)
-            env.weaveDelta(functionEnv.getDelta())
+              interpreter.prepareFunctionOrMethod(function, env, functionEnv, args)
+              interpreter.execute(function.statement, functionEnv)
+              env.weaveDelta(functionEnv.getDelta())
 
-            try {
-              functionEnv.lookup("$return")
-            } catch {
-              case e: Exception => NullValue
-            }
-          } case _ => NullValue
-
-        }
-
-      }
-
-      // Case 2: Callback method 
-      case av: ArrayValue => {
-        av.get(IntValue(0), env) match {
-          case obj: ObjectValue => {
-            val methodName = av.get(IntValue(1), env).asInstanceOf[StringValue] // StringValue
-
-            val method = obj.getClassDef().getMethods(methodName.value)
-            val args = param_arr
-            args match {
-              case args: ArrayValue => {
-                val arguments = args.array.map { case (k, v) => env.extract(v) }.toList
-
-                val methodCall = Call(obj.objectClass.name + "." + methodName, (Paths.get(methodName.file), methodName.lineNr), arguments)
-                val methodEnv = Environment.createMethodEnvironment(env, obj, methodCall)
-                interpreter.prepareFunctionOrMethod(method, env, methodEnv, arguments)
-                interpreter.execute(method.statement, methodEnv)
-                env.weaveDelta(methodEnv.getDelta())
-
-                try {
-                  methodEnv.lookup("$return")
-                } catch {
-                  case e: Exception => NullValue
-                }
+              try {
+                functionEnv.lookup("$return")
+              } catch {
+                case e: Exception => NullValue
               }
-              case v: OakValue => v
+            } case _ => NullValue
+
+          }
+
+        }
+
+        // Case 2: Callback method 
+        case av: ArrayValue => {
+          av.get(IntValue(0), env) match {
+            case obj: ObjectValue => {
+              val methodName = av.get(IntValue(1), env).asInstanceOf[StringValue] // StringValue
+
+              val method = obj.getClassDef().getMethods(methodName.value)
+              val args = param_arr
+              args match {
+                case args: ArrayValue => {
+                  val arguments = args.array.map { case (k, v) => env.extract(v) }.toList
+
+                  val methodCall = Call(obj.objectClass.name + "." + methodName, (Paths.get(methodName.file), methodName.lineNr), arguments)
+                  val methodEnv = Environment.createMethodEnvironment(env, obj, methodCall)
+                  interpreter.prepareFunctionOrMethod(method, env, methodEnv, arguments)
+                  interpreter.execute(method.statement, methodEnv)
+                  env.weaveDelta(methodEnv.getDelta())
+
+                  try {
+                    methodEnv.lookup("$return")
+                  } catch {
+                    case e: Exception => NullValue
+                  }
+                }
+                case v: OakValue => v
+              }
+            }
+            case _ => {
+              NullValue
             }
           }
-          case _ => {
-            NullValue
-          }
         }
+        case null => null
+        case NullValue => NullValue
+        case s: SymbolValue => s
       }
-      case null => null
-      case NullValue => NullValue
-      case s: SymbolValue => s
+    } catch {
+      case t: Throwable => NullValue
     }
 
     rv

@@ -38,14 +38,18 @@ class OakEngine {
    * @return QuercusProgram parsed AST
    */
   def loadFromFile(path: Path): QuercusProgram = {
-    val reader = new FileReader(path.toString)
-
-    val parser = {
-//      val context = getQuercus("UTF-8", true)
-      val pathObject = new FilePath(path.toString())
-      new QuercusParser(quercus, pathObject, reader)
+    if (!path.toFile().isDirectory()) {
+      val reader = new FileReader(path.toString)
+  
+      val parser = {
+  //      val context = getQuercus("UTF-8", true)
+        val pathObject = new FilePath(path.toString())
+        new QuercusParser(quercus, pathObject, reader)
+      }
+      return parser.parse()
+    } else {
+      null
     }
-    return parser.parse()
   }
 
 

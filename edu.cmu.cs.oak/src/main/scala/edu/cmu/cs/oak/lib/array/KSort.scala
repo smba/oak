@@ -24,7 +24,7 @@ class KSort extends InterpreterPlugin {
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
     /* Assert that the function has two arguments */
-    assert(args.size == 1) 
+    assert(args.size > 0, args.size) 
     
     val array = args.head
     
