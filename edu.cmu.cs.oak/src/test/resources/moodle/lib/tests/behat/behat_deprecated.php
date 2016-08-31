@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../../lib/behat/behat_base.php');
 
-use Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
-    Behat\Gherkin\Node\TableNode as TableNode;
+// use Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
+//     Behat\Gherkin\Node\TableNode as TableNode;
 
 /**
  * Deprecated behat step definitions.

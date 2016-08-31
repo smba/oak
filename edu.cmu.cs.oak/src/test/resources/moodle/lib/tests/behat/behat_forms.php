@@ -28,10 +28,10 @@
 require_once(__DIR__ . '/../../../lib/behat/behat_base.php');
 require_once(__DIR__ . '/../../../lib/behat/behat_field_manager.php');
 
-use Behat\Gherkin\Node\TableNode as TableNode,
-    Behat\Gherkin\Node\PyStringNode as PyStringNode,
-    Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
+// use Behat\Gherkin\Node\TableNode as TableNode,
+//     Behat\Gherkin\Node\PyStringNode as PyStringNode,
+//     Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
 
 /**
  * Forms-related steps definitions.

@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_files.php');
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Gherkin\Node\TableNode as TableNode;
+// use Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Gherkin\Node\TableNode as TableNode;
 
 /**
  * Steps definitions to deal with the upload repository.

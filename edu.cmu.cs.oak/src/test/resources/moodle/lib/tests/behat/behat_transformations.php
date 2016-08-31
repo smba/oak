@@ -29,7 +29,7 @@
 
 require_once(__DIR__ . '/../../behat/behat_base.php');
 
-use Behat\Gherkin\Node\TableNode;
+// use Behat\Gherkin\Node\TableNode;
 
 /**
  * Transformations to apply to steps arguments.

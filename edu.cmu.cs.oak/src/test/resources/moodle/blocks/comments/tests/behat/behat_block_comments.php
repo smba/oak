@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
-use Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
-    Behat\Mink\Exception\ExpectationException as ExpectationException;
+// use Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
+//     Behat\Mink\Exception\ExpectationException as ExpectationException;
 
 /**
  * Steps definitions to deal with the commenting system

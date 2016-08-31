@@ -25,7 +25,7 @@
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
-use Behat\Testwork\Environment\Environment;
+// use Behat\Testwork\Environment\Environment;
 
 /**
  * Helper to get behat contexts.

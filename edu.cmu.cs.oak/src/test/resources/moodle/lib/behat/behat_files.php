@@ -31,8 +31,8 @@
 
 require_once(__DIR__ . '/behat_base.php');
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Element\NodeElement as NodeElement;
+// use Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Mink\Element\NodeElement as NodeElement;
 
 /**
  * Files-related actions.

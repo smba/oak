@@ -27,9 +27,9 @@
 
 require_once(__DIR__ . '/../../../lib/behat/behat_base.php');
 
-use Behat\Gherkin\Node\TableNode as TableNode,
-    Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
+// use Behat\Gherkin\Node\TableNode as TableNode,
+//     Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
 
 /**
  * Steps definitions related with the question bank management.

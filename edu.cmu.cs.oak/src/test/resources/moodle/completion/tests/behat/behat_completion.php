@@ -27,7 +27,7 @@
 
 require_once(__DIR__ . '/../../../lib/behat/behat_base.php');
 
-use Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
+// use Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
 
 /**
  * Steps definitions to deal with course and activities completion.

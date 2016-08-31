@@ -28,8 +28,8 @@
 require_once(__DIR__ . '/../../../../../../lib/behat/behat_base.php');
 require_once(__DIR__ . '/../../../../../../lib/behat/behat_field_manager.php');
 
-use Behat\Gherkin\Node\TableNode as TableNode,
-    Behat\Mink\Exception\ElementTextException as ElementTextException;
+// use Behat\Gherkin\Node\TableNode as TableNode,
+//     Behat\Mink\Exception\ElementTextException as ElementTextException;
 
 /**
  * Steps definitions related to workshopallocation_manual.

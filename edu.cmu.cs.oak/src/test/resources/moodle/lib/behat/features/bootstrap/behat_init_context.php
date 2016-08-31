@@ -23,9 +23,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use Behat\Behat\Context\BehatContext,
-    Behat\MinkExtension\Context\MinkContext,
-    Moodle\BehatExtension\Context\MoodleContext;
+// use Behat\Behat\Context\BehatContext,
+//     Behat\MinkExtension\Context\MinkContext,
+//     Moodle\BehatExtension\Context\MoodleContext;
 
 /**
  * Loads main subcontexts

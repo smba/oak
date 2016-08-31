@@ -6,7 +6,7 @@ import com.caucho.quercus.Location
 case class StringValue(value: String, var file: String, var lineNr: Int) extends OakValue {
 
   var context = StringLiteralContext.MISC
-  var fdef: (String, Location) = ("", null)
+  var fdef: (String, (String, Int)) = ("", ("", 0))
   
   override def toString() = value // + "@"+file+":"+lineNr
   

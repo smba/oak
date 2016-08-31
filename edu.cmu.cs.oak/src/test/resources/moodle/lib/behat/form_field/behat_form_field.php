@@ -25,8 +25,8 @@
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
-use Behat\Mink\Session as Session,
-    Behat\Mink\Element\NodeElement as NodeElement;
+// use Behat\Mink\Session as Session,
+//     Behat\Mink\Element\NodeElement as NodeElement;
 
 /**
  * Representation of a form field.

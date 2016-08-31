@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../behat/behat_base.php');
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException;
-use Behat\Mink\Exception\DriverException as DriverException;
+// use Behat\Mink\Exception\ExpectationException as ExpectationException;
+// use Behat\Mink\Exception\DriverException as DriverException;
 
 /**
  * Steps definitions to navigate through the navigation tree nodes.

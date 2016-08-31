@@ -29,9 +29,9 @@ require_once(__DIR__ . '/../../../../../lib/behat/behat_base.php');
 require_once(__DIR__ . '/../../../../../lib/behat/behat_field_manager.php');
 require_once(__DIR__ . '/../../../../../lib/tests/behat/behat_navigation.php');
 
-use Behat\Gherkin\Node\TableNode as TableNode,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
-    Behat\Mink\Exception\ExpectationException as ExpectationException;
+// use Behat\Gherkin\Node\TableNode as TableNode,
+//     Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
+//     Behat\Mink\Exception\ExpectationException as ExpectationException;
 
 /**
  * Backup-related steps definitions.

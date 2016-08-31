@@ -272,7 +272,7 @@ class ASTVisitor(path: Path) {
         string.context = context
         
         if (string.context == StringLiteralContext.FDEFINITION) {
-          string.fdef = current_fdef
+          string.fdef = (current_fdef._1, (current_fdef._2.getFileName, current_fdef._2.getLineNumber))
         }
         
         if (string.lineNr == 0) throw new RuntimeException()
@@ -681,7 +681,7 @@ class ASTVisitor(path: Path) {
       value.context = context
       
       if (value.context == StringLiteralContext.FDEFINITION) {
-          value.fdef = current_fdef
+          value.fdef = (current_fdef._1, (current_fdef._2.getFileName, current_fdef._2.getLineNumber))
         }
       
       stringLiterals += value
@@ -797,7 +797,7 @@ class ASTVisitor(path: Path) {
       string.context = context
       
       if (string.context == StringLiteralContext.FDEFINITION) {
-          string.fdef = current_fdef
+          string.fdef = (current_fdef._1, (current_fdef._2.getFileName, current_fdef._2.getLineNumber))
         }
       
       stringLiterals += string
@@ -815,7 +815,9 @@ class ASTVisitor(path: Path) {
       string.context = context
       
       if (string.context == StringLiteralContext.FDEFINITION) {
-          string.fdef = current_fdef
+        val fdef_file = if (current_fdef._2 == null) "" else current_fdef._2.getFileName
+        val fdef_line = if (current_fdef._2 == null) 0 else current_fdef._2.getLineNumber
+          string.fdef = (current_fdef._1, (fdef_file, fdef_line))
         }
       
       stringLiterals += string

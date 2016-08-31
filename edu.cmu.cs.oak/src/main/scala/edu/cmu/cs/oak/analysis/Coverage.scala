@@ -21,12 +21,6 @@ class Coverage {
 
 object Coverage extends App {
 
-  //  implicit class FutureExtensions[T](f: Future[T]) {
-  //    def withTimeout(timeout: => Throwable)(implicit duration: FiniteDuration, system: ActorSystem): Future[T] = {
-  //      Future firstCompletedOf Seq(f, after(duration, system.scheduler)(Future.failed(timeout)))
-  //    }
-  //  }
-
   // engine and interpreter instance for testing
   var engine = new OakEngine()
   var interpreter = new OakInterpreter()
@@ -324,13 +318,13 @@ object Coverage extends App {
 //@    getWebchessCoverage
     //#endif
     //#ifdef Wordpress
-    getWordpressCoverage
+//@    getWordpressCoverage
     //#endif
     //#ifdef PHPBB
 //@    getPHPBBCoverage
     //#endif
     //#ifdef Drupal
-//@    getDrupalCoverage
+    getDrupalCoverage
     //#endif
     //#ifdef Mediawiki
 //@    getMediaWikiCoverage

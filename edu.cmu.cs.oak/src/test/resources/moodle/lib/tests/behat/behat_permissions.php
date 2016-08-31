@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../behat/behat_base.php');
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Gherkin\Node\TableNode as TableNode;
+// use Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Gherkin\Node\TableNode as TableNode;
 
 /**
  * Steps definitions to set up permissions to capabilities.

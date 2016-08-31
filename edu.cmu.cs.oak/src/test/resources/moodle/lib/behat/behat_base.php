@@ -28,9 +28,9 @@
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
-    Behat\Mink\Element\NodeElement as NodeElement;
+// use Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
+//     Behat\Mink\Element\NodeElement as NodeElement;
 
 /**
  * Steps definitions base class.

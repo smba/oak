@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../../../../lib/behat/behat_base.php');
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
+// // use Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException;
 
 /**
  * Steps definitions related with the drag and drop onto image question type.

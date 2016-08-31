@@ -27,8 +27,8 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
-use Behat\Gherkin\Node\TableNode as TableNode,
-    Behat\Mink\Exception\ExpectationException as ExpectationException;
+// use Behat\Gherkin\Node\TableNode as TableNode,
+//     Behat\Mink\Exception\ExpectationException as ExpectationException;
 
 /**
  * Steps definitions related to mod_feedback.

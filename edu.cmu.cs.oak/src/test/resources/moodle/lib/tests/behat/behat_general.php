@@ -27,12 +27,12 @@
 
 require_once(__DIR__ . '/../../behat/behat_base.php');
 
-use Behat\Mink\Exception\ExpectationException as ExpectationException,
-    Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
-    Behat\Mink\Exception\DriverException as DriverException,
-    WebDriver\Exception\NoSuchElement as NoSuchElement,
-    WebDriver\Exception\StaleElementReference as StaleElementReference,
-    Behat\Gherkin\Node\TableNode as TableNode;
+// use Behat\Mink\Exception\ExpectationException as ExpectationException,
+//     Behat\Mink\Exception\ElementNotFoundException as ElementNotFoundException,
+//     Behat\Mink\Exception\DriverException as DriverException,
+//     WebDriver\Exception\NoSuchElement as NoSuchElement,
+//     WebDriver\Exception\StaleElementReference as StaleElementReference,
+//     Behat\Gherkin\Node\TableNode as TableNode;
 
 /**
  * Cross component steps definitions.

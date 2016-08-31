@@ -29,20 +29,20 @@
 
 require_once(__DIR__ . '/../../behat/behat_base.php');
 
-use Behat\Testwork\Hook\Scope\BeforeSuiteScope,
-    Behat\Testwork\Hook\Scope\AfterSuiteScope,
-    Behat\Behat\Hook\Scope\BeforeFeatureScope,
-    Behat\Behat\Hook\Scope\AfterFeatureScope,
-    Behat\Behat\Hook\Scope\BeforeScenarioScope,
-    Behat\Behat\Hook\Scope\AfterScenarioScope,
-    Behat\Behat\Hook\Scope\BeforeStepScope,
-    Behat\Behat\Hook\Scope\AfterStepScope,
-    Behat\Mink\Exception\DriverException as DriverException,
-    WebDriver\Exception\NoSuchWindow as NoSuchWindow,
-    WebDriver\Exception\UnexpectedAlertOpen as UnexpectedAlertOpen,
-    WebDriver\Exception\UnknownError as UnknownError,
-    WebDriver\Exception\CurlExec as CurlExec,
-    WebDriver\Exception\NoAlertOpenError as NoAlertOpenError;
+// use Behat\Testwork\Hook\Scope\BeforeSuiteScope,
+//     Behat\Testwork\Hook\Scope\AfterSuiteScope,
+//     Behat\Behat\Hook\Scope\BeforeFeatureScope,
+//     Behat\Behat\Hook\Scope\AfterFeatureScope,
+//     Behat\Behat\Hook\Scope\BeforeScenarioScope,
+//     Behat\Behat\Hook\Scope\AfterScenarioScope,
+//     Behat\Behat\Hook\Scope\BeforeStepScope,
+//     Behat\Behat\Hook\Scope\AfterStepScope,
+//     Behat\Mink\Exception\DriverException as DriverException,
+//     WebDriver\Exception\NoSuchWindow as NoSuchWindow,
+//     WebDriver\Exception\UnexpectedAlertOpen as UnexpectedAlertOpen,
+//     WebDriver\Exception\UnknownError as UnknownError,
+//     WebDriver\Exception\CurlExec as CurlExec,
+//     WebDriver\Exception\NoAlertOpenError as NoAlertOpenError;
 
 /**
  * Hooks to the behat process.
