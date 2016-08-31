@@ -2,10 +2,16 @@ package edu.cmu.cs.oak.value
 
 import com.caucho.quercus.Location
 
+
 case class StringValue(value: String, var file: String, var lineNr: Int) extends OakValue {
 
-  override def toString() = value// + "@"+file+":"+lineNr
-override def isEmpty() = false
+  var context = StringLiteralContext.MISC
+  var fdef: (String, Location) = ("", null)
+  
+  override def toString() = value // + "@"+file+":"+lineNr
+  
+  override def isEmpty() = false
+  
   def this(value: String, location: Location) {
     this(value, "", 0)
     this.setLocation(location)
@@ -26,4 +32,9 @@ override def isEmpty() = false
 
   def getLineNr(): Int = lineNr
 
+}
+
+// analysis only
+object StringLiteralContext extends Enumeration {
+  val TEMPLATE, FDEFINITION, MISC  = Value
 }

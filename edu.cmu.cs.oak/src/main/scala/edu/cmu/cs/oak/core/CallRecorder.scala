@@ -26,6 +26,14 @@ trait CallRecorder {
       undefinedCalls.get(call.name).get.append(call)
     }
   }
+  
+  def isRecordedAsUndefined(name: String): Boolean = {
+    !undefinedCalls.get(name).isEmpty
+  }
+  
+  def unrecordAsUndefined(name: String) {
+    undefinedCalls.remove(name)
+  }
 
   def recordDefinedSymbolicCall(call: Call, s: SymbolicValue) {
     if (definedButSymbolicCalls.get(call.name).isEmpty) {

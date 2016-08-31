@@ -43,7 +43,6 @@
 					<feature mandatory="true" name="INCLUDE_LOGGING">
 						<description>
 							Log every file script include in a tree-like representation of the include stack.
-							
 						</description>
 					</feature>
 					<feature mandatory="true" name="CHOICE_LOGGING">
@@ -112,6 +111,91 @@
 						</feature>
 					</alt>
 				</and>
+				<alt name="Timeout">
+					<description>
+						
+					</description>
+					<feature mandatory="true" name="MINUTES_5">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="MINUTES_10">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="MINUTES_15">
+						<description>
+							
+						</description>
+					</feature>
+				</alt>
+				<or name="CoverageAnalysis">
+					<description>
+						
+					</description>
+					<feature mandatory="true" name="Addressbook">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Schoolmate">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Timeclock">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="UPB">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Webchess">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Wordpress">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="PHPBB">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Drupal">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Mediawiki">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Moodle">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="PhpMyAdmin">
+						<description>
+							
+						</description>
+					</feature>
+					<feature mandatory="true" name="Joomla">
+						<description>
+							
+						</description>
+					</feature>
+				</or>
 			</and>
 		</struct>
 		<constraints/>

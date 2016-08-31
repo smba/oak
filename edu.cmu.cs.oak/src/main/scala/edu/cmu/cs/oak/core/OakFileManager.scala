@@ -37,7 +37,7 @@ trait OakFileManager {
     if (base.isEmpty) {
       base = Some(FileSystems.getDefault.getPath(base_path.toString()))
     } else {
-      throw new RuntimeException("Path to entry point already defined.")
+      //throw new RuntimeException("Path to entry point already defined.")
     }
   }
 

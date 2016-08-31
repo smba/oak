@@ -24,3 +24,5 @@ libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
 // https://mvnrepository.com/artifact/de.fosd.typechef/featureexprlib_2.11
 libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.4.1"
 
+// https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor_2.11
+libraryDependencies += "com.typesafe.akka" % "akka-actor_2.11" % "2.3.8"

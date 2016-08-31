@@ -36,7 +36,7 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("mediawiki/index.php"))
+  val env = loadAndExecute(url("wordpress/wp-admin/index.php"))
   val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml"))
   pw.write(env._2.getOutputAsPrettyXML())
   pw.close

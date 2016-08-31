@@ -64,9 +64,7 @@ class ArrayValue extends OakValue {
       NullValue
     } else {
       val r = array.get( array.keys.toList.reverse.head ).get
-      
       this.reset() // http://php.net/manual/en/function.array-pop.php
-      
       array = array.slice(0, array.size - 1)
       r
     }
@@ -97,11 +95,9 @@ class ArrayValue extends OakValue {
   }
   
   def setRef(index: OakValue, ref: Reference): Unit = {
-    
     if (index.isInstanceOf[StringValue]) {
       index.asInstanceOf[StringValue].setLocation(null)
     }
-    
     array.put(index, ref)
   }
   

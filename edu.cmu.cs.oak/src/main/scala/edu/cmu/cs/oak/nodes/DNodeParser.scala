@@ -85,6 +85,4 @@ object DNodeParser extends App {
     LiteralNode(text, file, line)
   }
   
-  val node = scala.xml.XML.load("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml")
-  println(parseNode(node))
 }

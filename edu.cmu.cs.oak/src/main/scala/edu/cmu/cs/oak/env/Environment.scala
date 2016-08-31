@@ -48,6 +48,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   var symbolic = true
   var single_branch = false
+  
+  // Keep track of touched string literals
+  val touched = new collection.mutable.HashSet[StringValue]()
+  
+  // Keep track of all include expressions
+  val include_history = new collection.mutable.HashMap[(String, Int), Boolean]
 
   /**
    * Map of variable identifiers and variable references.
@@ -376,25 +382,40 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     return new FunctionDef(f.getName, args.toArray, defaults, statement, hasReturn, returnsRef)
   }
 
+  /**
+   * Takes an environment Delta instance and merges with the existing environment. This method
+   * is either used for merging different branches (if-else, switch-case) or for merging sub-environments
+   * such as function/method calls and loops that are nested in a separate environment. 
+   * Merged properties are:
+   * 
+   * 	1) Output (D Model)
+   * 	2) References
+   * 	3) Variables
+   * 	4) Global variables
+   * 	5) Static class fields
+   * 	6) Constant definitions
+   * 	7) Function definitions (not conditional)
+   *  8) Class definitions (not conditional) 
+   *  
+   *  9) [optional] Touched String literals
+   *  10) [optional] Include expressions
+   * 
+   * @param joinResult Delta of an environment instance to be merged
+   * 
+   */
   def weaveDelta(joinResult: Delta) {
 
-    // 1) Add the variational output to the environments output
+    // 1) Merge output
     if (!joinResult.joinedOutput.isEmpty()) {
       this.addOutput(joinResult.joinedOutput)
     }
 
-    // 2) Update the references on the environment's heap
-    //    joinResult.joinedHeap.foreach {
-    //      case (reference, value) => {
-    //        this.heap.insert(reference, value)
-    //      }
-    //    }
-    //    val sizes = (this.heap.varval.size, joinResult.joinedHeap.size)
-    joinResult.joinedHeap.foreach {
+    // 2) Update references
+    joinResult.joinedHeap.foreach { 
       case (reference, value) => this.insert(reference, value)
     }
 
-    // 3) Update the variables that have changed during the execution of the branches
+    // 3) Update ONLY the variables that have changed during the execution of the branches
     joinResult.joinedVariables.foreach {
       case (name, value) => {
         if (name != null && (name equals "$return")) {
@@ -405,7 +426,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
               this.setRef(name, value.asInstanceOf[Reference])
             }
           } else {
-            // do nothing
+            // skip
           }
         } else {
           if (!value.isInstanceOf[Reference]) {
@@ -417,12 +438,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       }
     }
 
-    // 4 Globals
+    // 4) Update global variables
     joinResult.joinedGlobals.foreach {
       g => this.addToGlobal(g)
     }
 
-    // 5 Static fields
+    // 5) Update static class fields
     joinResult.joinedStaticClassVariables.foreach {
       case (c, m) => {
         m.foreach {
@@ -433,19 +454,29 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       }
     }
 
-    // 6) Constants
+    // 6) Update constant definitions
     joinResult.joinedConstants.foreach {
       case (n, c) => this.defineConstant(n, c)
     }
 
-    // 7) Functions
+    // 7) Update function definitions
     joinResult.joinedFunctionDefs.foreach {
       case (name, f) => this.defineFunction(f)
     }
 
-    // 8) Classes
+    // 8) Update class definitions
     joinResult.joinedClassDefs.foreach {
       case (name, c) => this.addClass(c)
+    }
+    
+    // 9) Touched string literals
+    joinResult.joinedTouchedStringLiterals.foreach {
+      sv => this.recordTouchedLiteral(sv)
+    }
+    
+    // 10) Include expressions
+    joinResult.joinedIncludeHistory.foreach {
+      case (k, v) => this.recordIncludeExpression(k._1, k._2, v) // methode haendelt das schon..
     }
   }
 
@@ -487,7 +518,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       update("$return", Choice.optimized(constraint, if (re == null) NullValue else re, NullValue))
     }*/
 
-    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs)
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs, touched.toSet, include_history.toMap)
   }
 
   //  def weaveReferences(that: Environment) {
@@ -620,6 +651,20 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       //parent.terminate(call_stack_size)
     }
   }
+  
+  def recordTouchedLiteral(sv: StringValue) {
+    this.touched.add(sv)
+  }
+  
+  def recordIncludeExpression(file: String, line: Int, success: Boolean) {
+    if (!include_history.contains((file, line))) { // noch nicht besucht in diesem environment
+      include_history.put((file, line), success)
+    } else {
+      if (!include_history.get((file, line)).get && success) { // schon mal besucht, aber nicht erfolgreich· nun aber
+        include_history.put((file, line), true)
+      }
+    }
+  }
 }
 
 /**
@@ -743,5 +788,7 @@ object Environment {
 
     env
   }
+  
+  
 
 }

@@ -53,6 +53,7 @@ class Sprintf extends InterpreterPlugin {
 
     value match {
       case sv: StringValue => {
+        env.recordTouchedLiteral(sv)
         return StringValue(Companion.sprintf(sv.value, args.tail), sv.file, sv.lineNr)
       }
       case _ => {
@@ -99,6 +100,7 @@ class Vsprintf extends InterpreterPlugin {
 
     value match {
       case sv: StringValue => {
+        env.recordTouchedLiteral(sv)
         StringValue(sprintf(sv.value, args.tail), sv.file, sv.lineNr)
       }
       case _ => {
