@@ -1,0 +1,66 @@
+\begin{frame}[t,plain]
+	\titlepage
+\end{frame}
+
+\begin{frame}[t]{PHP}
+
+	\begin{itemize}
+	  \item Script language, widely used for server-side web applications
+	  \item ranked 6th on TIOBE index (09/16)
+	\end{itemize}
+	\pause
+	\begin{itemize}
+	  \item Popular projects, such as \emph{Wordpress}, \emph{MediaWiki} or
+	  \emph{vBulletin}
+	\end{itemize}
+
+	\begin{figure}[!htb]
+	    \centering
+	    \begin{minipage}{.3\textwidth}
+	        \centering
+	        \includegraphics[width=0.9\linewidth]{images/media_wiki_logo}
+	    \end{minipage}%
+	    \begin{minipage}{0.3\textwidth}
+	        \centering
+	        \includegraphics[width=0.9\linewidth]{images/wordpress_logo}
+	    \end{minipage}
+	    \begin{minipage}{0.3\textwidth}
+	        \centering
+	        \includegraphics[width=0.9\linewidth]{images/vbulletin_logo}
+	    \end{minipage}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}[t]{Motivation}
+	 \begin{minipage}{.48\textwidth}
+	       	\uncover<1->{Tool support: Syntax highlighting for nested code (HTML, JavaScript)}\\
+	    \end{minipage}%
+	    \begin{minipage}{0.48\textwidth}
+	    \uncover<4->{HTML validation of possible output}
+	    \end{minipage}
+	    \begin{center}
+			\begin{overprint}	       	
+				\onslide<2>\includegraphics[width=0.4\textwidth]{images/motivation_1}
+				\onslide<3>\includegraphics[width=0.4\textwidth]{images/motivation_1b}
+				\onslide<4->\includegraphics[width=0.4\textwidth]{images/motivation_1c}
+			\end{overprint}
+			\end{center}
+\end{frame}
+
+\begin{frame}[t, fragile]{Symbolic Execution}
+	\begin{semiverbatim} \small
+	\$x = input(); \uncover<2->{\comment{// x \begin{math}\leftarrow\alpha\end{math}}} 
+	\$y = 2;       \uncover<3->{\comment{// y \begin{math}\leftarrow2\end{math}}} 
+	\$z = x + y;   \uncover<4->{\comment{// z \begin{math}\leftarrow{\alpha+2}\end{math}}} 
+	
+	if (\$z > 0) \{ \uncover<5->{\comment{// if \begin{math}(\alpha+2)>0\end{math}}} 
+	   \$r = 'A';  \uncover<6->{\comment{// \begin{math}r\leftarrow\end{math}'A'}} 
+	\} else \{
+	   \$r = 'B';  \uncover<7->{\comment{// \begin{math}r\leftarrow\end{math}'B'}} 
+	\}
+	
+	print(\$r);    \uncover<8->{\comment{// Choice(\begin{math}\alpha+2>0\end{math},'A', 'B')}} 
+	\end{semiverbatim}
+	
+\end{frame}

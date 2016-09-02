@@ -1,0 +1,36 @@
+\documentclass{beamer}
+\usetheme[pageofpages=of,% String used between the current page and the
+                         % total page count.
+          bullet=circle,% Use circles instead of squares for bullets.
+          titleline=true,% Show a line below the frame title.
+          alternativetitlepage=true,% Use the fancy title page.
+          %titlepagelogo=logo-polito,% Logo for the first page.
+          %watermark=watermark-polito,% Watermark used in every page.
+          %watermarkheight=100px,% Height of the watermark.
+          %watermarkheightmult=4,% The watermark image is 4 times bigger
+                                % than watermarkheight.
+          ]{Torino}
+\usecolortheme{freewilly}
+\usepackage{listings}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+
+\author{Stefan Mühlbauer} 
+\title{Symbolic Execution for PHP Web Applications}
+\institute{Technische Universität Braunschweig, Germany}
+\date{September 9, 2016}
+
+\begin{document}
+
+
+\definecolor{comment}{RGB}{0, 102, 102}
+\newcommand{\comment}[1]{\textcolor{comment}{#1}}
+
+\include{slides}
+
+\end{document}
+
