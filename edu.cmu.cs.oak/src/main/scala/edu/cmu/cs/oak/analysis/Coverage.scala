@@ -232,7 +232,8 @@ object Coverage extends App {
     println(s"Touched includes: ${include_expressions_with_result.keySet.size}, total includes: ${all_include_expressions.size}")
     println(s"Include resolution success rate: ${include_expressions_with_result.groupBy(f => f._2).map(f => (f._1, f._2.size))}")
 
-
+  println(include_expressions_with_result.groupBy(f => f._2).getOrElse(true, "no include available"))
+    
     return (relative_coverage, (relevant_foundLiterals.size, relevant_projectLiterals.size))
   }
 
@@ -324,7 +325,7 @@ object Coverage extends App {
 //@    getPHPBBCoverage
     //#endif
     //#ifdef Drupal
-    getDrupalCoverage
+//@    getDrupalCoverage
     //#endif
     //#ifdef Mediawiki
 //@    getMediaWikiCoverage
@@ -334,6 +335,9 @@ object Coverage extends App {
     //#endif
     //#ifdef PhpMyAdmin 
 //@    getPhpMyAdminCoverage
+    //#endif
+    //#ifdef Joomla
+    getJoomlaCoverage
     //#endif
   }
   

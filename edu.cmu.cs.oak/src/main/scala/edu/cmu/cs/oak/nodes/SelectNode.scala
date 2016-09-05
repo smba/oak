@@ -19,13 +19,13 @@ case class SelectNode(mapc: Map[DNode, Constraint]) extends DNode {
     var sequence = List[String]()
     mapc.slice(0, mapc.size - 1)foreach {
       case (v, c) => {
-        sequence ++= List(s"<!-- #ifdef -->")
+        sequence ++= List(s"<!-- #ifdef ${c.toString()} -->")
         sequence ++= v.ifdefy()
         sequence ++= List(s"<!-- #else -->")
         
       }
     }
-    sequence ++= List(s"<!-- #ifdef -->")
+    sequence ++= List(s"<!-- #ifdef ${mapc.last._2.toString()} -->")
     sequence ++= mapc.last._1.ifdefy()
     sequence ++= List(s"<!-- #endif -->")
    

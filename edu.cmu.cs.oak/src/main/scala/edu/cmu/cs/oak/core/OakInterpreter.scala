@@ -1035,10 +1035,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     val now = java.time.Instant.now()
 
     //#ifdef MINUTES_5
-    val timeout = java.time.Duration.ofMinutes(5)
+//@    val timeout = java.time.Duration.ofMinutes(5)
     //#endif
     //#ifdef MINUTES_10
-//@        val timeout = java.time.Duration.ofMinutes(10)
+        val timeout = java.time.Duration.ofMinutes(10)
     //#endif
     //#ifdef MINUTES_15
     //@    val timeout = java.time.Duration.ofMinutes(15)
@@ -1990,7 +1990,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         case choice: MapChoice => {
 
           //#ifdef SYMBOLIC_RETURN_VALUE 
-//@          return SymbolValue(value.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
+          return SymbolValue(value.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
           //#endif
 
           //#ifdef CHOICE_LOGGING
