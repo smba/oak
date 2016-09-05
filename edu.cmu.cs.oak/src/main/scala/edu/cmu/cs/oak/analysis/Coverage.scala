@@ -2,7 +2,6 @@ package edu.cmu.cs.oak.analysis
 
 import java.io.{ File, FileOutputStream, PrintWriter }
 import java.nio.file.{ Path, Paths }
-import java.time.Instant
 
 import edu.cmu.cs.oak.core.{ ControlCode, OakEngine, OakInterpreter }
 import edu.cmu.cs.oak.env.Environment
@@ -100,13 +99,11 @@ object Coverage extends App {
 
     val tasks = for (ep <- entryPoints.zipWithIndex) yield future {
       //      println(s"Now analyzing (${ep._2}/${entryPoints.size}) ${ep._1.toAbsolutePath().toString()}")
-      val before = Instant.now()
       interpreter = new OakInterpreter()
 
       val executed = interpreter.execute(ep._1)
       val found = DNode.extractStringLiterals(executed._2.output)
       found.foreach { s => literalSet += s }
-      val after = Instant.now()
       //      println(s"Finished (${ep._2}/${entryPoints.size}) (${Duration.between(before, after)})")
 
       //#ifdef AbstractLogging
