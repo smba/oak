@@ -20,9 +20,12 @@ class Coverage {
 }
 
 object Coverage extends App {
-
-  val out = new PrintStream(new FileOutputStream(OakUtility.url("output.txt").toFile()))
-  System.setOut(out)
+//
+////  val f = Paths.get(this.getClass().getResource("").getPath + "output.txt").toFile()
+////  f.createNewFile()
+//////  println(f.toString())
+//  val out = new PrintStream(new FileOutputStream(f))
+//  System.setOut(out)
   
   // engine and interpreter instance for testing
   var engine = new OakEngine()
