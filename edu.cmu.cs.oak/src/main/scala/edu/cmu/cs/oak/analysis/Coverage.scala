@@ -13,6 +13,7 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ future, Future }
+import java.io.PrintStream
 
 class Coverage {
 
@@ -20,25 +21,29 @@ class Coverage {
 
 object Coverage extends App {
 
+  val out = new PrintStream(new FileOutputStream(OakUtility.url("output.txt").toFile()))
+  System.setOut(out)
+  
   // engine and interpreter instance for testing
   var engine = new OakEngine()
   var interpreter = new OakInterpreter()
 
   val logger = LoggerFactory.getLogger(classOf[Coverage])
 
-  val ADDRESSBOOK = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/addressbook")
-  val SCHOOLMATE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate")
-  val TIMECLOCK = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/timeclock")
-  val UPB = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/upb")
-  val WEBCHESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/webchess")
+//  val ADDRESSBOOK = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/addressbook")
+  val ADDRESSBOOK = OakUtility.url("addressbook").toFile
+  val SCHOOLMATE = OakUtility.url("schoolmate").toFile
+  val TIMECLOCK = OakUtility.url("timeclock").toFile
+  val UPB = OakUtility.url("upb").toFile
+  val WEBCHESS = OakUtility.url("webchess").toFile
 
-  val DRUPAL = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/drupal")
-  val JOOMLA = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/joomla")
-  val MEDIAWIKI = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/mediawiki")
-  val MOODLE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/moodle")
-  val PHPBB = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/phpbb")
-  val PHPMYADMIN = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/phpmyadmin")
-  val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
+  val DRUPAL = OakUtility.url("drupal").toFile
+  val JOOMLA = OakUtility.url("joomla").toFile
+  val MEDIAWIKI = OakUtility.url("mediawiki").toFile
+  val MOODLE = OakUtility.url("moodle").toFile
+  val PHPBB = OakUtility.url("phpbb").toFile
+  val PHPMYADMIN = OakUtility.url("phpmyadmin").toFile
+  val WORDPRESS = OakUtility.url("wordpress").toFile
 
   val MODEL_PROJECT = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/model_project")
 
@@ -301,40 +306,40 @@ object Coverage extends App {
 
   def coverages() {
     //#ifdef Addressbook
-//@    getAddressbookCoverage
+    getAddressbookCoverage
     //#endif
     //#ifdef Schoolmate
-//@    getSchoolmateCoverage
+    getSchoolmateCoverage
     //#endif
     //#ifdef Timeclock
-//@    getTimeclockCoverage
+    getTimeclockCoverage
     //#endif
     //#ifdef UPB
-//@    getUPBCoverage
+    getUPBCoverage
     //#endif
     //#ifdef Webchess
-//@    getWebchessCoverage
+    getWebchessCoverage
     //#endif
     //#ifdef Wordpress
-//@    getWordpressCoverage
+    getWordpressCoverage
     //#endif
     //#ifdef PHPBB
-//@    getPHPBBCoverage
+    getPHPBBCoverage
     //#endif
     //#ifdef Drupal
-//@    getDrupalCoverage
+    getDrupalCoverage
     //#endif
     //#ifdef Mediawiki
-//@    getMediaWikiCoverage
+    getMediaWikiCoverage
     //#endif
     //#ifdef Moodle
 //@    getMoodleCoverage
     //#endif
     //#ifdef PhpMyAdmin 
-//@    getPhpMyAdminCoverage
+    getPhpMyAdminCoverage
     //#endif
     //#ifdef Joomla
-    getJoomlaCoverage
+//@    getJoomlaCoverage
     //#endif
   }
   

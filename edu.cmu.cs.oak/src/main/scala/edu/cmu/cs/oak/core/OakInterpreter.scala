@@ -982,7 +982,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               env.weaveDelta(loop_env.getDelta())
 
               //#ifndef CONCRETE_FOREACH_LOOP
-//@              break
+              break
               //#endif
             }
           }
@@ -1038,10 +1038,10 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 //@    val timeout = 300000L
     //#endif
     //#ifdef MINUTES_10
-        val timeout = 600000L
+//@        val timeout = 600000L
     //#endif
     //#ifdef MINUTES_15
-    //@    val timeout = 900000L
+        val timeout = 900000L
     //#endif
 
     /*
@@ -1261,32 +1261,32 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   private def evaluateArrayGetExpr(arrayGet: ArrayGetExpr, env: Environment): OakValue = {
 
     //#ifdef ARRAY_GET_CONCRETE
-    val exx = arrayGet._expr
-    if (exx.toString.equals("$_POST") || exx.toString.equals("$_GET") || exx.toString.equals("$_SESSION") || exx.toString.equals("$_SERVER")) {
-      return SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE)
-    }
-
-    val expr = evaluate(exx, env)
-    val index = evaluate(arrayGet._index, env)
-    expr match {
-      case null => null
-      case av: ArrayValue => {
-        val value = try {
-          if (index.isInstanceOf[StringValue]) {
-            index.asInstanceOf[StringValue].setLocation(null)
-          }
-          av.get(index, env)
-        } catch {
-          case t: ArrayIndexOutOfBoundsException => NullValue
-        }
-        value
-      }
-      case v: OakValue => {
-        NullValue
-      }
-    }
+//@    val exx = arrayGet._expr
+//@    if (exx.toString.equals("$_POST") || exx.toString.equals("$_GET") || exx.toString.equals("$_SESSION") || exx.toString.equals("$_SERVER")) {
+//@      return SymbolValue(exx.toString, OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE)
+//@    }
+//@
+//@    val expr = evaluate(exx, env)
+//@    val index = evaluate(arrayGet._index, env)
+//@    expr match {
+//@      case null => null
+//@      case av: ArrayValue => {
+//@        val value = try {
+//@          if (index.isInstanceOf[StringValue]) {
+//@            index.asInstanceOf[StringValue].setLocation(null)
+//@          }
+//@          av.get(index, env)
+//@        } catch {
+//@          case t: ArrayIndexOutOfBoundsException => NullValue
+//@        }
+//@        value
+//@      }
+//@      case v: OakValue => {
+//@        NullValue
+//@      }
+//@    }
     //#else
-//@            return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
+            return SymbolValue(arrayGet.toString, OakHeap.getIndex, SymbolFlag.DUMMY)
     //#endif
   }
 
