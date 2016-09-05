@@ -42,7 +42,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   val engine = new OakEngine()
 
   //#ifdef Timeout
-  var start: Option[java.time.Instant] = None
+  var start: Option[Long] = Some(0L)
   //#endif
 
   //#ifdef CHOICE_LOGGING
@@ -56,7 +56,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     //#ifdef Timeout
     // set the start time for this entry point
-    this.start = Some(java.time.Instant.now())
+    this.start = Some(System.currentTimeMillis())
     //#endif
 
     // the entry point if
@@ -1032,23 +1032,23 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   def execute(stmt: Statement, env: Environment): ControlCode.Value = {
 
     //#ifdef Timeout
-    val now = java.time.Instant.now()
+    val now = System.currentTimeMillis()
 
     //#ifdef MINUTES_5
-//@    val timeout = java.time.Duration.ofMinutes(5)
+//@    val timeout = 300000L
     //#endif
     //#ifdef MINUTES_10
-        val timeout = java.time.Duration.ofMinutes(10)
+        val timeout = 600000L
     //#endif
     //#ifdef MINUTES_15
-    //@    val timeout = java.time.Duration.ofMinutes(15)
+    //@    val timeout = 900000L
     //#endif
 
     /*
      * If the interpreter is timed out, send a terminate() to the environment and shutdown the
      * interpreter.
      */
-    if (java.time.Duration.between(this.start.get, now).toMillis() > timeout.toMillis()) {
+    if ((now - start.get)  > timeout) {
       env.terminate()
       //logger.warn(s"Interpreter timed out after ${timeout.toMinutes()} minutes. Shutting down environment.")
     }
