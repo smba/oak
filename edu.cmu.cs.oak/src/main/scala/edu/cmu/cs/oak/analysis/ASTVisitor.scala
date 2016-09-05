@@ -2,17 +2,170 @@ package edu.cmu.cs.oak.analysis
 
 import java.nio.file.Path
 
-import com.caucho.quercus.Location
-import com.caucho.quercus.expr._
-import com.caucho.quercus.program.Function
-import com.caucho.quercus.statement._
-import edu.cmu.cs.oak.core.OakEngine
-import edu.cmu.cs.oak.value.StringValue
+import scala.collection.mutable.HashSet
+
 import org.slf4j.LoggerFactory
 
-import scala.collection.JavaConversions._
-import scala.collection.mutable.HashSet
+import com.caucho.quercus.program.Function
+
+import scala.collection.JavaConverters._
+
+import com.caucho.quercus.Location
+import com.caucho.quercus.expr.AbstractBinaryExpr
+import com.caucho.quercus.expr.AbstractLongValuedExpr
+import com.caucho.quercus.expr.AbstractMethodExpr
+import com.caucho.quercus.expr.AbstractUnaryExpr
+import com.caucho.quercus.expr.AbstractVarExpr
+import com.caucho.quercus.expr.ArrayIsSetExpr
+import com.caucho.quercus.expr.ArrayTailExpr
+import com.caucho.quercus.expr.ArrayUnsetExpr
+import com.caucho.quercus.expr.BinaryAddExpr
+import com.caucho.quercus.expr.BinaryAndExpr
+import com.caucho.quercus.expr.BinaryAppendExpr
+import com.caucho.quercus.expr.BinaryAssignExpr
+import com.caucho.quercus.expr.BinaryAssignListEachExpr
+import com.caucho.quercus.expr.BinaryAssignListExpr
+import com.caucho.quercus.expr.BinaryAssignRefExpr
+import com.caucho.quercus.expr.BinaryBitAndExpr
+import com.caucho.quercus.expr.BinaryBitOrExpr
+import com.caucho.quercus.expr.BinaryBitXorExpr
+import com.caucho.quercus.expr.BinaryCharAtExpr
+import com.caucho.quercus.expr.BinaryCommaExpr
+import com.caucho.quercus.expr.BinaryDivExpr
+import com.caucho.quercus.expr.BinaryEqExpr
+import com.caucho.quercus.expr.BinaryEqualsExpr
+import com.caucho.quercus.expr.BinaryGeqExpr
+import com.caucho.quercus.expr.BinaryGtExpr
+import com.caucho.quercus.expr.BinaryInstanceOfExpr
+import com.caucho.quercus.expr.BinaryInstanceOfVarExpr
+import com.caucho.quercus.expr.BinaryLeftShiftExpr
+import com.caucho.quercus.expr.BinaryLeqExpr
+import com.caucho.quercus.expr.BinaryLtExpr
+import com.caucho.quercus.expr.BinaryModExpr
+import com.caucho.quercus.expr.BinaryMulExpr
+import com.caucho.quercus.expr.BinaryNeqExpr
+import com.caucho.quercus.expr.BinaryOrExpr
+import com.caucho.quercus.expr.BinaryRightShiftExpr
+import com.caucho.quercus.expr.BinarySubExpr
+import com.caucho.quercus.expr.BinaryXorExpr
+import com.caucho.quercus.expr.CallExpr
+import com.caucho.quercus.expr.CallVarExpr
+import com.caucho.quercus.expr.ClassConstExpr
+import com.caucho.quercus.expr.ClassConstructExpr
+import com.caucho.quercus.expr.ClassConstructorExpr
+import com.caucho.quercus.expr.ClassFieldExpr
+import com.caucho.quercus.expr.ClassFieldVarExpr
+import com.caucho.quercus.expr.ClassMethodExpr
+import com.caucho.quercus.expr.ClassMethodVarExpr
+import com.caucho.quercus.expr.ClassVarConstExpr
+import com.caucho.quercus.expr.ClassVarFieldExpr
+import com.caucho.quercus.expr.ClassVarFieldVarExpr
+import com.caucho.quercus.expr.ClassVarMethodExpr
+import com.caucho.quercus.expr.ClassVarMethodVarExpr
+import com.caucho.quercus.expr.ClassVarNameConstExpr
+import com.caucho.quercus.expr.ClassVarNameVirtualConstExpr
+import com.caucho.quercus.expr.ClassVarVarConstExpr
+import com.caucho.quercus.expr.ClassVirtualConstExpr
+import com.caucho.quercus.expr.ClassVirtualFieldExpr
+import com.caucho.quercus.expr.ClassVirtualFieldVarExpr
+import com.caucho.quercus.expr.ClassVirtualMethodExpr
+import com.caucho.quercus.expr.ClassVirtualMethodVarExpr
+import com.caucho.quercus.expr.ClosureExpr
+import com.caucho.quercus.expr.ConditionalShortExpr
+import com.caucho.quercus.expr.ConstClassExpr
+import com.caucho.quercus.expr.ConstDirExpr
+import com.caucho.quercus.expr.ConstExpr
+import com.caucho.quercus.expr.ConstFileExpr
+import com.caucho.quercus.expr.DieExpr
+import com.caucho.quercus.expr.Expr
+import com.caucho.quercus.expr.FunArrayExpr
+import com.caucho.quercus.expr.FunCloneExpr
+import com.caucho.quercus.expr.FunDieExpr
+import com.caucho.quercus.expr.FunEachExpr
+import com.caucho.quercus.expr.FunEmptyExpr
+import com.caucho.quercus.expr.FunExitExpr
+import com.caucho.quercus.expr.FunGetCalledClassExpr
+import com.caucho.quercus.expr.FunGetClassExpr
+import com.caucho.quercus.expr.FunIncludeExpr
+import com.caucho.quercus.expr.FunIncludeOnceExpr
+import com.caucho.quercus.expr.FunIssetExpr
+import com.caucho.quercus.expr.ImportExpr
+import com.caucho.quercus.expr.ListHeadExpr
+import com.caucho.quercus.expr.LiteralBinaryStringExpr
+import com.caucho.quercus.expr.LiteralExpr
+import com.caucho.quercus.expr.LiteralLongExpr
+import com.caucho.quercus.expr.LiteralNullExpr
+import com.caucho.quercus.expr.LiteralStringExpr
+import com.caucho.quercus.expr.LiteralUnicodeExpr
+import com.caucho.quercus.expr.ObjectFieldExpr
+import com.caucho.quercus.expr.ObjectFieldVarExpr
+import com.caucho.quercus.expr.ObjectMethodExpr
+import com.caucho.quercus.expr.ObjectMethodVarExpr
+import com.caucho.quercus.expr.ObjectNewExpr
+import com.caucho.quercus.expr.ObjectNewStaticExpr
+import com.caucho.quercus.expr.ObjectNewVarExpr
+import com.caucho.quercus.expr.ParamDefaultExpr
+import com.caucho.quercus.expr.ParamRequiredExpr
+import com.caucho.quercus.expr.ThisExpr
+import com.caucho.quercus.expr.ThisFieldExpr
+import com.caucho.quercus.expr.ThisFieldVarExpr
+import com.caucho.quercus.expr.ThisMethodExpr
+import com.caucho.quercus.expr.ThisMethodVarExpr
+import com.caucho.quercus.expr.ToArrayExpr
+import com.caucho.quercus.expr.ToBinaryExpr
+import com.caucho.quercus.expr.ToBooleanExpr
+import com.caucho.quercus.expr.ToDoubleExpr
+import com.caucho.quercus.expr.ToLongExpr
+import com.caucho.quercus.expr.ToObjectExpr
+import com.caucho.quercus.expr.ToStringExpr
+import com.caucho.quercus.expr.ToUnicodeExpr
+import com.caucho.quercus.expr.TraitParentClassConstExpr
+import com.caucho.quercus.expr.TraitParentClassMethodExpr
+import com.caucho.quercus.expr.UnaryBitNotExpr
+import com.caucho.quercus.expr.UnaryCopyExpr
+import com.caucho.quercus.expr.UnaryMinusExpr
+import com.caucho.quercus.expr.UnaryNotExpr
+import com.caucho.quercus.expr.UnaryPlusExpr
+import com.caucho.quercus.expr.UnaryPostIncrementExpr
+import com.caucho.quercus.expr.UnaryPreIncrementExpr
+import com.caucho.quercus.expr.UnaryRefExpr
+import com.caucho.quercus.expr.UnarySuppressErrorExpr
+import com.caucho.quercus.expr.UnaryUnsetExpr
+import com.caucho.quercus.expr.VarExpr
+import com.caucho.quercus.expr.VarTempExpr
+import com.caucho.quercus.expr.VarUnsetExpr
+import com.caucho.quercus.expr.VarVarExpr
+import com.caucho.quercus.statement.BlockStatement
+import com.caucho.quercus.statement.BreakStatement
+import com.caucho.quercus.statement.ClassDefStatement
+import com.caucho.quercus.statement.ClassStaticStatement
+import com.caucho.quercus.statement.ClosureStaticStatement
+import com.caucho.quercus.statement.ContinueStatement
+import com.caucho.quercus.statement.DoStatement
+import com.caucho.quercus.statement.EchoStatement
+import com.caucho.quercus.statement.ExprStatement
+import com.caucho.quercus.statement.ForStatement
+import com.caucho.quercus.statement.ForeachStatement
+import com.caucho.quercus.statement.FunctionDefStatement
+import com.caucho.quercus.statement.GlobalStatement
+import com.caucho.quercus.statement.IfStatement
+import com.caucho.quercus.statement.NullStatement
+import com.caucho.quercus.statement.ReturnRefStatement
+import com.caucho.quercus.statement.ReturnStatement
+import com.caucho.quercus.statement.Statement
+import com.caucho.quercus.statement.StaticStatement
+import com.caucho.quercus.statement.SwitchStatement
+import com.caucho.quercus.statement.TextStatement
+import com.caucho.quercus.statement.ThrowStatement
+import com.caucho.quercus.statement.TryStatement
+import com.caucho.quercus.statement.VarGlobalStatement
+import com.caucho.quercus.statement.WhileStatement
+
+import edu.cmu.cs.oak.core.OakEngine
 import edu.cmu.cs.oak.value.StringLiteralContext
+import edu.cmu.cs.oak.value.StringValue
+import com.caucho.quercus.expr.ConditionalExpr
+
 
 /**
  * Traverses the PHP AST provided by Quercus and retrieves all
@@ -107,7 +260,7 @@ class ASTVisitor(path: Path) {
         val ic = s._cl
         val functionMap = ic._functionMap //Interpreter.accessField(ic, "_functionMap").asInstanceOf[LinkedHashMap[com.caucho.quercus.env.StringValue, AbstractFunction]]
 
-        val functions = functionMap.map { case (k, v) => (k.toString(), v) }
+        val functions = functionMap.asScala.map { case (k, v) => (k.toString(), v) }
         
         functions.values.map {
           f => {
