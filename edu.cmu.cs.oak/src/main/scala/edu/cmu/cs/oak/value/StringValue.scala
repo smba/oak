@@ -5,8 +5,10 @@ import com.caucho.quercus.Location
 
 case class StringValue(value: String, var file: String, var lineNr: Int) extends OakValue {
 
+  //#ifdef CoverageAnalysis
   var context = StringLiteralContext.MISC
   var fdef: (String, (String, Int)) = ("", ("", 0))
+  //#endif
   
   override def toString() = value // + "@"+file+":"+lineNr
   
@@ -31,7 +33,6 @@ case class StringValue(value: String, var file: String, var lineNr: Int) extends
   def getFileName(): String = file
 
   def getLineNr(): Int = lineNr
-
 }
 
 // analysis only

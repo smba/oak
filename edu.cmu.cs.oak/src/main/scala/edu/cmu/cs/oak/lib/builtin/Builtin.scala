@@ -8,7 +8,6 @@ import edu.cmu.cs.oak.env.Environment
 import java.nio.file.Path
 import com.caucho.quercus.expr.Expr
 import edu.cmu.cs.oak.value.BooleanValue
-import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.env.OakHeap
@@ -21,6 +20,10 @@ import com.caucho.quercus.Location
 import java.io.File
 import edu.cmu.cs.oak.env.Call
 import java.nio.file.Paths
+import edu.cmu.cs.oak.value.NullValue
+
+
+
 
 class IsNull extends InterpreterPlugin {
   override def getName(): String = "is_null"

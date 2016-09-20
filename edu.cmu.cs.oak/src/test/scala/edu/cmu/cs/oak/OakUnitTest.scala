@@ -8,6 +8,7 @@ import edu.cmu.cs.oak.env.Environment
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
+import edu.cmu.cs.oak.nodes.DNode
 
 /**
  * This test class contains unit tests based on PHP snippets and its
@@ -36,8 +37,10 @@ object OakUnitTest extends App {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("wordpress/wp-admin/index.php"))
+  val env = loadAndExecute(url("model_project/index.php"))
   val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml"))
-  pw.write(env._2.getOutputAsPrettyXML())
+//  pw.write(env._2.getOutputAsPrettyXML())
+  
+  println(env._2.ifdefy.mkString("\n"))
   pw.close
 }

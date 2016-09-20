@@ -1,10 +1,9 @@
 package edu.cmu.cs.oak.env
 
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.ObjectValue
-import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.exceptions.VariableNotFoundException
+import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.OakValue
+import edu.cmu.cs.oak.value.ObjectValue
 
 case class ClassDef(name: String, var fields: Map[String, OakValue], methods: Map[String, FunctionDef], constants: Map[String, OakValue], var staticFields: Map[String, OakValue],  parent: String) {
   

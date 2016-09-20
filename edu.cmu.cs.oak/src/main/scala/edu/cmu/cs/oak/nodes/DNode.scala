@@ -4,18 +4,13 @@ import java.security.MessageDigest
 
 import com.caucho.quercus.Location
 
-import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.value.MapChoice
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
-import edu.cmu.cs.oak.env.OakHeap
-import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.nodes.SymbolNode
 import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.MapChoice
 
 
 /**
@@ -63,7 +58,12 @@ abstract class DNode {
     if (ifd1.size == ifd2.size) {
       (ifd1 zip ifd2).map {
         case (x, y) => {
-          chop(x) equals chop(y)
+          if (!(chop(x) equals chop(y))) {
+            
+            false
+          } else {
+            true
+          }
         }
       }.fold(true)(_ && _)
     } else {

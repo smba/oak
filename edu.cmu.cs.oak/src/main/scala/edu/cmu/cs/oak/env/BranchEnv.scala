@@ -8,7 +8,6 @@ import edu.cmu.cs.oak.exceptions.VariableNotFoundException
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.nodes.SelectNode
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.NullValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.Reference
 import org.slf4j.LoggerFactory
@@ -16,6 +15,7 @@ import edu.cmu.cs.oak.value.MapChoice
 import edu.cmu.cs.oak.value.ObjectValue
 import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.MapChoice
+import edu.cmu.cs.oak.value.NullValue
 
 /**
  * This class encapsulates all merging functionality used for branching
@@ -286,6 +286,7 @@ object BranchEnv {
    *  
    *  9) [For coverage evaluation only!] Touched string literals
    *  10) [optional] Include history
+   *  11) [optional] unknown functions
    *
    * @param envs List[BranchEnv] list of branch environments to be joined, each environment is a parallel branch
    * @param constraints List[Constraint] list of conditions for the corresponding branches
@@ -307,6 +308,8 @@ object BranchEnv {
           updatedVariableMap += (name -> joinVariable(envs, constraints, name))
         }
     }
+    // Array updates
+    val arrays = envs
 
     // 4) Global variables
     val allGlobals = envs.map { e => e.globalVariables }.fold(Set[String]())(_ union _).toSet
@@ -350,7 +353,13 @@ object BranchEnv {
     val keys = include_expressions.map(e => e.keySet).fold(Set[(String, Int)]())(_ union _)
     val history = keys.map(k => (k, include_expressions.map(m => m.getOrElse(k, false)).fold(false)(_ || _))).toMap
 
+    
+    // 11)
+    val unknownFunctions = envs.map(e => e.unknown_standard_functions.keySet).fold(Set[String]())(_ union _)
+    val unknownFunctionsMap = unknownFunctions.map {
+      k => (k, envs.map(e => e.unknown_standard_functions).map(m => m.getOrElse(k, 0)).fold(0)(_ + _))
+    }.toMap
     // Create and export new Delta instance
-    new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals, constants, functions, classes, touched, history)
+    new Delta(joinedOutput, updatedVariableMap, joinedHeap, updatedFieldz, allGlobals, constants, functions, classes, touched, history, unknownFunctionsMap)
   }
 }

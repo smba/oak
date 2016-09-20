@@ -23,8 +23,7 @@ import edu.cmu.cs.oak.nodes.ConcatNode
 import edu.cmu.cs.oak.nodes.DNode
 import edu.cmu.cs.oak.value.ArrayValue
 import edu.cmu.cs.oak.value.Choice
-import edu.cmu.cs.oak.value.NullValue
-import edu.cmu.cs.oak.value.NullValue
+
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
@@ -34,6 +33,12 @@ import edu.cmu.cs.oak.value.StringValue
 import edu.cmu.cs.oak.value.SymbolValue
 import edu.cmu.cs.oak.value.MapChoice
 import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.value.ArrayValue
+import edu.cmu.cs.oak.nodes.ConcatNode
+import edu.cmu.cs.oak.value.NullValue
+import edu.cmu.cs.oak.core.ArrayUpdateRecordMap
+
 
 /**
  * Programs state and program state operations.
@@ -55,6 +60,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
   // Keep track of all include expressions
   val include_history = new collection.mutable.HashMap[(String, Int), Boolean]
 
+  // standard lib functions
+  val unknown_standard_functions = new collection.mutable.HashMap[String, Int]()
+  
   /**
    * Map of variable identifiers and variable references.
    * In various contexts, variables can refer to the same value.
@@ -107,6 +115,9 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    * is executed.
    */
   private var terminated = false
+  
+  val array_updates = new ArrayUpdateRecordMap()
+  
 
   val logger = LoggerFactory.getLogger(classOf[Environment])
 
@@ -399,6 +410,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
    *  
    *  9) [optional] Touched String literals
    *  10) [optional] Include expressions
+   *  11) [optional] Standard lib functions
    * 
    * @param joinResult Delta of an environment instance to be merged
    * 
@@ -478,6 +490,17 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     joinResult.joinedIncludeHistory.foreach {
       case (k, v) => this.recordIncludeExpression(k._1, k._2, v) // methode haendelt das schon..
     }
+    
+    // 11) unknown functions
+    joinResult.joinedUndefinedfunctions.foreach {
+      case (k, v) => {
+        if (unknown_standard_functions.contains(k)) {
+          unknown_standard_functions.put(k, unknown_standard_functions.get(k).get + v)
+        } else {
+          unknown_standard_functions.put(k, v)
+        }
+      }
+    }
   }
 
   def getDelta(): Delta = {
@@ -518,7 +541,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       update("$return", Choice.optimized(constraint, if (re == null) NullValue else re, NullValue))
     }*/
 
-    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs, touched.toSet, include_history.toMap)
+    new Delta(this.getOutput(), if (!this.isFunctionEnv()) variables else returnMap, references, t, this.globalVariables.toSet, constants.toMap, funcs, classDefs, touched.toSet, include_history.toMap, unknown_standard_functions.toMap)
   }
 
   //  def weaveReferences(that: Environment) {
@@ -629,7 +652,7 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
 
   // Triggers termination of the environment
   def terminate() {
-    this.terminate(this.getCalls().size)
+    this.terminate(getCalls().size)
   }
 
   private def terminate(call_stack_size: Int) {
@@ -642,14 +665,12 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
      */
     if (parent != null && parent.getCalls().size == call_stack_size) {
 
-      /* Special case: If this environment is a branch, check, if it is a concrete
+      /* Special case: If this environment is a branch, check, whether it is a concrete
       * branch choice or not */
       if (!this.isSymbolic()) {
         parent.terminate(call_stack_size)
       }
-    } else {
-      //parent.terminate(call_stack_size)
-    }
+    } 
   }
   
   def recordTouchedLiteral(sv: StringValue) {
@@ -663,6 +684,37 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
       if (!include_history.get((file, line)).get && success) { // schon mal besucht, aber nicht erfolgreich· nun aber
         include_history.put((file, line), true)
       }
+    }
+  }
+  
+  def info() = {
+
+    val variables = (List(this) ++ getParents).map(e => e.variables.keySet).fold(Set[String]())(_ union _).toSeq.sorted
+    val var_val = variables.map(v => (v -> lookup(v))).toMap
+    
+    val constants = (List(this) ++ getParents).map(e => e.constants.keySet).fold(Set[String]())(_ union _).toSeq.sorted
+    val const_val = constants.map(c => (c -> getConstant(c))).toMap
+    
+    println(s"### ${getConstraint()} ###")
+    var_val.foreach {
+      case (k, v) => {
+        v match {
+          case av: ArrayValue => {
+            val ar = av.array.map {
+              case (kk, vv) => {
+                (kk, extract(vv))
+              }
+            }
+            println(k, ar)
+          }
+          case _ => {
+            println(k, v)
+          }
+        }
+      }
+    }
+    const_val.foreach {
+      case (k, v) => println(k, v)
     }
   }
 }

@@ -1,5 +1,6 @@
 package edu.cmu.cs.oak.analysis
 
+import scala.io.Source
 import java.io.PrintWriter
 import java.nio.file.Paths
 import scala.util.Random
@@ -16,12 +17,28 @@ import edu.cmu.cs.oak.value.StringLiteralContext
 import java.io.ObjectOutputStream
 import java.io.FileInputStream
 import java.io.ObjectInputStream
+import scala.collection.mutable.ListBuffer
 
 /**
  * Selection of useful methods used during analysis.
  *
  */
 object OakUtility {
+
+  var phpStandardFunctions: Option[List[String]] = None
+
+  def is_php_function(s: String): Boolean = {
+    
+    // runtime caching
+    if (phpStandardFunctions.isEmpty) {
+      val functions = new ListBuffer[String]()
+      for (line <- Source.fromURL(url("phpStandardFunctions.txt").toFile().toURL()).getLines()) {
+        functions += line.toString()
+      }
+      phpStandardFunctions = Some(functions.toList)
+    }
+    phpStandardFunctions.get.contains(s)
+  }
 
   /**
    * Utility Method,
@@ -55,14 +72,14 @@ object OakUtility {
 
     return if (path.toFile().exists()) { // ergebnisse schon mal gelesen
       val ois = new ObjectInputStream(new FileInputStream(path.toFile))
-      val r = ois.readObject.asInstanceOf[ (Set[StringValue], Set[(String, Int)]) ]
+      val r = ois.readObject.asInstanceOf[(Set[StringValue], Set[(String, Int)])]
       ois.close
       r
     } else { // parse und schreibe den shit
       // Parallel parsing tasks
       val files = getPHPFiles(file)
       val tasks = for (phpFile <- files.zipWithIndex) yield future {
-        println(s"${phpFile._2}/${files.size} ${phpFile._1.toPath().toString()}")
+        //        println(s"${phpFile._2}/${files.size} ${phpFile._1.toPath().toString()}")
         (new ASTVisitor(Paths.get(phpFile._1.getAbsolutePath))).retrieveStringLiterals()
       }
       val aggregated = Future.sequence(tasks)
@@ -82,6 +99,7 @@ object OakUtility {
 
   def deserializeParseResults(file: File): (Set[StringValue], Set[(String, Int)]) = {
     val filename = file.toPath().toAbsolutePath().toString().hashCode() + ".xml"
+
     val path = Paths.get(OakUtility.url("").toString + "/" + filename)
     def p(label: String): Boolean = !(label equals "#PCDATA")
 
@@ -128,16 +146,21 @@ object OakUtility {
         (name, (file, line))
       }
       val sv = StringValue(value, file, line)
+      
+      //#ifdef CoverageAnalysis
       sv.context = context
       sv.fdef = fdef
+      //#endif
       return sv
     }
 
     parseContent(scala.xml.XML.loadFile(path.toFile))
   }
 
+  //#ifdef CoverageAnalysis
   def serializeParseResults(file: File, literals: Set[StringValue], includes: Set[(String, Int)]) {
     val filename = file.toPath().toAbsolutePath().toString().hashCode() + ".xml"
+
     val literals_xml = {
       <Literals>
         {
@@ -147,6 +170,7 @@ object OakUtility {
         }
       </Literals>
     }
+    
     val includes_xml = {
       <Includes>
         {
@@ -166,6 +190,7 @@ object OakUtility {
     pw.write((new scala.xml.PrettyPrinter(80, 2)).format(node))
     pw.close
   }
+  //#endif
 
   /**
    * Returns a stream of all files having the file extension ".php" or ".inc" for a
@@ -183,7 +208,7 @@ object OakUtility {
     }
 
     // Look for file names ending with ".inc" or ".php"
-    getFileTree(file).filter(p => p.getName.endsWith(".php") || p.getName.endsWith(".inc"))
+    getFileTree(file).filter(p => p.getName.endsWith(".php") || p.getName.endsWith(".inc") || p.getName.endsWith(".bit"))
   }
 
 }

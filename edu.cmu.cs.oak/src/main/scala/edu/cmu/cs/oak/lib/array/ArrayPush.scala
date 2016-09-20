@@ -30,12 +30,16 @@ class ArrayPush extends InterpreterPlugin {
     
     args.head match {
       case ref: Reference => {
+        try {
         val array_to_push_to = env.extract(ref).asInstanceOf[ArrayValue]
         val s = array_to_push_to.array.size
         args.tail.foreach {
           arg => array_to_push_to.set(IntValue(s), arg, env)
         }
         env.insert(ref, array_to_push_to)
+        } catch {
+          case t: Throwable => {}
+        }
       }
     }
 

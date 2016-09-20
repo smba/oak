@@ -85,11 +85,11 @@ class ArrayValue extends OakValue {
          env.extract(array.values.toList(index.asInstanceOf[IntValue].value.toInt))
         } catch {
           case e: Exception => {
-            NullValue
+            SymbolValue("arrayget1")
           }
         }
       } else {
-        NullValue
+        SymbolValue("arrayget2")
       }
     }
   }

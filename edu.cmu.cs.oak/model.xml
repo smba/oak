@@ -131,71 +131,131 @@
 						</description>
 					</feature>
 				</alt>
-				<or name="CoverageAnalysis">
+				<and abstract="true" name="Analysis">
 					<description>
 						
 					</description>
-					<feature mandatory="true" name="Addressbook">
+					<or mandatory="true" name="CoverageAnalysis">
+						<description>
+							
+						</description>
+						<feature mandatory="true" name="Addressbook">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Schoolmate">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Timeclock">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="UPB">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Webchess">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Wordpress">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="PHPBB">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Drupal">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Mediawiki">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Moodle">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="PhpMyAdmin">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Joomla">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Anchor">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Garv">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Pagekit">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Kirby">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Fork">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Automad">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="WonderCMS">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Monstra">
+							<description>
+								
+							</description>
+						</feature>
+						<feature mandatory="true" name="Nibbleblog">
+							<description>
+								
+							</description>
+						</feature>
+					</or>
+					<feature name="Parallelization">
 						<description>
 							
 						</description>
 					</feature>
-					<feature mandatory="true" name="Schoolmate">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Timeclock">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="UPB">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Webchess">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Wordpress">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="PHPBB">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Drupal">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Mediawiki">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Moodle">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="PhpMyAdmin">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="Joomla">
-						<description>
-							
-						</description>
-					</feature>
-				</or>
+				</and>
+				<feature name="Debugging">
+					<description>
+						
+					</description>
+				</feature>
 			</and>
 		</struct>
 		<constraints/>

@@ -26,3 +26,5 @@ libraryDependencies += "de.fosd.typechef" % "featureexprlib_2.11" % "0.4.1"
 
 // https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor_2.11
 
+// set the main class for 'sbt run'
+mainClass in (Compile, run) := Some("edu.cmu.cs.oak.analysis.Coverage")

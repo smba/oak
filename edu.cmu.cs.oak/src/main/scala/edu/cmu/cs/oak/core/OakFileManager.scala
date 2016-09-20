@@ -5,10 +5,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 import scala.collection.mutable.Stack
-import scala.collection.mutable.ListBuffer
+
+import edu.cmu.cs.oak.value.MapChoice
 import edu.cmu.cs.oak.value.OakValue
 import edu.cmu.cs.oak.value.OakValueSequence
-import edu.cmu.cs.oak.value.MapChoice
 
 trait OakFileManager {
 
@@ -53,8 +53,9 @@ trait OakFileManager {
    *
    * @throws FileNotFoundException
    */
-  def resolvePath(fragment: String): Path = {
+  def resolvePath(fragmento: String): Path = {
 
+    val fragment = fragmento//.replaceAll("../", "").replaceAll("./", "")
     if (!includes.isEmpty) {
 
       /**
@@ -72,7 +73,9 @@ trait OakFileManager {
         } else {
           p = p.getParent
         }
+
       }
+
       return null
     } else {
       val path = base.get.getParent.resolve(fragment).normalize()
@@ -118,25 +121,43 @@ trait OakFileManager {
     return this.base.get
   }
 
-  def flattenPath(paf: OakValue): List[OakValue] = {
-    paf match {
-      case s: OakValueSequence => {
-        // Flatten all choices
-        val sequenceFlattened = s.getSequence.map {
-          v =>
-            v match {
-              case c: MapChoice => new OakValueSequence(c.toMap().keys.toList)
-              case v: OakValue => v
-              case null => null
-            }
-        }
+  /**
+   * After evaluating the include expression, this is (usually..) an OakValueSequence
+   * wit nested MapChoices and other fancy values. Since MapChoices and Sequences can be nested,
+   * we flatten the evaluated value by resolving ALL possible variants.
+   *
+   * For instance:
+   * (a | b (c | d) ) e (f | g)  where (x|y) is a choice and enything else from left to right is the/a sequence
+   *
+   * would be flattened to
+   *
+   * aef
+   * bcef
+   * bdef
+   * aeg
+   * bceg
+   * bdeg
+   *
+   */
+  def flattenPath(path: OakValue): Seq[String] = {
+    val vs = createVariants(path).getEntries().map(v => v.getEntries() mkString "")
+    return vs
+  }
 
-        val tree = Tree.construct(sequenceFlattened)
-        val paths = new ListBuffer[OakValueSequence]()
-        tree.plainTraverse(paths)
-        paths.toList
-      }
-      case v: OakValue => List(v)
+  /**
+   *
+   */
+  private def createVariants(v: OakValue): Variants = v match {
+    case s: OakValueSequence => {
+      val x = s.getSequence.map(ov => createVariants(ov))
+      x.tail.fold(x.head)(_ * _)
+    }
+    case c: MapChoice => {
+      val x = c.toMap.keys.map(k => createVariants(k)).map(e => e.getEntries())
+      new Variants(x.tail.fold(x.head)(_ ++ _))
+    }
+    case v: OakValue => {
+      new Variants(List(new Variant(List(v))))
     }
   }
 }

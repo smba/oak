@@ -6,13 +6,12 @@ import edu.cmu.cs.oak.core.SymbolFlag
 import edu.cmu.cs.oak.core.OakInterpreter
 import edu.cmu.cs.oak.env.OakHeap
 
-/**
-  *
-  */
-case class SymbolValue(e: String, id: Long, flag: SymbolFlag.Value) extends SymbolicValue {
+// TODO remove default parameter in the near future
+case class SymbolValue(e: String, id: Long = OakHeap.getIndex(), flag: SymbolFlag.Value= SymbolFlag.DUMMY) extends SymbolicValue {
 
-  //OakInterpreter.symbolSet += this
-  
-  override def toString() = s"Symbol[${e}]"  
+  override def toString() = {
+    s"Symbol[${e}]"  
+  }
   override def isEmpty() = false
+  
 }
