@@ -1,12 +1,12 @@
 # Oak 
-*Oak* is an extensible *symbolic interpreter* for the [PHP](http://php.net/) programming language written mostly in Scala. Most execution features are similar to symbolic execution, although, if possible, certain features may be executed concretely. This tool is inspired by the symbolic execution engine by [Varis/Symex](https://github.com/git1997/VarAnalysis) and additionally provides support for basic Object-Oriented Programming and a framework for standard library function plugins.
+**Oak** is an extensible **symbolic interpreter** for the [PHP](http://php.net/) programming language written mostly in Scala. Most execution features are similar to symbolic execution, although, if possible, certain features may be executed concretely. This tool is inspired by the symbolic execution engine by [Varis/Symex](https://github.com/git1997/VarAnalysis) and additionally provides support for basic Object-Oriented Programming and a framework for standard library function plugins.
 
 ## Documentation
 For documentation and further reading, please refer to the [wiki](https://github.com/smba/oak/wiki) of this repository.
 
 ## Requirements
-* *JDK 8* and *Scala 2.11.8+*
-* *sbt 0.11+*: [sbt](http://www.scala-sbt.org/index.html) is used for building the interpreter and resolving dependencies.
+* **JDK 8** and **Scala 2.11.8+**
+* **sbt 0.11+**: [sbt](http://www.scala-sbt.org/index.html) is used for building the interpreter and resolving dependencies.
 
 ## Build [![Build Status](https://travis-ci.org/smba/oak.svg?branch=master)](https://travis-ci.org/smba/oak)
 To build this project, clone this repository using
