@@ -8,7 +8,7 @@ For documentation and further reading, please refer to the [wiki](https://github
 * *JDK 8* and *Scala 2.11.8+*
 * *sbt 0.11+*: [sbt](http://www.scala-sbt.org/index.html) is used for building the interpreter and resolving dependencies.
 
-## Build
+## Build [![Build Status](https://travis-ci.org/smba/oak.svg?branch=master)](https://travis-ci.org/smba/oak)
 To build this project, clone this repository using
 ```git clone https://github.com/smba/oak.git```
 and build the project using `sbt compile`.
@@ -35,4 +35,4 @@ To analyse PHP systems from multiple/all entry points, use `edu.cmu.cs.oak.analy
 * `kernel` and `hessian` are dependencies for quercus
 
 ## Contact 
-Feel free to fork this project or contact the author with any question at http://chxo.com/labelgen/labelgen.php?textval=s.muehlbauer%40tu-bs.de&font=COUR.TTF&size=12&bgcolor=%23f5f5f5&textcolor=%23000000&submit=create+image
+Feel free to fork this project or contact the author with any question at ![mail](http://chxo.com/labelgen/labelgen.php?textval=s.muehlbauer%40tu-bs.de&font=COUR.TTF&size=12&bgcolor=%23f5f5f5&textcolor=%23000000&submit=create+image)
