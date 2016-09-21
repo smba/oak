@@ -48,7 +48,7 @@ class Getcwd extends InterpreterPlugin {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
-    return StringValue(interpreter.getCurrentPath().getParent.toString, "", 0)
+    return StringValue(interpreter.getBasePath().getParent.toString, "", 0)
   }
 
 }

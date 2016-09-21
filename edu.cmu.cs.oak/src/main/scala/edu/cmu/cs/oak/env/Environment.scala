@@ -565,7 +565,11 @@ class Environment(parent: Environment, calls: Stack[Call], constraint: Constrain
     } else if (this.parent != null) {
       this.parent.getStaticClassField(className, fieldName)
     } else {
-      getClassDef(className).getStaticFields().get(fieldName).get
+      try {
+        getClassDef(className).getStaticFields().get(fieldName).get
+      } catch {
+        case t: Throwable => SymbolValue(s"${className}::${fieldName}")
+      }
     }
   }
 
