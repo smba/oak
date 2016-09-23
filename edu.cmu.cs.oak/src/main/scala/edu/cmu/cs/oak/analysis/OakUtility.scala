@@ -32,8 +32,8 @@ object OakUtility {
     // runtime caching
     if (phpStandardFunctions.isEmpty) {
       val functions = new ListBuffer[String]()
-      for (line <- Source.fromURL(url("phpStandardFunctions.txt").toFile().toURL()).getLines()) {
-        functions += line.toString()
+      Source.fromURL(url("phpStandardFunctions.txt").toFile().toURL()).getLines().foreach {
+        line => functions += line.toString()
       }
       phpStandardFunctions = Some(functions.toList)
     }
@@ -208,7 +208,7 @@ object OakUtility {
     }
 
     // Look for file names ending with ".inc" or ".php"
-    getFileTree(file).filter(p => p.getName.endsWith(".php") || p.getName.endsWith(".inc") || p.getName.endsWith(".bit"))
+    getFileTree(file).filter(p => p.getName.endsWith(".php") || p.getName.endsWith(".inc") || p.getName.endsWith(".module") || p.getName.endsWith(".bit"))
   }
 
 }

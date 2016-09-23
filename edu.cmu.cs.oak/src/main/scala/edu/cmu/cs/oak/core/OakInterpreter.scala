@@ -158,6 +158,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
+    included_files.add(path)
+    
     //#ifdef Timeout
     // set the start time for this entry point
     this.start = Some(System.currentTimeMillis())
@@ -195,11 +197,15 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       env.addToGlobal("$_CONFIG")
       env.update("$_CONFIG", SymbolValue("$_CONFIG", OakHeap.getIndex, SymbolFlag.BUILTIN_VALUE))
 
+      /*
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/Exception.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
+      * 
+      */
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/array_shift.php").toURI())), env)
+			
 
       //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/config.php").toURI())), env)
       //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)

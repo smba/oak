@@ -12,7 +12,7 @@ trait OakDebugger {
   
   // BREA K  P   O    I     N      T       S!
   // ----------------
-  //breakpoints.+=(( "/home/stefan/git/oak/edu.cmu.cs.oak/bin/nibbleblog/index.php", 40) )
+  breakpoints.+=(("/home/stefan/git/oak/edu.cmu.cs.oak/bin/drupal/includes/menu.inc",525))
   // ----------------
   
   def stall(breakpoint: (String, Int), env: Environment) {

@@ -216,9 +216,10 @@ class ASTVisitor(path: Path) {
           {
             val pre = context
             context = StringLiteralContext.FDEFINITION
-            val r = visit(f.asInstanceOf[Function]._statement)
             current_fdef = (f.asInstanceOf[Function]._name.toString, f.asInstanceOf[Function]._statement._location)
+            val r = visit(f.asInstanceOf[Function]._statement)
             functions.put(current_fdef, r)
+            
             context = pre
           }
       }

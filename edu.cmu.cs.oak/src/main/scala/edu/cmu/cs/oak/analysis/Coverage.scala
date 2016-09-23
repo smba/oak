@@ -202,6 +202,7 @@ object Coverage extends App {
 
     val projectLiterals = parsed._1 //.map(s => s.value)
     val relevant_projectLiterals = projectLiterals.filter { lit => relevant(lit) }
+//    println(relevant_projectLiterals)
     val foundLiterals = findProjectLiterals(entryPoints) //.map(s => s.value)
     val relevant_foundLiterals = foundLiterals._1.filter { lit => relevant(lit) }
     val undefinedFunctionNames = foundLiterals._6.filter { case (k, v) => (OakUtility.is_php_function(k) && k.startsWith("str")) }
@@ -238,7 +239,7 @@ object Coverage extends App {
     val filesOfNotFoundLiterals = notfound.toList.map { s => Paths.get(s.file) }
 
     //#ifdef CoverageAnalysis
-    val funcitonsOfNotFoundLiterals = notfound.toList.filter(s => s.context == StringLiteralContext.FDEFINITION).filter(sv => !("" equals sv.file) && included.contains(Paths.get(sv.file))).map {
+    val funcitonsOfNotFoundLiterals = not_touched.filter(s => isRelevant(s)).toList.filter(s => s.context == StringLiteralContext.FDEFINITION).filter(sv => !("" equals sv.file)).map {
       s => s.fdef
     }.map(s => s._1)
 
@@ -258,7 +259,15 @@ object Coverage extends App {
     //#ifdef CoverageAnalysis
     // How many not-touched string literals reside in functions that are defined (thus known) but never called?
     val dead_functions = funcitonsOfNotFoundLiterals.map(fname => if (definedButNotCalledFunctions.contains(fname)) 1 else 0).fold(0)(_ + _)
+    val dead_function_sample = Random.shuffle(funcitonsOfNotFoundLiterals.toSet intersect definedButNotCalledFunctions).take(25)
 
+    dead_function_sample.foreach {
+      df => println(df)
+    }
+    
+//    println(funcitonsOfNotFoundLiterals)
+//    println(definedButNotCalledFunctions)
+    
     /*
      * Dynamic resolution of include statements (require, require_once or include_once). 
      * - How many include statements exist in the entire system? [Parser]
@@ -288,42 +297,64 @@ object Coverage extends App {
     val not_found_sample = Random.shuffle(not_found_literals).take(10).toList
 
     //     val include_touch_coverage = (include_expressions_with_result.keySet.size*1.0) / all_include_expressions.size
-    println(s"-----------------------------")
-    println(s"Touch Coverage: ${touch_coverage * 100} % or (${(foundLiterals._4 intersect relevant_projectLiterals).size}/${relevant_projectLiterals.size})")
-    println(s"Not-touched explained by dead imports: ${dead_imports}")
-
-    //#ifdef CoverageAnalysis
-    println(s"Not-touched explained by dead functions: ${dead_functions}")
-    println(s"Distribution of not covered literals: ${dstro}")
-    //#endif
-
-    println(s"Touched includes: ${include_expressions_with_result.keySet.size}, total includes: ${all_include_expressions.size}")
-    println(s"Include resolution success rate: ${include_expressions_with_result.groupBy(f => f._2).map(f => (f._1, f._2.size))} ${include_expressions_with_result}")
-    val calls = undefinedFunctionNames.keySet.map { k => undefinedFunctionNames.getOrElse(k, 0) }.fold(0)(_ + _)
-    println(s"${undefinedFunctionNames.size} funtions were undefined, and were part of the standard lib, ${calls} calls in total")
-    
-    println(s"(Touched && relevant) / touched: ${ratio_relevantTouchedLiterals_touchedLiterals}")
-    println(s"(Found && relevant) / found: ${ratio_relevantFoundLiterals_touchedLiterals}")
-    
+//    println(s"-----------------------------")
+//    println(s"Touch Coverage: ${touch_coverage * 100} % or (${(foundLiterals._4 intersect relevant_projectLiterals).size}/${relevant_projectLiterals.size})")
+//    println(s"Not-touched explained by dead imports: ${dead_imports}")
+//
+//    //#ifdef CoverageAnalysis
+//    println(s"Not-touched explained by dead functions: ${dead_functions}")
+//    println(s"Distribution of not covered literals: ${dstro}")
+//    //#endif
+//
+//    println(s"Touched includes: ${include_expressions_with_result.keySet.size}, total includes: ${all_include_expressions.size}")
+//    println(s"Include resolution success rate: ${include_expressions_with_result.groupBy(f => f._2).map(f => (f._1, f._2.size))} ${include_expressions_with_result}")
+//    val calls = undefinedFunctionNames.keySet.map { k => undefinedFunctionNames.getOrElse(k, 0) }.fold(0)(_ + _)
+//    println(s"${undefinedFunctionNames.size} funtions were undefined, and were part of the standard lib, ${calls} calls in total")
+//    
+//    println(s"(Touched && relevant) / touched: ${ratio_relevantTouchedLiterals_touchedLiterals}")
+//    println(s"(Found && relevant) / found: ${ratio_relevantFoundLiterals_touchedLiterals}")
+//    
     //    println(s"${include_expressions_with_result.groupBy(f => f._2).getOrElse(false, "nix")}")
     //println(include_expressions_with_result.groupBy(f => f._2).getOrElse(true, "no include available"))
 
     val failed_includes = include_expressions_with_result.groupBy(f => f._2).getOrElse(false, List()).map(e => e._1)
+    val succ_includes = include_expressions_with_result.groupBy(f => f._2).getOrElse(true, List()).size
 
-//    failed_includes.toList.sortBy(r => (r._1, r._2)).foreach {
-//      f => println(f)
-//    }
-    //    not_found_sample.foreach {
-    //      s => {
-    //        println("################################")
-    //        println(s.file + " " + s.lineNr)
-    //        println(s)
-    //      }
-    //    }
-
+    println("-------------------------------------------------------------------------------------")
+    println("### Code Coverage ###")
+    // Reach cooverage 
+    println("Reach Coverage: " + bar((foundLiterals._4 intersect relevant_projectLiterals).size, relevant_projectLiterals.size))
+    
+    // Output coverage 
+    println("Outpt Ouverage: " + bar(relevant_foundLiterals.size, relevant_projectLiterals.size))
+    
+    // (Sanity check)
+    val alle = dstro.map(s => s._2).fold(0)(_ + _)
+    println("\n### Not-reached string distribution ###")
+    println(s"Functions     : ${bar(dstro.getOrElse(StringLiteralContext.FDEFINITION, 0), alle)}")
+    println(s"Templates     : ${bar(dstro.getOrElse(StringLiteralContext.TEMPLATE, 0), alle)}")
+    println(s"Misc..        : ${bar(dstro.getOrElse(StringLiteralContext.MISC, 0), alle)}")
+    
+    println("\n### Fault Analysis (not-reached strings) ###")
+    println(s"Dead imports  : ${bar(dead_imports, dead_imports + dead_functions)}")
+    println(s"Dead functions: ${bar(dead_functions, dead_imports + dead_functions)}")
+    
+    
+    println("\n### Include Coverage ###")
+    println(s"Reached       : ${bar(include_expressions_with_result.keySet.size,Math.max(include_expressions_with_result.keySet.size, all_include_expressions.size))}")
+    println(s"Resolved      : ${bar(succ_includes, Math.max(include_expressions_with_result.keySet.size, all_include_expressions.size))}")
+    println(s"Succes rate   : ${succ_includes / (if (include_expressions_with_result.keySet.size == 0) 1 else include_expressions_with_result.keySet.size) * 100}%")
     return (relative_coverage, (relevant_foundLiterals.size, relevant_projectLiterals.size))
   }
 
+  def bar(x: Int, y: Int): String = {
+    val ratio = x*1.0 / (if (y == 0) 1.0 else y * 1.0) * 100
+    val roundd = Math.round(ratio*100.0)/100.0
+    val n = 75
+    val digits = Math.floor(n * (x/((if (y == 0) 1.0 else y * 1.0)))).toInt
+    return s"|${"=" * digits}${" " * (n - digits)}| ${ratio}% (${x}/${y})"
+  }
+  
   private def getSchoolmateCoverage() {
     var entrypoints = OakUtility.getPHPFiles(SCHOOLMATE).toList.map(f => f.toPath())
     println(s"SchoolMate: ${getCoverage(SCHOOLMATE, entrypoints, isRelevant)}")
@@ -431,19 +462,19 @@ object Coverage extends App {
 
   def coverages() {
     //#ifdef Addressbook
-        getAddressbookCoverage
+//@        getAddressbookCoverage
     //#endif
     //#ifdef Schoolmate
-        getSchoolmateCoverage
+//@        getSchoolmateCoverage
     //#endif
     //#ifdef Timeclock
-        getTimeclockCoverage
+//@        getTimeclockCoverage
     //#endif
     //#ifdef UPB
 //@        getUPBCoverage
     //#endif
     //#ifdef Webchess
-        getWebchessCoverage
+//@        getWebchessCoverage
     //#endif
     //#ifdef Wordpress
     //@    getWordpressCoverage
@@ -493,6 +524,7 @@ object Coverage extends App {
     //#ifdef Nibbleblog
         getNibbleblogCoverage()
     //#endif
+//        getModelProjectCoverage()
   }
 
   //#ifdef CoverageAnalysis

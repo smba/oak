@@ -18,13 +18,12 @@ abstract class IChoice extends SymbolicValue {
 class MapChoice(private val entries: Map[OakValue, Constraint]) extends IChoice {
   
   def deepCopy(env: Environment): MapChoice = {
-    val nentries = entries.map {
+    new MapChoice(entries.map {
       case (v, c) => (v match {
         case av: ArrayValue => av.deepCopy(env)
         case ov: OakValue => v
       }, c)
-    }
-    new MapChoice(nentries)
+    })
   }
 
   def addConstraint(p: Constraint): MapChoice = {

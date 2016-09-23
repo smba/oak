@@ -1,22 +1,33 @@
 package edu.cmu.cs.oak.analysis
 
-import edu.cmu.cs.oak.core.OakInterpreter
-import edu.cmu.cs.oak.core.ControlCode
-import java.io.PrintWriter
-import edu.cmu.cs.oak.core.OakEngine
-import java.nio.file.Paths
-import edu.cmu.cs.oak.env.Environment
-import java.nio.file.Path
 import java.io.File
+import java.io.PrintWriter
+import java.nio.file.Path
+import java.nio.file.Paths
 
+import edu.cmu.cs.oak.core.ControlCode
+import edu.cmu.cs.oak.core.OakEngine
+import edu.cmu.cs.oak.core.OakInterpreter
+import edu.cmu.cs.oak.env.Environment
+
+/**
+ * To run this file, specify the input file and an output file.
+ */
 object RunOakForFile extends App {
-  // engine and interpreter instance for testing
+  
+  // engine for loading and parsing files
   val engine = new OakEngine()
+  
+  // interpreter instance
   val interpreter = new OakInterpreter()
 
+  val INPUT_FILE = "drupal/index.php";
+  
+  val OUTPUT_FILE = "/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml";
+  
   /**
    * Read a PHP source code from file, parses & executes it.
-   *
+   * 
    * @param script PHP source code file
    * @return (ControlCode, Environment)
    */
@@ -24,15 +35,30 @@ object RunOakForFile extends App {
     return interpreter.execute(path)
   }
 
-  /* utility method */
+  /**
+   * Utility method to resolve paths.
+   * 
+   * @param  relative path to the input file / entry point
+   * @return absolute path to the input file
+   */
   def url(fileName: String): Path = {
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 
-  val env = loadAndExecute(url("schoolmate/index.php"))
-  val pw = new PrintWriter(new File("/home/stefan/git/oak/edu.cmu.cs.oak/out/output.xml"))
-  pw.write(env._2.getOutputAsPrettyXML())
+  /* --------------------------- MAIN ------------------------------ */
   
-//  println(env._2.getOutputAsPrettyXML())
-  pw.close
+  // Execute the system / entry point
+  val environment = loadAndExecute(url(OUTPUT_FILE))
+  
+  new PrintWriter(new File(OUTPUT_FILE)) {
+    
+    // Option A: XML output
+    write(environment._2.getOutputAsPrettyXML())
+    
+    // Option B: if/else-like output
+    write(environment._2.ifdefy().mkString("\n"))
+    
+    close()
+  }
+  
 }

@@ -30,6 +30,8 @@ class CallUserFuncArray extends InterpreterPlugin {
 
     val interpreter = provider.asInstanceOf[OakInterpreter]
 
+    
+    
     /* Assert that the function has two arguments */
     assert(args.size == 2)
 
