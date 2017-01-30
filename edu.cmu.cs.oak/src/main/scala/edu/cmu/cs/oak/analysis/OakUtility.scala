@@ -66,14 +66,14 @@ object OakUtility {
    * @return Set of all parsable string literals
    *
    */
-  def getProjectLiterals(file: File): (Set[StringValue], Set[(String, Int)]) = {
+  def getProjectLiterals(file: File): (Set[StringValue], Set[(String, Int, String)]) = {
 
     val filename = file.toPath().toAbsolutePath().toString().hashCode() + ".cache"
     val path = Paths.get(OakUtility.url("").toString + "/" + filename)
 
     return if (path.toFile().exists()) { // ergebnisse schon mal gelesen
       val ois = new ObjectInputStream(new FileInputStream(path.toFile))
-      val r = ois.readObject.asInstanceOf[(Set[StringValue], Set[(String, Int)])]
+      val r = ois.readObject.asInstanceOf[(Set[StringValue], Set[(String, Int, String)])]
       ois.close
       r
     } else { // parse und schreibe den shit
@@ -87,7 +87,7 @@ object OakUtility {
       var parsed = Await.result(aggregated, 45.minutes)
 
       val string_literals = parsed.map(p => p._1).foldLeft(Set[StringValue]())(_ union _)
-      val include_expressions = parsed.map(p => p._2).foldLeft(Set[(String, Int)]())(_ union _)
+      val include_expressions = parsed.map(p => p._2).foldLeft(Set[(String, Int, String)]())(_ union _)
 
       val oos = new ObjectOutputStream(new FileOutputStream(path.toFile()))
       oos.writeObject((string_literals, include_expressions))
@@ -210,6 +210,40 @@ object OakUtility {
 
     // Look for file names ending with ".inc" or ".php"
     getFileTree(file).filter(p => p.getName.endsWith(".php") || p.getName.endsWith(".inc") || p.getName.endsWith(".module") || p.getName.endsWith(".bit"))
+  }
+  
+  /**
+   * Determine how many include expressions in the system are dynamic and static.
+   * Static include = Include expression is a string constant
+   * Dynamic Include = Include expression is any other expression 
+   */
+  def analyzeIncludeExpressions(file: File): (Int, Int) = {
+    
+    // List of files in the system
+    val files = getPHPFiles(file)
+    
+    // counter for static and dynamic includes
+    var static = 0
+    var dynamic = 0
+    
+    var i = 0
+    files.foreach {
+      f => {
+        // for each file perform AST analysis
+        println(i + " of " + files.size) 
+        i += 1
+        val fpath = f.toPath()
+        
+        // Classifiy include expressions for AST
+        val static_dynamic = (new ASTVisitor(fpath)).analyseIncludeExpressions()
+        
+        // Add results to counters
+        static += static_dynamic._1
+        dynamic += static_dynamic._2
+      }
+    }
+    
+    return (static, dynamic)
   }
 
 }

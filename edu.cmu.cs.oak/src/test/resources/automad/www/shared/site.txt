@@ -1,0 +1,13 @@
+sitename: Automad Demo
+
+-
+
+theme: standard
+
+-
+
+brand: Your Brand
+
+-
+
+email: email@yourdomain.com

@@ -185,11 +185,15 @@ class ASTVisitor(path: Path) {
   /** Logger instance. */
   lazy val logger = LoggerFactory.getLogger(classOf[ASTVisitor])
 
+  // counters for static and dynamic includes
+  var static_includes_counter = 0
+  var dynamic_includes_counter = 0
+
   var context = StringLiteralContext.MISC
   var current_fdef: (String, Location) = ("", null) // (name, location)
   val functions = scala.collection.mutable.HashMap[(String, Location), Boolean]()
 
-  val include_expressions = scala.collection.mutable.HashSet[(String, Int)]() // locations
+  val include_expressions = scala.collection.mutable.HashSet[(String, Int, String)]() // locations
 
   var location: Location = null
 
@@ -205,7 +209,7 @@ class ASTVisitor(path: Path) {
    *
    * @param path URL to the PHP source file to parse
    */
-  def retrieveStringLiterals(): (Set[StringValue], Set[(String, Int)]) = {
+  def retrieveStringLiterals(): (Set[StringValue], Set[(String, Int, String)]) = {
 
     val program = engine.loadFromFile(path)
 
@@ -219,7 +223,7 @@ class ASTVisitor(path: Path) {
             current_fdef = (f.asInstanceOf[Function]._name.toString, f.asInstanceOf[Function]._statement._location)
             val r = visit(f.asInstanceOf[Function]._statement)
             functions.put(current_fdef, r)
-            
+
             context = pre
           }
       }
@@ -316,7 +320,8 @@ class ASTVisitor(path: Path) {
         val expr = s._expr
 
         if (expr.isInstanceOf[FunIncludeExpr] || expr.isInstanceOf[FunIncludeOnceExpr]) {
-          include_expressions.add(s._location.getFileName, s._location.getLineNumber)
+
+          include_expressions.add(s._location.getFileName, s._location.getLineNumber, s._expr.toString())
         }
 
         visit(expr)
@@ -425,7 +430,7 @@ class ASTVisitor(path: Path) {
 
         val value = s._value.toString()
         val string = StringValue(value, s._location.getFileName(), s._location.getLineNumber())
-        
+
         //#ifdef CoverageAnalysis
         string.context = context
         if (string.context == StringLiteralContext.FDEFINITION) {
@@ -954,7 +959,7 @@ class ASTVisitor(path: Path) {
     case e: LiteralStringExpr => {
       val string = StringValue(e._value.toString(), e._location.getFileName(), e._location.getLineNumber())
       if (string.lineNr == 0) throw new RuntimeException()
-      
+
       //#ifdef CoverageAnalysis
       string.context = context
       if (string.context == StringLiteralContext.FDEFINITION) {
@@ -974,7 +979,7 @@ class ASTVisitor(path: Path) {
       if (string.lineNr == 0) {
         string.setLocation(location)
       }
-      
+
       //#ifdef CoverageAnalysis
       string.context = context
       if (string.context == StringLiteralContext.FDEFINITION) {
@@ -1184,6 +1189,30 @@ class ASTVisitor(path: Path) {
     case e: VarVarExpr => { false }
 
     case _ => { false }
+  }
+
+  def analyseIncludeExpressions(): (Int, Int) = {
+
+    def isStaticInclude(e: String): Boolean = {
+      return (e.startsWith("\"") && e.endsWith("\"") && e.count(_ == '\"') == 2)
+    }
+
+    val parse_result = this.retrieveStringLiterals()
+    val includes = parse_result._2.map(s => s._3)
+    
+    var static = 0
+    var dynamic = 0
+    
+    includes.foreach {
+      i => if (isStaticInclude(i)) {
+        static += 1
+      } else {
+        dynamic += 1
+      }
+    }
+    
+    
+    (static, dynamic)
   }
 
 }
