@@ -1,0 +1,186 @@
+format version: 5
+output mode:
+1 items
+0 -> single
+output directories:
+1 items
+output dir -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes
+compile options:
+1 items
+0 -> -deprecation
+javac options:
+0 items
+compiler version:
+1 items
+0 -> 2.10.6
+compile order:
+1 items
+0 -> Mixed
+name hashing:
+1 items
+0 -> true
+products:
+21 items
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$1.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$2.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$3.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$4.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$1.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$2.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$3.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$4.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$5.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$1.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$2.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$3.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$4.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$5.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$1.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$2.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$3.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$4.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$5.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$.class
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild.class
+binary dependencies:
+7 items
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/.ivy2/cache/org.scala-sbt/collections/jars/collections-0.13.13.jar
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/.ivy2/cache/org.scala-sbt/ivy/jars/ivy-0.13.13.jar
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/.ivy2/cache/org.scala-sbt/main-settings/jars/main-settings-0.13.13.jar
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/.ivy2/cache/org.scala-sbt/main/jars/main-0.13.13.jar
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/.ivy2/cache/org.scala-sbt/sbt/jars/sbt-0.13.13.jar
+/home/stefan/git/oak/project/Build.scala -> /home/stefan/.sbt/boot/scala-2.10.6/lib/scala-library.jar
+/home/stefan/git/oak/project/Build.scala -> /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+direct source dependencies:
+0 items
+direct external dependencies:
+0 items
+public inherited source dependencies:
+0 items
+public inherited external dependencies:
+0 items
+member reference internal dependencies:
+0 items
+member reference external dependencies:
+0 items
+inheritance internal dependencies:
+0 items
+inheritance external dependencies:
+0 items
+class names:
+21 items
+/home/stefan/git/oak/project/Build.scala -> OakBuild
+/home/stefan/git/oak/project/Build.scala -> OakBuild$
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$hessian$1
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$hessian$2
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$hessian$3
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$hessian$4
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$kernel$1
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$kernel$2
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$kernel$3
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$kernel$4
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$kernel$5
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$oak$1
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$oak$2
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$oak$3
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$oak$4
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$oak$5
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$quercus$1
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$quercus$2
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$quercus$3
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$quercus$4
+/home/stefan/git/oak/project/Build.scala -> OakBuild$$anonfun$quercus$5
+used names:
+35 items
+/home/stefan/git/oak/project/Build.scala -> <byname>
+/home/stefan/git/oak/project/Build.scala -> <init>
+/home/stefan/git/oak/project/Build.scala -> <repeated>
+/home/stefan/git/oak/project/Build.scala -> AddSettings
+/home/stefan/git/oak/project/Build.scala -> Any
+/home/stefan/git/oak/project/Build.scala -> Build
+/home/stefan/git/oak/project/Build.scala -> ClasspathDep
+/home/stefan/git/oak/project/Build.scala -> ClasspathDependency
+/home/stefan/git/oak/project/Build.scala -> Configuration
+/home/stefan/git/oak/project/Build.scala -> Def
+/home/stefan/git/oak/project/Build.scala -> File
+/home/stefan/git/oak/project/Build.scala -> Function1
+/home/stefan/git/oak/project/Build.scala -> Keys
+/home/stefan/git/oak/project/Build.scala -> Nothing
+/home/stefan/git/oak/project/Build.scala -> OakBuild
+/home/stefan/git/oak/project/Build.scala -> Object
+/home/stefan/git/oak/project/Build.scala -> Predef
+/home/stefan/git/oak/project/Build.scala -> Project
+/home/stefan/git/oak/project/Build.scala -> ProjectReference
+/home/stefan/git/oak/project/Build.scala -> Seq
+/home/stefan/git/oak/project/Build.scala -> Setting
+/home/stefan/git/oak/project/Build.scala -> String
+/home/stefan/git/oak/project/Build.scala -> T
+/home/stefan/git/oak/project/Build.scala -> _$9
+/home/stefan/git/oak/project/Build.scala -> apply
+/home/stefan/git/oak/project/Build.scala -> classpathDependency
+/home/stefan/git/oak/project/Build.scala -> dependsOn
+/home/stefan/git/oak/project/Build.scala -> file
+/home/stefan/git/oak/project/Build.scala -> hessian
+/home/stefan/git/oak/project/Build.scala -> kernel
+/home/stefan/git/oak/project/Build.scala -> oak
+/home/stefan/git/oak/project/Build.scala -> package
+/home/stefan/git/oak/project/Build.scala -> projectToRef
+/home/stefan/git/oak/project/Build.scala -> quercus
+/home/stefan/git/oak/project/Build.scala -> sbt
+product stamps:
+21 items
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$1.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$2.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$3.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$hessian$4.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$1.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$2.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$3.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$4.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$kernel$5.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$1.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$2.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$3.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$4.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$oak$5.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$1.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$2.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$3.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$4.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$$anonfun$quercus$5.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild$.class -> lastModified(1485783444000)
+/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes/OakBuild.class -> lastModified(1485783444000)
+source stamps:
+1 items
+/home/stefan/git/oak/project/Build.scala -> hash(22bed8d92a3fc037723ad7f4e9d0b9cadf1457a9)
+binary stamps:
+7 items
+/home/stefan/.ivy2/cache/org.scala-sbt/collections/jars/collections-0.13.13.jar -> lastModified(1477656275000)
+/home/stefan/.ivy2/cache/org.scala-sbt/ivy/jars/ivy-0.13.13.jar -> lastModified(1477656404000)
+/home/stefan/.ivy2/cache/org.scala-sbt/main-settings/jars/main-settings-0.13.13.jar -> lastModified(1477656490000)
+/home/stefan/.ivy2/cache/org.scala-sbt/main/jars/main-0.13.13.jar -> lastModified(1477656548000)
+/home/stefan/.ivy2/cache/org.scala-sbt/sbt/jars/sbt-0.13.13.jar -> lastModified(1477656536000)
+/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-library.jar -> lastModified(1442568926000)
+/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar -> lastModified(1477404965000)
+class names:
+7 items
+/home/stefan/.ivy2/cache/org.scala-sbt/collections/jars/collections-0.13.13.jar -> sbt.Init
+/home/stefan/.ivy2/cache/org.scala-sbt/ivy/jars/ivy-0.13.13.jar -> sbt.Configuration
+/home/stefan/.ivy2/cache/org.scala-sbt/main-settings/jars/main-settings-0.13.13.jar -> sbt.Def$
+/home/stefan/.ivy2/cache/org.scala-sbt/main/jars/main-0.13.13.jar -> sbt.Build
+/home/stefan/.ivy2/cache/org.scala-sbt/sbt/jars/sbt-0.13.13.jar -> sbt.package$
+/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-library.jar -> scala.Predef$
+/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar -> java.lang.Object
+internal apis:
+1 items
+/home/stefan/git/oak/project/Build.scala -> 
+rO0ABXNyABB4c2J0aS5hcGkuU291cmNlSjH5SdlLSkQCAAdJAAdhcGlIYXNoWgAIaGFzTWFjcm9aABBoYXNQYWNrYWdlT2JqZWN0TAAYX2ludGVybmFsT25seV9uYW1lSGFzaGVzdAAkTHhzYnRpL2FwaS9faW50ZXJuYWxPbmx5X05hbWVIYXNoZXM7TAADYXBpdAAVTHhzYnRpL2FwaS9Tb3VyY2VBUEk7TAALY29tcGlsYXRpb250ABdMeHNidGkvYXBpL0NvbXBpbGF0aW9uO1sABGhhc2h0AAJbQnhw08WKLwAAc3IAInhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoZXNU2r6Z+tTsTAIAAlsAD2ltcGxpY2l0TWVtYmVyc3QAI1tMeHNidGkvYXBpL19pbnRlcm5hbE9ubHlfTmFtZUhhc2g7WwAOcmVndWxhck1lbWJlcnNxAH4AB3hwdXIAI1tMeHNidGkuYXBpLl9pbnRlcm5hbE9ubHlfTmFtZUhhc2g7SVqAtt2Wi/QCAAB4cAAAAAB1cQB+AAkAAAAec3IAIHhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoWw71InY4V88CAAJJAARoYXNoTAAEbmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO3hwy3b8O3QABm5vdGlmeXNxAH4ADFtbsN90AAZrZXJuZWxzcQB+AAxKJ4LldAAEd2FpdHNxAH4ADJFKWxV0AAdoZXNzaWFuc3EAfgAMuHouMHQADSRhc0luc3RhbmNlT2ZzcQB+AAwOSdZkdAAMYnVpbGRMb2FkZXJzc3EAfgAMQVLYLXQABmVxdWFsc3NxAH4ADITY28p0AAxhc0luc3RhbmNlT2ZzcQB+AAwANX3+dAAScHJvamVjdERlZmluaXRpb25zc3EAfgAMhDmkzHQADHN5bmNocm9uaXplZHNxAH4ADOBv7uF0AA0kaXNJbnN0YW5jZU9mc3EAfgAMD13EWHQACW5vdGlmeUFsbHNxAH4ADC1BWyN0AAtyb290UHJvamVjdHNxAH4ADP85+ix0AAhPYWtCdWlsZHNxAH4ADL+/ucV0AAxpc0luc3RhbmNlT2ZzcQB+AAyseY7OdAACPT1zcQB+AAzPdKdZdAADb2Frc3EAfgAMxh3oPnQABWNsb25lc3EAfgAMUPcMGnQABiRpbml0JHNxAH4ADMQaIY50AAh0b1N0cmluZ3NxAH4ADDjGQWJ0AAIhPXNxAH4ADOIyMbB0AAhwcm9qZWN0c3NxAH4ADMAexiN0AAhnZXRDbGFzc3NxAH4ADJONZxp0AAJuZXNxAH4ADAcB4ut0AAdxdWVyY3Vzc3EAfgAMlQQcA3QAAmVxc3EAfgAMzTW+NXQACHNldHRpbmdzc3EAfgAM3CCIQ3QAAiMjc3EAfgAMCoYCQ3QACGZpbmFsaXplc3EAfgAM4vc/xHQACGhhc2hDb2Rlc3IAE3hzYnRpLmFwaS5Tb3VyY2VBUEm5Xqf5KSM4pAIAAlsAC2RlZmluaXRpb25zdAAXW0x4c2J0aS9hcGkvRGVmaW5pdGlvbjtbAAhwYWNrYWdlc3QAFFtMeHNidGkvYXBpL1BhY2thZ2U7eHB1cgAXW0x4c2J0aS5hcGkuRGVmaW5pdGlvbjuIyVzntONeDgIAAHhwAAAAAXNyABN4c2J0aS5hcGkuQ2xhc3NMaWtlgzQcod+wl2wCAARMAA5kZWZpbml0aW9uVHlwZXQAGkx4c2J0aS9hcGkvRGVmaW5pdGlvblR5cGU7WwAQc2F2ZWRBbm5vdGF0aW9uc3QAE1tMamF2YS9sYW5nL1N0cmluZztMAAhzZWxmVHlwZXQAEEx4c2J0aS9hcGkvTGF6eTtMAAlzdHJ1Y3R1cmVxAH4AU3hyACF4c2J0aS5hcGkuUGFyYW1ldGVyaXplZERlZmluaXRpb275EW6x1VA84gIAAVsADnR5cGVQYXJhbWV0ZXJzdAAaW0x4c2J0aS9hcGkvVHlwZVBhcmFtZXRlcjt4cgAUeHNidGkuYXBpLkRlZmluaXRpb26HKhvocULjRgIABEwABmFjY2Vzc3QAEkx4c2J0aS9hcGkvQWNjZXNzO1sAC2Fubm90YXRpb25zdAAXW0x4c2J0aS9hcGkvQW5ub3RhdGlvbjtMAAltb2RpZmllcnN0ABVMeHNidGkvYXBpL01vZGlmaWVycztMAARuYW1lcQB+AA14cHNyABB4c2J0aS5hcGkuUHVibGljulg9rmwtYEICAAB4cgAQeHNidGkuYXBpLkFjY2Vzc91imvgdYzFIAgAAeHB1cgAXW0x4c2J0aS5hcGkuQW5ub3RhdGlvbjvrl+sZEPaNSAIAAHhwAAAAAHNyABN4c2J0aS5hcGkuTW9kaWZpZXJzl+dh3BMme7MCAAFCAAVmbGFnc3hwAHEAfgApdXIAGltMeHNidGkuYXBpLlR5cGVQYXJhbWV0ZXI72W0mDyid8rYCAAB4cAAAAAB+cgAYeHNidGkuYXBpLkRlZmluaXRpb25UeXBlAAAAAAAAAAASAAB4cgAOamF2YS5sYW5nLkVudW0AAAAAAAAAABIAAHhwdAAGTW9kdWxldXIAE1tMamF2YS5sYW5nLlN0cmluZzut0lbn6R17RwIAAHhwAAAAAHNyACF4c2J0aS5hcGkuQWJzdHJhY3RMYXp5JFN0cmljdExhenkNZhxrKRYquAIAAUwABXZhbHVldAASTGphdmEvbGFuZy9PYmplY3Q7eHBzcgATeHNidGkuYXBpLkVtcHR5VHlwZbz9nkZJO4kkAgAAeHIAFHhzYnRpLmFwaS5TaW1wbGVUeXBlcnhiiCEjv0ACAAB4cgAOeHNidGkuYXBpLlR5cGU/atkhFkmqygIAAHhwc3EAfgBqc3IAE3hzYnRpLmFwaS5TdHJ1Y3R1cmWpqvmAk2/YAAIAA0wACGRlY2xhcmVkcQB+AFNMAAlpbmhlcml0ZWRxAH4AU0wAB3BhcmVudHNxAH4AU3hxAH4Ab3NxAH4AanVxAH4ATgAAAABzcQB+AGp1cQB+AE4AAAAAc3EAfgBqdXIAEVtMeHNidGkuYXBpLlR5cGU7dP+lWnv56UECAAB4cAAAAANzcgAUeHNidGkuYXBpLlByb2plY3Rpb27z0o1U6UWkLQIAAkwAAmlkcQB+AA1MAAZwcmVmaXh0ABZMeHNidGkvYXBpL1NpbXBsZVR5cGU7eHEAfgBudAAFQnVpbGRzcgATeHNidGkuYXBpLlNpbmdsZXRvbvynX/jPVuRGAgABTAAEcGF0aHQAEEx4c2J0aS9hcGkvUGF0aDt4cQB+AG5zcgAOeHNidGkuYXBpLlBhdGibPVwIzqUnhAIAAVsACmNvbXBvbmVudHN0ABpbTHhzYnRpL2FwaS9QYXRoQ29tcG9uZW50O3hwdXIAGltMeHNidGkuYXBpLlBhdGhDb21wb25lbnQ7Q9oJdC1nFnQCAAB4cAAAAAJzcgAMeHNidGkuYXBpLklkmDJsizdTxEACAAFMAAJpZHEAfgANeHIAF3hzYnRpLmFwaS5QYXRoQ29tcG9uZW50X5oiWy6Gn7wCAAB4cHQAA3NidHNyAA54c2J0aS5hcGkuVGhpc9sJ7abMWkBcAgAAeHEAfgCIc3EAfgB7dAAGT2JqZWN0c3EAfgB/c3EAfgCCdXEAfgCFAAAAA3NxAH4Ah3QABGphdmFzcQB+AId0AARsYW5ncQB+AIxzcQB+AHt0AANBbnlzcQB+AH9zcQB+AIJ1cQB+AIUAAAACc3EAfgCHdAAFc2NhbGFxAH4AjHVyABRbTHhzYnRpLmFwaS5QYWNrYWdlO1sTGTdwpyehAgAAeHAAAAAAc3IAFXhzYnRpLmFwaS5Db21waWxhdGlvbu364MNq6KBCAgACSgAJc3RhcnRUaW1lWwAHb3V0cHV0c3QAGltMeHNidGkvYXBpL091dHB1dFNldHRpbmc7eHAAAAFZ75f/C3VyABpbTHhzYnRpLmFwaS5PdXRwdXRTZXR0aW5nO39qwvOnh6VCAgAAeHAAAAABc3IAF3hzYnRpLmFwaS5PdXRwdXRTZXR0aW5netmaR3T7HXsCAAJMAA9vdXRwdXREaXJlY3RvcnlxAH4ADUwAD3NvdXJjZURpcmVjdG9yeXEAfgANeHB0AD8vaG9tZS9zdGVmYW4vZ2l0L29hay9wcm9qZWN0L3RhcmdldC9zY2FsYS0yLjEwL3NidC0wLjEzL2NsYXNzZXN0AAEvdXIAAltCrPMX+AYIVOACAAB4cAAAABQivtjZKj/AN3I61/Tp0LnK3xRXqQ==
+external apis:
+0 items
+source infos:
+1 items
+/home/stefan/git/oak/project/Build.scala -> 
+AAAAAQAAAQAAAAQAH29iamVjdCBPYWtCdWlsZCBleHRlbmRzIEJ1aWxkIHsBAAAANAEAAAAYAQAYICAgICAgICAgICAgICAgICAgICAgICAgAQAoL2hvbWUvc3RlZmFuL2dpdC9vYWsvcHJvamVjdC9CdWlsZC5zY2FsYQEAKC9ob21lL3N0ZWZhbi9naXQvb2FrL3Byb2plY3QvQnVpbGQuc2NhbGEAQXRyYWl0IEJ1aWxkIGluIHBhY2thZ2Ugc2J0IGlzIGRlcHJlY2F0ZWQ6IFVzZSAuc2J0IGZvcm1hdCBpbnN0ZWFkAQAAAAA=
+compilations:
+1 items
+0 -> rO0ABXNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t+uDDauigQgIAAkoACXN0YXJ0VGltZVsAB291dHB1dHN0ABpbTHhzYnRpL2FwaS9PdXRwdXRTZXR0aW5nO3hwAAABWe+X/wt1cgAaW0x4c2J0aS5hcGkuT3V0cHV0U2V0dGluZzt/asLzp4elQgIAAHhwAAAAAXNyABd4c2J0aS5hcGkuT3V0cHV0U2V0dGluZ3rZmkd0+x17AgACTAAPb3V0cHV0RGlyZWN0b3J5dAASTGphdmEvbGFuZy9TdHJpbmc7TAAPc291cmNlRGlyZWN0b3J5cQB+AAZ4cHQAPy9ob21lL3N0ZWZhbi9naXQvb2FrL3Byb2plY3QvdGFyZ2V0L3NjYWxhLTIuMTAvc2J0LTAuMTMvY2xhc3Nlc3QAAS8=

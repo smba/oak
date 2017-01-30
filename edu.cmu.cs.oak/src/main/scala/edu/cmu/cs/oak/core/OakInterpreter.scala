@@ -146,7 +146,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   val engine = new OakEngine()
 
   //#ifdef Timeout
-  var start: Option[Long] = Some(0L)
+//@  var start: Option[Long] = Some(0L)
   //#endif
 
   //#ifdef CHOICE_LOGGING
@@ -161,8 +161,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     included_files.add(path)
     
     //#ifdef Timeout
-    // set the start time for this entry point
-    this.start = Some(System.currentTimeMillis())
+//@    // set the start time for this entry point
+//@    this.start = Some(System.currentTimeMillis())
     //#endif
 
     // the entry point if
@@ -1160,8 +1160,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   def execute(stmt: Statement, env: Environment): ControlCode.Value = {
 
     //#ifdef Timeout
-    val now = System.currentTimeMillis()
-
+//@    val now = System.currentTimeMillis()
+//@
     //#ifdef MINUTES_5
     //@    val timeout = 300000L
     //#endif
@@ -1169,17 +1169,17 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
     //@        val timeout = 600000L
     //#endif
     //#ifdef MINUTES_15
-    val timeout = 900000L
+//@    val timeout = 900000L
     //#endif
-
-    /*
-             * If the interpreter is timed out, send a terminate() to the environment and shutdown the
-             * interpreter.
-             */
-    if ((now - start.get) > timeout) {
-      env.terminate()
-      //logger.warn(s"Interpreter timed out after ${timeout.toMinutes()} minutes. Shutting down environment.")
-    }
+//@
+//@    /*
+//@             * If the interpreter is timed out, send a terminate() to the environment and shutdown the
+//@             * interpreter.
+//@             */
+//@    if ((now - start.get) > timeout) {
+//@      env.terminate()
+//@      //logger.warn(s"Interpreter timed out after ${timeout.toMinutes()} minutes. Shutting down environment.")
+//@    }
     //#endif
 
     //#ifdef Debugging
@@ -2438,6 +2438,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     env.recordIncludeExpression(location.get.getFileName, location.get.getLineNumber, false)
 
+    
     //TODO  For each resolved path, unless it is empty, do... until finished or an include succeeds
 
     breakable {
@@ -2449,6 +2450,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
               try {
                 // If the resolved (absolute) path exists, use file
+                
+                val name = resolved_path.toAbsolutePath()
+                if (name.toString endsWith "default.bit") {
+                  println(name)
+                }
+                
                 val program = this.engine.loadFromFile(resolved_path.toAbsolutePath())
 
                 env.recordIncludeExpression(location.get.getFileName, location.get.getLineNumber, true)

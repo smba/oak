@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ivy-report.xsl"?>
+<ivy-report version="1.0">
+	<info
+		organisation="hessian"
+		module="hessian_2.11"
+		revision="0.1-SNAPSHOT"
+		conf="test"
+		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
+		date="20170130143730"/>
+	<dependencies>
+		<module organisation="org.jboss.spec" name="jboss-javaee-6.0">
+			<revision name="1.0.0.Final" status="release" pubdate="20110103211458" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="1">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="6960" time="121" location="/home/stefan/.ivy2/cache/org.jboss.spec/jboss-javaee-6.0/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec/jboss-javaee-6.0/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/jboss-javaee-6.0/1.0.0.Final/jboss-javaee-6.0-1.0.0.Final.pom"/>
+				<caller organisation="hessian" name="hessian_2.11" conf="test, compile, runtime" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="0.1-SNAPSHOT"/>
+				<artifacts>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.validation" name="validation-api">
+			<revision name="1.0.0.GA" status="release" pubdate="20100225064311" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="29">
+				<license name="Apache License, Version 2.0" url="license.txt"/>
+				<metadata-artifact status="successful" details="" size="4389" time="117" location="/home/stefan/.ivy2/cache/javax.validation/validation-api/ivy-1.0.0.GA.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.validation/validation-api/ivy-1.0.0.GA.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.GA" rev-constraint-default="1.0.0.GA" rev-constraint-dynamic="1.0.0.GA" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="validation-api" type="jar" ext="jar" status="successful" details="" size="47433" time="161" location="/home/stefan/.ivy2/cache/javax.validation/validation-api/jars/validation-api-1.0.0.GA.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.resteasy" name="jaxrs-api">
+			<revision name="2.1.0.GA" status="release" pubdate="20101215174841" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="28">
+				<license name="Apache License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0"/>
+				<metadata-artifact status="successful" details="" size="944" time="120" location="/home/stefan/.ivy2/cache/org.jboss.resteasy/jaxrs-api/ivy-2.1.0.GA.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.resteasy/jaxrs-api/ivy-2.1.0.GA.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/resteasy/jaxrs-api/2.1.0.GA/jaxrs-api-2.1.0.GA.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="2.1.0.GA" rev-constraint-default="2.1.0.GA" rev-constraint-dynamic="2.1.0.GA" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jaxrs-api" type="jar" ext="jar" status="successful" details="" size="46435" time="140" location="/home/stefan/.ivy2/cache/org.jboss.resteasy/jaxrs-api/jars/jaxrs-api-2.1.0.GA.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/resteasy/jaxrs-api/2.1.0.GA/jaxrs-api-2.1.0.GA.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api">
+			<revision name="1.0.0.Final" status="release" pubdate="20100310171206" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="27">
+				<license name="Unknown License" url="license.txt"/>
+				<metadata-artifact status="successful" details="" size="6012" time="126" location="/home/stefan/.ivy2/cache/org.hibernate.javax.persistence/hibernate-jpa-2.0-api/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.hibernate.javax.persistence/hibernate-jpa-2.0-api/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.0.Final/hibernate-jpa-2.0-api-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="hibernate-jpa-2.0-api" type="jar" ext="jar" status="successful" details="" size="100884" time="203" location="/home/stefan/.ivy2/cache/org.hibernate.javax.persistence/hibernate-jpa-2.0-api/jars/hibernate-jpa-2.0-api-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.0.Final/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.servlet" name="jstl">
+			<revision name="1.2" status="release" pubdate="20110623192002" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="26">
+				<metadata-artifact status="successful" details="" size="356" time="116" location="/home/stefan/.ivy2/cache/javax.servlet/jstl/ivy-1.2.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.servlet/jstl/ivy-1.2.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.2" rev-constraint-default="1.2" rev-constraint-dynamic="1.2" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jstl" type="jar" ext="jar" status="successful" details="" size="414240" time="356" location="/home/stefan/.ivy2/cache/javax.servlet/jstl/jars/jstl-1.2.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/servlet/jstl/1.2/jstl-1.2.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.mail" name="mail">
+			<revision name="1.4.2" status="release" pubdate="20110802173831" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="25">
+				<license name="CDDL" url="http://www.sun.com/cddl"/>
+				<license name="GPLv2+CE" url="https://glassfish.dev.java.net/public/CDDL+GPL.html"/>
+				<metadata-artifact status="successful" details="" size="3831" time="120" location="/home/stefan/.ivy2/cache/javax.mail/mail/ivy-1.4.2.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.mail/mail/ivy-1.4.2.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/mail/mail/1.4.2/mail-1.4.2.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.4.2" rev-constraint-default="1.4.2" rev-constraint-dynamic="1.4.2" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="mail" type="jar" ext="jar" status="successful" details="" size="434923" time="323" location="/home/stefan/.ivy2/cache/javax.mail/mail/jars/mail-1.4.2.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/mail/mail/1.4.2/mail-1.4.2.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.jws" name="jsr181-api">
+			<revision name="1.0-MR1" status="release" pubdate="20090821160832" resolver="public" artresolver="public" homepage="http://jcp.org/en/jsr/summary?id=181" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="24">
+				<license name="CDDL+GPLv2" url="https://glassfish.dev.java.net/public/CDDL+GPL.html"/>
+				<metadata-artifact status="successful" details="" size="778" time="129" location="/home/stefan/.ivy2/cache/javax.jws/jsr181-api/ivy-1.0-MR1.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.jws/jsr181-api/ivy-1.0-MR1.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/jws/jsr181-api/1.0-MR1/jsr181-api-1.0-MR1.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0-MR1" rev-constraint-default="1.0-MR1" rev-constraint-dynamic="1.0-MR1" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jsr181-api" type="jar" ext="jar" status="successful" details="" size="7989" time="131" location="/home/stefan/.ivy2/cache/javax.jws/jsr181-api/jars/jsr181-api-1.0-MR1.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/jws/jsr181-api/1.0-MR1/jsr181-api-1.0-MR1.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="com.sun.faces" name="jsf-api">
+			<revision name="2.0.3-b05" status="release" pubdate="20101005071623" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="23">
+				<metadata-artifact status="successful" details="" size="998" time="125" location="/home/stefan/.ivy2/cache/com.sun.faces/jsf-api/ivy-2.0.3-b05.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/com.sun.faces/jsf-api/ivy-2.0.3-b05.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/sun/faces/jsf-api/2.0.3-b05/jsf-api-2.0.3-b05.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="2.0.3-b05" rev-constraint-default="2.0.3-b05" rev-constraint-dynamic="2.0.3-b05" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jsf-api" type="jar" ext="jar" status="successful" details="" size="607332" time="401" location="/home/stefan/.ivy2/cache/com.sun.faces/jsf-api/jars/jsf-api-2.0.3-b05.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/sun/faces/jsf-api/2.0.3-b05/jsf-api-2.0.3-b05.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.enterprise" name="cdi-api">
+			<revision name="1.0-SP4" status="release" pubdate="20101216201434" resolver="public" artresolver="public" homepage="http://www.seamframework.org/Weld" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="21">
+				<license name="Apache License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.html"/>
+				<metadata-artifact status="successful" details="" size="7041" time="114" location="/home/stefan/.ivy2/cache/javax.enterprise/cdi-api/ivy-1.0-SP4.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.enterprise/cdi-api/ivy-1.0-SP4.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/enterprise/cdi-api/1.0-SP4/cdi-api-1.0-SP4.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0-SP4" rev-constraint-default="1.0-SP4" rev-constraint-dynamic="1.0-SP4" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="cdi-api" type="jar" ext="jar" status="successful" details="" size="52033" time="140" location="/home/stefan/.ivy2/cache/javax.enterprise/cdi-api/jars/cdi-api-1.0-SP4.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/enterprise/cdi-api/1.0-SP4/cdi-api-1.0-SP4.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.inject" name="javax.inject">
+			<revision name="1" status="release" pubdate="20091014013500" resolver="public" artresolver="public" homepage="http://code.google.com/p/atinject/" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="22">
+				<license name="The Apache Software License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
+				<metadata-artifact status="successful" details="" size="612" time="110" location="/home/stefan/.ivy2/cache/javax.inject/javax.inject/ivy-1.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.inject/javax.inject/ivy-1.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.pom"/>
+				<caller organisation="javax.enterprise" name="cdi-api" conf="compile, runtime" rev="1" rev-constraint-default="1" rev-constraint-dynamic="1" callerrev="1.0-SP4"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1" rev-constraint-default="1" rev-constraint-dynamic="1" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="javax.inject" type="jar" ext="jar" status="successful" details="" size="2497" time="136" location="/home/stefan/.ivy2/cache/javax.inject/javax.inject/jars/javax.inject-1.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.xml.ws" name="jboss-jaxws-api_2.2_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021225741" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="20">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1104" time="158" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.ws/jboss-jaxws-api_2.2_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.ws/jboss-jaxws-api_2.2_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/ws/jboss-jaxws-api_2.2_spec/1.0.0.Final/jboss-jaxws-api_2.2_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jaxws-api_2.2_spec" type="jar" ext="jar" status="successful" details="" size="44849" time="143" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.ws/jboss-jaxws-api_2.2_spec/jars/jboss-jaxws-api_2.2_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/ws/jboss-jaxws-api_2.2_spec/1.0.0.Final/jboss-jaxws-api_2.2_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.xml.soap" name="jboss-saaj-api_1.3_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021231529" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="19">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1116" time="144" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.soap/jboss-saaj-api_1.3_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.soap/jboss-saaj-api_1.3_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/soap/jboss-saaj-api_1.3_spec/1.0.0.Final/jboss-saaj-api_1.3_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-saaj-api_1.3_spec" type="jar" ext="jar" status="successful" details="" size="23955" time="129" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.soap/jboss-saaj-api_1.3_spec/jars/jboss-saaj-api_1.3_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/soap/jboss-saaj-api_1.3_spec/1.0.0.Final/jboss-saaj-api_1.3_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.xml.rpc" name="jboss-jaxrpc-api_1.1_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021224256" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="18">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1328" time="136" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.rpc/jboss-jaxrpc-api_1.1_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.rpc/jboss-jaxrpc-api_1.1_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/rpc/jboss-jaxrpc-api_1.1_spec/1.0.0.Final/jboss-jaxrpc-api_1.1_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jaxrpc-api_1.1_spec" type="jar" ext="jar" status="successful" details="" size="29432" time="138" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.rpc/jboss-jaxrpc-api_1.1_spec/jars/jboss-jaxrpc-api_1.1_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/rpc/jboss-jaxrpc-api_1.1_spec/1.0.0.Final/jboss-jaxrpc-api_1.1_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.xml.bind" name="jboss-jaxb-api_2.2_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021225127" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="17">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1110" time="121" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.bind/jboss-jaxb-api_2.2_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.bind/jboss-jaxb-api_2.2_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/bind/jboss-jaxb-api_2.2_spec/1.0.0.Final/jboss-jaxb-api_2.2_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jaxb-api_2.2_spec" type="jar" ext="jar" status="successful" details="" size="91779" time="159" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.bind/jboss-jaxb-api_2.2_spec/jars/jboss-jaxb-api_2.2_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/bind/jboss-jaxb-api_2.2_spec/1.0.0.Final/jboss-jaxb-api_2.2_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.servlet.jsp" name="jboss-jsp-api_2.2_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021202329" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="16">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1950" time="119" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.servlet.jsp/jboss-jsp-api_2.2_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.servlet.jsp/jboss-jsp-api_2.2_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/servlet/jsp/jboss-jsp-api_2.2_spec/1.0.0.Final/jboss-jsp-api_2.2_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jsp-api_2.2_spec" type="jar" ext="jar" status="successful" details="" size="48870" time="142" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.servlet.jsp/jboss-jsp-api_2.2_spec/jars/jboss-jsp-api_2.2_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/servlet/jsp/jboss-jsp-api_2.2_spec/1.0.0.Final/jboss-jsp-api_2.2_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.jms" name="jboss-jms-api_1.1_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021231051" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="15">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1064" time="117" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.jms/jboss-jms-api_1.1_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.jms/jboss-jms-api_1.1_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/jms/jboss-jms-api_1.1_spec/1.0.0.Final/jboss-jms-api_1.1_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jms-api_1.1_spec" type="jar" ext="jar" status="successful" details="" size="27605" time="151" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.jms/jboss-jms-api_1.1_spec/jars/jboss-jms-api_1.1_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/jms/jboss-jms-api_1.1_spec/1.0.0.Final/jboss-jms-api_1.1_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.xml.registry" name="jboss-jaxr-api_1.0_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021221030" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="13">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1321" time="111" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.registry/jboss-jaxr-api_1.0_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.registry/jboss-jaxr-api_1.0_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/registry/jboss-jaxr-api_1.0_spec/1.0.0.Final/jboss-jaxr-api_1.0_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jaxr-api_1.0_spec" type="jar" ext="jar" status="successful" details="" size="29454" time="142" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.xml.registry/jboss-jaxr-api_1.0_spec/jars/jboss-jaxr-api_1.0_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/xml/registry/jboss-jaxr-api_1.0_spec/1.0.0.Final/jboss-jaxr-api_1.0_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.activation" name="activation">
+			<revision name="1.1" status="release" pubdate="20060503014829" resolver="public" artresolver="public" homepage="http://java.sun.com/products/javabeans/jaf/index.jsp" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="14">
+				<license name="Common Development and Distribution License (CDDL) v1.0" url="https://glassfish.dev.java.net/public/CDDLv1.0.html"/>
+				<metadata-artifact status="successful" details="" size="1058" time="124" location="/home/stefan/.ivy2/cache/javax.activation/activation/ivy-1.1.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.activation/activation/ivy-1.1.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/activation/activation/1.1/activation-1.1.pom"/>
+				<caller organisation="javax.mail" name="mail" conf="compile, runtime" rev="1.1" rev-constraint-default="1.1" rev-constraint-dynamic="1.1" callerrev="1.4.2"/>
+				<caller organisation="org.jboss.spec.javax.xml.registry" name="jboss-jaxr-api_1.0_spec" conf="compile, runtime" rev="1.1" rev-constraint-default="1.1" rev-constraint-dynamic="1.1" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.1" rev-constraint-default="1.1" rev-constraint-dynamic="1.1" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="activation" type="jar" ext="jar" status="successful" details="" size="62983" time="144" location="/home/stefan/.ivy2/cache/javax.activation/activation/jars/activation-1.1.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/activation/activation/1.1/activation-1.1.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.security.auth.message" name="jboss-jaspi-api_1.0_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101208211958" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="12">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1147" time="144" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.security.auth.message/jboss-jaspi-api_1.0_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.security.auth.message/jboss-jaspi-api_1.0_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/security/auth/message/jboss-jaspi-api_1.0_spec/1.0.0.Final/jboss-jaspi-api_1.0_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jaspi-api_1.0_spec" type="jar" ext="jar" status="successful" details="" size="24372" time="136" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.security.auth.message/jboss-jaspi-api_1.0_spec/jars/jboss-jaspi-api_1.0_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/security/auth/message/jboss-jaspi-api_1.0_spec/1.0.0.Final/jboss-jaspi-api_1.0_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.enterprise.deploy" name="jboss-jad-api_1.2_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021204541" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="11">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1331" time="119" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.enterprise.deploy/jboss-jad-api_1.2_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.enterprise.deploy/jboss-jad-api_1.2_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/enterprise/deploy/jboss-jad-api_1.2_spec/1.0.0.Final/jboss-jad-api_1.2_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jad-api_1.2_spec" type="jar" ext="jar" status="successful" details="" size="24562" time="135" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.enterprise.deploy/jboss-jad-api_1.2_spec/jars/jboss-jad-api_1.2_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/enterprise/deploy/jboss-jad-api_1.2_spec/1.0.0.Final/jboss-jad-api_1.2_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.security.jacc" name="jboss-jacc-api_1.4_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021213648" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="9">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1505" time="148" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.4_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.4_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/security/jacc/jboss-jacc-api_1.4_spec/1.0.0.Final/jboss-jacc-api_1.4_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-jacc-api_1.4_spec" type="jar" ext="jar" status="successful" details="" size="24728" time="137" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.4_spec/jars/jboss-jacc-api_1.4_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/security/jacc/jboss-jacc-api_1.4_spec/1.0.0.Final/jboss-jacc-api_1.4_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.servlet" name="jboss-servlet-api_3.0_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021200843" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="10">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1568" time="117" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.servlet/jboss-servlet-api_3.0_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.servlet/jboss-servlet-api_3.0_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/servlet/jboss-servlet-api_3.0_spec/1.0.0.Final/jboss-servlet-api_3.0_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec.javax.servlet.jsp" name="jboss-jsp-api_2.2_spec" conf="compile, runtime" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec.javax.xml.rpc" name="jboss-jaxrpc-api_1.1_spec" conf="compile, runtime" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec.javax.security.jacc" name="jboss-jacc-api_1.4_spec" conf="compile, runtime" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-servlet-api_3.0_spec" type="jar" ext="jar" status="successful" details="" size="70799" time="156" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.servlet/jboss-servlet-api_3.0_spec/jars/jboss-servlet-api_3.0_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/servlet/jboss-servlet-api_3.0_spec/1.0.0.Final/jboss-servlet-api_3.0_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.interceptor" name="jboss-interceptors-api_1.1_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021190513" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="8">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1136" time="146" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.interceptor/jboss-interceptors-api_1.1_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.interceptor/jboss-interceptors-api_1.1_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/interceptor/jboss-interceptors-api_1.1_spec/1.0.0.Final/jboss-interceptors-api_1.1_spec-1.0.0.Final.pom"/>
+				<caller organisation="javax.enterprise" name="cdi-api" conf="compile, runtime" rev="1.0.0.Beta1" rev-constraint-default="1.0.0.Beta1" rev-constraint-dynamic="1.0.0.Beta1" callerrev="1.0-SP4"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-interceptors-api_1.1_spec" type="jar" ext="jar" status="successful" details="" size="9299" time="134" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.interceptor/jboss-interceptors-api_1.1_spec/jars/jboss-interceptors-api_1.1_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/interceptor/jboss-interceptors-api_1.1_spec/1.0.0.Final/jboss-interceptors-api_1.1_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+			<revision name="1.0.0.Beta1" evicted="latest-revision" evicted-reason="" downloaded="false" searched="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="-1">
+				<evicted-by rev="1.0.0.Final"/>
+				<caller organisation="javax.enterprise" name="cdi-api" conf="compile, runtime" rev="1.0.0.Beta1" rev-constraint-default="1.0.0.Beta1" rev-constraint-dynamic="1.0.0.Beta1" callerrev="1.0-SP4"/>
+				<artifacts>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.el" name="jboss-el-api_2.2_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021192822" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="7">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1571" time="147" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.el/jboss-el-api_2.2_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.el/jboss-el-api_2.2_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/el/jboss-el-api_2.2_spec/1.0.0.Final/jboss-el-api_2.2_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec.javax.servlet.jsp" name="jboss-jsp-api_2.2_spec" conf="compile, runtime" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-el-api_2.2_spec" type="jar" ext="jar" status="successful" details="" size="33232" time="137" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.el/jboss-el-api_2.2_spec/jars/jboss-el-api_2.2_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/el/jboss-el-api_2.2_spec/1.0.0.Final/jboss-el-api_2.2_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.ejb" name="jboss-ejb-api_3.1_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101208211420" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="5">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1750" time="118" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.ejb/jboss-ejb-api_3.1_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.ejb/jboss-ejb-api_3.1_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/ejb/jboss-ejb-api_3.1_spec/1.0.0.Final/jboss-ejb-api_3.1_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-ejb-api_3.1_spec" type="jar" ext="jar" status="successful" details="" size="45096" time="148" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.ejb/jboss-ejb-api_3.1_spec/jars/jboss-ejb-api_3.1_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/ejb/jboss-ejb-api_3.1_spec/1.0.0.Final/jboss-ejb-api_3.1_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.xml" name="jaxrpc-api">
+			<revision name="1.1" status="release" pubdate="20051222132100" resolver="public" artresolver="public" homepage="http://java.sun.com/webservices/jaxrpc/index.jsp" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="6">
+				<metadata-artifact status="successful" details="" size="491" time="124" location="/home/stefan/.ivy2/cache/javax.xml/jaxrpc-api/ivy-1.1.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/javax.xml/jaxrpc-api/ivy-1.1.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/xml/jaxrpc-api/1.1/jaxrpc-api-1.1.pom"/>
+				<caller organisation="org.jboss.spec.javax.ejb" name="jboss-ejb-api_3.1_spec" conf="compile, runtime" rev="1.1" rev-constraint-default="1.1" rev-constraint-dynamic="1.1" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jaxrpc-api" type="jar" ext="jar" status="successful" details="" size="28492" time="143" location="/home/stefan/.ivy2/cache/javax.xml/jaxrpc-api/jars/jaxrpc-api-1.1.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/xml/jaxrpc-api/1.1/jaxrpc-api-1.1.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.resource" name="jboss-connector-api_1.5_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021211243" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="3">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1559" time="334" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.resource/jboss-connector-api_1.5_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.resource/jboss-connector-api_1.5_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/resource/jboss-connector-api_1.5_spec/1.0.0.Final/jboss-connector-api_1.5_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-connector-api_1.5_spec" type="jar" ext="jar" status="successful" details="" size="34788" time="151" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.resource/jboss-connector-api_1.5_spec/jars/jboss-connector-api_1.5_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/resource/jboss-connector-api_1.5_spec/1.0.0.Final/jboss-connector-api_1.5_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.transaction" name="jboss-transaction-api_1.1_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021184853" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="4">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1106" time="332" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.transaction/jboss-transaction-api_1.1_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.transaction/jboss-transaction-api_1.1_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/transaction/jboss-transaction-api_1.1_spec/1.0.0.Final/jboss-transaction-api_1.1_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec.javax.resource" name="jboss-connector-api_1.5_spec" conf="compile, runtime" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec.javax.ejb" name="jboss-ejb-api_3.1_spec" conf="compile, runtime" rev="1.0.0.Beta1" rev-constraint-default="1.0.0.Beta1" rev-constraint-dynamic="1.0.0.Beta1" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-transaction-api_1.1_spec" type="jar" ext="jar" status="successful" details="" size="11209" time="160" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.transaction/jboss-transaction-api_1.1_spec/jars/jboss-transaction-api_1.1_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/transaction/jboss-transaction-api_1.1_spec/1.0.0.Final/jboss-transaction-api_1.1_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+			<revision name="1.0.0.Beta1" evicted="latest-revision" evicted-reason="" downloaded="false" searched="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="-1">
+				<evicted-by rev="1.0.0.Final"/>
+				<caller organisation="org.jboss.spec.javax.ejb" name="jboss-ejb-api_3.1_spec" conf="compile, runtime" rev="1.0.0.Beta1" rev-constraint-default="1.0.0.Beta1" rev-constraint-dynamic="1.0.0.Beta1" callerrev="1.0.0.Final"/>
+				<artifacts>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.jboss.spec.javax.annotation" name="jboss-annotations-api_1.1_spec">
+			<revision name="1.0.0.Final" status="release" pubdate="20101021184442" resolver="public" artresolver="public" homepage="" downloaded="true" searched="true" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="2">
+				<license name="lgpl" url="http://repository.jboss.org/licenses/lgpl-2.1.txt"/>
+				<metadata-artifact status="successful" details="" size="1117" time="332" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.annotation/jboss-annotations-api_1.1_spec/ivy-1.0.0.Final.xml" searched="true" original-local-location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.annotation/jboss-annotations-api_1.1_spec/ivy-1.0.0.Final.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/jboss/spec/javax/annotation/jboss-annotations-api_1.1_spec/1.0.0.Final/jboss-annotations-api_1.1_spec-1.0.0.Final.pom"/>
+				<caller organisation="org.jboss.spec" name="jboss-javaee-6.0" conf="default, compile, runtime, master" rev="1.0.0.Final" rev-constraint-default="1.0.0.Final" rev-constraint-dynamic="1.0.0.Final" callerrev="1.0.0.Final"/>
+				<artifacts>
+					<artifact name="jboss-annotations-api_1.1_spec" type="jar" ext="jar" status="successful" details="" size="9251" time="129" location="/home/stefan/.ivy2/cache/org.jboss.spec.javax.annotation/jboss-annotations-api_1.1_spec/jars/jboss-annotations-api_1.1_spec-1.0.0.Final.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/jboss/spec/javax/annotation/jboss-annotations-api_1.1_spec/1.0.0.Final/jboss-annotations-api_1.1_spec-1.0.0.Final.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.scala-lang" name="scala-library">
+			<revision name="2.11.8" status="release" pubdate="20160304162633" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" extra-info.apiURL="http://www.scala-lang.org/api/2.11.8/" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="0">
+				<license name="BSD 3-Clause" url="http://www.scala-lang.org/license.html"/>
+				<metadata-artifact status="no" details="" size="2653" time="0" location="/home/stefan/.ivy2/cache/org.scala-lang/scala-library/ivy-2.11.8.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8.pom"/>
+				<caller organisation="hessian" name="hessian_2.11" conf="test, compile, runtime" rev="2.11.8" rev-constraint-default="2.11.8" rev-constraint-dynamic="2.11.8" callerrev="0.1-SNAPSHOT"/>
+				<artifacts>
+					<artifact name="scala-library" type="jar" ext="jar" status="no" details="" size="5744974" time="0" location="/home/stefan/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+	</dependencies>
+</ivy-report>

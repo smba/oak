@@ -35,22 +35,22 @@ class MapChoice(private val entries: Map[OakValue, Constraint]) extends IChoice 
   override def map(f: OakValue => OakValue): MapChoice = {
     
     //#ifndef FIRST_CHOICE_ELEMENT
-//@    val newEntries = entries.map {
-//@      case (v, ps) => (f(v), ps) 
-//@    }
-    //#else
-    var newEntries = {
-      val objects = entries.filterKeys { v => v.isInstanceOf[ObjectValue] }
-      if (objects.isEmpty) {
-        Map[OakValue, Constraint]()
-      } else {
-        Map( f(objects.head._1) -> objects.head._2)
-      }
+    val newEntries = entries.map {
+      case (v, ps) => (f(v), ps) 
     }
-    
-    
+    //#else
+//@    var newEntries = {
+//@      val objects = entries.filterKeys { v => v.isInstanceOf[ObjectValue] }
+//@      if (objects.isEmpty) {
+//@        Map[OakValue, Constraint]()
+//@      } else {
+//@        Map( f(objects.head._1) -> objects.head._2)
+//@      }
+//@    }
+//@    
+//@    
     //#ifdef SYMBOLIC_CHOICE_ELEMENT
-    newEntries = newEntries + ( f(SymbolValue("ja")) -> new Constraint(BDDFeatureExprFactory.createDefinedExternal("isEmpty()")))
+//@    newEntries = newEntries + ( f(SymbolValue("ja")) -> new Constraint(BDDFeatureExprFactory.createDefinedExternal("isEmpty()")))
     //#endif
     //#endif
     new MapChoice(newEntries)

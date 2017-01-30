@@ -44,6 +44,7 @@ object OakUtility {
    * Utility Method,
    */
   def url(fileName: String): Path = {
+    println(fileName)
     Paths.get(getClass.getResource("/" + fileName).getPath)
   }
 

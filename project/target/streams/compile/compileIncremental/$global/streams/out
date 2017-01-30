@@ -1,0 +1,70 @@
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Initial source changes: [0m
+[0m[[0mdebug[0m] [0m[naha] 	removed:Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	added: Set(/home/stefan/git/oak/project/Build.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] 	modified: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated products: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] External API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Modified binary dependencies: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set(/home/stefan/git/oak/project/Build.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Sources indirectly invalidated by:[0m
+[0m[[0mdebug[0m] [0m[naha] 	product: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	binary dep: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	external source: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/stefan/git/oak/project/Build.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/stefan/git/oak/project/Build.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Recompiling all 1 sources: invalidated sources (1) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes...[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.13:component from component compiler for Scala 2.10.6[0m
+[0m[[0minfo[0m] [0m'compiler-interface' not yet compiled for Scala 2.10.6. Compiling...[0m
+[0m[[0mdebug[0m] [0mPlain interface to Scala compiler 2.10.6  with arguments: [0m
+[0m[[0mdebug[0m] [0m	-nowarn[0m
+[0m[[0mdebug[0m] [0m	-d[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_f98a9009[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/classes:/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/stefan/.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.13/xsbti/interface-0.13.13.jar:/tmp/sbt_ba41b2e1/srcs/org.scala-sbt/compiler-interface/compiler-interface-0.13.13-sources.jar:/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-compiler.jar:/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-reflect.jar:/home/stefan/.sbt/boot/scala-2.10.6/lib/jansi.jar:/home/stefan/.sbt/boot/scala-2.10.6/lib/jline.jar[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/API.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/Analyzer.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/Command.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/Compat.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/CompilerInterface.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/ConsoleInterface.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/DelegatingReporter.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/Dependency.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/ExtractAPI.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/ExtractUsedNames.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/GlobalHelpers.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/LocateClassFile.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/Log.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/Message.scala[0m
+[0m[[0mdebug[0m] [0m	/tmp/sbt_5a95e5a7/xsbt/ScaladocInterface.scala[0m
+[0m[[0minfo[0m] [0m  Compilation completed in 7.545 s[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.13:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 746cf4c8, interfacing (CompilerInterface) with Scala compiler version 2.10.6[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-deprecation[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/classes:/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/stefan/git/oak/project/target/scala-2.10/sbt-0.13/classes:/home/stefan/.ivy2/cache/scala_2.10/sbt_0.13/com.typesafe.sbteclipse/sbteclipse-plugin/jars/sbteclipse-plugin-4.0.0.jar:/home/stefan/.ivy2/cache/org.scalaz/scalaz-core_2.10/bundles/scalaz-core_2.10-7.1.0.jar:/home/stefan/.ivy2/cache/org.scalaz/scalaz-effect_2.10/bundles/scalaz-effect_2.10-7.1.0.jar:/home/stefan/.ivy2/cache/org.scala-sbt/sbt/jars/sbt-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/main/jars/main-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/actions/jars/actions-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/classpath/jars/classpath-0.13.13.jar:/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-compiler.jar:/home/stefan/.sbt/boot/scala-2.10.6/lib/scala-reflect.jar:/home/stefan/.ivy2/cache/org.scala-sbt/interface/jars/interface-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/io/jars/io-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/control/jars/control-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/launcher-interface/jars/launcher-interface-1.0.0-M1.jar:/home/stefan/.ivy2/cache/org.scala-sbt/completion/jars/completion-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/collections/jars/collections-0.13.13.jar:/home/stefan/.ivy2/cache/jline/jline/jars/jline-2.13.jar:/home/stefan/.ivy2/cache/org.fusesource.jansi/jansi/jars/jansi-1.11.jar:/home/stefan/.ivy2/cache/org.scala-sbt/api/jars/api-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/classfile/jars/classfile-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/logging/jars/logging-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/process/jars/process-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/compiler-integration/jars/compiler-integration-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/incremental-compiler/jars/incremental-compiler-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/relation/jars/relation-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/compile/jars/compile-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/persist/jars/persist-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-tools.sbinary/sbinary_2.10/jars/sbinary_2.10-0.4.2.jar:/home/stefan/.ivy2/cache/org.scala-sbt/compiler-ivy-integration/jars/compiler-ivy-integration-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/ivy/jars/ivy-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/cross/jars/cross-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt.ivy/ivy/jars/ivy-2.3.0-sbt-2cf13e211b2cb31f0d3b317289dca70eca3362f6.jar:/home/stefan/.ivy2/cache/com.jcraft/jsch/jars/jsch-0.1.50.jar:/home/stefan/.ivy2/cache/org.scala-sbt/serialization_2.10/jars/serialization_2.10-0.1.2.jar:/home/stefan/.ivy2/cache/org.scala-lang.modules/scala-pickling_2.10/jars/scala-pickling_2.10-0.10.1.jar:/home/stefan/.ivy2/cache/org.scalamacros/quasiquotes_2.10/jars/quasiquotes_2.10-2.0.1.jar:/home/stefan/.ivy2/cache/org.json4s/json4s-core_2.10/jars/json4s-core_2.10-3.2.10.jar:/home/stefan/.ivy2/cache/org.json4s/json4s-ast_2.10/jars/json4s-ast_2.10-3.2.10.jar:/home/stefan/.ivy2/cache/com.thoughtworks.paranamer/paranamer/jars/paranamer-2.6.jar:/home/stefan/.ivy2/cache/org.spire-math/jawn-parser_2.10/jars/jawn-parser_2.10-0.6.0.jar:/home/stefan/.ivy2/cache/org.spire-math/json4s-support_2.10/jars/json4s-support_2.10-0.6.0.jar:/home/stefan/.ivy2/cache/org.scala-sbt/run/jars/run-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/task-system/jars/task-system-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/tasks/jars/tasks-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/tracking/jars/tracking-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/cache/jars/cache-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/testing/jars/testing-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/test-agent/jars/test-agent-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar:/home/stefan/.ivy2/cache/org.scala-sbt/main-settings/jars/main-settings-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/apply-macro/jars/apply-macro-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/command/jars/command-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/template-resolver/jars/template-resolver-0.1.jar:/home/stefan/.ivy2/cache/org.scala-sbt/logic/jars/logic-0.13.13.jar:/home/stefan/.ivy2/cache/org.scala-sbt/compiler-interface/jars/compiler-interface-0.13.13.jar[0m
+[0m[[33mwarn[0m] [0m/home/stefan/git/oak/project/Build.scala:4: trait Build in package sbt is deprecated: Use .sbt format instead[0m
+[0m[[33mwarn[0m] [0mobject OakBuild extends Build {[0m
+[0m[[33mwarn[0m] [0m                        ^[0m
+[0m[[33mwarn[0m] [0mone warning found[0m
+[0m[[0mdebug[0m] [0mScala compilation took 11.75270338 s[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/stefan/git/oak/project/Build.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/stefan/git/oak/project/Build.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/stefan/git/oak/project/Build.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/stefan/git/oak/project/Build.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/stefan/git/oak/project/Build.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	notify, kernel, wait, hessian, $asInstanceOf, buildLoaders, equals, asInstanceOf, projectDefinitions, synchronized, $isInstanceOf, notifyAll, rootProject, OakBuild, isInstanceOf, ==, oak, clone, $init$, toString, !=, projects, getClass, ne, quercus, eq, settings, ##, finalize, hashCode.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] New invalidations:[0m
+[0m[[0mdebug[0m] [0m[naha] 	Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Previously invalidated, but (transitively) depend on new invalidations:[0m
+[0m[[0mdebug[0m] [0m[naha] 	Set()[0m
+[0m[[0mdebug[0m] [0m[naha] All newly invalidated sources after taking into account (previously) recompiled sources:Set()[0m

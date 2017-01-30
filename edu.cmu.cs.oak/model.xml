@@ -3,38 +3,14 @@
 		<properties/>
 		<struct>
 			<and abstract="true" mandatory="true" name="oak">
-				<description>
-					
-				</description>
 				<or abstract="true" name="WordpressSetup">
-					<description>
-						
-					</description>
-					<feature mandatory="true" name="WORDPRESS_DEPENDENCIES">
-						<description>
-							
-						</description>
-					</feature>
+					<feature mandatory="true" name="WORDPRESS_DEPENDENCIES"/>
 				</or>
 				<or abstract="true" name="Base">
-					<description>
-						
-					</description>
-					<feature mandatory="true" name="CONCRETE_FOREACH_LOOP">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="ARRAY_GET_CONCRETE">
-						<description>
-							
-						</description>
-					</feature>
+					<feature mandatory="true" name="CONCRETE_FOREACH_LOOP"/>
+					<feature mandatory="true" name="ARRAY_GET_CONCRETE"/>
 				</or>
 				<alt abstract="true" name="Logging">
-					<description>
-						
-					</description>
 					<feature mandatory="true" name="CALL_LOGGING">
 						<description>
 							Log every function/method call in a tree-like representation of the call stack.
@@ -52,9 +28,6 @@
 					</feature>
 				</alt>
 				<alt name="ChoicePrecision">
-					<description>
-						
-					</description>
 					<and mandatory="true" name="FIRST_CHOICE_ELEMENT">
 						<description>
 							A method call targeted at a choice will only be executed for the first concrete value / object value.
@@ -72,190 +45,48 @@
 					</feature>
 				</alt>
 				<and abstract="true" mandatory="true" name="CoverageHeuristic">
-					<description>
-						
-					</description>
 					<or abstract="true" mandatory="true" name="Contains">
-						<description>
-							
-						</description>
-						<feature mandatory="true" name="ContainsLessThan">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="ContainsGreaterThan">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="ContainsWhitespace">
-							<description>
-								
-							</description>
-						</feature>
+						<feature mandatory="true" name="ContainsLessThan"/>
+						<feature mandatory="true" name="ContainsGreaterThan"/>
+						<feature mandatory="true" name="ContainsWhitespace"/>
 					</or>
 					<alt abstract="true" mandatory="true" name="JunctiveContains">
-						<description>
-							
-						</description>
-						<feature mandatory="true" name="ConjunctiveContains">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="DisjunctiveContains">
-							<description>
-								
-							</description>
-						</feature>
+						<feature mandatory="true" name="ConjunctiveContains"/>
+						<feature mandatory="true" name="DisjunctiveContains"/>
 					</alt>
 				</and>
 				<alt name="Timeout">
-					<description>
-						
-					</description>
-					<feature mandatory="true" name="MINUTES_5">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="MINUTES_10">
-						<description>
-							
-						</description>
-					</feature>
-					<feature mandatory="true" name="MINUTES_15">
-						<description>
-							
-						</description>
-					</feature>
+					<feature mandatory="true" name="MINUTES_5"/>
+					<feature mandatory="true" name="MINUTES_10"/>
+					<feature mandatory="true" name="MINUTES_15"/>
 				</alt>
 				<and abstract="true" name="Analysis">
-					<description>
-						
-					</description>
 					<or mandatory="true" name="CoverageAnalysis">
-						<description>
-							
-						</description>
-						<feature mandatory="true" name="Addressbook">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Schoolmate">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Timeclock">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="UPB">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Webchess">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Wordpress">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="PHPBB">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Drupal">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Mediawiki">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Moodle">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="PhpMyAdmin">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Joomla">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Anchor">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Garv">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Pagekit">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Kirby">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Fork">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Automad">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="WonderCMS">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Monstra">
-							<description>
-								
-							</description>
-						</feature>
-						<feature mandatory="true" name="Nibbleblog">
-							<description>
-								
-							</description>
-						</feature>
+						<feature mandatory="true" name="Addressbook"/>
+						<feature mandatory="true" name="Schoolmate"/>
+						<feature mandatory="true" name="Timeclock"/>
+						<feature mandatory="true" name="UPB"/>
+						<feature mandatory="true" name="Webchess"/>
+						<feature mandatory="true" name="Wordpress"/>
+						<feature mandatory="true" name="PHPBB"/>
+						<feature mandatory="true" name="Drupal"/>
+						<feature mandatory="true" name="Mediawiki"/>
+						<feature mandatory="true" name="Moodle"/>
+						<feature mandatory="true" name="PhpMyAdmin"/>
+						<feature mandatory="true" name="Joomla"/>
+						<feature mandatory="true" name="Anchor"/>
+						<feature mandatory="true" name="Garv"/>
+						<feature mandatory="true" name="Pagekit"/>
+						<feature mandatory="true" name="Kirby"/>
+						<feature mandatory="true" name="Fork"/>
+						<feature mandatory="true" name="Automad"/>
+						<feature mandatory="true" name="WonderCMS"/>
+						<feature mandatory="true" name="Monstra"/>
+						<feature mandatory="true" name="Nibbleblog"/>
 					</or>
-					<feature name="Parallelization">
-						<description>
-							
-						</description>
-					</feature>
+					<feature name="Parallelization"/>
 				</and>
-				<feature name="Debugging">
-					<description>
-						
-					</description>
-				</feature>
+				<feature name="Debugging"/>
 			</and>
 		</struct>
 		<constraints/>

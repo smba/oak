@@ -118,53 +118,53 @@ object Coverage extends App {
     //------------------
 
     //#ifdef Parallelization
-        val tasks = for (ep <- entryPoints.zipWithIndex) yield future {
-          //      println(s"Now analyzing (${ep._2}/${entryPoints.size}) ${ep._1.toAbsolutePath().toString()}")
-          interpreter = new OakInterpreter()
-    
-          val executed = interpreter.execute(ep._1)
-          val found = DNode.extractStringLiterals(executed._2.output)
-          found.foreach { s => literalSet += s }
-          
-          val undefinedFunctions = executed._2.unknown_standard_functions.toSet
-          //      println(s"Finished (${ep._2}/${entryPoints.size}) (${Duration.between(before, after)})")
-    
-    //#ifdef AbstractLogging
-    //@          logger.info(s" Found ${literalSet.size} literals so far")
-    //#endif
-    
-          //println(s"${ep.toString()} found ${found.size} literals")
-          (found, interpreter.included_files, interpreter.defined_functions, executed._2.touched, executed._2.include_history, undefinedFunctions)
-        }
-    
-        val aggregated = Future.sequence(tasks)
-    
-        var found_ = Await.result(aggregated, 45.minutes)
-        
-    //#else
-//@    var found_ = new ListBuffer[(Set[StringValue], HashSet[Path] with SynchronizedSet[Path], HashMap[String, Boolean] with SynchronizedMap[String, Boolean], HashSet[StringValue], HashMap[(String, Int), Boolean], Set[(String, Int)])]()
-//@
-//@    entryPoints.zipWithIndex.foreach {
-//@      ep =>
-//@        {
+//@        val tasks = for (ep <- entryPoints.zipWithIndex) yield future {
+//@          //      println(s"Now analyzing (${ep._2}/${entryPoints.size}) ${ep._1.toAbsolutePath().toString()}")
 //@          interpreter = new OakInterpreter()
-//@
+//@    
 //@          val executed = interpreter.execute(ep._1)
 //@          val found = DNode.extractStringLiterals(executed._2.output)
 //@          found.foreach { s => literalSet += s }
-//@
+//@          
 //@          val undefinedFunctions = executed._2.unknown_standard_functions.toSet
 //@          //      println(s"Finished (${ep._2}/${entryPoints.size}) (${Duration.between(before, after)})")
-//@
+//@    
+    //#ifdef AbstractLogging
+    //@          logger.info(s" Found ${literalSet.size} literals so far")
+    //#endif
+//@    
+//@          //println(s"${ep.toString()} found ${found.size} literals")
+//@          (found, interpreter.included_files, interpreter.defined_functions, executed._2.touched, executed._2.include_history, undefinedFunctions)
+//@        }
+//@    
+//@        val aggregated = Future.sequence(tasks)
+//@    
+//@        var found_ = Await.result(aggregated, 45.minutes)
+//@        
+    //#else
+    var found_ = new ListBuffer[(Set[StringValue], HashSet[Path] with SynchronizedSet[Path], HashMap[String, Boolean] with SynchronizedMap[String, Boolean], HashSet[StringValue], HashMap[(String, Int), Boolean], Set[(String, Int)])]()
+
+    entryPoints.zipWithIndex.foreach {
+      ep =>
+        {
+          interpreter = new OakInterpreter()
+
+          val executed = interpreter.execute(ep._1)
+          val found = DNode.extractStringLiterals(executed._2.output)
+          found.foreach { s => literalSet += s }
+
+          val undefinedFunctions = executed._2.unknown_standard_functions.toSet
+          //      println(s"Finished (${ep._2}/${entryPoints.size}) (${Duration.between(before, after)})")
+
           //#ifdef AbstractLogging
           //@          logger.info(s" Found ${literalSet.size} literals so far")
           //#endif
-//@
-//@          //println(s"${ep.toString()} found ${found.size} literals")
-//@          found_.+=( (found, interpreter.included_files, interpreter.defined_functions, executed._2.touched, executed._2.include_history, undefinedFunctions) )
-//@        }
-//@    }
-//@
+
+          //println(s"${ep.toString()} found ${found.size} literals")
+          found_.+=( (found, interpreter.included_files, interpreter.defined_functions, executed._2.touched, executed._2.include_history, undefinedFunctions) )
+        }
+    }
+
     //#endif
     val found = found_.map(f => f._1).fold(Set[StringValue]())(_ union _)
     val includes = found_.map(f => f._2).fold(Set[Path]())(_ union _)
@@ -205,7 +205,7 @@ object Coverage extends App {
 //    println(relevant_projectLiterals)
     val foundLiterals = findProjectLiterals(entryPoints) //.map(s => s.value)
     val relevant_foundLiterals = foundLiterals._1.filter { lit => relevant(lit) }
-    val undefinedFunctionNames = foundLiterals._6.filter { case (k, v) => (OakUtility.is_php_function(k) && k.startsWith("str")) }
+    //val undefinedFunctionNames = foundLiterals._6.filter { case (k, v) => (OakUtility.is_php_function(k) && k.startsWith("str")) }
     val all_include_expressions = parsed._2
     val include_expressions_with_result = foundLiterals._5
 
@@ -224,14 +224,14 @@ object Coverage extends App {
 
     // Check if the file does not exist yet. If so, create file, otherwise overwrite it.
     val path = Paths.get(OakUtility.url("").toString + "/" + s"logs/${projectPath.toString.split("/").last}_not_found.csv")
-    new FileOutputStream(path.toAbsolutePath().toString(), false).close();
-    val pw = new PrintWriter(path.toFile())
+    //new FileOutputStream(path.toAbsolutePath().toString(), false).close();
+    /*val pw = new PrintWriter(path.toFile())
     val p = (relevant_projectLiterals -- relevant_foundLiterals).zipWithIndex.map {
       case (sv, i) => i + "|\"" + sv.value.replaceAll("\"", "'") + "\"|" + sv.file + "|" + sv.lineNr
     }.mkString("\n")
     pw.write("#|String Value|Location|Line Number|\n" + p)
     pw.close
-
+		*/
     // some logging
     val notfound = (relevant_projectLiterals -- relevant_foundLiterals)
     val not_touched = relevant_projectLiterals -- foundLiterals._4
@@ -465,7 +465,7 @@ object Coverage extends App {
 //@        getAddressbookCoverage
     //#endif
     //#ifdef Schoolmate
-//@        getSchoolmateCoverage
+        getSchoolmateCoverage
     //#endif
     //#ifdef Timeclock
 //@        getTimeclockCoverage
@@ -483,7 +483,7 @@ object Coverage extends App {
 //@        getPHPBBCoverage
     //#endif
     //#ifdef Drupal
-    getDrupalCoverage
+//@    getDrupalCoverage
     //#endif
     //#ifdef Mediawiki
     //@    getMediaWikiCoverage
