@@ -203,6 +203,9 @@ object Coverage extends App {
     val projectLiterals = parsed._1 //.map(s => s.value)
     val relevant_projectLiterals = projectLiterals.filter { lit => relevant(lit) }
 //    println(relevant_projectLiterals)
+    
+    
+    //
     val foundLiterals = findProjectLiterals(entryPoints) //.map(s => s.value)
     val relevant_foundLiterals = foundLiterals._1.filter { lit => relevant(lit) }
     //val undefinedFunctionNames = foundLiterals._6.filter { case (k, v) => (OakUtility.is_php_function(k) && k.startsWith("str")) }

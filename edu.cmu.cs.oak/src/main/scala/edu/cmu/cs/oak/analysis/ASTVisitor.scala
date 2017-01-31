@@ -197,6 +197,10 @@ class ASTVisitor(path: Path) {
 
   var location: Location = null
 
+  // Used for callback candidate statistics
+  var function_and_method_definitions = new scala.collection.mutable.HashSet[String]()
+  var callsites = new scala.collection.mutable.HashSet[String]()
+  
   /**
    * Set the global parent path for the ASTVisitor
    */
@@ -275,6 +279,11 @@ class ASTVisitor(path: Path) {
               context = StringLiteralContext.FDEFINITION
               val r = visit(f.asInstanceOf[Function]._statement)
               context = pre
+              
+              // record method definition
+              val methodName = f.asInstanceOf[Function]._name.toString()
+              this.function_and_method_definitions.add(methodName)
+              
               r
             }
         }.fold(false)(_ || _)
@@ -358,6 +367,11 @@ class ASTVisitor(path: Path) {
 
         functions.+=((current_fdef -> r))
         context = prev
+        
+        // record method definition
+              val fName = s._fun._name.toString()
+              this.function_and_method_definitions.add(fName)
+        
         r
       }
 
@@ -686,6 +700,10 @@ class ASTVisitor(path: Path) {
      * Case for AST node class CallExpr.
      */
     case e: CallExpr => {
+      
+      val fName = e._name.toString()
+      this.callsites.add(fName)
+      
       val args = e._args
       args.map { a => visit(a) }.fold(false)(_ || _)
     }
@@ -1210,11 +1228,26 @@ class ASTVisitor(path: Path) {
         dynamic += 1
       }
     }
-    
-    
-    (static, dynamic)
+    return (static, dynamic)
   }
 
+  def analyzeCalls(): (Set[String], Set[String]) = {
+    
+    val program = this.engine.loadFromFile(this.path)
+    
+    // collect all function definitions up-front
+    if (program != null) {
+      List(program.getFunctionList.toArray: _*).foreach {
+        f => {
+          this.function_and_method_definitions.add(f.asInstanceOf[Function]._name.toString())
+        }
+      }
+    }
+    
+    this.visit(program.getStatement)
+    
+    return (this.function_and_method_definitions.toSet, this.callsites.toSet)
+  }
 }
 
 object ASTVisitor {
