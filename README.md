@@ -17,42 +17,9 @@ The repository contains four projects:
 * `kernel` and `hessian` are dependencies for quercus
 
 ### Run Oak
-To run Oak for a given PHP script file see ```edu.cmu.cs.oak.analysis.RunOakForFile.scala``` and specify input script file and output path for the approximated output. 
+To run Oak for a given PHP script file see ```edu.cmu.cs.oak.analysis.RunOakForFile.scala``` and specify input script file and output path for the approximated output, then compile and execute the file. The predefined example script file `schoolmate/index.php` is the main entry point for the [SchoolMate](https://sourceforge.net/projects/schoolmate/) application. 
 
-The predefined example script file `schoolmate/index.php` is the main entry point for the [SchoolMate](https://sourceforge.net/projects/schoolmate/) application. The snippets below illustrates the approximation
-
-```php
-<?php
-$page = $_POST["page"];
-
-switch ($page)
-  {
-
-   case 0:
-		require_once("Login.php");
-		break;
-
-   case 1:
-		require_once("AdminMain.php");
-		break;
-
-   case 2:
-		require_once("TeacherMain.php");
-		break;
-
-   case 3:
-		//require_once("SubstituteMain.php");
-		break;
-
-   case 4:
-		require_once("StudentMain.php");
-		break;
-
-   case 5:
-		require_once("ParentMain.php");
-		break;
-  }
-```
+The approximated output can either be exported as HTML/JS output spiced with preprocessor-like annotations (#ifdef, #else, #endif, ...) or as a VarDOM/XML model (DOM-like output extended with select nodes to express variants and corresponding conditions). 
 
 ## Editing Oak
 To edit the interpreter [IntelliJ IDEA](https://www.jetbrains.com/idea/) or the [Scala IDE for Eclipse](http://scala-ide.org/) are recommended. You can import sbt projects directly into IntelliJ; for eclipse we use the plugin [sbteclipse](https://github.com/typesafehub/sbteclipse) to build eclipse projects. For Eclipse simply use ```sbt eclipse``` to build eclipse projects.
