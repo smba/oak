@@ -3,9 +3,10 @@
 **Oak** is an output-oriented symbolic interpreter for the [PHP](http://php.net/) programming language. PHP scripts generate client page output dynamically, often depending on a number of program inputs including user interaction, database queries or file system access. This tool is inspired by the symbolic execution engine by [Symex](https://github.com/git1997/VarAnalysis) and additionally provides support for basic object-oriented programming and array support.
 
 ## Getting Started
+### Download & Build
 To build and run Oak, you will need
 * **JDK 8**,
-* **Scala 2.11.8+**
+* **Scala 2.11.8+**,
 * **sbt 0.11+**: [sbt](http://www.scala-sbt.org/index.html) for building the interpreter and resolving dependencies.
 
 To obtain the tool, simply clone this repository ```git clone https://github.com/smba/oak.git``` and build the project by running sbt in the root directory of this repository ```sbt compile```.
@@ -15,25 +16,46 @@ The repository contains four projects:
 * `quercus`: [Quercus](http://quercus.caucho.com/) is a pure-Java implementation of the PHP language, we basically reuse the parser and AST fragments
 * `kernel` and `hessian` are dependencies for quercus
 
+### Run Oak
 To run Oak for a given PHP script file see ```edu.cmu.cs.oak.analysis.RunOakForFile.scala``` and specify input script file and output path for the approximated output. 
 
-## Extending Oak
-To edit the interpreter [IntelliJ IDEA](https://www.jetbrains.com/idea/) or the [Scala IDE for Eclipse](http://scala-ide.org/) are recommended. You can import sbt projects directly into IntelliJ; for eclipse we use the plugin [sbteclipse](https://github.com/typesafehub/sbteclipse) to build eclipse projects. For Eclipse simply use
+The predefined example script file `schoolmate/index.php` is the main entry point for the [SchoolMate](https://sourceforge.net/projects/schoolmate/) application. The snippets below illustrates the approximation
 
-```sbt eclipse```
-to build eclipse projects.
+```php
+<?php
+$page = $_POST["page"];
+
+switch ($page)
+  {
+
+   case 0:
+		require_once("Login.php");
+		break;
+
+   case 1:
+		require_once("AdminMain.php");
+		break;
+
+   case 2:
+		require_once("TeacherMain.php");
+		break;
+
+   case 3:
+		//require_once("SubstituteMain.php");
+		break;
+
+   case 4:
+		require_once("StudentMain.php");
+		break;
+
+   case 5:
+		require_once("ParentMain.php");
+		break;
+  }
+```
+
+## Editing Oak
+To edit the interpreter [IntelliJ IDEA](https://www.jetbrains.com/idea/) or the [Scala IDE for Eclipse](http://scala-ide.org/) are recommended. You can import sbt projects directly into IntelliJ; for eclipse we use the plugin [sbteclipse](https://github.com/typesafehub/sbteclipse) to build eclipse projects. For Eclipse simply use ```sbt eclipse``` to build eclipse projects.
 
 ### Configuration (Eclipse only)
 Additionally, if you might want to configure different variants of the interpreter, use the [Antenna](http://antenna.sourceforge.net/wtkpreprocess.php#eclipse_plugin) preprocessor. The eclipse plugin [FeatureIDE](http://wwwiti.cs.uni-magdeburg.de/iti_db/research/featureide/) might become handy when modeling additional features.
-
-More information about configuration and features used can be found in the [wiki](https://github.com/smba/oak/wiki).
-
-## Getting started
-We provide two different interpretation modes. A good start may be to fiddle with `edu.cmu.cs.oak.analysis.RunOakForFile.scala`. Specify the input file and (if desired) an ouput path for the symolic output.
-
-To analyse PHP systems from multiple/all entry points, use `edu.cmu.cs.oak.analysis.Coverage.scala`.
-
-
-
-## Contact 
-Feel free to fork this project or contact the author with any question at ![mail](http://chxo.com/labelgen/labelgen.php?textval=s.muehlbauer%40tu-bs.de&font=COUR.TTF&size=12&bgcolor=%23f5f5f5&textcolor=%23000000&submit=create+image)
