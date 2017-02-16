@@ -5,13 +5,34 @@ import java.io.File
 object OutputCandidateAnalyzer extends App {
 
 
-  val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
+  def url(fileName: String): File = {
+    new File(getClass.getResource("/" + fileName).getPath)
+  }
 
-  val strings = OakUtility.getProjectLiterals(WORDPRESS)._1
+  val ADDRESSBOOK = url("addressbook")
+  val SCHOOLMATE = url("schoolmate")
+  val TIMECLOCK = url("timeclock")
+  val UPB = url("upb")
+  val WEBCHESS = url("webchess")
 
-  val ocs = strings.count(Coverage.isRelevant(_))
+  val DRUPAL = url("drupal")
+  val PHPBB = url("phpbb")
+  val PHPMYADMIN = url("phpmyadmin")
+  val WORDPRESS = url("wordpress")
 
-  println(s"${ocs} / ${strings.size}")
+  val ANCHOR = url("anchor")
+  val KIRBY = url("kirby")
+  val AUTOMAD = url("automad")
+  val MONSTRA = url("monstra")
+  val NIBBLEBLOG = url("nibbleblog")
+
+  val MODELSYSTEM = url("modelsystem")
+
+//  val strings = OakUtility.getProjectLiterals(WORDPRESS)._1
+
+//  val ocs = strings.count(Coverage.isRelevant(_))
+
+//  println(s"${ocs} / ${strings.size}")
 
 
 }

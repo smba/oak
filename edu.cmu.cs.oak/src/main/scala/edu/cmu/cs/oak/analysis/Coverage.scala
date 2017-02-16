@@ -35,31 +35,28 @@ object Coverage extends App {
 
   val logger = LoggerFactory.getLogger(classOf[Coverage])
 
-  val ADDRESSBOOK = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/addressbook")
-  val SCHOOLMATE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/schoolmate")
-  val TIMECLOCK = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/timeclock")
-  val UPB = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/upb")
-  val WEBCHESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/webchess")
+  def url(fileName: String): File = {
+    new File(getClass.getResource("/" + fileName).getPath)
+  }
 
-  val DRUPAL = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/drupal")
-  val JOOMLA = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/joomla")
-  val MEDIAWIKI = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/mediawiki")
-  val MOODLE = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/moodle")
-  val PHPBB = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/phpbb")
-  val PHPMYADMIN = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/phpmyadmin")
-  val WORDPRESS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wordpress")
+  val ADDRESSBOOK = url("addressbook")
+  val SCHOOLMATE = url("schoolmate")
+  val TIMECLOCK = url("timeclock")
+  val UPB = url("upb")
+  val WEBCHESS = url("webchess")
 
-  val GARV = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/garv")
-  val ANCHOR = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/anchor")
-  val PAGEKIT = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/pagekit")
-  val KIRBY = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/kirby")
-  val FORK = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/fork")
-  val AUTOMAD = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/automad")
-  val WONDERCMS = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/wondercms")
-  val MONSTRA = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/monstra")
-  val NIBBLEBLOG = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/nibbleblog")
+  val DRUPAL = url("drupal")
+  val PHPBB = url("phpbb")
+  val PHPMYADMIN = url("phpmyadmin")
+  val WORDPRESS = url("wordpress")
 
-  val MODEL_PROJECT = new File("/home/stefan/git/oak/edu.cmu.cs.oak/bin/model_project")
+  val ANCHOR = url("anchor")
+  val KIRBY = url("kirby")
+  val AUTOMAD = url("automad")
+  val MONSTRA = url("monstra")
+  val NIBBLEBLOG = url("nibbleblog")
+
+  val MODELSYSTEM = url("modelsystem")
 
   def isRelevant(lit: StringValue) = {
     var contain_s = Set[String]()
@@ -121,26 +118,26 @@ object Coverage extends App {
         val tasks = for (ep <- entryPoints.zipWithIndex) yield future {
           //      println(s"Now analyzing (${ep._2}/${entryPoints.size}) ${ep._1.toAbsolutePath().toString()}")
           interpreter = new OakInterpreter()
-    
+
           val executed = interpreter.execute(ep._1)
           val found = DNode.extractStringLiterals(executed._2.output)
           found.foreach { s => literalSet += s }
-          
+
           val undefinedFunctions = executed._2.unknown_standard_functions.toSet
           //      println(s"Finished (${ep._2}/${entryPoints.size}) (${Duration.between(before, after)})")
-    
+
     //#ifdef AbstractLogging
     //@          logger.info(s" Found ${literalSet.size} literals so far")
     //#endif
-    
+
           //println(s"${ep.toString()} found ${found.size} literals")
           (found, interpreter.included_files, interpreter.defined_functions, executed._2.touched, executed._2.include_history, undefinedFunctions)
         }
-    
+
         val aggregated = Future.sequence(tasks)
-    
+
         var found_ = Await.result(aggregated, 45.minutes)
-        
+
     //#else
 //@    var found_ = new ListBuffer[(Set[StringValue], HashSet[Path] with SynchronizedSet[Path], HashMap[String, Boolean] with SynchronizedMap[String, Boolean], HashSet[StringValue], HashMap[(String, Int), Boolean], Set[(String, Int)])]()
 //@
@@ -203,8 +200,8 @@ object Coverage extends App {
     val projectLiterals = parsed._1 //.map(s => s.value)
     val relevant_projectLiterals = projectLiterals.filter { lit => relevant(lit) }
 //    println(relevant_projectLiterals)
-    
-    
+
+
     //
     val foundLiterals = findProjectLiterals(entryPoints) //.map(s => s.value)
     val relevant_foundLiterals = foundLiterals._1.filter { lit => relevant(lit) }
@@ -267,12 +264,12 @@ object Coverage extends App {
     dead_function_sample.foreach {
       df => println(df)
     }
-    
+
 //    println(funcitonsOfNotFoundLiterals)
 //    println(definedButNotCalledFunctions)
-    
+
     /*
-     * Dynamic resolution of include statements (require, require_once or include_once). 
+     * Dynamic resolution of include statements (require, require_once or include_once).
      * - How many include statements exist in the entire system? [Parser]
      * - How many include statements have been reached? [Environment]
      * 		- How many include expressions could not be resolved?
@@ -285,11 +282,11 @@ object Coverage extends App {
     //#endif
 
     val relevantTouchedLiterals = (foundLiterals._4 intersect relevant_projectLiterals)
-    
+
     val ratio_relevantTouchedLiterals_touchedLiterals = (relevantTouchedLiterals.size, foundLiterals._4.size)
     val ratio_relevantFoundLiterals_touchedLiterals = (relevant_foundLiterals.size, foundLiterals._1.size)
-    
-    
+
+
     val touch_coverage = (foundLiterals._4 intersect relevant_projectLiterals).size * 1.0 / relevant_projectLiterals.size
     val coverage_loss = (touch_coverage / relative_coverage)
 
@@ -313,10 +310,10 @@ object Coverage extends App {
 //    println(s"Include resolution success rate: ${include_expressions_with_result.groupBy(f => f._2).map(f => (f._1, f._2.size))} ${include_expressions_with_result}")
 //    val calls = undefinedFunctionNames.keySet.map { k => undefinedFunctionNames.getOrElse(k, 0) }.fold(0)(_ + _)
 //    println(s"${undefinedFunctionNames.size} funtions were undefined, and were part of the standard lib, ${calls} calls in total")
-//    
+//
 //    println(s"(Touched && relevant) / touched: ${ratio_relevantTouchedLiterals_touchedLiterals}")
 //    println(s"(Found && relevant) / found: ${ratio_relevantFoundLiterals_touchedLiterals}")
-//    
+//
     //    println(s"${include_expressions_with_result.groupBy(f => f._2).getOrElse(false, "nix")}")
     //println(include_expressions_with_result.groupBy(f => f._2).getOrElse(true, "no include available"))
 
@@ -325,24 +322,24 @@ object Coverage extends App {
 
     println("-------------------------------------------------------------------------------------")
     println("### Code Coverage ###")
-    // Reach cooverage 
+    // Reach cooverage
     println("Reach Coverage: " + bar((foundLiterals._4 intersect relevant_projectLiterals).size, relevant_projectLiterals.size))
-    
-    // Output coverage 
+
+    // Output coverage
     println("Outpt Ouverage: " + bar(relevant_foundLiterals.size, relevant_projectLiterals.size))
-    
+
     // (Sanity check)
     val alle = dstro.map(s => s._2).fold(0)(_ + _)
     println("\n### Not-reached string distribution ###")
     println(s"Functions     : ${bar(dstro.getOrElse(StringLiteralContext.FDEFINITION, 0), alle)}")
     println(s"Templates     : ${bar(dstro.getOrElse(StringLiteralContext.TEMPLATE, 0), alle)}")
     println(s"Misc..        : ${bar(dstro.getOrElse(StringLiteralContext.MISC, 0), alle)}")
-    
+
     println("\n### Fault Analysis (not-reached strings) ###")
     println(s"Dead imports  : ${bar(dead_imports, dead_imports + dead_functions)}")
     println(s"Dead functions: ${bar(dead_functions, dead_imports + dead_functions)}")
-    
-    
+
+
     println("\n### Include Coverage ###")
     println(s"Reached       : ${bar(include_expressions_with_result.keySet.size,Math.max(include_expressions_with_result.keySet.size, all_include_expressions.size))}")
     println(s"Resolved      : ${bar(succ_includes, Math.max(include_expressions_with_result.keySet.size, all_include_expressions.size))}")
@@ -357,7 +354,7 @@ object Coverage extends App {
     val digits = Math.floor(n * (x/((if (y == 0) 1.0 else y * 1.0)))).toInt
     return s"|${"=" * digits}${" " * (n - digits)}| ${ratio}% (${x}/${y})"
   }
-  
+
   private def getSchoolmateCoverage() {
     var entrypoints = OakUtility.getPHPFiles(SCHOOLMATE).toList.map(f => f.toPath())
     println(s"SchoolMate: ${getCoverage(SCHOOLMATE, entrypoints, isRelevant)}")
@@ -398,39 +395,9 @@ object Coverage extends App {
     println(s"Drupal: ${getCoverage(DRUPAL, entrypoints, isRelevant)}")
   }
 
-  private def getMediaWikiCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(MEDIAWIKI).toList.map(f => f.toPath())
-    println(s"Drupal: ${getCoverage(MEDIAWIKI, entrypoints, isRelevant)}")
-  }
-
-  private def getJoomlaCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(JOOMLA).toList.map(f => f.toPath())
-    println(s"Joomla: ${getCoverage(JOOMLA, entrypoints, isRelevant)}")
-  }
-
-  private def getMoodleCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(MOODLE).toList.map(f => f.toPath())
-    println(s"Moodle: ${getCoverage(MOODLE, entrypoints, isRelevant)}")
-  }
-
   private def getPhpMyAdminCoverage() {
     var entrypoints = OakUtility.getPHPFiles(PHPMYADMIN).toList.map(f => f.toPath())
     println(s"phpMyAdmin: ${getCoverage(PHPMYADMIN, entrypoints, isRelevant)}")
-  }
-
-  private def getModelProjectCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(MODEL_PROJECT).toList.map(f => f.toPath())
-    println(s"Model project: ${getCoverage(MODEL_PROJECT, entrypoints, isRelevant)}")
-  }
-
-  private def getGarvCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(GARV).toList.map(f => f.toPath())
-    println(s"Garv: ${getCoverage(GARV, entrypoints, isRelevant)}")
-  }
-
-  private def getPagekitCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(PAGEKIT).toList.map(f => f.toPath())
-    println(s"Pagekit: ${getCoverage(PAGEKIT, entrypoints, isRelevant)}")
   }
 
   private def getAnchorCoverage() {
@@ -442,17 +409,9 @@ object Coverage extends App {
     var entrypoints = OakUtility.getPHPFiles(KIRBY).toList.map(f => f.toPath())
     println(s"Kirby: ${getCoverage(KIRBY, entrypoints, isRelevant)}")
   }
-  private def getForkCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(FORK).toList.map(f => f.toPath())
-    println(s"Fork: ${getCoverage(FORK, entrypoints, isRelevant)}")
-  }
   private def getAutomadCoverage() {
     var entrypoints = OakUtility.getPHPFiles(AUTOMAD).toList.map(f => f.toPath())
     println(s"Automad: ${getCoverage(AUTOMAD, entrypoints, isRelevant)}")
-  }
-  private def getWonderCMSCoverage() {
-    var entrypoints = OakUtility.getPHPFiles(WONDERCMS).toList.map(f => f.toPath())
-    println(s"WonderCMS: ${getCoverage(WONDERCMS, entrypoints, isRelevant)}")
   }
   private def getMonstraCoverage() {
     var entrypoints = OakUtility.getPHPFiles(MONSTRA).toList.map(f => f.toPath())
@@ -494,7 +453,7 @@ object Coverage extends App {
     //#ifdef Moodle
     //@    getMoodleCoverage
     //#endif
-    //#ifdef PhpMyAdmin 
+    //#ifdef PhpMyAdmin
 //@        getPhpMyAdminCoverage
     //#endif
     //#ifdef Joomla

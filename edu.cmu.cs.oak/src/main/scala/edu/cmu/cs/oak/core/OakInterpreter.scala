@@ -135,7 +135,7 @@ import scala.util.control.BreakControl
  * Antenna feature definitions for configuration
  */
 
-class OakInterpreter extends InterpreterPluginProvider with CallRecorder with OakFileManager with OakDebugger {
+class OakInterpreter extends InterpreterPluginProvider with CallRecorder with OakFileManager {
 
   loadPlugins()
 
@@ -159,7 +159,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
   def execute(path: Path): (ControlCode.Value, Environment) = {
 
     included_files.add(path)
-    
+
     //#ifdef Timeout
 //@    // set the start time for this entry point
 //@    this.start = Some(System.currentTimeMillis())
@@ -202,35 +202,35 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/COM.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/php_user_filter.php").toURI())), env)
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/stdClass.php").toURI())), env)
-      * 
+      *
       */
       execute(engine.loadFromFile(Paths.get(getClass.getResource("/array_shift.php").toURI())), env)
-			
+
 
       //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/config.php").toURI())), env)
       //      execute(engine.loadFromFile(Paths.get(getClass.getResource("/moodle/lib/setup.php").toURI())), env)
 
       //#ifdef WORDPRESS_DEPENDENCIES
       //@            execute(engine.loadFromFile(Paths.get(getClass.getResource("/pear/PEAR.php").toURI())), env)
-      //@      
+      //@
       //@            env.resurrect()
       //@            val confpath = Paths.get(getClass.getResource("/wordpress/wp-config.php").toURI())
       //@            this.setCurrentPath(confpath)
       //@            execute(engine.loadFromFile(confpath), env)
       //@            this.resumePreviousCurrent()
-      //@      
+      //@
       //@            env.resurrect()
       //@            val pluginpath = Paths.get(getClass.getResource("/wordpress/wp-settings.php").toURI())
       //@            this.setCurrentPath(pluginpath)
       //@            execute(engine.loadFromFile(pluginpath), env)
       //@            this.resumePreviousCurrent()
-      //@            
+      //@
       //@            env.resurrect()
       //@            val l10npath = Paths.get(getClass.getResource("/wordpress/wp-includes/l10n.php").toURI())
       //@            this.setCurrentPath(l10npath)
       //@            execute(engine.loadFromFile(l10npath), env)
       //@            this.resumePreviousCurrent()
-      //@      
+      //@
       //#endif
     } catch {
       case null => {}
@@ -289,7 +289,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
                 env.lookup(i) match {
                   case sv: StringValue => {
 
-                    /* Since this StringValue is used by the ArrayValue internally, 
+                    /* Since this StringValue is used by the ArrayValue internally,
                       * we omit the location information. */
                     sv.setLocation(null)
                     sv
@@ -406,7 +406,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         val name = e._var
         val value = e._value
 
-        /* Update the environment so that 
+        /* Update the environment so that
          * + $var is mapped to the same reference as evaluate($value)
          * */
         val reference = value match {
@@ -434,7 +434,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
           }
 
           /*
-           * Since we are inside a BinaryAssignRefExpr, we assume that the returned value 
+           * Since we are inside a BinaryAssignRefExpr, we assume that the returned value
            * actually is a Reference/reference
            */
           case ome: ObjectMethodExpr => {
@@ -615,7 +615,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
    */
   private def executeIfStatement(s: IfStatement, env: Environment): ControlCode.Value = {
 
-    /* Retrieve the condition and both statements 
+    /* Retrieve the condition and both statements
      * from the IfStatement AST node via reflection. */
     val condition = new Constraint(BDDFeatureExprFactory.createDefinedExternal(s._test.toString()))
     val test = evaluate(s._test, env)
@@ -741,7 +741,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
           /*
            * XXX This snippet is still to be tested
-           * 
+           *
            */
           //          println(s"Unexpected return value was already defined: ${previous_return_value}, but wanted to return ${v} at ${s._location}")
           //          if (cv.getV2().isEmpty()) {
@@ -1088,7 +1088,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
               // loop environment for the current loop iteration
               val loop_env = Environment.createLoopEnvironment(env)
 
-              // initialize / update key and value 
+              // initialize / update key and value
               if (key != null) loop_env.update(key_name, key)
               loop_env.update(value_name, value)
 
@@ -1110,7 +1110,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         // loop environment for the current loop iteration
         val loop_env = Environment.createLoopEnvironment(env)
 
-        // initialize / update key and value 
+        // initialize / update key and value
         if (s._key != null) loop_env.update(key_name, SymbolValue(key_name, OakHeap.getIndex(), SymbolFlag.DUMMY))
         loop_env.update(value_name, SymbolValue(value_name, OakHeap.getIndex(), SymbolFlag.DUMMY))
 
@@ -1442,8 +1442,8 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
       /* If the function called refers to one implemented library function, such as
        * count($x) for arrays or concat/. for string literals, that implementation
-       * will be used (instead). 
-       * Each plugin implements its own library method, this.plugins is a map from 
+       * will be used (instead).
+       * Each plugin implements its own library method, this.plugins is a map from
        * the library function names to the actual plugin.
        * */
       if (getPlugins.contains(function_name)) {
@@ -1543,7 +1543,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
   /*
   * $objExpr->methodName(args...)
-  * 
+  *
   */
   private def evaluateObjectMethodExpr(e: ObjectMethodExpr, env: Environment): OakValue = {
     val methodName = e._methodName.toString()
@@ -1561,7 +1561,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       val objEnv = Environment.createObjectEnvironment(env, obj)
 
       /* Execute constructor in the object environment and keep its variable $this:
-     *  
+     *
      *  - assign all evaluated arg expressions to the constructor args
      *   */
       assert(constructor.args.size == args.size)
@@ -1695,7 +1695,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
       case a: ArrayGetExpr => {
 
         /* Gets the list of array expression indices, e.g.
-         * get_array_indices("$array[0]['a'][$b]") will return List('0', 'a', '$c') 
+         * get_array_indices("$array[0]['a'][$b]") will return List('0', 'a', '$c')
          */
         val get_array_indices = (e: String) => e.split("\\[").tail.map(s => s.slice(0, s.size - 1).replaceAll("\"", "")).toList
 
@@ -1716,7 +1716,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
                     case sv: StringValue => {
 
-                      /* Since this StringValue is used by the ArrayValue internally, 
+                      /* Since this StringValue is used by the ArrayValue internally,
                       * we omit the location information. */
                       sv.setLocation(null)
                       sv
@@ -1803,7 +1803,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
         /*
          * This is the reference pointing to the (prospective) array value to assign
          * the element to. If this value does not exist yet, i.e. the pointer refers to
-         * an undefined value, declare a new ArrayValue and 
+         * an undefined value, declare a new ArrayValue and
          */
         val array_reference_last = recursive_array_lookup(array_reference_first, array_indices)
         val av = try {
@@ -1825,7 +1825,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
                   env.update(array_name, av_top_new)
                   val av_top_new_ref = env.getRef(array_name, true)
-                  
+
                   recursive_array_set(av_top_new.asInstanceOf[ArrayValue], array_indices, value, env)
                 }
               }
@@ -2202,7 +2202,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
         case choice: MapChoice => {
 
-          //#ifdef SYMBOLIC_RETURN_VALUE 
+          //#ifdef SYMBOLIC_RETURN_VALUE
           //@          return SymbolValue(value.toString, OakHeap.getIndex, SymbolFlag.EXPR_UNEVALUATED)
           //#endif
 
@@ -2438,7 +2438,7 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
     env.recordIncludeExpression(location.get.getFileName, location.get.getLineNumber, false)
 
-    
+
     //TODO  For each resolved path, unless it is empty, do... until finished or an include succeeds
 
     breakable {
@@ -2450,12 +2450,12 @@ class OakInterpreter extends InterpreterPluginProvider with CallRecorder with Oa
 
               try {
                 // If the resolved (absolute) path exists, use file
-                
+
                 val name = resolved_path.toAbsolutePath()
                 if (name.toString endsWith "default.bit") {
                   println(name)
                 }
-                
+
                 val program = this.engine.loadFromFile(resolved_path.toAbsolutePath())
 
                 env.recordIncludeExpression(location.get.getFileName, location.get.getLineNumber, true)
