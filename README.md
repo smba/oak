@@ -5,9 +5,9 @@
 ## Getting Started
 ### Download & Build
 To build and run Oak, you will need
-* **JDK 8**,
-* **Scala 2.11.8+**,
-* **sbt 0.11+**: [sbt](http://www.scala-sbt.org/index.html) for building the interpreter and resolving dependencies.
+* Java 8+,
+* Scala 2.11.8+,
+* sbt 0.11+: [sbt](http://www.scala-sbt.org/index.html) for building the interpreter and resolving dependencies.
 
 To obtain the tool, simply clone this repository ```git clone https://github.com/smba/oak.git``` and build the project by running sbt in the root directory of this repository ```sbt compile```.
 
