@@ -3,3 +3,6 @@
 *.htm linguist-vendored
 *.php linguist-vendored
 *.js linguist-vendored
+*.java linguist-vendored
+*.feature linguist-vendored
+*.ls linguist-vendored
