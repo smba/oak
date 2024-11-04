@@ -4,5 +4,6 @@
 *.htm linguist-vendored
 *.js linguist-vendored
 *.java linguist-vendored
-*.feature linguist-vendored
-*.ls linguist-vendored
+*.jar linguist-vendored
+*.less linguist-vendored
+*.sass linguist-vendored
