@@ -1,6 +1,3 @@
-# Oak [![Build Status](https://travis-ci.org/smba/oak.svg?branch=master)](https://travis-ci.org/smba/oak)
-**UPDATE: I no longer have the resources to maintain this project. -- This project was the result of a research internship in 2016. If you have questions, I compiled a paper manuscript I will make available upon request or as a preprint later. (April 2022)**
-
 **Oak** is an output-oriented symbolic interpreter for the [PHP](http://php.net/) programming language. PHP scripts generate client page output dynamically, often depending on a number of program inputs including user interaction, database queries or file system access. This tool is inspired by the symbolic execution engine by [Symex](https://github.com/git1997/VarAnalysis) and additionally provides support for basic object-oriented programming and array support.
 
 ## Getting Started
